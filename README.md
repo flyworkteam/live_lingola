@@ -1,4 +1,4 @@
-# lingora_app
+# lingola_app
 
 A new Flutter project.
 
