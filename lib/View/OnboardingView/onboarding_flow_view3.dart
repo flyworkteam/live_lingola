@@ -1,0 +1,272 @@
+// lib/View/OnboardingView/onboarding_flow_view3.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lingora_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
+
+import 'onboarding_flow_view2.dart';
+import 'onboarding_flow_view4.dart';
+import 'onboarding_flow_view6.dart';
+
+class OnboardingFlowView3 extends ConsumerWidget {
+  const OnboardingFlowView3({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final s = ref.watch(onboardingControllerProvider);
+    final c = ref.read(onboardingControllerProvider.notifier);
+
+    final canNext = s.usedAiBefore != null;
+
+    //  Page-1 Skip hizası: right = 393 - (329 + 35) = 29
+    const skipRight = 29.0;
+
+    final bottomPad = 18.h;
+    final bottomCtaSpace = (51 + bottomPad + 12).h;
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFFFFFFF),
+      body: SafeArea(
+        top: true,
+        bottom: false,
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: EdgeInsets.only(left: 16.w),
+                child: SizedBox(
+                  height: 44.h,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const OnboardingFlowView2()),
+                      );
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: const Color(0xFF9AA4B2),
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                    ),
+                    child: Text(
+                      'Back',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            // SKIP
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: EdgeInsets.only(right: skipRight.w),
+                child: SizedBox(
+                  width: 35.w,
+                  height: 30.h,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const OnboardingFlowView6()),
+                      );
+                    },
+                    child: Center(
+                      child: Text(
+                        'Skip',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.sp,
+                          height: 30 / 16,
+                          color: const Color(0xFF0A70FF),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            // CONTENT
+            Positioned.fill(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: bottomCtaSpace),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 103.h),
+
+                    // TITLE
+                    SizedBox(
+                      width: 255.w,
+                      height: 60.h,
+                      child: Text(
+                        'Have you used AI\ntranslation before?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 24.sp,
+                          height: 30 / 24,
+                          color: const Color(0xFF000000),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 2.h),
+
+                    // SUBTITLE
+                    SizedBox(
+                      width: 275.w,
+                      height: 51.h,
+                      child: Text(
+                        'Please indicate your preference.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w300,
+                          fontSize: 15.sp,
+                          height: 1.0,
+                          color: const Color(0xFF000000),
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 26.h),
+
+                    _SimpleSelectButton(
+                      text: 'Yes',
+                      selected: s.usedAiBefore == true,
+                      onTap: () => c.setUsedAiBefore(true),
+                    ),
+                    SizedBox(height: 15.h),
+                    _SimpleSelectButton(
+                      text: 'No',
+                      selected: s.usedAiBefore == false,
+                      onTap: () => c.setUsedAiBefore(false),
+                    ),
+
+                    const Spacer(),
+                  ],
+                ),
+              ),
+            ),
+
+            // NEXT
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SafeArea(
+                top: false,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(36.w, 0, 36.w, bottomPad),
+                  child: SizedBox(
+                    width: 321.w,
+                    height: 51.h,
+                    child: ElevatedButton(
+                      onPressed: canNext
+                          ? () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) =>
+                                        const OnboardingFlowView4()),
+                              );
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        elevation: 0,
+                        backgroundColor: const Color(0xFF0A70FF),
+                        disabledBackgroundColor: const Color(0xFFE3E3E3),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.r),
+                        ),
+                      ),
+                      child: Text(
+                        'Next',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.sp,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SimpleSelectButton extends StatelessWidget {
+  final String text;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _SimpleSelectButton({
+    required this.text,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final borderColor =
+        selected ? const Color(0xFF0A70FF) : const Color(0xFFDFDFDF);
+    final borderWidth = selected ? 2.w : 1.w;
+    final textColor =
+        selected ? const Color(0xFF0A70FF) : const Color(0xFF000000);
+
+    return SizedBox(
+      width: 321.w,
+      height: 51.h,
+      child: Material(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(50.r),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(50.r),
+          onTap: onTap,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50.r),
+              border: Border.all(color: borderColor, width: borderWidth),
+            ),
+            child: Center(
+              child: SizedBox(
+                width: 164.w,
+                height: 24.h,
+                child: Center(
+                  child: Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15.sp,
+                      height: 24 / 15,
+                      color: textColor,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

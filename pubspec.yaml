@@ -1,0 +1,61 @@
+name: lingora_app
+description: "Live Lingola Application"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: "3.3.4"
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.0.10
+
+  url_launcher: ^6.2.6
+
+  cupertino_icons: ^1.0.8
+  flutter_riverpod: ^2.5.1
+  flutter_screenutil: ^5.9.3
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/logo/live_lingola_logo.png
+    - assets/fonts/
+    - assets/images/onboarding/
+    - assets/images/onboarding/flags/
+    - assets/images/auth/
+    - assets/images/home/
+    - assets/images/
+    - assets/images/icons/features/
+    - assets/images/icons/actions/
+    - assets/images/icons/notifications/
+    - assets/images/icons/nav/ic_nav_home.png
+    - assets/images/icons/nav/
+    - assets/images/onboarding1/
+    - assets/images/flags/
+    - assets/images/notificationspage/
+    - assets/images/logout/
+    - assets/images/icons/translate/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
