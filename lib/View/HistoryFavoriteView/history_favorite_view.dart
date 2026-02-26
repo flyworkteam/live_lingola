@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../Core/Utils/assets.dart';
 import '../../Core/widgets/navigation/bottom_nav_item_tile.dart';
 
 class HistoryFavoriteView extends StatefulWidget {
-  /// 0 = History, 1 = Favorite
   final int initialTab;
 
   const HistoryFavoriteView({super.key, this.initialTab = 0});
@@ -15,7 +15,7 @@ class HistoryFavoriteView extends StatefulWidget {
 }
 
 class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
-  late int _tab; // 0 history, 1 favorite
+  late int _tab;
   String _query = '';
 
   final List<_HFItem> _history = [
@@ -90,6 +90,7 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: true,
+      barrierColor: const Color(0xFF000000).withOpacity(0.35),
       builder: (context) => const _ClearConfirmDialog(),
     );
 
@@ -118,8 +119,6 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
       body: Column(
         children: [
           SizedBox(height: MediaQuery.of(context).padding.top + 8.h),
-
-          // TOP BAR
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Row(
@@ -128,12 +127,18 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
                   borderRadius: BorderRadius.circular(999),
                   onTap: () => Navigator.pop(context),
                   child: SizedBox(
-                    width: 44.w,
-                    height: 44.w,
-                    child: Icon(
-                      Icons.arrow_back_rounded,
-                      size: 22.sp,
-                      color: const Color(0xFF0F172A),
+                    width: 24.w,
+                    height: 24.w,
+                    child: Center(
+                      child: SvgPicture.asset(
+                        AppAssets.icBack2,
+                        width: 24.w,
+                        height: 24.w,
+                        colorFilter: const ColorFilter.mode(
+                          Color(0xFF0F172A),
+                          BlendMode.srcIn,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -150,14 +155,11 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
                     ),
                   ),
                 ),
-                SizedBox(width: 44.w, height: 44.w),
+                SizedBox(width: 24.w),
               ],
             ),
           ),
-
           SizedBox(height: 14.h),
-
-          // SEARCH
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Container(
@@ -176,8 +178,15 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.search,
-                      size: 18.sp, color: const Color(0xFF94A3B8)),
+                  SvgPicture.asset(
+                    AppAssets.icSearch,
+                    width: 18.sp,
+                    height: 18.sp,
+                    colorFilter: const ColorFilter.mode(
+                      Color(0xFF94A3B8),
+                      BlendMode.srcIn,
+                    ),
+                  ),
                   SizedBox(width: 10.w),
                   Expanded(
                     child: TextField(
@@ -204,10 +213,7 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
               ),
             ),
           ),
-
           SizedBox(height: 14.h),
-
-          // SEGMENT
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Container(
@@ -238,10 +244,7 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
               ),
             ),
           ),
-
           SizedBox(height: 14.h),
-
-          // SECTION HEADER + CLEAR
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Row(
@@ -271,10 +274,7 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
               ],
             ),
           ),
-
           SizedBox(height: 10.h),
-
-          // LIST
           Expanded(
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
@@ -295,8 +295,6 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
               },
             ),
           ),
-
-          // BOTTOM NAV
           BottomNavBar(
             currentIndex: 0,
             onTap: (i) {
@@ -312,6 +310,174 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
       ),
     );
   }
+}
+
+class _ClearConfirmDialog extends StatelessWidget {
+  const _ClearConfirmDialog();
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      insetPadding: EdgeInsets.zero,
+      backgroundColor: Colors.transparent,
+      child: Container(
+        width: 273.w,
+        height: 199.h,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15.r),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0xFF9EA9B8),
+              blurRadius: 10,
+              offset: Offset(0, 0),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: 14.h),
+            Container(
+              width: 52.w,
+              height: 52.w,
+              decoration: BoxDecoration(
+                color: const Color(0xFFE7F0FF),
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              child: Center(
+                child: SvgPicture.asset(
+                  AppAssets.icClean,
+                  width: 40.w,
+                  height: 40.w,
+                  colorFilter: const ColorFilter.mode(
+                    Color(0xFF0A70FF),
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 12.h),
+            SizedBox(
+              width: 101.w,
+              height: 15.h,
+              child: Center(
+                child: Text(
+                  'Clear History',
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15.sp,
+                    height: 15 / 15,
+                    letterSpacing: 0,
+                    color: const Color(0xFF0F172A),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 8.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 36.w),
+              child: Text(
+                'Are you sure you want to\nclear your history?',
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.visible,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w300,
+                  fontSize: 11.sp,
+                  height: 15 / 11,
+                  letterSpacing: 0,
+                  color: const Color(0xFF475569),
+                ),
+              ),
+            ),
+            const Spacer(),
+            Padding(
+              padding: EdgeInsets.only(left: 55.w, right: 18.w, bottom: 16.h),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 47.w,
+                    height: 24.h,
+                    child: InkWell(
+                      onTap: () => Navigator.pop(context, false),
+                      child: Center(
+                        child: Text(
+                          'Cancel',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 13.sp,
+                            height: 24 / 13,
+                            letterSpacing: 0,
+                            color: const Color(0xFF9E9E9E),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Spacer(),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(50.r),
+                    onTap: () => Navigator.pop(context, true),
+                    child: Container(
+                      width: 116.w,
+                      height: 28.h,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0A70FF),
+                        borderRadius: BorderRadius.circular(50.r),
+                      ),
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        width: 35.w,
+                        height: 24.h,
+                        child: Center(
+                          child: Text(
+                            'Clear',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 13.sp,
+                              height: 24 / 13,
+                              letterSpacing: 0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HFItem {
+  final String fromCode;
+  final String toCode;
+  final String title;
+  final String subtitle;
+  final String time;
+  bool starred;
+
+  _HFItem({
+    required this.fromCode,
+    required this.toCode,
+    required this.title,
+    required this.subtitle,
+    required this.time,
+    required this.starred,
+  });
 }
 
 class _SegmentBtn extends StatelessWidget {
@@ -369,7 +535,7 @@ class _HFCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(14.w, 14.h, 14.w, 14.h),
+      padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.r),
@@ -388,8 +554,11 @@ class _HFCard extends StatelessWidget {
             children: [
               _LangPill(code: item.fromCode),
               SizedBox(width: 8.w),
-              Icon(Icons.arrow_forward_rounded,
-                  size: 18.sp, color: const Color(0xFF0F172A)),
+              Icon(
+                Icons.arrow_forward_rounded,
+                size: 18.sp,
+                color: const Color(0xFF0F172A),
+              ),
               SizedBox(width: 8.w),
               _LangPill(code: item.toCode),
               const Spacer(),
@@ -491,122 +660,4 @@ class _LangPill extends StatelessWidget {
       ),
     );
   }
-}
-
-class _ClearConfirmDialog extends StatelessWidget {
-  const _ClearConfirmDialog();
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22.r)),
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(22.w, 18.h, 22.w, 18.h),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(height: 4.h),
-            Container(
-              width: 56.w,
-              height: 56.w,
-              decoration: BoxDecoration(
-                color: const Color(0xFFE7F0FF),
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-              child: Icon(Icons.cleaning_services_rounded,
-                  size: 28.sp, color: const Color(0xFF0A70FF)),
-            ),
-            SizedBox(height: 14.h),
-            Text(
-              'Clear History',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w700,
-                color: const Color(0xFF0F172A),
-              ),
-            ),
-            SizedBox(height: 6.h),
-            Text(
-              'Are you sure you want to\nclear your history?',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w400,
-                color: const Color(0xFF475569),
-                height: 1.25,
-              ),
-            ),
-            SizedBox(height: 16.h),
-            Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(999.r),
-                    onTap: () => Navigator.pop(context, false),
-                    child: Container(
-                      height: 44.h,
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Cancel',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(0xFF94A3B8),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(999.r),
-                    onTap: () => Navigator.pop(context, true),
-                    child: Container(
-                      height: 44.h,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF0A70FF),
-                        borderRadius: BorderRadius.circular(999.r),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Clear',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _HFItem {
-  final String fromCode;
-  final String toCode;
-  final String title;
-  final String subtitle;
-  final String time;
-  bool starred;
-
-  _HFItem({
-    required this.fromCode,
-    required this.toCode,
-    required this.title,
-    required this.subtitle,
-    required this.time,
-    required this.starred,
-  });
 }

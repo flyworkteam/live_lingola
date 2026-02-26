@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../Core/Utils/assets.dart';
 import '../../Core/widgets/navigation/bottom_nav_item_tile.dart';
@@ -45,8 +46,6 @@ class _FrequentlyTermsViewState extends State<FrequentlyTermsView> {
       body: Column(
         children: [
           SizedBox(height: MediaQuery.of(context).padding.top + 8.h),
-
-          // TOP BAR
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Row(
@@ -54,13 +53,20 @@ class _FrequentlyTermsViewState extends State<FrequentlyTermsView> {
                 InkWell(
                   borderRadius: BorderRadius.circular(999),
                   onTap: () => Navigator.pop(context),
-                  child: SizedBox(
-                    width: 44.w,
-                    height: 44.w,
-                    child: Icon(
-                      Icons.arrow_back_rounded,
-                      size: 22.sp,
-                      color: const Color(0xFF0F172A),
+                  child: Container(
+                    width: 24.w,
+                    height: 24.w,
+                    color: Colors.transparent,
+                    child: Center(
+                      child: SvgPicture.asset(
+                        AppAssets.icBack2,
+                        width: 24.w,
+                        height: 24.w,
+                        colorFilter: const ColorFilter.mode(
+                          Color(0xFF0F172A),
+                          BlendMode.srcIn,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -77,14 +83,11 @@ class _FrequentlyTermsViewState extends State<FrequentlyTermsView> {
                     ),
                   ),
                 ),
-                SizedBox(width: 44.w, height: 44.w),
+                SizedBox(width: 24.w),
               ],
             ),
           ),
-
           SizedBox(height: 14.h),
-
-          // SEARCH
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Container(
@@ -103,8 +106,15 @@ class _FrequentlyTermsViewState extends State<FrequentlyTermsView> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.search,
-                      size: 18.sp, color: const Color(0xFF94A3B8)),
+                  SvgPicture.asset(
+                    AppAssets.icSearch,
+                    width: 18.sp,
+                    height: 18.sp,
+                    colorFilter: const ColorFilter.mode(
+                      Color(0xFF94A3B8),
+                      BlendMode.srcIn,
+                    ),
+                  ),
                   SizedBox(width: 10.w),
                   Expanded(
                     child: TextField(
@@ -117,7 +127,7 @@ class _FrequentlyTermsViewState extends State<FrequentlyTermsView> {
                       ),
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Search terms',
+                        hintText: 'Search',
                         hintStyle: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12.sp,
@@ -131,10 +141,7 @@ class _FrequentlyTermsViewState extends State<FrequentlyTermsView> {
               ),
             ),
           ),
-
           SizedBox(height: 14.h),
-
-          // LIST
           Expanded(
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
@@ -146,7 +153,6 @@ class _FrequentlyTermsViewState extends State<FrequentlyTermsView> {
               ),
             ),
           ),
-
           BottomNavBar(
             currentIndex: 0,
             onTap: (i) {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lingora_app/Core/Utils/assets.dart';
 
 import 'big_action_card.dart';
 
@@ -55,13 +57,11 @@ class MoreFeaturesFigma extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                /// TEXT SIDE
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      /// Gradient küçük başlık
                       ShaderMask(
                         shaderCallback: (bounds) => const LinearGradient(
                           begin: Alignment.topCenter,
@@ -85,8 +85,6 @@ class MoreFeaturesFigma extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 6.h),
-
-                      /// Büyük açıklama metni
                       Text(
                         "Review the most\nfrequently used terms.",
                         maxLines: 2,
@@ -103,15 +101,12 @@ class MoreFeaturesFigma extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 SizedBox(width: 10.w),
-
-                /// Sağdaki ikon
                 SizedBox(
                   width: 74.w,
                   height: 74.w,
-                  child: Image.asset(
-                    'assets/images/icons/features/ic_feature_frequent.png',
+                  child: SvgPicture.asset(
+                    AppAssets.icFrequently,
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -129,8 +124,7 @@ class MoreFeaturesFigma extends StatelessWidget {
               child: BigActionCard(
                 title: "History",
                 active: false,
-                iconAsset:
-                    'assets/images/icons/features/ic_feature_history.png',
+                iconAsset: AppAssets.icHistory,
                 onTap: onHistoryTap,
               ),
             ),
@@ -139,8 +133,7 @@ class MoreFeaturesFigma extends StatelessWidget {
               child: BigActionCard(
                 title: "Favorite",
                 active: true,
-                iconAsset:
-                    'assets/images/icons/features/ic_feature_favorite.png',
+                iconAsset: AppAssets.icFavorite,
                 onTap: onFavoriteTap,
               ),
             ),

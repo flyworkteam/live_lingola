@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -71,12 +72,15 @@ class BottomNavBar extends StatelessWidget {
         width: 60.w,
         height: 62.h,
         child: Center(
-          child: Image.asset(
+          child: SvgPicture.asset(
             asset,
             width: 24.w,
             height: 24.w,
             fit: BoxFit.contain,
-            color: active ? activeColor : inactiveColor,
+            colorFilter: ColorFilter.mode(
+              active ? activeColor : inactiveColor,
+              BlendMode.srcIn,
+            ),
           ),
         ),
       ),

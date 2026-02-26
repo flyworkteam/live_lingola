@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lingora_app/Core/Utils/assets.dart';
 
 class QuickActionData {
   final String title;
@@ -15,42 +16,42 @@ class QuickActionData {
 const quickActions = <QuickActionData>[
   QuickActionData(
     title: "Ai Chat",
-    iconAsset: "assets/images/icons/actions/ic_action_ai_chat.png",
+    iconAsset: AppAssets.icAiChat,
     tileColor: Color(0xFFE7F0FF),
   ),
   QuickActionData(
     title: "Travel",
-    iconAsset: "assets/images/icons/actions/ic_action_travel.png",
+    iconAsset: AppAssets.icTravel,
     tileColor: Color(0xFFE7F7EF),
   ),
   QuickActionData(
     title: "Text Check",
-    iconAsset: "assets/images/icons/actions/ic_action_text_check.png",
+    iconAsset: AppAssets.icTextCheck,
     tileColor: Color(0xFFFFE9D6),
   ),
   QuickActionData(
     title: "Interview",
-    iconAsset: "assets/images/icons/actions/ic_action_interview.png",
+    iconAsset: AppAssets.icInterview,
     tileColor: Color(0xFFF1E6FF),
   ),
   QuickActionData(
     title: "Email",
-    iconAsset: "assets/images/icons/actions/ic_action_email.png",
+    iconAsset: AppAssets.icEmail,
     tileColor: Color(0xFFFFE2E7),
   ),
   QuickActionData(
     title: "Business",
-    iconAsset: "assets/images/icons/actions/ic_action_business.png",
+    iconAsset: AppAssets.icBusiness,
     tileColor: Color(0xFFDFF7FF),
   ),
   QuickActionData(
     title: "Reply Ideas",
-    iconAsset: "assets/images/icons/actions/ic_action_replay.png",
+    iconAsset: AppAssets.icReply,
     tileColor: Color(0xFFFFEACB),
   ),
   QuickActionData(
     title: "Popular",
-    iconAsset: "assets/images/icons/actions/ic_action_popular.png",
+    iconAsset: AppAssets.icPopular,
     tileColor: Color(0xFFE2F1FF),
   ),
 ];

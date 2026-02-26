@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'chat_message.dart';
 
@@ -18,7 +19,6 @@ class ChatBubble extends StatelessWidget {
     final bubbleRadius = 16.r;
 
     if (!msg.fromBot) {
-      // USER (mavi)
       return Align(
         alignment: Alignment.centerRight,
         child: Container(
@@ -48,7 +48,6 @@ class ChatBubble extends StatelessWidget {
       );
     }
 
-    // BOT
     return Padding(
       padding: EdgeInsets.only(top: 12.h),
       child: Row(
@@ -62,9 +61,12 @@ class ChatBubble extends StatelessWidget {
               color: const Color(0xFFE7F0FF),
               borderRadius: BorderRadius.circular(10.r),
             ),
-            child: Image.asset(
+            // ✅ GÜNCELLENDİ: Image.asset yerine SvgPicture.asset kullanıldı
+            child: SvgPicture.asset(
               botIconAsset,
               fit: BoxFit.contain,
+              // Eğer ikon çok koyu gelirse rengini buradan zorlayabilirsin:
+              // colorFilter: const ColorFilter.mode(Color(0xFF0A70FF), BlendMode.srcIn),
             ),
           ),
           SizedBox(width: 10.w),

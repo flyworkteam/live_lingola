@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-typedef TranslatedOverlayBuilder = Widget Function(BuildContext context);
-
 class PhotoScanFrame extends StatefulWidget {
-  final ImageProvider imageProvider;
-  final TranslatedOverlayBuilder translatedOverlayBuilder;
+  final ImageProvider originalImage;
+  final ImageProvider translatedImage;
 
   const PhotoScanFrame({
     super.key,
-    required this.imageProvider,
-    required this.translatedOverlayBuilder,
+    required this.originalImage,
+    required this.translatedImage,
   });
 
   @override
@@ -18,102 +16,65 @@ class PhotoScanFrame extends StatefulWidget {
 }
 
 class _PhotoScanFrameState extends State<PhotoScanFrame> {
-  double _x = 0.0;
+  double _x = 0.5;
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, c) {
-        final w = c.maxWidth;
-        final h = 360.h;
-        final lineX = (_x.clamp(0.0, 1.0)) * w;
+    final double frameWidth = 254.w;
+    final double frameHeight = 340.h;
 
-        return Container(
-          width: w,
-          height: h,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(22.r),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x1F0B2B6B),
-                blurRadius: 18,
-                offset: Offset(0, 10),
+    return Container(
+      width: frameWidth,
+      height: frameHeight,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22.r),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x1F0B2B6B),
+            blurRadius: 18,
+            offset: Offset(0, 10),
+          ),
+        ],
+      ),
+      padding: EdgeInsets.all(12.w),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(18.r),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Image(
+                image: widget.translatedImage,
+                fit: BoxFit.cover,
               ),
-            ],
-          ),
-          padding: EdgeInsets.all(14.w),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(18.r),
-            child: Stack(
-              children: [
-                // 1) Alt katman: “Translated”
-                Positioned.fill(
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Image(
-                        image: widget.imageProvider,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
-                          color: Colors.white,
-                          alignment: Alignment.center,
-                          child: Icon(
-                            Icons.image_not_supported_outlined,
-                            size: 40.sp,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                      Positioned.fill(
-                        child: Container(
-                          color: Colors.black.withOpacity(0.10),
-                        ),
-                      ),
-                      Positioned.fill(
-                          child: widget.translatedOverlayBuilder(context)),
-                    ],
-                  ),
-                ),
-
-                // 2) Üst katman: Original
-                Positioned.fill(
-                  child: ClipRect(
-                    clipper: _LeftClipper(dx: lineX),
-                    child: Image(
-                      image: widget.imageProvider,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-
-                // 3) Köşe frame
-                Positioned.fill(child: _CornerFrame()),
-
-                // 4) Kırmızı tarama çizgisi (drag)
-                Positioned.fill(
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onHorizontalDragStart: (d) {
-                      final local = (context.findRenderObject() as RenderBox)
-                          .globalToLocal(d.globalPosition);
-                      setState(() => _x = (local.dx / w).clamp(0.0, 1.0));
-                    },
-                    onHorizontalDragUpdate: (d) {
-                      final local = (context.findRenderObject() as RenderBox)
-                          .globalToLocal(d.globalPosition);
-                      setState(() => _x = (local.dx / w).clamp(0.0, 1.0));
-                    },
-                    child: CustomPaint(
-                      painter: _ScanLinePainter(dx: lineX),
-                    ),
-                  ),
-                ),
-              ],
             ),
-          ),
-        );
-      },
+            Positioned.fill(
+              child: ClipRect(
+                clipper: _LeftClipper(dx: _x * (frameWidth - 24.w)),
+                child: Image(
+                  image: widget.originalImage,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const Positioned.fill(child: _CornerFrame()),
+            Positioned.fill(
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onHorizontalDragUpdate: (details) {
+                  setState(() {
+                    _x = (details.localPosition.dx / (frameWidth - 24.w))
+                        .clamp(0.0, 1.0);
+                  });
+                },
+                child: CustomPaint(
+                  painter: _ScanLinePainter(dx: _x * (frameWidth - 24.w)),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -137,7 +98,7 @@ class _ScanLinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final p = Paint()
       ..color = const Color(0xFFFF2D2D)
-      ..strokeWidth = 2;
+      ..strokeWidth = 2.w;
 
     canvas.drawLine(Offset(dx, 0), Offset(dx, size.height), p);
   }
@@ -148,14 +109,13 @@ class _ScanLinePainter extends CustomPainter {
 }
 
 class _CornerFrame extends StatelessWidget {
+  const _CornerFrame();
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
       child: Padding(
-        padding: EdgeInsets.all(12.w),
-        child: CustomPaint(
-          painter: _CornerPainter(),
-        ),
+        padding: EdgeInsets.all(10.w),
+        child: CustomPaint(painter: _CornerPainter()),
       ),
     );
   }
@@ -167,24 +127,17 @@ class _CornerPainter extends CustomPainter {
     final p = Paint()
       ..color = Colors.white.withOpacity(0.90)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 4
+      ..strokeWidth = 3.5.w
       ..strokeCap = StrokeCap.round;
 
-    const len = 26.0;
+    const len = 20.0;
 
-    // TL
     canvas.drawLine(const Offset(0, 0), const Offset(len, 0), p);
     canvas.drawLine(const Offset(0, 0), const Offset(0, len), p);
-
-    // TR
     canvas.drawLine(Offset(size.width, 0), Offset(size.width - len, 0), p);
     canvas.drawLine(Offset(size.width, 0), Offset(size.width, len), p);
-
-    // BL
     canvas.drawLine(Offset(0, size.height), Offset(len, size.height), p);
     canvas.drawLine(Offset(0, size.height), Offset(0, size.height - len), p);
-
-    // BR
     canvas.drawLine(Offset(size.width, size.height),
         Offset(size.width - len, size.height), p);
     canvas.drawLine(Offset(size.width, size.height),

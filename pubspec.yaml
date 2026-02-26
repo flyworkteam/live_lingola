@@ -38,13 +38,17 @@ flutter:
     - assets/images/icons/features/
     - assets/images/icons/actions/
     - assets/images/icons/notifications/
-    - assets/images/icons/nav/ic_nav_home.png
+    - assets/images/icons/nav/
     - assets/images/icons/nav/
     - assets/images/onboarding1/
     - assets/images/flags/
     - assets/images/notificationspage/
     - assets/images/logout/
     - assets/images/icons/translate/
+    - assets/images/ProfileSettings/
+    - assets/images/PhotoTranslate/
+    - assets/images/icons/features/
+    - assets/images/demo/
 
   fonts:
     - family: Poppins

@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lingora_app/Core/Utils/assets.dart';
 
 class LogoutDialog {
   static Future<bool?> show(BuildContext context) {
@@ -53,10 +55,16 @@ class LogoutDialog {
                                 color: const Color(0xFFFFE3E3),
                                 borderRadius: BorderRadius.circular(10.r),
                               ),
-                              child: const Icon(
-                                Icons.arrow_back_rounded,
-                                color: Color(0xFFEF4444),
-                                size: 18,
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  AppAssets.icBack,
+                                  width: 14.w,
+                                  height: 14.w,
+                                  colorFilter: const ColorFilter.mode(
+                                    Color(0xFFEF4444),
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -74,7 +82,7 @@ class LogoutDialog {
                         ),
                         SizedBox(height: 6.h),
                         Text(
-                          "See you again soon! We'll miss your\nbreathing exercises.",
+                          "See you again soon! We'll miss your\nexperience.",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Poppins',

@@ -17,36 +17,27 @@ class SelectableNotificationRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Stack(
+      clipBehavior: Clip.none,
       children: [
-        if (deleteMode) ...[
-          InkWell(
-            onTap: onSelectToggle,
-            borderRadius: BorderRadius.circular(999),
-            child: Container(
-              width: 24.w,
-              height: 24.w,
-              decoration: BoxDecoration(
-                color: selected ? const Color(0xFFFF3B30) : Colors.white,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: selected
-                      ? const Color(0xFFFF3B30)
-                      : Colors.white.withOpacity(0.9),
-                  width: 1.2,
-                ),
-              ),
-              alignment: Alignment.center,
-              child: Icon(
-                selected ? Icons.remove_rounded : Icons.circle_outlined,
-                size: selected ? 18.sp : 14.sp,
-                color: selected ? Colors.white : Colors.white.withOpacity(0.9),
+        child,
+        if (deleteMode)
+          Positioned(
+            top: -6.h,
+            left: -6.w,
+            child: GestureDetector(
+              onTap: onSelectToggle,
+              child: Container(
+                width: 22.w,
+                height: 22.w,
+                decoration: const BoxDecoration(
+                    color: Color(0xFFFF3B30), shape: BoxShape.circle),
+                child: Center(
+                    child: Container(
+                        width: 10.w, height: 2.h, color: Colors.white)),
               ),
             ),
           ),
-          SizedBox(width: 10.w),
-        ],
-        Expanded(child: child),
       ],
     );
   }

@@ -1,4 +1,3 @@
-// lib/View/HomeView/home_and_notifications_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lingora_app/View/PhotoTranslateView/photo_translate_view.dart';
@@ -20,11 +19,9 @@ import '../NotificationView/notifications_view.dart';
 import '../HistoryFavoriteView/history_favorite_view.dart';
 import '../FrequentlyTermsView/frequently_terms_view.dart';
 import '../TranslationView/VoiceTranslationView/voice_translate_view.dart';
-
 import '../TranslationView/TextTranslationView/text_translation_view.dart';
 
 import '../ProfileView/profile_view.dart';
-
 import '../ChatView/ai_chat_view.dart';
 
 class HomeAndNotificationsView extends StatefulWidget {
@@ -80,27 +77,16 @@ class _HomeAndNotificationsViewState extends State<HomeAndNotificationsView> {
 
   @override
   Widget build(BuildContext context) {
-    //  TAB yapısı:
-    // 0 Home
-    // 1 Chat icon -> TextTranslationView (BOTTOM NAV)
-    // 2 Mic icon -> VoiceTranslateView
-    // 3 Camera icon -> PhotoTranslateView
     final pages = [
       _HomeTab(
         onNotificationsTap: _openNotifications,
         onHistoryTap: () => _openHistoryFavorite(initialTab: 0),
         onFavoriteTap: () => _openHistoryFavorite(initialTab: 1),
         onFrequentlyTap: _openFrequentlyTerms,
-
-        //  INSTANT -> ilgili sayfalara gitsin
         onVoiceTap: () => _goToTab(2),
         onPhotoTap: () => _goToTab(3),
         onTextTap: () => _goToTab(1),
-
-        //  Greeting + Settings -> Profile
         onProfileTap: _openProfile,
-
-        //  Quick action router
         onQuickActionTap: _handleQuickActionTap,
       ),
       TextTranslationView(
@@ -172,37 +158,55 @@ class _HomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
     return Padding(
-      padding: EdgeInsets.fromLTRB(18.w, 10.h, 18.w, 0),
+      padding: EdgeInsets.symmetric(horizontal: 18.w),
       child: CustomScrollView(
         physics: const BouncingScrollPhysics(parent: ClampingScrollPhysics()),
         slivers: [
           SliverToBoxAdapter(
             child: Column(
               children: [
-                SizedBox(height: 8.h),
-                Padding(
-                  padding:
-                      EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-                  child: Row(
-                    children: [
-                      InkWell(
-                        borderRadius: BorderRadius.circular(30.r),
-                        onTap: onProfileTap,
-                        child: const GreetingPill(),
+                SizedBox(height: MediaQuery.of(context).padding.top + 10.h),
+                Row(
+                  children: [
+                    InkWell(
+                      borderRadius: BorderRadius.circular(30.r),
+                      onTap: onProfileTap,
+                      child: const GreetingPill(),
+                    ),
+                    const Spacer(),
+                    Container(
+                      width: 29.w,
+                      height: 29.w,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
                       ),
-                      const Spacer(),
-                      TopIconBtn(
-                        icon: Icons.notifications_none_rounded,
-                        onTap: onNotificationsTap,
+                      child: Center(
+                        child: TopIconBtn(
+                          svgPath: AppAssets.icNotification,
+                          onTap: onNotificationsTap,
+                        ),
                       ),
-                      SizedBox(width: 10.w),
-                      TopIconBtn(
-                        icon: Icons.settings_outlined,
-                        onTap: onProfileTap,
+                    ),
+                    SizedBox(width: 10.w),
+                    Container(
+                      width: 29.w,
+                      height: 29.w,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
                       ),
-                    ],
-                  ),
+                      child: Center(
+                        child: TopIconBtn(
+                          svgPath: AppAssets.icSettings,
+                          onTap: onProfileTap,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: 60.h),
                 Align(
@@ -223,17 +227,17 @@ class _HomeTab extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     FeatureBtn(
-                      icon: Icons.mic_none_rounded,
+                      svgPath: AppAssets.icMicFeature,
                       title: "Instant Voice\nTranslation",
                       onTap: onVoiceTap,
                     ),
                     FeatureBtn(
-                      icon: Icons.photo_camera_outlined,
+                      svgPath: AppAssets.icCameraFeature,
                       title: "Instant Photo\nTranslation",
                       onTap: onPhotoTap,
                     ),
                     FeatureBtn(
-                      icon: Icons.text_fields_rounded,
+                      svgPath: AppAssets.icTextFeature,
                       title: "Instant Text\nTranslation",
                       onTap: onTextTap,
                     ),
@@ -265,7 +269,7 @@ class _HomeTab extends StatelessWidget {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.only(bottom: 90.h),
+            padding: EdgeInsets.only(bottom: 120.h + bottomPadding),
             sliver: SliverGrid(
               delegate: SliverChildBuilderDelegate(
                 (context, i) => QuickActionItem(

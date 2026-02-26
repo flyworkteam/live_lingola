@@ -1,4 +1,4 @@
-package com.example.lingora_app
+package com.flywork.livelingolaapp;
 
 import io.flutter.embedding.android.FlutterActivity
 

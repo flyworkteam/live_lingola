@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lingora_app/Core/Utils/assets.dart';
 
 class PremiumOfferCard extends StatelessWidget {
   const PremiumOfferCard({super.key});
@@ -99,21 +101,25 @@ class PremiumOfferCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
-                        width: 22.w,
-                        height: 22.w,
+                        width: 20.w,
+                        height: 20.w,
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.20),
                           shape: BoxShape.circle,
                         ),
                         child: Padding(
                           padding: EdgeInsets.all(4.w),
-                          child: Image.asset(
-                            'assets/images/icons/features/ic_premium.png',
+                          child: SvgPicture.asset(
+                            AppAssets.icPremium,
                             fit: BoxFit.contain,
+                            colorFilter: const ColorFilter.mode(
+                              Colors.white,
+                              BlendMode.srcIn,
+                            ),
                           ),
                         ),
                       ),
-                      SizedBox(width: 10.w),
+                      SizedBox(width: 8.w),
                       Text(
                         "Get Premium",
                         style: TextStyle(

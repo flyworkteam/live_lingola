@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lingora_app/Core/widgets/voice_translate/voice_pro_background_painter.dart';
 
 class VoiceMicButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -9,6 +10,7 @@ class VoiceMicButton extends StatelessWidget {
     super.key,
     required this.onTap,
     this.filled = true,
+    required ProStage stage,
   });
 
   @override

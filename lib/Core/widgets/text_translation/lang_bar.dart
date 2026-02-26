@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../Utils/assets.dart';
 
 class TextTranslationLangBar extends StatelessWidget {
   final LayerLink sourceLink;
@@ -14,6 +16,7 @@ class TextTranslationLangBar extends StatelessWidget {
   final VoidCallback onLeftTap;
   final VoidCallback onRightTap;
   final VoidCallback onSwap;
+  final String? swapIconAsset;
 
   const TextTranslationLangBar({
     super.key,
@@ -26,6 +29,7 @@ class TextTranslationLangBar extends StatelessWidget {
     required this.onLeftTap,
     required this.onRightTap,
     required this.onSwap,
+    this.swapIconAsset,
   });
 
   @override
@@ -81,16 +85,22 @@ class TextTranslationLangBar extends StatelessWidget {
             onTap: onSwap,
             borderRadius: BorderRadius.circular(999.r),
             child: Container(
-              width: 34.w,
-              height: 34.w,
+              width: 31.w,
+              height: 31.w,
               decoration: const BoxDecoration(
                 color: Color(0xFF0A70FF),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                Icons.swap_horiz_rounded,
-                size: 18.sp,
-                color: Colors.white,
+              child: Center(
+                child: SvgPicture.asset(
+                  swapIconAsset ?? AppAssets.icDegisim,
+                  width: 15.w,
+                  height: 15.w,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
             ),
           ),

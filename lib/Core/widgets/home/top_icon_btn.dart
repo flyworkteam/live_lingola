@@ -1,33 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TopIconBtn extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback? onTap;
+  final String svgPath;
+  final VoidCallback onTap;
 
-  const TopIconBtn({
-    super.key,
-    required this.icon,
-    this.onTap,
-  });
+  const TopIconBtn({super.key, required this.svgPath, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(999),
+    return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: 34.w,
-        height: 34.w,
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.22),
-          borderRadius: BorderRadius.circular(999),
-          border: Border.all(color: Colors.white.withOpacity(0.35)),
-        ),
-        child: Icon(
-          icon,
-          size: 18.sp,
-          color: Colors.white,
+      behavior: HitTestBehavior.opaque,
+      child: SvgPicture.asset(
+        svgPath,
+        width: 16.w,
+        height: 16.w,
+        colorFilter: const ColorFilter.mode(
+          Color(0xFF0A70FF),
+          BlendMode.srcIn,
         ),
       ),
     );

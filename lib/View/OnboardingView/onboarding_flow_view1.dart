@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lingora_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
 
 import 'onboarding_flow_view2.dart';
@@ -15,7 +16,6 @@ class OnboardingFlowView1 extends ConsumerWidget {
     final c = ref.read(onboardingControllerProvider.notifier);
 
     const skipRight = 29.0;
-
     const blockTop = 130.0;
     const blockHeight = 516.0;
 
@@ -47,6 +47,7 @@ class OnboardingFlowView1 extends ConsumerWidget {
         minimum: EdgeInsets.only(top: 73.h),
         child: Stack(
           children: [
+            // Skip Button
             Align(
               alignment: Alignment.topRight,
               child: Padding(
@@ -81,6 +82,7 @@ class OnboardingFlowView1 extends ConsumerWidget {
                 ),
               ),
             ),
+            // Content
             Positioned.fill(
               child: Padding(
                 padding: EdgeInsets.only(bottom: bottomCtaSpace),
@@ -129,41 +131,42 @@ class OnboardingFlowView1 extends ConsumerWidget {
                             ),
                           ),
                         ),
+                        // Choices with SVG assets
                         choice(
                           figmaTop: 265,
                           text: 'Daily Communication',
                           v: TranslationUsage.daily,
-                          iconAsset: 'assets/images/onboarding1/messages.png',
+                          iconAsset: 'assets/images/onboarding1/messages.svg',
                         ),
                         choice(
                           figmaTop: 331,
                           text: 'Business World',
                           v: TranslationUsage.business,
-                          iconAsset: 'assets/images/onboarding1/bussines.png',
+                          iconAsset: 'assets/images/onboarding1/business.svg',
                         ),
                         choice(
                           figmaTop: 397,
                           text: 'Language Learning',
                           v: TranslationUsage.learning,
-                          iconAsset: 'assets/images/onboarding1/translate.png',
+                          iconAsset: 'assets/images/onboarding1/translate.svg',
                         ),
                         choice(
                           figmaTop: 463,
                           text: 'Travel',
                           v: TranslationUsage.travel,
-                          iconAsset: 'assets/images/onboarding1/travel.png',
+                          iconAsset: 'assets/images/onboarding1/travel.svg',
                         ),
                         choice(
                           figmaTop: 529,
                           text: 'Entertainment',
                           v: TranslationUsage.entertainment,
-                          iconAsset: 'assets/images/onboarding1/game.png',
+                          iconAsset: 'assets/images/onboarding1/game.svg',
                         ),
                         choice(
                           figmaTop: 595,
                           text: 'Other',
                           v: TranslationUsage.other,
-                          iconAsset: 'assets/images/onboarding1/other.png',
+                          iconAsset: 'assets/images/onboarding1/other.svg',
                         ),
                       ],
                     ),
@@ -171,6 +174,7 @@ class OnboardingFlowView1 extends ConsumerWidget {
                 ),
               ),
             ),
+            // Next Button
             Align(
               alignment: Alignment.bottomCenter,
               child: SafeArea(
@@ -260,13 +264,15 @@ class _UsageChoiceButton extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Image.asset(
+                  SvgPicture.asset(
                     iconAsset,
                     width: 18.sp,
                     height: 18.sp,
                     fit: BoxFit.contain,
-                    color: contentColor,
-                    colorBlendMode: BlendMode.srcIn,
+                    colorFilter: ColorFilter.mode(
+                      contentColor,
+                      BlendMode.srcIn,
+                    ),
                   ),
                   SizedBox(width: 10.w),
                   ConstrainedBox(

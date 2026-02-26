@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lingora_app/Core/Utils/assets.dart';
 import 'package:lingora_app/Core/widgets/common/app_card.dart';
 import 'package:lingora_app/Core/widgets/common/dropdown_card.dart';
 import 'package:lingora_app/Core/widgets/common/tap_outside_to_close.dart';
 import 'package:lingora_app/Core/widgets/text_translation/example_tile.dart';
-import 'package:lingora_app/Core/widgets/text_translation/expert_row.dart';
 import 'package:lingora_app/Core/widgets/text_translation/lang_bar.dart';
 import 'package:lingora_app/Core/widgets/text_translation/lang_row.dart';
 import 'package:lingora_app/Core/widgets/text_translation/models.dart';
@@ -53,8 +54,7 @@ class _TextTranslationViewState extends State<TextTranslationView> {
     LangItem(name: "Spanish", flagAsset: "assets/images/flags/Spanish.png"),
   ];
 
-  final LayerLink _sourceLink = LayerLink();
-  final LayerLink _targetLink = LayerLink();
+  final LayerLink _langBarLink = LayerLink();
   final LayerLink _expertLink = LayerLink();
 
   OverlayEntry? _langOverlay;
@@ -102,8 +102,6 @@ class _TextTranslationViewState extends State<TextTranslationView> {
       return;
     }
 
-    final link = forSource ? _sourceLink : _targetLink;
-
     _langOverlay = OverlayEntry(
       builder: (_) {
         return TapOutsideToClose(
@@ -112,17 +110,15 @@ class _TextTranslationViewState extends State<TextTranslationView> {
             children: [
               Positioned.fill(child: Container(color: Colors.transparent)),
               CompositedTransformFollower(
-                link: link,
+                link: _langBarLink,
                 showWhenUnlinked: false,
-                targetAnchor:
-                    forSource ? Alignment.bottomLeft : Alignment.bottomRight,
-                followerAnchor:
-                    forSource ? Alignment.topLeft : Alignment.topRight,
+                targetAnchor: Alignment.bottomCenter,
+                followerAnchor: Alignment.topCenter,
                 offset: Offset(0, 10.h),
                 child: Material(
                   color: Colors.transparent,
                   child: DropdownCard(
-                    width: 348.w,
+                    width: 358.w,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -190,18 +186,34 @@ class _TextTranslationViewState extends State<TextTranslationView> {
                 child: Material(
                   color: Colors.transparent,
                   child: DropdownCard(
-                    width: 220.w,
+                    width: 160.w,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         for (int i = 0; i < _experts.length; i++) ...[
-                          TextTranslationExpertRow(
-                            text: _experts[i],
-                            active: _experts[i] == _expert,
+                          InkWell(
                             onTap: () {
                               setState(() => _expert = _experts[i]);
                               _removeExpertOverlay();
                             },
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 14.w, vertical: 12.h),
+                              child: Text(
+                                _experts[i],
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w500,
+                                  height: 26 / 12,
+                                  color: _experts[i] == _expert
+                                      ? const Color(0xFF0A70FF)
+                                      : const Color(0xFF0F172A),
+                                ),
+                              ),
+                            ),
                           ),
                           if (i != _experts.length - 1)
                             Divider(
@@ -286,11 +298,14 @@ class _TextTranslationViewState extends State<TextTranslationView> {
     final topPad = MediaQuery.of(context).padding.top;
     final bottomReserve = 62.h + 20.h + 22.h;
 
-    // ignore: deprecated_member_use
-    return WillPopScope(
-      onWillPop: _handleBack,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+        final shouldPop = await _handleBack();
+        if (shouldPop && context.mounted) Navigator.of(context).pop();
+      },
       child: Scaffold(
-        backgroundColor: const Color(0xFFF3F6FB),
         body: Stack(
           children: [
             Positioned.fill(
@@ -314,9 +329,10 @@ class _TextTranslationViewState extends State<TextTranslationView> {
               children: [
                 SizedBox(height: topPad + 8.h),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  padding: EdgeInsets.only(
+                      top: 83.h - topPad - 8.h, left: 16.w, right: 16.w),
                   child: SizedBox(
-                    height: 44.h,
+                    height: 26.h,
                     child: Row(
                       children: [
                         InkWell(
@@ -326,13 +342,20 @@ class _TextTranslationViewState extends State<TextTranslationView> {
                               widget.onBackToHome!();
                             }
                           },
-                          child: SizedBox(
-                            width: 44.w,
-                            height: 44.w,
-                            child: Icon(
-                              Icons.arrow_back_rounded,
-                              size: 22.sp,
-                              color: Colors.white,
+                          child: Container(
+                            width: 24.w,
+                            height: 24.w,
+                            color: Colors.transparent,
+                            child: Center(
+                              child: SvgPicture.asset(
+                                AppAssets.icBack,
+                                width: 24.w,
+                                height: 24.w,
+                                colorFilter: const ColorFilter.mode(
+                                  Colors.white,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -340,21 +363,24 @@ class _TextTranslationViewState extends State<TextTranslationView> {
                           child: Center(
                             child: Text(
                               "Text Translation",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w500,
+                                height: 26 / 20,
+                                letterSpacing: 0,
                                 color: Colors.white,
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(width: 44.w),
+                        SizedBox(width: 24.w),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(height: 51.h),
                 Expanded(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
@@ -363,30 +389,31 @@ class _TextTranslationViewState extends State<TextTranslationView> {
                           EdgeInsets.fromLTRB(16.w, 0, 16.w, bottomReserve),
                       child: Column(
                         children: [
-                          TextTranslationLangBar(
-                            sourceLink: _sourceLink,
-                            targetLink: _targetLink,
-                            sourceFlagAsset: _langs
-                                .firstWhere((e) => e.name == _sourceLang)
-                                .flagAsset,
-                            targetFlagAsset: _langs
-                                .firstWhere((e) => e.name == _targetLang)
-                                .flagAsset,
-                            leftText: _sourceLang,
-                            rightText: _targetLang,
-                            onLeftTap: () =>
-                                _toggleLangDropdown(forSource: true),
-                            onRightTap: () =>
-                                _toggleLangDropdown(forSource: false),
-                            onSwap: () {
-                              _removeLangOverlay();
-                              _removeExpertOverlay();
-                              _swapLang();
-                            },
+                          CompositedTransformTarget(
+                            link: _langBarLink,
+                            child: TextTranslationLangBar(
+                              sourceLink: LayerLink(),
+                              targetLink: LayerLink(),
+                              sourceFlagAsset: _langs
+                                  .firstWhere((e) => e.name == _sourceLang)
+                                  .flagAsset,
+                              targetFlagAsset: _langs
+                                  .firstWhere((e) => e.name == _targetLang)
+                                  .flagAsset,
+                              leftText: _sourceLang,
+                              rightText: _targetLang,
+                              onLeftTap: () =>
+                                  _toggleLangDropdown(forSource: true),
+                              onRightTap: () =>
+                                  _toggleLangDropdown(forSource: false),
+                              onSwap: () {
+                                _removeLangOverlay();
+                                _removeExpertOverlay();
+                                _swapLang();
+                              },
+                            ),
                           ),
                           SizedBox(height: 14.h),
-
-                          // SOURCE CARD
                           AppCard(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -416,10 +443,14 @@ class _TextTranslationViewState extends State<TextTranslationView> {
                                       ),
                                       child: Row(
                                         children: [
-                                          Icon(
-                                            Icons.content_paste_rounded,
-                                            size: 14.sp,
-                                            color: const Color(0xFF0A70FF),
+                                          SvgPicture.asset(
+                                            AppAssets.icPaste,
+                                            width: 14.sp,
+                                            height: 14.sp,
+                                            colorFilter: const ColorFilter.mode(
+                                              Color(0xFF0A70FF),
+                                              BlendMode.srcIn,
+                                            ),
                                           ),
                                           SizedBox(width: 6.w),
                                           Text(
@@ -455,10 +486,14 @@ class _TextTranslationViewState extends State<TextTranslationView> {
                                 SizedBox(height: 8.h),
                                 Row(
                                   children: [
-                                    Icon(
-                                      Icons.insert_drive_file_outlined,
-                                      size: 18.sp,
-                                      color: const Color(0xFF94A3B8),
+                                    SvgPicture.asset(
+                                      AppAssets.icDocument,
+                                      width: 18.sp,
+                                      height: 18.sp,
+                                      colorFilter: const ColorFilter.mode(
+                                        Color(0xFF94A3B8),
+                                        BlendMode.srcIn,
+                                      ),
                                     ),
                                     const Spacer(),
                                     Text(
@@ -475,10 +510,7 @@ class _TextTranslationViewState extends State<TextTranslationView> {
                               ],
                             ),
                           ),
-
                           SizedBox(height: 14.h),
-
-                          // TRANSLATION CARD
                           AppCard(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -508,13 +540,25 @@ class _TextTranslationViewState extends State<TextTranslationView> {
                                 SizedBox(height: 12.h),
                                 Row(
                                   children: [
-                                    Icon(Icons.copy_rounded,
-                                        size: 18.sp,
-                                        color: const Color(0xFFCBD5E1)),
+                                    SvgPicture.asset(
+                                      AppAssets.icCopy,
+                                      width: 18.sp,
+                                      height: 18.sp,
+                                      colorFilter: const ColorFilter.mode(
+                                        Color(0xFFCBD5E1),
+                                        BlendMode.srcIn,
+                                      ),
+                                    ),
                                     SizedBox(width: 14.w),
-                                    Icon(Icons.star_border_rounded,
-                                        size: 20.sp,
-                                        color: const Color(0xFFCBD5E1)),
+                                    SvgPicture.asset(
+                                      AppAssets.icFav,
+                                      width: 20.sp,
+                                      height: 20.sp,
+                                      colorFilter: const ColorFilter.mode(
+                                        Color(0xFFCBD5E1),
+                                        BlendMode.srcIn,
+                                      ),
+                                    ),
                                     const Spacer(),
                                     Container(
                                       width: 34.w,
@@ -523,18 +567,24 @@ class _TextTranslationViewState extends State<TextTranslationView> {
                                         color: Color(0xFF0A70FF),
                                         shape: BoxShape.circle,
                                       ),
-                                      child: Icon(Icons.volume_up_rounded,
-                                          size: 18.sp, color: Colors.white),
+                                      child: Center(
+                                        child: SvgPicture.asset(
+                                          AppAssets.icSes,
+                                          width: 18.sp,
+                                          height: 18.sp,
+                                          colorFilter: const ColorFilter.mode(
+                                            Colors.white,
+                                            BlendMode.srcIn,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
                               ],
                             ),
                           ),
-
                           SizedBox(height: 14.h),
-
-                          // AI EXPERTS
                           AppCard(
                             child: Row(
                               children: [
@@ -585,10 +635,7 @@ class _TextTranslationViewState extends State<TextTranslationView> {
                               ],
                             ),
                           ),
-
                           SizedBox(height: 14.h),
-
-                          // EXAMPLES
                           AppCard(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

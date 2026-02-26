@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../../Core/Utils/assets.dart';
 
 class SelectLanguageView extends StatefulWidget {
   const SelectLanguageView({super.key});
@@ -37,16 +39,13 @@ class _SelectLanguageViewState extends State<SelectLanguageView> {
 
   @override
   Widget build(BuildContext context) {
-    final bottomPad = MediaQuery.of(context).padding.bottom;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(18.w, 10.h, 18.w, 18.h + bottomPad),
+          padding: EdgeInsets.fromLTRB(18.w, 10.h, 18.w, 24.h),
           child: Column(
             children: [
-              // Üst Bar - Select Language (Poppins 20px, Medium)
               _TopBar(
                 title: "Select Language",
                 onBack: () => Navigator.of(context).pop(),
@@ -54,8 +53,10 @@ class _SelectLanguageViewState extends State<SelectLanguageView> {
               SizedBox(height: 18.h),
               Expanded(
                 child: ListView.separated(
+                  padding: EdgeInsets.zero,
                   physics: const BouncingScrollPhysics(
-                      parent: ClampingScrollPhysics()),
+                    parent: AlwaysScrollableScrollPhysics(),
+                  ),
                   itemCount: _langs.length,
                   separatorBuilder: (_, __) => SizedBox(height: 12.h),
                   itemBuilder: (context, i) {
@@ -72,9 +73,7 @@ class _SelectLanguageViewState extends State<SelectLanguageView> {
                   },
                 ),
               ),
-              SizedBox(height: 14.h),
-
-              // Next Butonu
+              SizedBox(height: 16.h),
               SizedBox(
                 width: double.infinity,
                 height: 54.h,
@@ -131,10 +130,16 @@ class _TopBar extends StatelessWidget {
             child: SizedBox(
               width: 44.w,
               height: 44.w,
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: 18.sp,
-                color: const Color(0xFF0F172A),
+              child: Center(
+                child: SvgPicture.asset(
+                  AppAssets.icBack,
+                  width: 24.sp,
+                  height: 24.sp,
+                  colorFilter: const ColorFilter.mode(
+                    Color(0xFF0F172A),
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
             ),
           ),
@@ -192,7 +197,6 @@ class _LangPill extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Bayrak alanı
             SizedBox(
               width: 28.w,
               height: 20.h,
@@ -208,8 +212,6 @@ class _LangPill extends StatelessWidget {
               ),
             ),
             SizedBox(width: 12.w),
-
-            // Dil metni (Poppins Light 15px)
             Text(
               title,
               style: TextStyle(

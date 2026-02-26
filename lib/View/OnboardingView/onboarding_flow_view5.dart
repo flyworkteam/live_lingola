@@ -1,7 +1,7 @@
-// lib/View/OnboardingView/onboarding_flow_view5.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:lingora_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
 import 'package:lingora_app/View/HomeView/home_and_notifications_view.dart';
@@ -49,8 +49,6 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(height: 28.h),
-
-                      // PROGRESS CIRCLE + ICON
                       SizedBox(
                         width: 159.w,
                         height: 159.w,
@@ -90,22 +88,22 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                                 color: Color(0xFFD9E7FF),
                               ),
                               child: Center(
-                                child: Image.asset(
-                                  'assets/images/icons/actions/robot.png',
+                                child: SvgPicture.asset(
+                                  'assets/images/icons/actions/ai_robot.svg',
                                   width: 54.sp,
                                   height: 54.sp,
                                   fit: BoxFit.contain,
-                                  color: const Color(0xFF0A70FF),
-                                  colorBlendMode: BlendMode.srcIn,
+                                  colorFilter: const ColorFilter.mode(
+                                    Color(0xFF0A70FF),
+                                    BlendMode.srcIn,
+                                  ),
                                 ),
                               ),
                             ),
                           ],
                         ),
                       ),
-
                       SizedBox(height: 20.h),
-
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 24.w),
                         child: Text(
@@ -120,9 +118,7 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                           ),
                         ),
                       ),
-
                       SizedBox(height: 10.h),
-
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 32.w),
                         child: Text(
@@ -137,9 +133,7 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                           ),
                         ),
                       ),
-
                       SizedBox(height: 34.h),
-
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 36.w),
                         child: Row(
@@ -177,9 +171,7 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                           ],
                         ),
                       ),
-
                       SizedBox(height: 8.h),
-
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 36.w),
                         child: ClipRRect(
@@ -196,9 +188,7 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                           ),
                         ),
                       ),
-
                       SizedBox(height: 18.h),
-
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 36.w),
                         child: Container(
@@ -299,7 +289,8 @@ class _CheckRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
           width: 22.w,
           height: 22.w,
           decoration: BoxDecoration(

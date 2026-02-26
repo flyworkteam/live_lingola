@@ -1,13 +1,21 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../Core/Routes/app_routes.dart';
 import '../../../Core/Theme/app_colors.dart';
 import '../../../Core/Theme/app_text_styles.dart';
 
-/// Kullanıcı giriş işlemlerini, sosyal medya entegrasyonlarını
-/// ve yasal dökümantasyon erişimlerini yöneten ana ekran.
+/// LoginView
+/// - Sosyal giriş butonları (Google/Facebook/Apple)
+/// - Continue as Guest
+/// - Terms / Privacy / Cookies linkleri
+///
+/// Bu ekran Figma ölçülerine göre pixel-perfect kurgulanmıştır.
+/// Özellikle social login butonlarında:
+/// - İkonların X/Y konumu ve boyutu Figma’daki left/top/width/height değerleriyle eşleşir.
+/// - Yazı kutularının genişlikleri (122/145/121) Figma’daki bounding box değerleriyle birebir uygulanır.
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
 
@@ -23,11 +31,10 @@ class LoginView extends StatelessWidget {
   /// Harici tarayıcı üzerinden belirtilen URL bağlantısını açar.
   Future<void> _openUrl(String url) async {
     final uri = Uri.parse(url);
-    final ok = await launchUrl(
-      uri,
-      mode: LaunchMode.externalApplication,
-    );
-    if (!ok) {}
+    final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!ok) {
+      // Opsiyonel: Snackbar/Toast
+    }
   }
 
   @override
@@ -38,7 +45,9 @@ class LoginView extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
-          // Arka plan gradyan katmanı
+          // -------------------------------------------------------------------
+          // 1) Background Gradient
+          // -------------------------------------------------------------------
           Positioned.fill(
             child: Container(
               decoration: const BoxDecoration(
@@ -47,7 +56,9 @@ class LoginView extends StatelessWidget {
             ),
           ),
 
-          // Logo ve marka ikonu alanı
+          // -------------------------------------------------------------------
+          // 2) Brand Logo Container
+          // -------------------------------------------------------------------
           Positioned(
             top: 125,
             left: 38,
@@ -69,7 +80,9 @@ class LoginView extends StatelessWidget {
             ),
           ),
 
-          // Uygulama başlığı
+          // -------------------------------------------------------------------
+          // 3) App Title
+          // -------------------------------------------------------------------
           const Positioned(
             top: 130,
             left: 96,
@@ -89,7 +102,9 @@ class LoginView extends StatelessWidget {
             ),
           ),
 
-          // Karşılama metni
+          // -------------------------------------------------------------------
+          // 4) Headline
+          // -------------------------------------------------------------------
           const Positioned(
             top: 207,
             left: 37,
@@ -109,7 +124,9 @@ class LoginView extends StatelessWidget {
             ),
           ),
 
-          // Tanıtım alt metni
+          // -------------------------------------------------------------------
+          // 5) Subtitle
+          // -------------------------------------------------------------------
           Positioned(
             top: 289,
             left: 38,
@@ -129,7 +146,13 @@ class LoginView extends StatelessWidget {
             ),
           ),
 
-          // Sosyal medya giriş butonları
+          // -------------------------------------------------------------------
+          // 6) Social Login Buttons (Figma pixel-perfect)
+          // Button ölçüsü: width=319 height=45, left=37
+          // İçerikler: ikon + text kutuları figmadaki top/left değerleriyle konumlandırılır.
+          // -------------------------------------------------------------------
+
+          // Google Button
           Positioned(
             top: 389,
             left: 37,
@@ -137,8 +160,23 @@ class LoginView extends StatelessWidget {
               label: "Continue with Gmail",
               provider: _AuthProvider.google,
               onTap: () => _goOnboarding(context),
+
+              // --- Figma: TEXT box
+              textBoxWidth: 122,
+              textBoxHeight: 18,
+              // Global left/top -> buton içi (buttonLeft=37, buttonTop=389)
+              textLeft: 148 - 37, // 111
+              textTop: 403.43 - 389, // 14.43
+
+              // --- Figma: ICON
+              iconWidth: 18.0,
+              iconHeight: 18.642105102539062,
+              iconLeft: 122 - 37, // 85
+              iconTop: 402 - 389, // 13
             ),
           ),
+
+          // Facebook Button
           Positioned(
             top: 453,
             left: 37,
@@ -146,8 +184,22 @@ class LoginView extends StatelessWidget {
               label: "Continue with Facebook",
               provider: _AuthProvider.facebook,
               onTap: () => _goOnboarding(context),
+
+              // --- Figma: TEXT box
+              textBoxWidth: 145,
+              textBoxHeight: 18,
+              textLeft: 134 - 37, // 97
+              textTop: 467.43 - 453, // 14.43
+
+              // --- Figma: ICON
+              iconWidth: 12.0,
+              iconHeight: 21.81818199157715,
+              iconLeft: 113 - 37, // 76
+              iconTop: 464 - 453, // 11
             ),
           ),
+
+          // Apple Button
           Positioned(
             top: 517,
             left: 37,
@@ -155,10 +207,24 @@ class LoginView extends StatelessWidget {
               label: "Continue with Apple",
               provider: _AuthProvider.apple,
               onTap: () => _goOnboarding(context),
+
+              // --- Figma: TEXT box
+              textBoxWidth: 121,
+              textBoxHeight: 18,
+              textLeft: 149 - 37, // 112
+              textTop: 531.43 - 517, // 14.43
+
+              // --- Figma: ICON
+              iconWidth: 18.0,
+              iconHeight: 22.0,
+              iconLeft: 122 - 37, // 85
+              iconTop: 526 - 517, // 9
             ),
           ),
 
-          // Misafir girişi sekmesi
+          // -------------------------------------------------------------------
+          // 7) Guest Login
+          // -------------------------------------------------------------------
           Positioned(
             bottom: 80 + bottomPad,
             left: 0,
@@ -179,7 +245,9 @@ class LoginView extends StatelessWidget {
             ),
           ),
 
-          // Yasal bilgilendirme ve yönlendirme linkleri
+          // -------------------------------------------------------------------
+          // 8) Legal Links
+          // -------------------------------------------------------------------
           Positioned(
             left: 52,
             bottom: 24 + bottomPad,
@@ -208,9 +276,7 @@ class LoginView extends StatelessWidget {
                           decoration: TextDecoration.underline,
                         ),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            _openUrl(_termsUrl);
-                          },
+                          ..onTap = () => _openUrl(_termsUrl),
                       ),
                       const TextSpan(text: '\n'),
                       const TextSpan(
@@ -223,9 +289,7 @@ class LoginView extends StatelessWidget {
                           decoration: TextDecoration.underline,
                         ),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            _openUrl(_privacyUrl);
-                          },
+                          ..onTap = () => _openUrl(_privacyUrl),
                       ),
                       const TextSpan(text: ' and\n'),
                       TextSpan(
@@ -235,9 +299,7 @@ class LoginView extends StatelessWidget {
                           decoration: TextDecoration.underline,
                         ),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            _openUrl(_cookiesUrl);
-                          },
+                          ..onTap = () => _openUrl(_cookiesUrl),
                       ),
                       const TextSpan(text: '.'),
                     ],
@@ -256,17 +318,19 @@ class LoginView extends StatelessWidget {
 enum _AuthProvider { google, facebook, apple }
 
 extension _AuthProviderAssets on _AuthProvider {
+  /// SVG asset path'leri
   String get assetPath {
     switch (this) {
       case _AuthProvider.google:
-        return 'assets/images/auth/google.png';
+        return 'assets/images/auth/google.svg';
       case _AuthProvider.facebook:
-        return 'assets/images/auth/facebook.png';
+        return 'assets/images/auth/facebook.svg';
       case _AuthProvider.apple:
-        return 'assets/images/auth/apple.png';
+        return 'assets/images/auth/apple.svg';
     }
   }
 
+  /// Erişilebilirlik etiketi
   String get semanticLabel {
     switch (this) {
       case _AuthProvider.google:
@@ -279,16 +343,39 @@ extension _AuthProviderAssets on _AuthProvider {
   }
 }
 
-/// Standartlaştırılmış giriş butonu bileşeni
+/// Social login button
+///
+/// Bu widget Figma pixel değerleri ile çalışır.
+/// - İçerikler (ikon + yazı) butonun içine, figmadaki left/top değerleriyle "Positioned" olarak yerleşir.
 class _LoginButton extends StatelessWidget {
   final String label;
   final _AuthProvider provider;
   final VoidCallback? onTap;
 
+  // Figma: text bounding box
+  final double textBoxWidth;
+  final double textBoxHeight;
+  final double textLeft;
+  final double textTop;
+
+  // Figma: icon box
+  final double iconWidth;
+  final double iconHeight;
+  final double iconLeft;
+  final double iconTop;
+
   const _LoginButton({
     required this.label,
     required this.provider,
-    this.onTap,
+    required this.onTap,
+    required this.textBoxWidth,
+    required this.textBoxHeight,
+    required this.textLeft,
+    required this.textTop,
+    required this.iconWidth,
+    required this.iconHeight,
+    required this.iconLeft,
+    required this.iconTop,
   });
 
   @override
@@ -312,37 +399,60 @@ class _LoginButton extends StatelessWidget {
               ),
             ],
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Center(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  provider.assetPath,
-                  width: 18,
-                  height: 18,
-                  fit: BoxFit.contain,
-                  semanticLabel: provider.semanticLabel,
-                  errorBuilder: (_, __, ___) =>
-                      const Icon(Icons.image_not_supported, size: 18),
-                ),
-                const SizedBox(width: 10),
-                Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: false,
-                  style: const TextStyle(
-                    fontFamily: AppTextStyles.fontFamily,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    height: 1.0,
-                    letterSpacing: 0.0,
-                    color: Colors.black,
+
+          // Stack: Figma'daki absolute konumları buton içinde birebir uygular.
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              // --------------------------------------------------------------
+              // Icon (Figma left/top/width/height)
+              // --------------------------------------------------------------
+              Positioned(
+                left: iconLeft,
+                top: iconTop,
+                child: SizedBox(
+                  width: iconWidth,
+                  height: iconHeight,
+                  child: SvgPicture.asset(
+                    provider.assetPath,
+                    width: iconWidth,
+                    height: iconHeight,
+                    fit: BoxFit.contain,
+                    semanticsLabel: provider.semanticLabel,
                   ),
                 ),
-              ],
-            ),
+              ),
+
+              // --------------------------------------------------------------
+              // Text (Figma bounding box: width/height + left/top)
+              // --------------------------------------------------------------
+              Positioned(
+                left: textLeft,
+                top: textTop,
+                child: SizedBox(
+                  width: textBoxWidth,
+                  height: textBoxHeight,
+                  child: Center(
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      softWrap: false,
+                      overflow: TextOverflow
+                          .clip, // Figma'da bounding box içinde kalır
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: AppTextStyles.fontFamily, // Poppins
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        height: 1.0, // line-height: 100%
+                        letterSpacing: 0.0,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

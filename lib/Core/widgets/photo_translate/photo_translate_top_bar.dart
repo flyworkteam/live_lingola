@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lingora_app/Core/Utils/assets.dart';
 
 class PhotoTranslateTopBar extends StatelessWidget {
   final String title;
@@ -25,10 +27,16 @@ class PhotoTranslateTopBar extends StatelessWidget {
             child: SizedBox(
               width: 44.w,
               height: 44.w,
-              child: Icon(
-                Icons.arrow_back_rounded,
-                size: 22.sp,
-                color: const Color(0xFF0F172A),
+              child: Center(
+                child: SvgPicture.asset(
+                  AppAssets.icBack,
+                  width: 24.sp,
+                  height: 24.sp,
+                  colorFilter: const ColorFilter.mode(
+                    Color(0xFF0F172A),
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
             ),
           ),
@@ -36,10 +44,13 @@ class PhotoTranslateTopBar extends StatelessWidget {
             child: Center(
               child: Text(
                 title,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Poppins',
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w500,
+                  height: 26 / 20,
+                  letterSpacing: 0,
                   color: const Color(0xFF0F172A),
                 ),
               ),
@@ -53,16 +64,29 @@ class PhotoTranslateTopBar extends StatelessWidget {
               height: 44.w,
               child: Center(
                 child: Container(
-                  width: 22.w,
-                  height: 22.w,
+                  width: 29.w,
+                  height: 29.w,
                   decoration: const BoxDecoration(
-                    color: Color(0xFF0A70FF),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.settings_outlined,
-                    size: 14.sp,
                     color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0x1A000000),
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
+                      )
+                    ],
+                  ),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      AppAssets.icSettings,
+                      width: 20.w,
+                      height: 20.w,
+                      colorFilter: const ColorFilter.mode(
+                        Color(0xFF0A70FF),
+                        BlendMode.srcIn,
+                      ),
+                    ),
                   ),
                 ),
               ),

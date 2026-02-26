@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../Core/Utils/assets.dart';
 import '../../Core/widgets/chat/chat_bubble.dart';
 import '../../Core/widgets/chat/chat_chip.dart';
 import '../../Core/widgets/chat/chat_input.dart';
@@ -23,18 +24,15 @@ class _AiChatViewState extends State<AiChatView> {
   final List<ChatMessage> _messages = const [
     ChatMessage(
       fromBot: true,
-      text:
-          "Hello! I'm your AI Travel Assistant. I can help you find flights, suggest\nlocal attractions, or even translate common phrases. How can I assist\nyou today? ✈️",
+      text: "Hello! I'm your AI Travel Assistant...",
     ),
     ChatMessage(
       fromBot: false,
-      text:
-          "I'm planning a trip to Tokyo next\nmonth. Can you recommend some\nmust-visit hidden gems?",
+      text: "I'm planning a trip to Tokyo...",
     ),
     ChatMessage(
       fromBot: true,
-      text:
-          "Tokyo is amazing! Aside from the\nusual spots, you should definitely\ncheck out:\n• Shimokitazawa: Great for\n  vintage shopping and cool cafes.\n• Yanaka Ginza: A preserved \"Old\n  Tokyo\" shopping street.",
+      text: "Tokyo is amazing!...",
       actionText: "VIEW ON MAP",
     ),
   ];
@@ -71,10 +69,7 @@ class _AiChatViewState extends State<AiChatView> {
   @override
   Widget build(BuildContext context) {
     final topPad = MediaQuery.of(context).padding.top;
-
     final bottomReserve = 62.h + 12.h;
-
-    const botIconAsset = 'assets/images/icons/actions/ic_action_ai_chat.png';
 
     return Scaffold(
       backgroundColor: const Color(0xFFF3F6FB),
@@ -82,15 +77,11 @@ class _AiChatViewState extends State<AiChatView> {
         children: [
           SizedBox(height: topPad + 10.h),
           ChatTopBar(
-            onBack: () {
-              if (widget.onBackToHome != null) {
-                widget.onBackToHome!();
-              } else {
-                Navigator.pop(context);
-              }
-            },
+            onBack: () => widget.onBackToHome != null
+                ? widget.onBackToHome!()
+                : Navigator.pop(context),
             title: 'Ai Chat',
-            iconAsset: botIconAsset,
+            iconAsset: AppAssets.icAiChat,
           ),
           SizedBox(height: 6.h),
           Text(
@@ -98,8 +89,6 @@ class _AiChatViewState extends State<AiChatView> {
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 11.sp,
-              fontWeight: FontWeight.w400,
-              letterSpacing: 0.2,
               color: const Color(0xFF94A3B8),
             ),
           ),
@@ -107,14 +96,12 @@ class _AiChatViewState extends State<AiChatView> {
           Expanded(
             child: ListView.builder(
               controller: _scroll,
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
-              ),
+              physics: const BouncingScrollPhysics(),
               padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 6.h),
               itemCount: _mutableMessages.length,
               itemBuilder: (context, i) => ChatBubble(
                 msg: _mutableMessages[i],
-                botIconAsset: botIconAsset,
+                botIconAsset: AppAssets.icAiChat,
               ),
             ),
           ),
@@ -122,7 +109,6 @@ class _AiChatViewState extends State<AiChatView> {
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: const SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
               child: Row(
                 children: [
                   ChatChip(text: "🇯🇵 Best Sushi?"),

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../Utils/assets.dart';
 
 class VoiceLangBar extends StatelessWidget {
   final String leftFlagAsset;
   final String leftText;
-
   final String rightFlagAsset;
   final String rightText;
-
   final VoidCallback onLeftTap;
   final VoidCallback onRightTap;
   final VoidCallback onSwap;
@@ -26,105 +26,100 @@ class VoiceLangBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 64.h,
+      height: 58.h,
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(22.r),
+        borderRadius: BorderRadius.circular(18.r),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x26000000),
-            blurRadius: 22,
-            offset: Offset(0, 12),
+            color: Color(0x1F0B2B6B),
+            blurRadius: 18,
+            offset: Offset(0, 10),
           ),
         ],
       ),
       child: Row(
         children: [
-          Expanded(
-            child: InkWell(
-              onTap: onLeftTap,
-              borderRadius: BorderRadius.circular(16.r),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(5.r),
-                    child: Image.asset(
-                      leftFlagAsset,
-                      width: 34.w,
-                      height: 24.h,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(
-                        width: 34.w,
-                        height: 24.h,
-                        color: const Color(0xFFE2E8F0),
-                      ),
-                    ),
+          InkWell(
+            onTap: onLeftTap,
+            borderRadius: BorderRadius.circular(14.r),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4.r),
+                  child: Image.asset(
+                    leftFlagAsset,
+                    width: 26.w,
+                    height: 18.h,
+                    fit: BoxFit.cover,
                   ),
-                  SizedBox(width: 12.w),
-                  Text(
-                    leftText,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF0F172A),
-                    ),
+                ),
+                SizedBox(width: 10.w),
+                Text(
+                  leftText,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF0F172A),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
+          const Spacer(),
           InkWell(
             onTap: onSwap,
             borderRadius: BorderRadius.circular(999.r),
             child: Container(
-              width: 44.w,
-              height: 44.w,
+              width: 31.w,
+              height: 31.w,
               decoration: const BoxDecoration(
-                color: Color(0xFF1677FF),
+                color: Color(0xFF0A70FF),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                Icons.swap_horiz_rounded,
-                size: 22.sp,
-                color: Colors.white,
+              child: Center(
+                child: SvgPicture.asset(
+                  AppAssets.icDegisim,
+                  width: 15.w,
+                  height: 15.w,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
             ),
           ),
-          Expanded(
-            child: InkWell(
-              onTap: onRightTap,
-              borderRadius: BorderRadius.circular(16.r),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(5.r),
-                    child: Image.asset(
-                      rightFlagAsset,
-                      width: 34.w,
-                      height: 24.h,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(
-                        width: 34.w,
-                        height: 24.h,
-                        color: const Color(0xFFE2E8F0),
-                      ),
-                    ),
+          const Spacer(),
+          InkWell(
+            onTap: onRightTap,
+            borderRadius: BorderRadius.circular(14.r),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  rightText,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF0F172A),
                   ),
-                  SizedBox(width: 12.w),
-                  Text(
-                    rightText,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF0F172A),
-                    ),
+                ),
+                SizedBox(width: 10.w),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(4.r),
+                  child: Image.asset(
+                    rightFlagAsset,
+                    width: 26.w,
+                    height: 18.h,
+                    fit: BoxFit.cover,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],

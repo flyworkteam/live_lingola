@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../Models/notification_model.dart';
 
 class NotificationCard extends StatelessWidget {
@@ -25,7 +26,6 @@ class NotificationCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Bildirim kategori ikonu ve arka planı
           Container(
             width: 56.w,
             height: 56.w,
@@ -34,22 +34,22 @@ class NotificationCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(16.r),
             ),
             child: Center(
-              child: Image.asset(
+              child: SvgPicture.asset(
                 item.iconAsset,
                 width: 28.w,
                 height: 28.w,
                 fit: BoxFit.contain,
+                colorFilter: item.iconColor != null
+                    ? ColorFilter.mode(item.iconColor!, BlendMode.srcIn)
+                    : null,
               ),
             ),
           ),
-
           SizedBox(width: 14.w),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Başlık ve durum (zaman/okunmamış işareti) satırı
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -68,8 +68,6 @@ class NotificationCard extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 10.w),
-
-                    // Okunmamış bildirimi işaretçisi ve zaman bilgisi
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -98,10 +96,7 @@ class NotificationCard extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 SizedBox(height: 8.h),
-
-                // Bildirim içeriği
                 Text(
                   item.body,
                   style: TextStyle(
@@ -112,7 +107,6 @@ class NotificationCard extends StatelessWidget {
                     color: const Color(0xFF64748B),
                   ),
                 ),
-
                 if (item.action != null) ...[
                   SizedBox(height: 12.h),
                   Row(

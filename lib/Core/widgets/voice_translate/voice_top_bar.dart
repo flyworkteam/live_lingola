@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lingora_app/Core/Utils/assets.dart';
 
 class VoiceTopBar extends StatelessWidget {
   final String title;
@@ -14,37 +16,54 @@ class VoiceTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 44.h,
-      child: Row(
+      height: 26.h,
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          InkWell(
-            onTap: onBack,
-            borderRadius: BorderRadius.circular(999.r),
-            child: SizedBox(
-              width: 44.w,
-              height: 44.w,
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: 20.sp,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Center(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 22.sp,
-                  fontWeight: FontWeight.w600,
-                  height: 1.0,
-                  color: Colors.white,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: InkWell(
+              onTap: onBack,
+              borderRadius: BorderRadius.circular(999),
+              child: SizedBox(
+                width: 40.w,
+                height: 40.w,
+                child: Center(
+                  child: SvgPicture.asset(
+                    AppAssets.icBack,
+                    width: 24.sp,
+                    colorFilter: const ColorFilter.mode(
+                      Colors.white,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-          SizedBox(width: 44.w),
+          Center(
+            child: SizedBox(
+              width: 157.w,
+              height: 26.h,
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.visible,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20.sp,
+                    height: 26 / 20,
+                    letterSpacing: 0,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

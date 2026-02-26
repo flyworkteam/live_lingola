@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lingora_app/Core/Utils/assets.dart';
 
 class FaqView extends StatefulWidget {
   const FaqView({super.key});
@@ -89,15 +91,19 @@ class _TopBar extends StatelessWidget {
           child: SizedBox(
             width: 44.w,
             height: 44.w,
-            child: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              size: 18.sp,
-              color: const Color(0xFF0F172A),
+            child: Center(
+              child: SvgPicture.asset(
+                AppAssets.icBack,
+                width: 18.sp,
+                height: 18.sp,
+                colorFilter: const ColorFilter.mode(
+                  Color(0xFF0F172A),
+                  BlendMode.srcIn,
+                ),
+              ),
             ),
           ),
         ),
-
-        //F.A.Q title: Poppins 20 / Medium(500) / lineHeight 26 / centered
         Expanded(
           child: Center(
             child: Text(
@@ -107,14 +113,13 @@ class _TopBar extends StatelessWidget {
                 fontFamily: 'Poppins',
                 fontSize: 20.sp,
                 fontWeight: FontWeight.w500,
-                height: 26 / 20, // line-height: 26px
+                height: 26 / 20,
                 letterSpacing: 0,
                 color: const Color(0xFF0F172A),
               ),
             ),
           ),
         ),
-
         SizedBox(width: 44.w),
       ],
     );
@@ -163,23 +168,26 @@ class _FaqCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      // Question title: Lato 15 / Regular(400) / letterSpacing -0.3 / lineHeight 100%
                       style: TextStyle(
                         fontFamily: 'Lato',
                         fontSize: 15.sp,
                         fontWeight: FontWeight.w400,
-                        height: 1.0, // line-height: 100%
+                        height: 1.0,
                         letterSpacing: -0.3,
                         color: const Color(0xFF0F172A),
                       ),
                     ),
                   ),
-                  Icon(
+                  SvgPicture.asset(
                     isOpen
-                        ? Icons.keyboard_arrow_up_rounded
-                        : Icons.keyboard_arrow_down_rounded,
-                    color: const Color(0xFF94A3B8),
-                    size: 24.sp,
+                        ? 'assets/images/icons/features/ic_arrow_up.svg'
+                        : 'assets/images/icons/features/ic_arrow_down.svg',
+                    width: 24.sp,
+                    height: 24.sp,
+                    colorFilter: const ColorFilter.mode(
+                      Color(0xFF94A3B8),
+                      BlendMode.srcIn,
+                    ),
                   ),
                 ],
               ),

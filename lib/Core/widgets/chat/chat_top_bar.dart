@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lingora_app/Core/Utils/assets.dart';
 
 class ChatTopBar extends StatelessWidget {
   final VoidCallback onBack;
@@ -19,16 +21,23 @@ class ChatTopBar extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Row(
         children: [
+          // --- GERİ BUTONU (SVG GÜNCELLENDİ) ---
           InkWell(
             borderRadius: BorderRadius.circular(999),
             onTap: onBack,
             child: SizedBox(
               width: 44.w,
               height: 44.w,
-              child: Icon(
-                Icons.arrow_back_rounded,
-                size: 22.sp,
-                color: const Color(0xFF0F172A),
+              child: Center(
+                child: SvgPicture.asset(
+                  AppAssets.icBack,
+                  width: 22.sp,
+                  height: 22.sp,
+                  colorFilter: const ColorFilter.mode(
+                    Color(0xFF0F172A),
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
             ),
           ),
@@ -43,7 +52,7 @@ class ChatTopBar extends StatelessWidget {
                   color: const Color(0xFFE7F0FF),
                   borderRadius: BorderRadius.circular(10.r),
                 ),
-                child: Image.asset(
+                child: SvgPicture.asset(
                   iconAsset,
                   fit: BoxFit.contain,
                 ),
@@ -67,6 +76,7 @@ class ChatTopBar extends StatelessWidget {
             ],
           ),
           const Spacer(),
+          // Sağ taraftaki dengeleyici boşluk
           SizedBox(width: 44.w, height: 44.w),
         ],
       ),

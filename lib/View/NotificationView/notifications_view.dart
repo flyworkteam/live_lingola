@@ -1,11 +1,11 @@
-// lib/View/NotificationView/notifications_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../HomeView/home_and_notifications_view.dart';
 
 import '../../Core/Theme/app_colors.dart';
+import '../../Core/Utils/assets.dart';
 import '../../Core/widgets/notification/notification_card.dart';
-import '../../Core/widgets/notification/notification_section_label.dart';
 import '../../Core/widgets/notification/selectable_notification_row.dart';
 import '../../Models/notification_model.dart';
 
@@ -18,41 +18,40 @@ class NotificationsView extends StatefulWidget {
 
 class _NotificationsViewState extends State<NotificationsView> {
   bool _deleteMode = false;
-  final Set<String> _selectedIds = <String>{};
 
-  final List<NotifItem> _items = const [
-    NotifItem(
+  late final List<NotifItem> _items = [
+    const NotifItem(
       id: 't1',
       section: NotifSection.today,
       iconBg: Color(0xFFE7F0FF),
-      iconAsset: 'assets/images/notificationspage/notification-status.png',
+      iconAsset: AppAssets.icStatus,
       iconColor: Color(0xFF0A70FF),
       title: 'New Translation Ready',
       body:
-          'Your audio translation file has been\nsuccessfully converted to text and translated.',
+          'Your audio translation file has been successfully converted to text and translated.',
       time: '10 min. ago',
       unread: true,
     ),
-    NotifItem(
+    const NotifItem(
       id: 't2',
       section: NotifSection.today,
       iconBg: Color(0xFFFFE9D6),
-      iconAsset: 'assets/images/notificationspage/ticket-star.png',
+      iconAsset: AppAssets.icTicket,
       iconColor: Color(0xFFFF8A00),
       title: 'A Special Offer Awaits You',
-      body: 'Upgrade to Premium for unlimited photo\ntranslations at 50% off.',
+      body: 'Upgrade to Premium for unlimited photo translations at 50% off.',
       time: '2h ago',
       unread: true,
       action: 'SEE THE OPPORTUNITY',
     ),
-    NotifItem(
+    const NotifItem(
       id: 'y1',
       section: NotifSection.yesterday,
       iconBg: Color(0xFFE7F7EF),
-      iconAsset: 'assets/images/notificationspage/Robot.png',
+      iconAsset: AppAssets.icRobot,
       iconColor: Color(0xFF10B981),
       title: 'Ai Chat ile Sohbet et',
-      body: 'AI chat ile aklına takılan sorular\nanında yanıt bul.',
+      body: 'Ai chat ile aklına takılan sorular anında yanıt bul.',
       time: '2:20 PM',
       unread: false,
     ),
@@ -60,32 +59,16 @@ class _NotificationsViewState extends State<NotificationsView> {
 
   late final List<NotifItem> _mutableItems = List<NotifItem>.from(_items);
 
-  void _removeByIds(Set<String> ids) {
+  void _deleteOne(String id) {
     setState(() {
-      _mutableItems.removeWhere((e) => ids.contains(e.id));
-      _selectedIds.clear();
-      _deleteMode = false;
+      _mutableItems.removeWhere((e) => e.id == id);
     });
   }
 
-  void _toggleDeleteModeOrDeleteSelected() {
-    if (!_deleteMode) {
-      setState(() {
-        _deleteMode = true;
-        _selectedIds.clear();
-      });
-      return;
-    }
-
-    if (_selectedIds.isEmpty) {
-      setState(() {
-        _deleteMode = false;
-        _selectedIds.clear();
-      });
-      return;
-    }
-
-    _removeByIds(Set<String>.from(_selectedIds));
+  void _toggleDeleteMode() {
+    setState(() {
+      _deleteMode = !_deleteMode;
+    });
   }
 
   void _onBack() {
@@ -101,7 +84,6 @@ class _NotificationsViewState extends State<NotificationsView> {
   @override
   Widget build(BuildContext context) {
     final topPad = MediaQuery.of(context).padding.top;
-
     final today =
         _mutableItems.where((e) => e.section == NotifSection.today).toList();
     final yesterday = _mutableItems
@@ -126,125 +108,56 @@ class _NotificationsViewState extends State<NotificationsView> {
                   children: [
                     InkWell(
                       onTap: _onBack,
-                      borderRadius: BorderRadius.circular(999),
-                      child: SizedBox(
-                        width: 40.w,
-                        height: 40.w,
-                        child: Icon(
-                          Icons.arrow_back_ios_new_rounded,
-                          size: 18.sp,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: SvgPicture.asset(AppAssets.icBack,
+                          width: 18.sp,
+                          colorFilter: const ColorFilter.mode(
+                              Colors.white, BlendMode.srcIn)),
                     ),
                     const Spacer(),
-                    Text(
-                      "Notifications",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                        letterSpacing: -0.3,
-                      ),
-                    ),
+                    Text("Notifications",
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white)),
                     const Spacer(),
                     InkWell(
-                      onTap: _toggleDeleteModeOrDeleteSelected,
-                      borderRadius: BorderRadius.circular(999),
-                      child: SizedBox(
-                        width: 40.w,
-                        height: 40.w,
-                        child: Icon(
-                          !_deleteMode
-                              ? Icons.delete_outline_rounded
-                              : (_selectedIds.isEmpty
-                                  ? Icons.close_rounded
-                                  : Icons.delete_outline_rounded),
-                          size: 22.sp,
-                          color: Colors.white,
-                        ),
-                      ),
+                      onTap: _toggleDeleteMode,
+                      child: _deleteMode
+                          ? Icon(Icons.close_rounded,
+                              size: 24.sp, color: Colors.white)
+                          : SvgPicture.asset(AppAssets.icTrash,
+                              width: 22.sp,
+                              colorFilter: const ColorFilter.mode(
+                                  Colors.white, BlendMode.srcIn)),
                     ),
                   ],
                 ),
                 SizedBox(height: 22.h),
                 Expanded(
                   child: ListView(
-                    physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics(),
-                    ),
-                    padding: EdgeInsets.only(
-                      bottom: 14.h + MediaQuery.of(context).padding.bottom,
-                    ),
+                    physics: const BouncingScrollPhysics(),
+                    padding: EdgeInsets.only(bottom: 20.h),
                     children: [
                       if (today.isNotEmpty) ...[
-                        const NotificationSectionLabel(
-                          text: 'Today',
-                          isOnBlue: true,
-                        ),
+                        _buildSectionLabel("Today", true),
                         SizedBox(height: 10.h),
-                        ...today.map(
-                          (e) => Padding(
-                            padding: EdgeInsets.only(bottom: 14.h),
-                            child: SelectableNotificationRow(
-                              deleteMode: _deleteMode,
-                              selected: _selectedIds.contains(e.id),
-                              onSelectToggle: () {
-                                setState(() {
-                                  if (_selectedIds.contains(e.id)) {
-                                    _selectedIds.remove(e.id);
-                                  } else {
-                                    _selectedIds.add(e.id);
-                                  }
-                                });
-                              },
-                              child: NotificationCard(item: e),
-                            ),
-                          ),
-                        ),
+                        ...today.map((e) => _buildRow(e)),
                       ],
                       if (yesterday.isNotEmpty) ...[
-                        SizedBox(height: 6.h),
-                        const NotificationSectionLabel(
-                          text: 'Yesterday',
-                          isOnBlue: false,
-                        ),
                         SizedBox(height: 10.h),
-                        ...yesterday.map(
-                          (e) => Padding(
-                            padding: EdgeInsets.only(bottom: 14.h),
-                            child: SelectableNotificationRow(
-                              deleteMode: _deleteMode,
-                              selected: _selectedIds.contains(e.id),
-                              onSelectToggle: () {
-                                setState(() {
-                                  if (_selectedIds.contains(e.id)) {
-                                    _selectedIds.remove(e.id);
-                                  } else {
-                                    _selectedIds.add(e.id);
-                                  }
-                                });
-                              },
-                              child: NotificationCard(item: e),
-                            ),
-                          ),
-                        ),
+                        _buildSectionLabel("Yesterday", false),
+                        SizedBox(height: 10.h),
+                        ...yesterday.map((e) => _buildRow(e)),
                       ],
                       if (_mutableItems.isEmpty)
                         Padding(
-                          padding: EdgeInsets.only(top: 60.h),
+                          padding: EdgeInsets.only(top: 100.h),
                           child: Center(
-                            child: Text(
-                              "No notifications",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white.withOpacity(0.85),
-                              ),
-                            ),
-                          ),
+                              child: Text("No notifications",
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.7),
+                                      fontSize: 16.sp))),
                         ),
                     ],
                   ),
@@ -253,6 +166,35 @@ class _NotificationsViewState extends State<NotificationsView> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSectionLabel(String text, bool isToday) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.only(left: isToday ? 0 : 2.w),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w500,
+          height: 26 / 12,
+          color: const Color(0x80000000),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRow(NotifItem e) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 14.h, left: _deleteMode ? 8.w : 0),
+      child: SelectableNotificationRow(
+        deleteMode: _deleteMode,
+        selected: false,
+        onSelectToggle: () => _deleteOne(e.id),
+        child: NotificationCard(item: e),
       ),
     );
   }

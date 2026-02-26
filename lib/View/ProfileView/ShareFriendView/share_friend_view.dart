@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../../Core/Utils/assets.dart';
 
 class ShareFriendView extends StatefulWidget {
   const ShareFriendView({super.key});
@@ -12,7 +14,6 @@ class ShareFriendView extends StatefulWidget {
 class _ShareFriendViewState extends State<ShareFriendView> {
   final String _link = "https://lingolalive.app/invite?friend=alex_johnson";
 
-  // Kopyalama Fonksiyonu
   void _copy() async {
     await Clipboard.setData(ClipboardData(text: _link));
     if (!mounted) return;
@@ -33,16 +34,28 @@ class _ShareFriendViewState extends State<ShareFriendView> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Üst Bar - Share with Friend
-              // Top: 83px, Left: 109px (ScreenUtil ile dengelendi)
               Padding(
                 padding: EdgeInsets.only(top: 40.h, left: 20.w, right: 20.w),
                 child: Row(
                   children: [
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(),
-                      child: const Icon(Icons.arrow_back,
-                          color: Colors.black, size: 24),
+                      child: Container(
+                        width: 24.w,
+                        height: 24.w,
+                        color: Colors.transparent,
+                        child: Center(
+                          child: SvgPicture.asset(
+                            AppAssets.icBack,
+                            width: 24.w,
+                            height: 24.w,
+                            colorFilter: const ColorFilter.mode(
+                              Colors.black,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                     const Spacer(),
                     Text(
@@ -50,26 +63,22 @@ class _ShareFriendViewState extends State<ShareFriendView> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500, // Medium
+                        fontWeight: FontWeight.w500,
                         fontSize: 20.sp,
-                        height: 26 / 20, // Line-height: 26px
+                        height: 26 / 20,
                         color: Colors.black,
                       ),
                     ),
                     const Spacer(),
-                    const SizedBox(
-                        width: 24), // Geri butonu ile dengelemek için
+                    SizedBox(width: 24.w),
                   ],
                 ),
               ),
-
               SizedBox(height: 40.h),
-
-              // Büyük Görsel (sharefriend.png)
               Center(
                 child: Image.asset(
                   "assets/images/logout/sharefriend.png",
-                  width: 300.w, // Oransal genişlik
+                  width: 300.w,
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) => const Icon(
                       Icons.people_alt_outlined,
@@ -77,42 +86,30 @@ class _ShareFriendViewState extends State<ShareFriendView> {
                       color: Colors.grey),
                 ),
               ),
-
               SizedBox(height: 35.h),
-
-              // Fotoğraf altındaki Share with Friend Başlığı
-              // Top: 402px, Left: 103px
               Text(
                 "Share with Friend",
                 style: TextStyle(
                   fontFamily: 'Lato',
-                  fontWeight: FontWeight.w700, // Bold
+                  fontWeight: FontWeight.w700,
                   fontSize: 24.sp,
-                  height: 1.0, // Line-height %100
+                  height: 1.0,
                   color: Colors.black,
                 ),
               ),
-
               SizedBox(height: 10.h),
-
-              // Alt Bilgi Metni
-              // Top: 437px, Left: 96px
               Text(
                 "Invite your friends and enjoy\ntranslate together",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Lato',
-                  fontWeight: FontWeight.w400, // Regular
+                  fontWeight: FontWeight.w400,
                   fontSize: 16.sp,
                   height: 1.0,
                   color: Colors.black87,
                 ),
               ),
-
               SizedBox(height: 32.h),
-
-              // Link Kartı (Büyük Dikdörtgen)
-              // Width: 298, Height: 173, Top: 507px
               Container(
                 width: 298.w,
                 height: 173.h,
@@ -124,22 +121,17 @@ class _ShareFriendViewState extends State<ShareFriendView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // LINK Etiketi
-                    // Top: 525px, Color: #7D7D7D
                     Text(
                       "LINK",
                       style: TextStyle(
                         fontFamily: 'Lato',
-                        fontWeight: FontWeight.w700, // Bold
+                        fontWeight: FontWeight.w700,
                         fontSize: 14.sp,
-                        letterSpacing: 1.4, // %10
+                        letterSpacing: 1.4,
                         color: const Color(0xFF7D7D7D),
                       ),
                     ),
-
                     SizedBox(height: 12.h),
-
-                    // Link Görüntüleme Alanı
                     Container(
                       width: 260.w,
                       padding: EdgeInsets.symmetric(
@@ -160,29 +152,24 @@ class _ShareFriendViewState extends State<ShareFriendView> {
                         ),
                       ),
                     ),
-
                     SizedBox(height: 14.h),
-
-                    // Copy the Link Butonu
-                    // Top: 629px
                     GestureDetector(
                       onTap: _copy,
                       child: Container(
                         width: 260.w,
                         height: 48.h,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF3B82F6), // Buton Mavi Rengi
+                          color: const Color(0xFF3B82F6),
                           borderRadius: BorderRadius.circular(24.r),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // Belirttiğin Asset İkonu
                             Image.asset(
                               "assets/images/logout/copy_link.png",
                               width: 18.w,
                               height: 18.h,
-                              color: Colors.white, // İkon rengini beyaza zorlar
+                              color: Colors.white,
                               errorBuilder: (context, error, stackTrace) =>
                                   const Icon(Icons.copy,
                                       color: Colors.white, size: 18),
@@ -192,7 +179,7 @@ class _ShareFriendViewState extends State<ShareFriendView> {
                               "Copy the link",
                               style: TextStyle(
                                 fontFamily: 'Lato',
-                                fontWeight: FontWeight.w400, // Regular
+                                fontWeight: FontWeight.w400,
                                 fontSize: 16.sp,
                                 color: Colors.white,
                               ),
@@ -204,8 +191,6 @@ class _ShareFriendViewState extends State<ShareFriendView> {
                   ],
                 ),
               ),
-
-              // Sayfa sonu boşluğu
               SizedBox(height: 40.h),
             ],
           ),

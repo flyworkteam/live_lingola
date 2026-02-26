@@ -1,10 +1,11 @@
-// lib/View/ProfileView/profile_view.dart
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../Core/Theme/app_colors.dart';
 import '../../Core/Routes/app_routes.dart';
+import '../../Core/Utils/assets.dart';
 
 import '../ProfileView/ProfileSettingsView/profile_settings_view.dart';
 import '../ProfileView/ShareFriendView/share_friend_view.dart';
@@ -47,16 +48,11 @@ class _ProPill extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.asset(
+          SvgPicture.asset(
             iconPath,
             width: 20.w,
             height: 20.w,
             fit: BoxFit.contain,
-            errorBuilder: (_, __, ___) => Icon(
-              Icons.lock_rounded,
-              size: 20.sp,
-              color: const Color(0xFFF59E0B),
-            ),
           ),
           SizedBox(width: 10.w),
           Text(
@@ -76,25 +72,22 @@ class _ProPill extends StatelessWidget {
 }
 
 class _ProfileViewState extends State<ProfileView> {
-  // ------- asset paths (assets/images/logout)
   static const String _avatarPath = 'assets/images/logout/Alex.png';
 
-  static const String _icProfile = 'assets/images/logout/profile.png';
-  static const String _icNotification = 'assets/images/logout/notification.png';
-  static const String _icAppLang = 'assets/images/logout/app_language.png';
+  static const String _icProfile = AppAssets.icProfile;
+  static const String _icNotification = AppAssets.icProfileNotification;
+  static const String _icAppLang = AppAssets.icAppLang;
+  static const String _icPrivacy = AppAssets.icPrivacy;
+  static const String _icTerms = AppAssets.icTerms;
+  static const String _icShareFriend = AppAssets.icShareFriend;
+  static const String _icRate = AppAssets.icRate;
+  static const String _icFaq = AppAssets.icFaq;
+  static const String _icSupport = AppAssets.icSupport;
+  static const String _icFeedback = AppAssets.icFeedback;
+  static const String _icLogout = AppAssets.icLogout;
+  static const String _icPro = AppAssets.icPro;
 
-  static const String _icPrivacy = 'assets/images/logout/privacy.png';
-  static const String _icTerms = 'assets/images/logout/terms_of_service.png';
-  static const String _icShareFriend = 'assets/images/logout/share.png';
-  static const String _icRate = 'assets/images/logout/rate.png';
-  static const String _icFaq = 'assets/images/logout/faq.png';
-  static const String _icSupport = 'assets/images/logout/support.png';
-  static const String _icFeedback = 'assets/images/logout/feedback.png';
-
-  static const String _icLogout = 'assets/images/logout/logout.png';
-  static const String _icPro = 'assets/images/logout/pro.png';
-
-  static const double _iconSize = 23; // all icons 23x23
+  static const double _iconSize = 23;
 
   bool _notificationsOn = true;
 
@@ -116,7 +109,6 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-  // taps
   void _openProfileSettings() => _pushSlide(const ProfileSettingsView());
   void _openShareFriend() => _pushSlide(const ShareFriendView());
   void _openFaq() => _pushSlide(const FaqView());
@@ -144,7 +136,6 @@ class _ProfileViewState extends State<ProfileView> {
                     width: 330.w,
                     padding: EdgeInsets.fromLTRB(20.w, 22.h, 20.w, 18.h),
                     decoration: BoxDecoration(
-                      // background: linear-gradient(180deg, #FEF4F4 0%, #FFFFFF 100%);
                       gradient: const LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
@@ -152,10 +143,9 @@ class _ProfileViewState extends State<ProfileView> {
                         stops: [0.0, 1.0],
                       ),
                       borderRadius: BorderRadius.circular(22.r),
-                      //  box-shadow: 0px 0px 4px 0px #00000040;
                       boxShadow: const [
                         BoxShadow(
-                          color: Color(0x40000000), // #00000040
+                          color: Color(0x40000000),
                           blurRadius: 4,
                           offset: Offset(0, 0),
                           spreadRadius: 0,
@@ -165,7 +155,6 @@ class _ProfileViewState extends State<ProfileView> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // TOP ICON (assets/images/logout/logout.png)
                         Container(
                           width: 62.w,
                           height: 62.w,
@@ -182,21 +171,13 @@ class _ProfileViewState extends State<ProfileView> {
                                 borderRadius: BorderRadius.circular(14.r),
                               ),
                               child: Center(
-                                child: ColorFiltered(
+                                child: SvgPicture.asset(
+                                  _icLogout,
+                                  width: 22.w,
+                                  height: 22.w,
                                   colorFilter: const ColorFilter.mode(
                                     Color(0xFFF87171),
                                     BlendMode.srcIn,
-                                  ),
-                                  child: Image.asset(
-                                    _icLogout,
-                                    width: 22.w,
-                                    height: 22.w,
-                                    fit: BoxFit.contain,
-                                    errorBuilder: (_, __, ___) => Icon(
-                                      Icons.logout_rounded,
-                                      color: const Color(0xFFF87171),
-                                      size: _iconSize.sp,
-                                    ),
                                   ),
                                 ),
                               ),
@@ -204,8 +185,6 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                         ),
                         SizedBox(height: 18.h),
-
-                        // Lato Bold 18
                         Text(
                           "You are about to log out",
                           textAlign: TextAlign.center,
@@ -218,8 +197,6 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                         ),
                         SizedBox(height: 12.h),
-
-                        // Lato Light 14
                         Text(
                           "See you again soon! We'll miss your\nbreathing exercises.",
                           textAlign: TextAlign.center,
@@ -232,7 +209,6 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                         ),
                         SizedBox(height: 22.h),
-
                         SizedBox(
                           width: double.infinity,
                           height: 52.h,
@@ -258,7 +234,6 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                         ),
                         SizedBox(height: 16.h),
-
                         InkWell(
                           onTap: () => Navigator.of(context).pop(false),
                           borderRadius: BorderRadius.circular(12.r),
@@ -301,8 +276,9 @@ class _ProfileViewState extends State<ProfileView> {
       },
     );
 
+    if (!mounted) return;
+
     if (confirmed == true) {
-      // ignore: use_build_context_synchronously
       Navigator.of(context).pushNamedAndRemoveUntil(
         AppRoutes.login,
         (route) => false,
@@ -334,8 +310,6 @@ class _ProfileViewState extends State<ProfileView> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   SizedBox(height: 4.h),
-
-                  // TOP BAR
                   Row(
                     children: [
                       InkWell(
@@ -344,10 +318,16 @@ class _ProfileViewState extends State<ProfileView> {
                         child: SizedBox(
                           width: 44.w,
                           height: 44.w,
-                          child: Icon(
-                            Icons.arrow_back_ios_new_rounded,
-                            color: Colors.white,
-                            size: _iconSize.sp,
+                          child: Center(
+                            child: SvgPicture.asset(
+                              AppAssets.icBack,
+                              width: 24.w,
+                              height: 24.w,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -367,10 +347,7 @@ class _ProfileViewState extends State<ProfileView> {
                       SizedBox(width: 44.w),
                     ],
                   ),
-
                   SizedBox(height: 18.h),
-
-                  // AVATAR
                   Center(
                     child: Container(
                       width: 106.w,
@@ -395,9 +372,7 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                     ),
                   ),
-
                   SizedBox(height: 14.h),
-
                   Center(
                     child: Text(
                       "Alex Johnson",
@@ -411,7 +386,6 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
                   ),
                   SizedBox(height: 5.h),
-
                   Center(
                     child: Text(
                       "Free Version",
@@ -425,8 +399,6 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
                   ),
                   SizedBox(height: 18.h),
-
-                  // PRO CARD (wave kaldırıldı)
                   InkWell(
                     onTap: () {},
                     borderRadius: BorderRadius.circular(18.r),
@@ -477,9 +449,7 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                     ),
                   ),
-
                   SizedBox(height: 18.h),
-
                   _sectionTitle("ACCOUNT SETTINGS"),
                   SizedBox(height: 8.h),
                   _whiteCard(
@@ -510,9 +480,7 @@ class _ProfileViewState extends State<ProfileView> {
                       ],
                     ),
                   ),
-
                   SizedBox(height: 14.h),
-
                   _sectionTitle("GENERAL"),
                   SizedBox(height: 8.h),
                   _whiteCard(
@@ -569,10 +537,7 @@ class _ProfileViewState extends State<ProfileView> {
                       ],
                     ),
                   ),
-
                   SizedBox(height: 14.h),
-
-                  // LOGOUT BUTTON
                   InkWell(
                     borderRadius: BorderRadius.circular(14.r),
                     onTap: _showLogoutDialog,
@@ -594,15 +559,14 @@ class _ProfileViewState extends State<ProfileView> {
                               borderRadius: BorderRadius.circular(10.r),
                             ),
                             child: Center(
-                              child: Image.asset(
+                              child: SvgPicture.asset(
                                 _icLogout,
                                 width: 22.w,
                                 height: 22.w,
                                 fit: BoxFit.contain,
-                                errorBuilder: (_, __, ___) => Icon(
-                                  Icons.logout_rounded,
-                                  color: const Color(0xFFF87171),
-                                  size: _iconSize.sp,
+                                colorFilter: const ColorFilter.mode(
+                                  Color(0xFFF87171),
+                                  BlendMode.srcIn,
                                 ),
                               ),
                             ),
@@ -621,7 +585,6 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                     ),
                   ),
-
                   SizedBox(height: 10.h),
                   Center(
                     child: Text(
@@ -642,8 +605,6 @@ class _ProfileViewState extends State<ProfileView> {
       ),
     );
   }
-
-  // ---- helpers
 
   Widget _sectionTitle(String text) {
     return Padding(
@@ -719,16 +680,11 @@ class _ProfileViewState extends State<ProfileView> {
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Center(
-                child: Image.asset(
+                child: SvgPicture.asset(
                   assetPath,
                   width: _iconSize.w,
                   height: _iconSize.w,
                   fit: BoxFit.contain,
-                  errorBuilder: (_, __, ___) => Icon(
-                    Icons.image_not_supported_outlined,
-                    size: _iconSize.sp,
-                    color: const Color(0xFF94A3B8),
-                  ),
                 ),
               ),
             ),
@@ -764,16 +720,11 @@ class _ProfileViewState extends State<ProfileView> {
               borderRadius: BorderRadius.circular(12.r),
             ),
             child: Center(
-              child: Image.asset(
+              child: SvgPicture.asset(
                 assetPath,
                 width: _iconSize.w,
                 height: _iconSize.w,
                 fit: BoxFit.contain,
-                errorBuilder: (_, __, ___) => Icon(
-                  Icons.image_not_supported_outlined,
-                  size: _iconSize.sp,
-                  color: const Color(0xFF94A3B8),
-                ),
               ),
             ),
           ),

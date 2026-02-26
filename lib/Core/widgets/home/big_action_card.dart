@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lingora_app/Core/Utils/assets.dart';
 
 class BigActionCard extends StatelessWidget {
   final String title;
@@ -58,7 +60,14 @@ class BigActionCard extends StatelessWidget {
                     : null,
                 borderRadius: BorderRadius.circular(14.r),
               ),
-              child: Image.asset(iconAsset, fit: BoxFit.contain),
+              child: SvgPicture.asset(
+                iconAsset,
+                fit: BoxFit.contain,
+                colorFilter: ColorFilter.mode(
+                  active ? const Color(0xFF0A70FF) : Colors.white,
+                  BlendMode.srcIn,
+                ),
+              ),
             ),
             Positioned(
               left: 0,
@@ -76,11 +85,22 @@ class BigActionCard extends StatelessWidget {
             ),
             Positioned(
               right: 0,
-              bottom: 6.h,
-              child: Icon(
-                Icons.arrow_forward_rounded,
-                size: 26.sp,
-                color: active ? Colors.white : const Color(0xFF0F172A),
+              bottom: 0,
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Transform.translate(
+                  offset: Offset(0, -4.h),
+                  child: SvgPicture.asset(
+                    AppAssets.icArrowRight,
+                    width: 24.sp,
+                    height: 24.sp,
+                    fit: BoxFit.contain,
+                    colorFilter: ColorFilter.mode(
+                      active ? Colors.white : const Color(0xFF0F172A),
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

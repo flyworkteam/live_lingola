@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lingora_app/Core/Utils/assets.dart';
 import 'package:lingora_app/Core/widgets/navigation/bottom_nav_item_tile.dart';
 
@@ -63,7 +64,6 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
           Column(
             children: [
               SizedBox(height: topPad + 10.h),
-              // TOP BAR
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: SizedBox(
@@ -73,13 +73,20 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                       InkWell(
                         borderRadius: BorderRadius.circular(999),
                         onTap: () => Navigator.pop(context),
-                        child: SizedBox(
-                          width: 44.w,
-                          height: 44.w,
-                          child: Icon(
-                            Icons.arrow_back_rounded,
-                            size: 22.sp,
-                            color: const Color(0xFF0F172A),
+                        child: Container(
+                          width: 24.w,
+                          height: 24.w,
+                          color: Colors.transparent,
+                          child: Center(
+                            child: SvgPicture.asset(
+                              AppAssets.icBack,
+                              width: 24.w,
+                              height: 24.w,
+                              colorFilter: const ColorFilter.mode(
+                                Color(0xFF0F172A),
+                                BlendMode.srcIn,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -96,13 +103,12 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                           ),
                         ),
                       ),
-                      SizedBox(width: 44.w),
+                      SizedBox(width: 24.w),
                     ],
                   ),
                 ),
               ),
-              SizedBox(height: 10.h),
-              // Sub text + Try Now
+              SizedBox(height: 51.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
@@ -141,7 +147,6 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                 ),
               ),
               SizedBox(height: 18.h),
-              // WAVE AREA
               SizedBox(
                 height: 140.h,
                 child: _stage == _FreeStage.listening
@@ -209,7 +214,6 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                         const Spacer(),
                       ],
                       const Spacer(),
-                      // Small pill (Buradaki ikonu da asset yaptık)
                       Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: 18.w,
@@ -226,11 +230,14 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Image.asset(
-                              'assets/images/icons/translate/microphone.png',
+                            SvgPicture.asset(
+                              AppAssets.icMicrophone,
                               width: 14.w,
                               height: 14.w,
-                              color: const Color(0xFF0A70FF),
+                              colorFilter: const ColorFilter.mode(
+                                Color(0xFF0A70FF),
+                                BlendMode.srcIn,
+                              ),
                             ),
                             SizedBox(width: 8.w),
                             Text(
@@ -246,7 +253,6 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                         ),
                       ),
                       SizedBox(height: 14.h),
-                      // LANG + BIG BUTTON area
                       Container(
                         height: 74.h,
                         decoration: BoxDecoration(
@@ -298,11 +304,15 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                                               size: 34.sp,
                                               color: Colors.white,
                                             )
-                                          : Image.asset(
-                                              'assets/images/icons/translate/microphone.png',
+                                          : SvgPicture.asset(
+                                              AppAssets.icMicrophone,
                                               width: 30.w,
                                               height: 30.w,
-                                              color: const Color(0xFF0F172A),
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                Color(0xFF0F172A),
+                                                BlendMode.srcIn,
+                                              ),
                                             ),
                                     ),
                                   ),
