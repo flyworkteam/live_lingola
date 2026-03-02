@@ -8,6 +8,12 @@ class PremiumOfferCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double imageWidth = 110;
+    const double imageRight = 20;
+    const double imageTop = -8;
+    const double imageBottom = -85;
+    const double textRightPadding = 140;
+
     return Container(
       width: double.infinity,
       height: 150.h,
@@ -25,19 +31,25 @@ class PremiumOfferCard extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
-            right: 6.w,
-            bottom: 0,
-            top: 0,
-            child: AspectRatio(
-              aspectRatio: 1.0,
-              child: Image.asset(
-                'assets/images/home/premium_girl.png',
-                fit: BoxFit.contain,
+            right: imageRight.w,
+            top: imageTop.h,
+            bottom: imageBottom.h,
+            child: SizedBox(
+              width: imageWidth.w,
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(22.r),
+                  bottomRight: Radius.circular(22.r),
+                ),
+                child: Image.asset(
+                  'assets/images/home/premium_girl.png',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(18.w, 16.h, 140.w, 16.h),
+            padding: EdgeInsets.fromLTRB(18.w, 16.h, textRightPadding.w, 16.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

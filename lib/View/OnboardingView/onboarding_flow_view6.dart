@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OnboardingFlowView6 extends StatelessWidget {
-  const OnboardingFlowView6({super.key});
+  final VoidCallback onFinish;
+
+  const OnboardingFlowView6({
+    super.key,
+    required this.onFinish,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +44,7 @@ class OnboardingFlowView6 extends StatelessWidget {
                   width: double.infinity,
                   height: 51.h,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).popUntil((r) => r.isFirst);
-                    },
+                    onPressed: onFinish,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF0A70FF),
                       shape: RoundedRectangleBorder(

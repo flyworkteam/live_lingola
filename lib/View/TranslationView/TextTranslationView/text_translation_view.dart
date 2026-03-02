@@ -310,17 +310,17 @@ class _TextTranslationViewState extends State<TextTranslationView> {
           children: [
             Positioned.fill(
               child: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                     colors: [
-                      Color(0xFF0A70FF),
-                      Color(0xFF03B7FF),
-                      Color(0xFFEFF2F9),
-                      Color(0xFFFFFFFF),
+                      const Color(0xFF0A70FF),
+                      const Color(0xFF03B7FF),
+                      const Color(0xFFEFF2F9).withOpacity(0.72),
+                      const Color(0xFFEFF2F9).withOpacity(0.0),
                     ],
-                    stops: [0.0, 0.35, 0.70, 1.0],
+                    stops: const [0.0043, 0.2741, 0.575, 0.9957],
                   ),
                 ),
               ),

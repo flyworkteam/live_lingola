@@ -4,11 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lingora_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
 
-import 'onboarding_flow_view2.dart';
-import 'onboarding_flow_view6.dart';
-
 class OnboardingFlowView1 extends ConsumerWidget {
-  const OnboardingFlowView1({super.key});
+  final VoidCallback onNext;
+  final VoidCallback onSkip;
+
+  const OnboardingFlowView1({
+    super.key,
+    required this.onNext,
+    required this.onSkip,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,14 +61,7 @@ class OnboardingFlowView1 extends ConsumerWidget {
                   height: 30.h,
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const OnboardingFlowView6(),
-                        ),
-                      );
-                    },
+                    onTap: onSkip,
                     child: Center(
                       child: Text(
                         'Skip',
@@ -82,6 +79,7 @@ class OnboardingFlowView1 extends ConsumerWidget {
                 ),
               ),
             ),
+
             // Content
             Positioned.fill(
               child: Padding(
@@ -131,7 +129,6 @@ class OnboardingFlowView1 extends ConsumerWidget {
                             ),
                           ),
                         ),
-                        // Choices with SVG assets
                         choice(
                           figmaTop: 265,
                           text: 'Daily Communication',
@@ -174,6 +171,7 @@ class OnboardingFlowView1 extends ConsumerWidget {
                 ),
               ),
             ),
+
             // Next Button
             Align(
               alignment: Alignment.bottomCenter,
@@ -185,16 +183,7 @@ class OnboardingFlowView1 extends ConsumerWidget {
                     width: 321.w,
                     height: 51.h,
                     child: ElevatedButton(
-                      onPressed: s.canGoNext
-                          ? () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const OnboardingFlowView2(),
-                                ),
-                              );
-                            }
-                          : null,
+                      onPressed: s.canGoNext ? onNext : null,
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
                         backgroundColor: const Color(0xFF0A70FF),

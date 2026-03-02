@@ -1,23 +1,36 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../Core/Routes/app_routes.dart';
 import '../../../Core/Theme/app_colors.dart';
 import '../../../Core/Theme/app_text_styles.dart';
+import '../../../Core/Utils/assets.dart';
 
-/// LoginView
-/// - Sosyal giriş butonları (Google/Facebook/Apple)
-/// - Continue as Guest
-/// - Terms / Privacy / Cookies linkleri
-///
-/// Bu ekran Figma ölçülerine göre pixel-perfect kurgulanmıştır.
-/// Özellikle social login butonlarında:
-/// - İkonların X/Y konumu ve boyutu Figma’daki left/top/width/height değerleriyle eşleşir.
-/// - Yazı kutularının genişlikleri (122/145/121) Figma’daki bounding box değerleriyle birebir uygulanır.
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
+
+  static const Alignment _gradBegin = Alignment(0.198, -0.980);
+  static const Alignment _gradEnd = Alignment(-0.198, 0.980);
+
+  static const LinearGradient _figmaGradient = LinearGradient(
+    begin: _gradBegin,
+    end: _gradEnd,
+    colors: [
+      Color(0xFF0A70FF),
+      Color(0xFF03B7FF),
+      Color.fromRGBO(239, 242, 249, 0.721154),
+      Color.fromRGBO(239, 242, 249, 0.0),
+    ],
+    stops: [0.0043, 0.2741, 0.5750, 0.9957],
+  );
+
+  static const LinearGradient _guestTextGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [Color(0xFF03B7FF), Color(0xFF0A70FF)],
+  );
 
   static const String _termsUrl = 'https://fly-work.com/livelingola/terms/';
   static const String _privacyUrl =
@@ -28,13 +41,10 @@ class LoginView extends StatelessWidget {
     Navigator.pushReplacementNamed(context, AppRoutes.onboardingFlow);
   }
 
-  /// Harici tarayıcı üzerinden belirtilen URL bağlantısını açar.
   Future<void> _openUrl(String url) async {
     final uri = Uri.parse(url);
     final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
-    if (!ok) {
-      // Opsiyonel: Snackbar/Toast
-    }
+    if (!ok) {}
   }
 
   @override
@@ -45,20 +55,11 @@ class LoginView extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
-          // -------------------------------------------------------------------
-          // 1) Background Gradient
-          // -------------------------------------------------------------------
           Positioned.fill(
             child: Container(
-              decoration: const BoxDecoration(
-                gradient: AppColors.primaryGradient,
-              ),
+              decoration: const BoxDecoration(gradient: _figmaGradient),
             ),
           ),
-
-          // -------------------------------------------------------------------
-          // 2) Brand Logo Container
-          // -------------------------------------------------------------------
           Positioned(
             top: 125,
             left: 38,
@@ -79,10 +80,6 @@ class LoginView extends StatelessWidget {
               ),
             ),
           ),
-
-          // -------------------------------------------------------------------
-          // 3) App Title
-          // -------------------------------------------------------------------
           const Positioned(
             top: 130,
             left: 96,
@@ -101,10 +98,6 @@ class LoginView extends StatelessWidget {
               ),
             ),
           ),
-
-          // -------------------------------------------------------------------
-          // 4) Headline
-          // -------------------------------------------------------------------
           const Positioned(
             top: 207,
             left: 37,
@@ -123,10 +116,6 @@ class LoginView extends StatelessWidget {
               ),
             ),
           ),
-
-          // -------------------------------------------------------------------
-          // 5) Subtitle
-          // -------------------------------------------------------------------
           Positioned(
             top: 289,
             left: 38,
@@ -145,114 +134,82 @@ class LoginView extends StatelessWidget {
               ),
             ),
           ),
-
-          // -------------------------------------------------------------------
-          // 6) Social Login Buttons (Figma pixel-perfect)
-          // Button ölçüsü: width=319 height=45, left=37
-          // İçerikler: ikon + text kutuları figmadaki top/left değerleriyle konumlandırılır.
-          // -------------------------------------------------------------------
-
-          // Google Button
           Positioned(
             top: 389,
             left: 37,
-            child: _LoginButton(
+            child: _LoginButtonAligned(
               label: "Continue with Gmail",
               provider: _AuthProvider.google,
               onTap: () => _goOnboarding(context),
-
-              // --- Figma: TEXT box
-              textBoxWidth: 122,
-              textBoxHeight: 18,
-              // Global left/top -> buton içi (buttonLeft=37, buttonTop=389)
-              textLeft: 148 - 37, // 111
-              textTop: 403.43 - 389, // 14.43
-
-              // --- Figma: ICON
-              iconWidth: 18.0,
-              iconHeight: 18.642105102539062,
-              iconLeft: 122 - 37, // 85
-              iconTop: 402 - 389, // 13
+              iconSize: const Size(18, 18.64),
             ),
           ),
-
-          // Facebook Button
           Positioned(
             top: 453,
             left: 37,
-            child: _LoginButton(
+            child: _LoginButtonAligned(
               label: "Continue with Facebook",
               provider: _AuthProvider.facebook,
               onTap: () => _goOnboarding(context),
-
-              // --- Figma: TEXT box
-              textBoxWidth: 145,
-              textBoxHeight: 18,
-              textLeft: 134 - 37, // 97
-              textTop: 467.43 - 453, // 14.43
-
-              // --- Figma: ICON
-              iconWidth: 12.0,
-              iconHeight: 21.81818199157715,
-              iconLeft: 113 - 37, // 76
-              iconTop: 464 - 453, // 11
+              iconSize: const Size(12, 21.81),
             ),
           ),
-
-          // Apple Button
           Positioned(
             top: 517,
             left: 37,
-            child: _LoginButton(
+            child: _LoginButtonAligned(
               label: "Continue with Apple",
               provider: _AuthProvider.apple,
               onTap: () => _goOnboarding(context),
-
-              // --- Figma: TEXT box
-              textBoxWidth: 121,
-              textBoxHeight: 18,
-              textLeft: 149 - 37, // 112
-              textTop: 531.43 - 517, // 14.43
-
-              // --- Figma: ICON
-              iconWidth: 18.0,
-              iconHeight: 22.0,
-              iconLeft: 122 - 37, // 85
-              iconTop: 526 - 517, // 9
+              iconSize: const Size(18, 22),
             ),
           ),
-
-          // -------------------------------------------------------------------
-          // 7) Guest Login
-          // -------------------------------------------------------------------
           Positioned(
             bottom: 80 + bottomPad,
             left: 0,
             right: 0,
             child: Center(
-              child: TextButton(
-                onPressed: () => _goOnboarding(context),
-                child: const Text(
-                  'Continue as Guest   →',
-                  style: TextStyle(
-                    fontFamily: AppTextStyles.fontFamily,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF0A70FF),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(999),
+                onTap: () => _goOnboarding(context),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ShaderMask(
+                        shaderCallback: (b) =>
+                            _guestTextGradient.createShader(b),
+                        child: const Text(
+                          'Continue as Guest',
+                          style: TextStyle(
+                            fontFamily: AppTextStyles.fontFamily,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            height: 1.0,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      SvgPicture.asset(
+                        AppAssets.navOkRight,
+                        width: 24,
+                        height: 24,
+                        fit: BoxFit.contain,
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
           ),
-
-          // -------------------------------------------------------------------
-          // 8) Legal Links
-          // -------------------------------------------------------------------
           Positioned(
             left: 52,
             bottom: 24 + bottomPad,
             child: SizedBox(
-              width: 290,
+              width: 295,
               height: 60,
               child: Center(
                 child: RichText(
@@ -261,7 +218,7 @@ class LoginView extends StatelessWidget {
                     style: const TextStyle(
                       fontFamily: AppTextStyles.fontFamily,
                       fontSize: 10,
-                      height: 1.2,
+                      height: 1.5,
                       color: Colors.black87,
                       fontWeight: FontWeight.w400,
                     ),
@@ -314,11 +271,9 @@ class LoginView extends StatelessWidget {
   }
 }
 
-/// Desteklenen kimlik doğrulama sağlayıcıları
 enum _AuthProvider { google, facebook, apple }
 
 extension _AuthProviderAssets on _AuthProvider {
-  /// SVG asset path'leri
   String get assetPath {
     switch (this) {
       case _AuthProvider.google:
@@ -330,7 +285,6 @@ extension _AuthProviderAssets on _AuthProvider {
     }
   }
 
-  /// Erişilebilirlik etiketi
   String get semanticLabel {
     switch (this) {
       case _AuthProvider.google:
@@ -343,51 +297,38 @@ extension _AuthProviderAssets on _AuthProvider {
   }
 }
 
-/// Social login button
-///
-/// Bu widget Figma pixel değerleri ile çalışır.
-/// - İçerikler (ikon + yazı) butonun içine, figmadaki left/top değerleriyle "Positioned" olarak yerleşir.
-class _LoginButton extends StatelessWidget {
+class _LoginButtonAligned extends StatelessWidget {
   final String label;
   final _AuthProvider provider;
   final VoidCallback? onTap;
 
-  // Figma: text bounding box
-  final double textBoxWidth;
-  final double textBoxHeight;
-  final double textLeft;
-  final double textTop;
+  final Size iconSize;
 
-  // Figma: icon box
-  final double iconWidth;
-  final double iconHeight;
-  final double iconLeft;
-  final double iconTop;
-
-  const _LoginButton({
+  const _LoginButtonAligned({
     required this.label,
     required this.provider,
     required this.onTap,
-    required this.textBoxWidth,
-    required this.textBoxHeight,
-    required this.textLeft,
-    required this.textTop,
-    required this.iconWidth,
-    required this.iconHeight,
-    required this.iconLeft,
-    required this.iconTop,
+    required this.iconSize,
   });
 
   @override
   Widget build(BuildContext context) {
+    const double buttonW = 319;
+    const double buttonH = 45;
+
+    const double iconSlotW = 44;
+    const double gap = 14;
+    const double textW = 190;
+    const double contentW = iconSlotW + gap + textW;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(50),
         onTap: onTap,
         child: Container(
-          width: 319,
-          height: 45,
+          width: buttonW,
+          height: buttonH,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(50),
@@ -399,60 +340,52 @@ class _LoginButton extends StatelessWidget {
               ),
             ],
           ),
-
-          // Stack: Figma'daki absolute konumları buton içinde birebir uygular.
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              // --------------------------------------------------------------
-              // Icon (Figma left/top/width/height)
-              // --------------------------------------------------------------
-              Positioned(
-                left: iconLeft,
-                top: iconTop,
-                child: SizedBox(
-                  width: iconWidth,
-                  height: iconHeight,
-                  child: SvgPicture.asset(
-                    provider.assetPath,
-                    width: iconWidth,
-                    height: iconHeight,
-                    fit: BoxFit.contain,
-                    semanticsLabel: provider.semanticLabel,
-                  ),
-                ),
-              ),
-
-              // --------------------------------------------------------------
-              // Text (Figma bounding box: width/height + left/top)
-              // --------------------------------------------------------------
-              Positioned(
-                left: textLeft,
-                top: textTop,
-                child: SizedBox(
-                  width: textBoxWidth,
-                  height: textBoxHeight,
-                  child: Center(
-                    child: Text(
-                      label,
-                      maxLines: 1,
-                      softWrap: false,
-                      overflow: TextOverflow
-                          .clip, // Figma'da bounding box içinde kalır
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontFamily: AppTextStyles.fontFamily, // Poppins
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        height: 1.0, // line-height: 100%
-                        letterSpacing: 0.0,
-                        color: Colors.black,
+          child: Center(
+            child: SizedBox(
+              width: contentW,
+              height: buttonH,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: iconSlotW,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: SizedBox(
+                        width: iconSize.width,
+                        height: iconSize.height,
+                        child: SvgPicture.asset(
+                          provider.assetPath,
+                          fit: BoxFit.contain,
+                          semanticsLabel: provider.semanticLabel,
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  const SizedBox(width: gap),
+                  SizedBox(
+                    width: textW,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        label,
+                        maxLines: 1,
+                        softWrap: false,
+                        overflow: TextOverflow.clip,
+                        style: const TextStyle(
+                          fontFamily: AppTextStyles.fontFamily,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          height: 1.0,
+                          letterSpacing: 0.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

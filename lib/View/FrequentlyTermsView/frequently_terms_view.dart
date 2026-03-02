@@ -53,15 +53,14 @@ class _FrequentlyTermsViewState extends State<FrequentlyTermsView> {
                 InkWell(
                   borderRadius: BorderRadius.circular(999),
                   onTap: () => Navigator.pop(context),
-                  child: Container(
-                    width: 24.w,
-                    height: 24.w,
-                    color: Colors.transparent,
+                  child: SizedBox(
+                    width: 40.w,
+                    height: 40.w,
                     child: Center(
                       child: SvgPicture.asset(
                         AppAssets.icBack2,
-                        width: 24.w,
-                        height: 24.w,
+                        width: 16.sp,
+                        height: 16.sp,
                         colorFilter: const ColorFilter.mode(
                           Color(0xFF0F172A),
                           BlendMode.srcIn,
@@ -83,7 +82,7 @@ class _FrequentlyTermsViewState extends State<FrequentlyTermsView> {
                     ),
                   ),
                 ),
-                SizedBox(width: 24.w),
+                SizedBox(width: 40.w),
               ],
             ),
           ),
@@ -196,8 +195,11 @@ class _TermCard extends StatelessWidget {
             children: [
               _LangPill(code: item.fromCode),
               SizedBox(width: 8.w),
-              Icon(Icons.arrow_forward_rounded,
-                  size: 18.sp, color: const Color(0xFF0F172A)),
+              Icon(
+                Icons.arrow_forward_rounded,
+                size: 18.sp,
+                color: const Color(0xFF0F172A),
+              ),
               SizedBox(width: 8.w),
               _LangPill(code: item.toCode),
             ],

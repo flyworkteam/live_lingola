@@ -11,7 +11,31 @@ class VoiceProBackgroundPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final whitePaint = Paint()..color = Colors.white;
+    final Rect rect = Offset.zero & size;
+
+    const double angle = 191.41 * (math.pi / 180);
+    final Alignment begin = Alignment(
+      math.cos(angle - math.pi / 2),
+      math.sin(angle - math.pi / 2),
+    );
+    final Alignment end = Alignment(
+      math.cos(angle + math.pi / 2),
+      math.sin(angle + math.pi / 2),
+    );
+
+    final gradient = LinearGradient(
+      begin: begin,
+      end: end,
+      colors: [
+        const Color(0xFF0A70FF),
+        const Color(0xFF03B7FF),
+        const Color(0xFFEFF2F9).withOpacity(0.72),
+        const Color(0xFFEFF2F9).withOpacity(0.0),
+      ],
+      stops: const [0.0043, 0.2741, 0.575, 0.9957],
+    );
+
+    final whitePaint = Paint()..shader = gradient.createShader(rect);
 
     final baseTop = size.height * 0.62;
     final path = Path()

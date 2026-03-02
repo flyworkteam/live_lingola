@@ -5,6 +5,7 @@ class VoiceTextCard extends StatelessWidget {
   final String label;
   final String text;
   final Widget? rightTopWidget;
+  final Widget? labelWidget;
   final bool showBottomIcons;
   final bool showEmptyPlaceholder;
 
@@ -13,6 +14,7 @@ class VoiceTextCard extends StatelessWidget {
     required this.label,
     required this.text,
     this.rightTopWidget,
+    this.labelWidget,
     required this.showBottomIcons,
     this.showEmptyPlaceholder = false,
   });
@@ -38,16 +40,17 @@ class VoiceTextCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
-                label,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 10.sp,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.2,
-                  color: const Color(0xFF0A70FF),
-                ),
-              ),
+              labelWidget ??
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 10.sp,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.2,
+                      color: const Color(0xFF0A70FF),
+                    ),
+                  ),
               const Spacer(),
               if (rightTopWidget != null) rightTopWidget!,
             ],

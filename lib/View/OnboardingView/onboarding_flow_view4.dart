@@ -1,15 +1,19 @@
-// lib/View/OnboardingView/onboarding_flow_view4.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lingora_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
 
-import 'onboarding_flow_view3.dart';
-import 'onboarding_flow_view5.dart';
-import 'onboarding_flow_view6.dart';
-
 class OnboardingFlowView4 extends ConsumerWidget {
-  const OnboardingFlowView4({super.key});
+  final VoidCallback onNext;
+  final VoidCallback onBack;
+  final VoidCallback onSkip;
+
+  const OnboardingFlowView4({
+    super.key,
+    required this.onNext,
+    required this.onBack,
+    required this.onSkip,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,8 +21,6 @@ class OnboardingFlowView4 extends ConsumerWidget {
     final c = ref.read(onboardingControllerProvider.notifier);
 
     final canNext = s.feature != null;
-
-    // Page-1 Skip hizası: right = 393 - (329 + 35) = 29
     const skipRight = 29.0;
 
     final bottomPad = 18.h;
@@ -39,13 +41,7 @@ class OnboardingFlowView4 extends ConsumerWidget {
                 child: SizedBox(
                   height: 44.h,
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const OnboardingFlowView3()),
-                      );
-                    },
+                    onPressed: onBack,
                     style: TextButton.styleFrom(
                       foregroundColor: const Color(0xFF9AA4B2),
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -73,13 +69,7 @@ class OnboardingFlowView4 extends ConsumerWidget {
                   height: 30.h,
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const OnboardingFlowView6()),
-                      );
-                    },
+                    onTap: onSkip,
                     child: Center(
                       child: Text(
                         'Skip',
@@ -106,8 +96,6 @@ class OnboardingFlowView4 extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: 103.h),
-
-                    // TITLE
                     SizedBox(
                       width: 354.w,
                       height: 60.h,
@@ -125,10 +113,7 @@ class OnboardingFlowView4 extends ConsumerWidget {
                         ),
                       ),
                     ),
-
                     SizedBox(height: 2.h),
-
-                    // SUBTITLE
                     SizedBox(
                       width: 275.w,
                       height: 51.h,
@@ -144,9 +129,7 @@ class OnboardingFlowView4 extends ConsumerWidget {
                         ),
                       ),
                     ),
-
                     SizedBox(height: 26.h),
-
                     _SimpleSelectButton(
                       text: 'Accurate Translation',
                       selected: s.feature == AppFeature.accurate,
@@ -176,7 +159,6 @@ class OnboardingFlowView4 extends ConsumerWidget {
                       selected: s.feature == AppFeature.all,
                       onTap: () => c.setFeature(AppFeature.all),
                     ),
-
                     const Spacer(),
                   ],
                 ),
@@ -194,16 +176,7 @@ class OnboardingFlowView4 extends ConsumerWidget {
                     width: 321.w,
                     height: 51.h,
                     child: ElevatedButton(
-                      onPressed: canNext
-                          ? () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) =>
-                                        const OnboardingFlowView5()),
-                              );
-                            }
-                          : null,
+                      onPressed: canNext ? onNext : null,
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
                         backgroundColor: const Color(0xFF0A70FF),

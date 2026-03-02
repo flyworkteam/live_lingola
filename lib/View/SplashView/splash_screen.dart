@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../Core/Routes/app_routes.dart';
-import '../../Core/Theme/app_colors.dart';
 import '../../Core/Theme/app_text_styles.dart';
 
 class SplashView extends StatefulWidget {
@@ -15,7 +14,6 @@ class _SplashViewState extends State<SplashView> {
   void initState() {
     super.initState();
 
-    // 1.5 - 2 saniye sonra onboarding'e geç
     Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
       Navigator.pushReplacementNamed(context, AppRoutes.onboarding);
@@ -24,11 +22,26 @@ class _SplashViewState extends State<SplashView> {
 
   @override
   Widget build(BuildContext context) {
+    const Alignment begin = Alignment(0.198, -0.980);
+    const Alignment end = Alignment(-0.198, 0.980);
+
+    const gradient = LinearGradient(
+      begin: begin,
+      end: end,
+      colors: [
+        Color(0xFF0A70FF),
+        Color(0xFF03B7FF),
+        Color.fromRGBO(239, 242, 249, 0.721154),
+        Color.fromRGBO(239, 242, 249, 0.0),
+      ],
+      stops: [0.0043, 0.2741, 0.5750, 0.9957],
+    );
+
     return Scaffold(
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
+        decoration: const BoxDecoration(gradient: gradient),
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,

@@ -16,7 +16,7 @@ class VoiceTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 26.h,
+      height: 40.h,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -26,8 +26,8 @@ class VoiceTopBar extends StatelessWidget {
               onTap: onBack,
               borderRadius: BorderRadius.circular(999),
               child: SizedBox(
-                width: 40.w,
-                height: 40.w,
+                width: 44.w,
+                height: 44.w,
                 child: Center(
                   child: SvgPicture.asset(
                     AppAssets.icBack,
@@ -41,26 +41,21 @@ class VoiceTopBar extends StatelessWidget {
               ),
             ),
           ),
-          Center(
-            child: SizedBox(
-              width: 157.w,
-              height: 26.h,
-              child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.visible,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20.sp,
-                    height: 26 / 20,
-                    letterSpacing: 0,
-                    color: Colors.white,
-                  ),
-                ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 48.w),
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              softWrap: false,
+              overflow: TextOverflow.visible,
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
+                fontSize: 20.sp,
+                height: 1.2,
+                letterSpacing: 0,
+                color: Colors.white,
               ),
             ),
           ),

@@ -236,237 +236,233 @@ class _ProfileSettingsViewState extends State<ProfileSettingsView> {
 
   @override
   Widget build(BuildContext context) {
-    final bottomPad = MediaQuery.of(context).padding.bottom;
-
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(18.w, 10.h, 18.w, 18.h + bottomPad),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 56.h,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: InkWell(
-                        onTap: () => Navigator.of(context).pop(),
-                        borderRadius: BorderRadius.circular(12.r),
-                        child: SizedBox(
-                          width: 44.w,
-                          height: 44.w,
-                          child: Center(
-                            child: SvgPicture.asset(
-                              AppAssets.icBack,
-                              width: _iconPx.sp,
-                              height: _iconPx.sp,
-                              colorFilter: const ColorFilter.mode(
-                                  Color(0xFF0F172A), BlendMode.srcIn),
-                            ),
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(
+            18.w, MediaQuery.of(context).padding.top + 10.h, 18.w, 0),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 56.h,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: InkWell(
+                      onTap: () => Navigator.of(context).pop(),
+                      borderRadius: BorderRadius.circular(12.r),
+                      child: SizedBox(
+                        width: 44.w,
+                        height: 44.w,
+                        child: Center(
+                          child: SvgPicture.asset(
+                            AppAssets.icBack,
+                            width: _iconPx.sp,
+                            height: _iconPx.sp,
+                            colorFilter: const ColorFilter.mode(
+                                Color(0xFF0F172A), BlendMode.srcIn),
                           ),
                         ),
                       ),
                     ),
-                    Text("Profile Settings", style: _titleStyle),
-                    SizedBox(width: 44.w),
-                  ],
-                ),
+                  ),
+                  Text("Profile Settings", style: _titleStyle),
+                  SizedBox(width: 44.w),
+                ],
               ),
-              SizedBox(height: 6.h),
-              Expanded(
-                child: LayoutBuilder(builder: (context, constraints) {
-                  return SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(
-                        parent: ClampingScrollPhysics()),
-                    child: ConstrainedBox(
-                      constraints:
-                          BoxConstraints(minHeight: constraints.maxHeight),
-                      child: IntrinsicHeight(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Center(
-                              child: Column(
-                                children: [
-                                  Stack(
-                                    children: [
-                                      Container(
-                                        width: 86.w,
-                                        height: 86.w,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(3.w),
-                                          child: Container(
-                                            decoration: const BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.white,
-                                            ),
-                                            child: ClipOval(
-                                              child: Image.asset(
-                                                "assets/images/logout/Alex.png",
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (_, __, ___) =>
-                                                    const Icon(Icons.person,
-                                                        size: 40),
-                                              ),
+            ),
+            SizedBox(height: 6.h),
+            Expanded(
+              child: LayoutBuilder(builder: (context, constraints) {
+                return SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(
+                      parent: ClampingScrollPhysics()),
+                  child: ConstrainedBox(
+                    constraints:
+                        BoxConstraints(minHeight: constraints.maxHeight),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Center(
+                            child: Column(
+                              children: [
+                                Stack(
+                                  children: [
+                                    Container(
+                                      width: 86.w,
+                                      height: 86.w,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(3.w),
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.white,
+                                          ),
+                                          child: ClipOval(
+                                            child: Image.asset(
+                                              "assets/images/logout/Alex.png",
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (_, __, ___) =>
+                                                  const Icon(Icons.person,
+                                                      size: 40),
                                             ),
                                           ),
                                         ),
                                       ),
-                                      Positioned(
-                                        right: 2.w,
-                                        bottom: 2.w,
-                                        child: InkWell(
-                                          onTap: () => _toast("Change Photo"),
-                                          borderRadius:
-                                              BorderRadius.circular(999),
-                                          child: Container(
-                                            width: 26.w,
-                                            height: 26.w,
-                                            decoration: BoxDecoration(
-                                              color: const Color(0xFF5F8486),
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                  color: Colors.white,
-                                                  width: 2),
-                                            ),
-                                            child: Center(
-                                              child: SvgPicture.asset(
-                                                AppAssets.icEditCamera,
-                                                colorFilter:
-                                                    const ColorFilter.mode(
-                                                        Colors.white,
-                                                        BlendMode.srcIn),
-                                                width: 14.sp,
-                                              ),
+                                    ),
+                                    Positioned(
+                                      right: 2.w,
+                                      bottom: 2.w,
+                                      child: InkWell(
+                                        onTap: () => _toast("Change Photo"),
+                                        borderRadius:
+                                            BorderRadius.circular(999),
+                                        child: Container(
+                                          width: 26.w,
+                                          height: 26.w,
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFF5F8486),
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                                color: Colors.white, width: 2),
+                                          ),
+                                          child: Center(
+                                            child: SvgPicture.asset(
+                                              AppAssets.icEditCamera,
+                                              colorFilter:
+                                                  const ColorFilter.mode(
+                                                      Colors.white,
+                                                      BlendMode.srcIn),
+                                              width: 14.sp,
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ],
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 8.h),
+                                Text(
+                                  "Change Photo",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 11.5.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: const Color(0xFF5F8486),
                                   ),
-                                  SizedBox(height: 8.h),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 18.h),
+                          _Label("Full Name", style: _labelStyle),
+                          SizedBox(height: 8.h),
+                          _InputPill(
+                            controller: _nameCtrl,
+                            hint: "Full Name",
+                            leadingIcon: AppAssets.icInputUser,
+                            trailingIcon: null,
+                            enabled: true,
+                            iconPx: _iconPx,
+                            textStyle: _inputTextStyle,
+                          ),
+                          SizedBox(height: 14.h),
+                          _Label("E-mail", style: _labelStyle),
+                          SizedBox(height: 8.h),
+                          _InputPill(
+                            controller: _mailCtrl,
+                            hint: "E-mail",
+                            leadingIcon: AppAssets.icInputMail,
+                            trailingIcon: AppAssets.icInputLock,
+                            enabled: false,
+                            iconPx: _iconPx,
+                            textStyle: _mailTextStyle,
+                          ),
+                          SizedBox(height: 14.h),
+                          _Label("Age", style: _labelStyle),
+                          SizedBox(height: 8.h),
+                          _DropdownPill(
+                            leadingIcon: AppAssets.icInputAge,
+                            value: _age,
+                            items: List<int>.generate(83, (i) => i + 18),
+                            onChanged: (v) => setState(() => _age = v),
+                            iconPx: _iconPx,
+                            textStyle: _inputTextStyle,
+                          ),
+                          const Spacer(),
+                          SizedBox(height: 28.h),
+                          SizedBox(
+                            height: 54.h,
+                            child: ElevatedButton(
+                              onPressed: () => _toast("Saved"),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF1677FF),
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(28.r),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    AppAssets.icSave,
+                                    width: _iconPx.sp,
+                                    colorFilter: const ColorFilter.mode(
+                                        Colors.white, BlendMode.srcIn),
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  Text("Save", style: _saveTextStyle),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 14.h),
+                          InkWell(
+                            onTap: _showDeleteAccountDialog,
+                            borderRadius: BorderRadius.circular(12.r),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10.h),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    AppAssets.icDeleteAccount,
+                                    width: 18.w,
+                                    colorFilter: const ColorFilter.mode(
+                                        Color(0xFFEF4444), BlendMode.srcIn),
+                                  ),
+                                  SizedBox(width: 8.w),
                                   Text(
-                                    "Change Photo",
+                                    "Delete Account",
                                     style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 11.5.sp,
+                                      fontFamily: 'Lato',
                                       fontWeight: FontWeight.w500,
-                                      color: const Color(0xFF5F8486),
+                                      fontSize: 14.sp,
+                                      height: 1.0,
+                                      color: const Color(0xFFEF4444),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            SizedBox(height: 18.h),
-                            _Label("Full Name", style: _labelStyle),
-                            SizedBox(height: 8.h),
-                            _InputPill(
-                              controller: _nameCtrl,
-                              hint: "Full Name",
-                              leadingIcon: AppAssets.icInputUser,
-                              trailingIcon: null,
-                              enabled: true,
-                              iconPx: _iconPx,
-                              textStyle: _inputTextStyle,
-                            ),
-                            SizedBox(height: 14.h),
-                            _Label("E-mail", style: _labelStyle),
-                            SizedBox(height: 8.h),
-                            _InputPill(
-                              controller: _mailCtrl,
-                              hint: "E-mail",
-                              leadingIcon: AppAssets.icInputMail,
-                              trailingIcon: AppAssets.icInputLock,
-                              enabled: false,
-                              iconPx: _iconPx,
-                              textStyle: _mailTextStyle,
-                            ),
-                            SizedBox(height: 14.h),
-                            _Label("Age", style: _labelStyle),
-                            SizedBox(height: 8.h),
-                            _DropdownPill(
-                              leadingIcon: AppAssets.icInputAge,
-                              value: _age,
-                              items: List<int>.generate(83, (i) => i + 18),
-                              onChanged: (v) => setState(() => _age = v),
-                              iconPx: _iconPx,
-                              textStyle: _inputTextStyle,
-                            ),
-                            const Spacer(),
-                            SizedBox(height: 28.h),
-                            SizedBox(
-                              height: 54.h,
-                              child: ElevatedButton(
-                                onPressed: () => _toast("Saved"),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF1677FF),
-                                  foregroundColor: Colors.white,
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(28.r),
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      AppAssets.icSave,
-                                      width: _iconPx.sp,
-                                      colorFilter: const ColorFilter.mode(
-                                          Colors.white, BlendMode.srcIn),
-                                    ),
-                                    SizedBox(width: 8.w),
-                                    Text("Save", style: _saveTextStyle),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 14.h),
-                            InkWell(
-                              onTap: _showDeleteAccountDialog,
-                              borderRadius: BorderRadius.circular(12.r),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 10.h),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      AppAssets.icDeleteAccount,
-                                      width: 18.w,
-                                      colorFilter: const ColorFilter.mode(
-                                          Color(0xFFEF4444), BlendMode.srcIn),
-                                    ),
-                                    SizedBox(width: 8.w),
-                                    Text(
-                                      "Delete Account",
-                                      style: TextStyle(
-                                        fontFamily: 'Lato',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14.sp,
-                                        height: 1.0,
-                                        color: const Color(0xFFEF4444),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 6.h),
-                          ],
-                        ),
+                          ),
+                          SizedBox(height: 30.h),
+                        ],
                       ),
                     ),
-                  );
-                }),
-              ),
-            ],
-          ),
+                  ),
+                );
+              }),
+            ),
+          ],
         ),
       ),
     );

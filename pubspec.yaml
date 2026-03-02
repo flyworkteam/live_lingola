@@ -10,7 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  rive: ^0.13.0
   flutter_svg: ^2.0.10
+  lottie: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
 
   url_launcher: ^6.2.6
 
@@ -49,6 +52,7 @@ flutter:
     - assets/images/PhotoTranslate/
     - assets/images/icons/features/
     - assets/images/demo/
+    - assets/animations/
 
   fonts:
     - family: Poppins
@@ -63,3 +67,11 @@ flutter:
           weight: 600
         - asset: assets/fonts/Poppins-Bold.ttf
           weight: 700
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/images/logo/live_lingola_logo.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/logo/live_lingola_logo.png"

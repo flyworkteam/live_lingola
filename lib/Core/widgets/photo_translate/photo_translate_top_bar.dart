@@ -6,13 +6,11 @@ import 'package:lingora_app/Core/Utils/assets.dart';
 class PhotoTranslateTopBar extends StatelessWidget {
   final String title;
   final VoidCallback onBack;
-  final VoidCallback? onRightTap;
 
   const PhotoTranslateTopBar({
     super.key,
     required this.title,
     required this.onBack,
-    this.onRightTap,
   });
 
   @override
@@ -56,42 +54,7 @@ class PhotoTranslateTopBar extends StatelessWidget {
               ),
             ),
           ),
-          InkWell(
-            borderRadius: BorderRadius.circular(999),
-            onTap: onRightTap,
-            child: SizedBox(
-              width: 44.w,
-              height: 44.w,
-              child: Center(
-                child: Container(
-                  width: 29.w,
-                  height: 29.w,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0x1A000000),
-                        blurRadius: 4,
-                        offset: Offset(0, 2),
-                      )
-                    ],
-                  ),
-                  child: Center(
-                    child: SvgPicture.asset(
-                      AppAssets.icSettings,
-                      width: 20.w,
-                      height: 20.w,
-                      colorFilter: const ColorFilter.mode(
-                        Color(0xFF0A70FF),
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          SizedBox(width: 44.w),
         ],
       ),
     );

@@ -4,10 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:lingora_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
-import 'package:lingora_app/View/HomeView/home_and_notifications_view.dart';
 
 class OnboardingFlowView5 extends ConsumerStatefulWidget {
-  const OnboardingFlowView5({super.key});
+  final VoidCallback onFinish;
+
+  const OnboardingFlowView5({
+    super.key,
+    required this.onFinish,
+    required Null Function() onNext,
+  });
 
   @override
   ConsumerState<OnboardingFlowView5> createState() =>
@@ -239,17 +244,8 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                     width: 321.w,
                     height: 51.h,
                     child: ElevatedButton(
-                      onPressed: s.createProgress >= 1.0
-                          ? () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) =>
-                                      const HomeAndNotificationsView(),
-                                ),
-                              );
-                            }
-                          : null,
+                      onPressed:
+                          s.createProgress >= 1.0 ? widget.onFinish : null,
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
                         backgroundColor: const Color(0xFF0A70FF),

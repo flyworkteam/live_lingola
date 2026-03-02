@@ -7,6 +7,8 @@ import 'package:lingora_app/Core/widgets/navigation/bottom_nav_item_tile.dart';
 
 enum _FreeStage { idle, listening, result }
 
+enum _SpeakLang { tr, en }
+
 class VoiceTranslateFreeLiveView extends StatefulWidget {
   const VoiceTranslateFreeLiveView({super.key});
 
@@ -18,6 +20,7 @@ class VoiceTranslateFreeLiveView extends StatefulWidget {
 class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
     with SingleTickerProviderStateMixin {
   _FreeStage _stage = _FreeStage.idle;
+  _SpeakLang _speakLang = _SpeakLang.tr;
 
   late final AnimationController _waveCtrl;
 
@@ -26,7 +29,7 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
     super.initState();
     _waveCtrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1400),
     )..repeat();
   }
 
@@ -36,7 +39,9 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
     super.dispose();
   }
 
-  void _toggle() {
+  bool get _isListening => _stage == _FreeStage.listening;
+
+  void _toggleMic() {
     setState(() {
       if (_stage == _FreeStage.idle) {
         _stage = _FreeStage.listening;
@@ -46,6 +51,10 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
         _stage = _FreeStage.idle;
       }
     });
+  }
+
+  void _setSpeakLang(_SpeakLang lang) {
+    setState(() => _speakLang = lang);
   }
 
   @override
@@ -64,6 +73,8 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
           Column(
             children: [
               SizedBox(height: topPad + 10.h),
+
+              // TOP BAR
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: SizedBox(
@@ -73,15 +84,14 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                       InkWell(
                         borderRadius: BorderRadius.circular(999),
                         onTap: () => Navigator.pop(context),
-                        child: Container(
-                          width: 24.w,
-                          height: 24.w,
-                          color: Colors.transparent,
+                        child: SizedBox(
+                          width: 40.w,
+                          height: 40.w,
                           child: Center(
                             child: SvgPicture.asset(
                               AppAssets.icBack,
-                              width: 24.w,
-                              height: 24.w,
+                              width: 18.sp,
+                              height: 18.sp,
                               colorFilter: const ColorFilter.mode(
                                 Color(0xFF0F172A),
                                 BlendMode.srcIn,
@@ -103,12 +113,15 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                           ),
                         ),
                       ),
-                      SizedBox(width: 24.w),
+                      SizedBox(width: 40.w),
                     ],
                   ),
                 ),
               ),
+
               SizedBox(height: 51.h),
+
+              // HEADER ROW
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
@@ -146,24 +159,33 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                   ],
                 ),
               ),
+
               SizedBox(height: 18.h),
+
+              // TOP WAVE
               SizedBox(
                 height: 140.h,
-                child: _stage == _FreeStage.listening
+                child: _isListening
                     ? AnimatedBuilder(
                         animation: _waveCtrl,
                         builder: (_, __) => CustomPaint(
                           size: Size(double.infinity, 140.h),
-                          painter: _WavePainter(t: _waveCtrl.value),
+                          painter: _TopStrandsWavePainter(
+                            t: _waveCtrl.value,
+                            strands: 12,
+                          ),
                         ),
                       )
                     : const SizedBox.shrink(),
               ),
+
+              // Divider line
               Container(
                 height: 2.h,
                 width: double.infinity,
                 color: const Color(0xFF0A70FF),
               ),
+
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(20.w, 18.h, 20.w, 0),
@@ -181,7 +203,9 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                         ),
                         SizedBox(height: 8.h),
                         Text(
-                          "Merhaba, nasılsın?",
+                          _speakLang == _SpeakLang.tr
+                              ? "Merhaba, nasılsın?"
+                              : "Hello, how are you?",
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 22.sp,
@@ -201,7 +225,9 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                         ),
                         SizedBox(height: 8.h),
                         Text(
-                          "Hello, how are you?",
+                          _speakLang == _SpeakLang.tr
+                              ? "Hello, how are you?"
+                              : "Merhaba, nasılsın?",
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 22.sp,
@@ -214,6 +240,8 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                         const Spacer(),
                       ],
                       const Spacer(),
+
+                      // Pill
                       Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: 18.w,
@@ -252,92 +280,22 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                           ],
                         ),
                       ),
+
                       SizedBox(height: 14.h),
-                      Container(
+
+                      _UnifiedLangBar(
                         height: 74.h,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  "Turkish",
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w700,
-                                    color: const Color(0xFF0F172A),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 96.w,
-                              child: Center(
-                                child: InkWell(
-                                  onTap: _toggle,
-                                  borderRadius: BorderRadius.circular(999),
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 200),
-                                    width: 84.w,
-                                    height: 84.w,
-                                    decoration: BoxDecoration(
-                                      color: _stage == _FreeStage.listening
-                                          ? const Color(0xFF0A70FF)
-                                          : Colors.white,
-                                      shape: BoxShape.circle,
-                                      boxShadow: const [
-                                        BoxShadow(
-                                          color: Color(0x1F0B2B6B),
-                                          blurRadius: 18,
-                                          offset: Offset(0, 10),
-                                        )
-                                      ],
-                                    ),
-                                    child: Center(
-                                      child: _stage == _FreeStage.listening
-                                          ? Icon(
-                                              Icons.stop_rounded,
-                                              size: 34.sp,
-                                              color: Colors.white,
-                                            )
-                                          : SvgPicture.asset(
-                                              AppAssets.icMicrophone,
-                                              width: 30.w,
-                                              height: 30.w,
-                                              colorFilter:
-                                                  const ColorFilter.mode(
-                                                Color(0xFF0F172A),
-                                                BlendMode.srcIn,
-                                              ),
-                                            ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  "English",
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w700,
-                                    color: const Color(0xFF0F172A),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        isListening: _isListening,
+                        speakLang: _speakLang,
+                        onSelectTR: () => _setSpeakLang(_SpeakLang.tr),
+                        onSelectEN: () => _setSpeakLang(_SpeakLang.en),
+                        onMicTap: _toggleMic,
                       ),
+
                       SizedBox(height: 10.h),
+
                       Text(
-                        _stage == _FreeStage.listening
+                        _isListening
                             ? "Tap to translate now"
                             : "Please select the language you wish to speak in",
                         style: TextStyle(
@@ -347,6 +305,7 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                           color: const Color(0xFF64748B),
                         ),
                       ),
+
                       SizedBox(height: 18.h),
                       SizedBox(height: bottomNavReserve),
                     ],
@@ -355,6 +314,8 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
               ),
             ],
           ),
+
+          // Bottom Nav
           Positioned(
             left: 0,
             right: 0,
@@ -375,38 +336,213 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
   }
 }
 
-class _WavePainter extends CustomPainter {
+class _TopStrandsWavePainter extends CustomPainter {
   final double t;
+  final int strands;
 
-  _WavePainter({required this.t});
+  _TopStrandsWavePainter({required this.t, this.strands = 12});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = const Color(0xFF0A70FF).withOpacity(0.18)
-      ..style = PaintingStyle.fill;
+    final w = size.width;
+    final h = size.height;
 
-    final path = Path();
-    const double waveHeight = 24.0;
-    final double waveLength = size.width;
-    final double baseHeight = size.height / 2;
+    final baseY = h - 2.0;
 
-    path.moveTo(0, baseHeight);
+    const double freq = 2 * math.pi;
+    final phase = t * 2 * math.pi;
 
-    for (double x = 0; x <= waveLength; x++) {
-      final y = baseHeight +
-          math.sin((x / waveLength * 2 * math.pi) + (t * 2 * math.pi)) *
-              waveHeight;
-      path.lineTo(x, y);
+    final envelope = 0.55 + 0.45 * ((math.sin(phase * 0.9) + 1) / 2);
+
+    for (int i = 0; i < strands; i++) {
+      final mid = (strands - 1) / 2;
+      final dist = (i - mid).abs();
+      final alpha = 0.08 + (1.0 - dist / (mid + 0.0001)) * 0.22;
+
+      final paint = Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.0
+        ..strokeCap = StrokeCap.round
+        ..color = const Color(0xFF0A70FF).withOpacity(alpha);
+
+      final path = Path();
+      path.moveTo(0, baseY);
+
+      final localPhase = phase + i * 0.22;
+
+      for (double x = 0; x <= w; x += 2) {
+        final nx = x / w;
+
+        final ampBase = 18.0 * (1.0 - (dist / (mid + 0.0001)) * 0.35);
+        final amp = ampBase * envelope;
+
+        final y = baseY - (math.sin(nx * freq + localPhase) * amp).abs();
+
+        path.lineTo(x, y);
+      }
+
+      canvas.drawPath(path, paint);
     }
-
-    path.lineTo(size.width, size.height);
-    path.lineTo(0, size.height);
-    path.close();
-
-    canvas.drawPath(path, paint);
   }
 
   @override
-  bool shouldRepaint(_WavePainter oldDelegate) => oldDelegate.t != t;
+  bool shouldRepaint(_TopStrandsWavePainter oldDelegate) =>
+      oldDelegate.t != t || oldDelegate.strands != strands;
+}
+
+class _UnifiedLangBar extends StatelessWidget {
+  final double height;
+  final bool isListening;
+  final _SpeakLang speakLang;
+  final VoidCallback onSelectTR;
+  final VoidCallback onSelectEN;
+  final VoidCallback onMicTap;
+
+  const _UnifiedLangBar({
+    required this.height,
+    required this.isListening,
+    required this.speakLang,
+    required this.onSelectTR,
+    required this.onSelectEN,
+    required this.onMicTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const blue = Color(0xFF0A70FF);
+    const dark = Color(0xFF0F172A);
+
+    final isTrActive = isListening && speakLang == _SpeakLang.tr;
+    final isEnActive = isListening && speakLang == _SpeakLang.en;
+
+    final r = 16.r;
+
+    final double micSize = 84.w;
+    final double micSlotW = 96.w;
+
+    return SizedBox(
+      height: height,
+      child: LayoutBuilder(
+        builder: (context, c) {
+          final w = c.maxWidth;
+
+          final double micLeft = (w - micSize) / 2;
+          final double micCenter = w / 2;
+
+          return Stack(
+            alignment: Alignment.center,
+            clipBehavior: Clip.none,
+            children: [
+              Positioned.fill(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(r),
+                  child: Container(color: Colors.white),
+                ),
+              ),
+              if (isTrActive)
+                Positioned(
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: micCenter,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(r),
+                    child: Container(color: blue),
+                  ),
+                ),
+              if (isEnActive)
+                Positioned(
+                  left: micCenter,
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(r),
+                    child: Container(color: blue),
+                  ),
+                ),
+              Positioned.fill(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: onSelectTR,
+                        child: Center(
+                          child: Text(
+                            "Turkish",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w700,
+                              color: isTrActive ? Colors.white : dark,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: micSlotW),
+                    Expanded(
+                      child: InkWell(
+                        onTap: onSelectEN,
+                        child: Center(
+                          child: Text(
+                            "English",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w700,
+                              color: isEnActive ? Colors.white : dark,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                left: micLeft,
+                child: InkWell(
+                  onTap: onMicTap,
+                  borderRadius: BorderRadius.circular(999),
+                  child: Container(
+                    width: micSize,
+                    height: micSize,
+                    decoration: BoxDecoration(
+                      color: isListening ? blue : Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0x1F0B2B6B),
+                          blurRadius: 18,
+                          offset: Offset(0, 10),
+                        )
+                      ],
+                    ),
+                    child: Center(
+                      child: isListening
+                          ? Icon(
+                              Icons.stop_rounded,
+                              size: 34.sp,
+                              color: Colors.white,
+                            )
+                          : SvgPicture.asset(
+                              AppAssets.icMicrophone,
+                              width: 30.w,
+                              height: 30.w,
+                              colorFilter: const ColorFilter.mode(
+                                dark,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 }

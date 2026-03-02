@@ -4,6 +4,7 @@ class AppAssets {
   static const String navChat = 'assets/images/icons/nav/ic_nav_chat.svg';
   static const String navMic = 'assets/images/icons/nav/ic_nav_mic.svg';
   static const String navCamera = 'assets/images/icons/nav/ic_nav_camera.svg';
+  static const String navOkRight = 'assets/images/icons/nav/arrow-right.svg';
 
   // Home Screen Icons
   static const String icNotification =

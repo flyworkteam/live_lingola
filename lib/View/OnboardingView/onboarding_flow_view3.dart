@@ -1,15 +1,19 @@
-// lib/View/OnboardingView/onboarding_flow_view3.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lingora_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
 
-import 'onboarding_flow_view2.dart';
-import 'onboarding_flow_view4.dart';
-import 'onboarding_flow_view6.dart';
-
 class OnboardingFlowView3 extends ConsumerWidget {
-  const OnboardingFlowView3({super.key});
+  final VoidCallback onNext;
+  final VoidCallback onBack;
+  final VoidCallback onSkip;
+
+  const OnboardingFlowView3({
+    super.key,
+    required this.onNext,
+    required this.onBack,
+    required this.onSkip,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,8 +21,6 @@ class OnboardingFlowView3 extends ConsumerWidget {
     final c = ref.read(onboardingControllerProvider.notifier);
 
     final canNext = s.usedAiBefore != null;
-
-    //  Page-1 Skip hizası: right = 393 - (329 + 35) = 29
     const skipRight = 29.0;
 
     final bottomPad = 18.h;
@@ -31,6 +33,7 @@ class OnboardingFlowView3 extends ConsumerWidget {
         bottom: false,
         child: Stack(
           children: [
+            // BACK
             Align(
               alignment: Alignment.topLeft,
               child: Padding(
@@ -38,13 +41,7 @@ class OnboardingFlowView3 extends ConsumerWidget {
                 child: SizedBox(
                   height: 44.h,
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const OnboardingFlowView2()),
-                      );
-                    },
+                    onPressed: onBack,
                     style: TextButton.styleFrom(
                       foregroundColor: const Color(0xFF9AA4B2),
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -72,13 +69,7 @@ class OnboardingFlowView3 extends ConsumerWidget {
                   height: 30.h,
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const OnboardingFlowView6()),
-                      );
-                    },
+                    onTap: onSkip,
                     child: Center(
                       child: Text(
                         'Skip',
@@ -105,8 +96,6 @@ class OnboardingFlowView3 extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: 103.h),
-
-                    // TITLE
                     SizedBox(
                       width: 255.w,
                       height: 60.h,
@@ -122,10 +111,7 @@ class OnboardingFlowView3 extends ConsumerWidget {
                         ),
                       ),
                     ),
-
                     SizedBox(height: 2.h),
-
-                    // SUBTITLE
                     SizedBox(
                       width: 275.w,
                       height: 51.h,
@@ -141,9 +127,7 @@ class OnboardingFlowView3 extends ConsumerWidget {
                         ),
                       ),
                     ),
-
                     SizedBox(height: 26.h),
-
                     _SimpleSelectButton(
                       text: 'Yes',
                       selected: s.usedAiBefore == true,
@@ -155,7 +139,6 @@ class OnboardingFlowView3 extends ConsumerWidget {
                       selected: s.usedAiBefore == false,
                       onTap: () => c.setUsedAiBefore(false),
                     ),
-
                     const Spacer(),
                   ],
                 ),
@@ -173,16 +156,7 @@ class OnboardingFlowView3 extends ConsumerWidget {
                     width: 321.w,
                     height: 51.h,
                     child: ElevatedButton(
-                      onPressed: canNext
-                          ? () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) =>
-                                        const OnboardingFlowView4()),
-                              );
-                            }
-                          : null,
+                      onPressed: canNext ? onNext : null,
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
                         backgroundColor: const Color(0xFF0A70FF),

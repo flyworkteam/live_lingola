@@ -127,13 +127,13 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
                   borderRadius: BorderRadius.circular(999),
                   onTap: () => Navigator.pop(context),
                   child: SizedBox(
-                    width: 24.w,
-                    height: 24.w,
+                    width: 40.w,
+                    height: 40.w,
                     child: Center(
                       child: SvgPicture.asset(
                         AppAssets.icBack2,
-                        width: 24.w,
-                        height: 24.w,
+                        width: 16.sp,
+                        height: 16.sp,
                         colorFilter: const ColorFilter.mode(
                           Color(0xFF0F172A),
                           BlendMode.srcIn,
@@ -155,7 +155,7 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
                     ),
                   ),
                 ),
-                SizedBox(width: 24.w),
+                SizedBox(width: 40.w),
               ],
             ),
           ),
@@ -357,41 +357,26 @@ class _ClearConfirmDialog extends StatelessWidget {
               ),
             ),
             SizedBox(height: 12.h),
-            SizedBox(
-              width: 101.w,
-              height: 15.h,
-              child: Center(
-                child: Text(
-                  'Clear History',
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15.sp,
-                    height: 15 / 15,
-                    letterSpacing: 0,
-                    color: const Color(0xFF0F172A),
-                  ),
+            Center(
+              child: Text(
+                'Clear History',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15.sp,
+                  color: const Color(0xFF0F172A),
                 ),
               ),
             ),
             SizedBox(height: 8.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 36.w),
-              child: Text(
-                'Are you sure you want to\nclear your history?',
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.visible,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w300,
-                  fontSize: 11.sp,
-                  height: 15 / 11,
-                  letterSpacing: 0,
-                  color: const Color(0xFF475569),
-                ),
+            Text(
+              'Are you sure you want to\nclear your history?',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w300,
+                fontSize: 11.sp,
+                color: const Color(0xFF475569),
               ),
             ),
             const Spacer(),
@@ -399,24 +384,15 @@ class _ClearConfirmDialog extends StatelessWidget {
               padding: EdgeInsets.only(left: 55.w, right: 18.w, bottom: 16.h),
               child: Row(
                 children: [
-                  SizedBox(
-                    width: 47.w,
-                    height: 24.h,
-                    child: InkWell(
-                      onTap: () => Navigator.pop(context, false),
-                      child: Center(
-                        child: Text(
-                          'Cancel',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 13.sp,
-                            height: 24 / 13,
-                            letterSpacing: 0,
-                            color: const Color(0xFF9E9E9E),
-                          ),
-                        ),
+                  InkWell(
+                    onTap: () => Navigator.pop(context, false),
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 13.sp,
+                        color: const Color(0xFF9E9E9E),
                       ),
                     ),
                   ),
@@ -432,22 +408,13 @@ class _ClearConfirmDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(50.r),
                       ),
                       alignment: Alignment.center,
-                      child: SizedBox(
-                        width: 35.w,
-                        height: 24.h,
-                        child: Center(
-                          child: Text(
-                            'Clear',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 13.sp,
-                              height: 24 / 13,
-                              letterSpacing: 0,
-                              color: Colors.white,
-                            ),
-                          ),
+                      child: Text(
+                        'Clear',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 13.sp,
+                          color: Colors.white,
                         ),
                       ),
                     ),

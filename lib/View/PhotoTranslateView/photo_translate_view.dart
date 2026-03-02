@@ -88,10 +88,8 @@ class _PhotoTranslateViewState extends State<PhotoTranslateView> {
                           final double camSize = 70.w;
                           final double galSize = 37.w;
                           final double spacing = 15.w;
-
                           final double camLeft =
                               (constraints.maxWidth - camSize) / 2;
-
                           final double galLeft = camLeft - galSize - spacing;
 
                           return SizedBox(

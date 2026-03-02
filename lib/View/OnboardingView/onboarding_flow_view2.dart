@@ -1,16 +1,17 @@
-// lib/View/OnboardingView/onboarding_flow_view2.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lingora_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
-import 'package:lingora_app/View/OnboardingView/onboarding_flow_view3.dart';
-
-import 'onboarding_flow_view1.dart';
 
 class OnboardingFlowView2 extends ConsumerWidget {
-  const OnboardingFlowView2({super.key});
+  final VoidCallback onNext;
+  final VoidCallback onBack;
 
-  num? get blockTop => null;
+  const OnboardingFlowView2({
+    super.key,
+    required this.onNext,
+    required this.onBack,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,14 +43,7 @@ class OnboardingFlowView2 extends ConsumerWidget {
                         child: SizedBox(
                           height: 44.h,
                           child: TextButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const OnboardingFlowView1(),
-                                ),
-                              );
-                            },
+                            onPressed: onBack,
                             style: TextButton.styleFrom(
                               foregroundColor: const Color(0xFF9AA4B2),
                               padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -89,7 +83,7 @@ class OnboardingFlowView2 extends ConsumerWidget {
 
                     SizedBox(height: 2.h),
 
-                    // SUBTITLE (2 satır, w341 h46)
+                    // SUBTITLE
                     SizedBox(
                       width: 341.w,
                       height: 46.h,
@@ -116,7 +110,7 @@ class OnboardingFlowView2 extends ConsumerWidget {
 
                     SizedBox(height: 40.h),
 
-                    // LIST (scroll)
+                    // LIST
                     Expanded(
                       child: ListView.separated(
                         padding: EdgeInsets.fromLTRB(36.w, 0, 36.w, 0),
@@ -160,16 +154,7 @@ class OnboardingFlowView2 extends ConsumerWidget {
                     width: 321.w,
                     height: 51.h,
                     child: ElevatedButton(
-                      onPressed: s.canGoNext
-                          ? () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const OnboardingFlowView3(),
-                                ),
-                              );
-                            }
-                          : null,
+                      onPressed: s.canGoNext ? onNext : null,
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
                         backgroundColor: const Color(0xFF0A70FF),
@@ -324,7 +309,6 @@ class _LanguagePill extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 14.w),
             child: Row(
               children: [
-                // FLAG IMAGE
                 Image.asset(
                   flagAsset,
                   width: 24.w,
@@ -352,8 +336,7 @@ class _LanguagePill extends StatelessWidget {
   }
 }
 
-/// ---- Languages list  ----
-
+/// ---- Languages list ----
 class LanguageOption {
   final String code;
   final String name;
