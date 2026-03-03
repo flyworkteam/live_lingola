@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lingora_app/Core/Utils/assets.dart';
+import 'package:lingola_app/Core/Utils/assets.dart';
 
 class VoicePlanCard extends StatelessWidget {
   final bool isPro;
@@ -94,10 +94,7 @@ class VoicePlanCard extends StatelessWidget {
                   ),
                 ),
               ),
-
-              // sabit mesafe
               SizedBox(height: 12.h),
-
               Text(
                 title,
                 style: TextStyle(
@@ -124,8 +121,6 @@ class VoicePlanCard extends StatelessWidget {
                     ),
                   )),
               const Spacer(),
-
-              // Başlat Butonu
               Center(
                 child: SizedBox(
                   width: 132.w,
@@ -156,8 +151,6 @@ class VoicePlanCard extends StatelessWidget {
             ],
           ),
         ),
-
-        // FREE/PRO Etiketi
         Positioned(
           top: -11.5.h,
           left: 0,
@@ -185,7 +178,6 @@ class VoicePlanCard extends StatelessWidget {
             ),
           ),
         ),
-
         if (isPro)
           Positioned(
             bottom: 42.h,

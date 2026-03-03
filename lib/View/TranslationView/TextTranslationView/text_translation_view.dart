@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lingora_app/Core/Utils/assets.dart';
-import 'package:lingora_app/Core/widgets/common/app_card.dart';
-import 'package:lingora_app/Core/widgets/common/dropdown_card.dart';
-import 'package:lingora_app/Core/widgets/common/tap_outside_to_close.dart';
-import 'package:lingora_app/Core/widgets/text_translation/example_tile.dart';
-import 'package:lingora_app/Core/widgets/text_translation/lang_bar.dart';
-import 'package:lingora_app/Core/widgets/text_translation/lang_row.dart';
-import 'package:lingora_app/Core/widgets/text_translation/models.dart';
+import 'package:lingola_app/Core/Utils/assets.dart';
+import 'package:lingola_app/Core/widgets/common/app_card.dart';
+import 'package:lingola_app/Core/widgets/common/dropdown_card.dart';
+import 'package:lingola_app/Core/widgets/common/tap_outside_to_close.dart';
+import 'package:lingola_app/Core/widgets/text_translation/example_tile.dart';
+import 'package:lingola_app/Core/widgets/text_translation/lang_bar.dart';
+import 'package:lingola_app/Core/widgets/text_translation/lang_row.dart';
+import 'package:lingola_app/Core/widgets/text_translation/models.dart';
 
 class TextTranslationView extends StatefulWidget {
   final VoidCallback? onBackToHome;

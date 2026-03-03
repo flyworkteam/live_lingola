@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lingora_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
+import 'package:lingola_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
 
 class OnboardingFlowView3 extends ConsumerWidget {
   final VoidCallback onNext;

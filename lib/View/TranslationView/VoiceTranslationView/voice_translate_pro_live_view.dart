@@ -4,13 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:lingora_app/Core/widgets/voice_translate/voice_lang_bar.dart';
-import 'package:lingora_app/Core/widgets/voice_translate/voice_paste_pill.dart';
-import 'package:lingora_app/Core/widgets/voice_translate/voice_pro_background_painter.dart';
-import 'package:lingora_app/Core/widgets/voice_translate/voice_text_card.dart';
-import 'package:lingora_app/Core/widgets/voice_translate/voice_top_bar.dart';
-import 'package:lingora_app/Core/Utils/assets.dart';
-import 'package:lingora_app/Riverpod/Providers/voice_translation_providers.dart';
+import 'package:lingola_app/Core/widgets/voice_translate/voice_lang_bar.dart';
+import 'package:lingola_app/Core/widgets/voice_translate/voice_paste_pill.dart';
+import 'package:lingola_app/Core/widgets/voice_translate/voice_pro_background_painter.dart';
+import 'package:lingola_app/Core/widgets/voice_translate/voice_text_card.dart';
+import 'package:lingola_app/Core/widgets/voice_translate/voice_top_bar.dart';
+import 'package:lingola_app/Core/Utils/assets.dart';
+import 'package:lingola_app/Riverpod/Providers/voice_translation_providers.dart';
 
 class VoiceTranslateProLiveView extends ConsumerStatefulWidget {
   const VoiceTranslateProLiveView({super.key});

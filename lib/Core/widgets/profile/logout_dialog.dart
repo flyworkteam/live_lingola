@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lingora_app/Core/Utils/assets.dart';
+import 'package:lingola_app/Core/Utils/assets.dart';
 
 class LogoutDialog {
   static Future<bool?> show(BuildContext context) {

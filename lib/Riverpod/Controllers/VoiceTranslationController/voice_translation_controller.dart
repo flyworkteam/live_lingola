@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lingora_app/Core/widgets/voice_translate/voice_pro_background_painter.dart'
+import 'package:lingola_app/Core/widgets/voice_translate/voice_pro_background_painter.dart'
     show ProStage;
 
 class VoiceProLiveState {

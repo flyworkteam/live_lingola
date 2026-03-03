@@ -42,40 +42,55 @@ class _SelectLanguageViewState extends State<SelectLanguageView> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(18.w, 10.h, 18.w, 24.h),
-          child: Column(
-            children: [
-              _TopBar(
-                title: "Select Language",
-                onBack: () => Navigator.of(context).pop(),
-              ),
-              SizedBox(height: 18.h),
-              Expanded(
-                child: ListView.separated(
-                  padding: EdgeInsets.zero,
-                  physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics(),
+        bottom: false,
+        child: Stack(
+          children: [
+            /// CONTENT
+            Padding(
+              padding: EdgeInsets.fromLTRB(18.w, 10.h, 18.w, 0),
+              child: Column(
+                children: [
+                  _TopBar(
+                    title: "Select Language",
+                    onBack: () => Navigator.of(context).pop(),
                   ),
-                  itemCount: _langs.length,
-                  separatorBuilder: (_, __) => SizedBox(height: 12.h),
-                  itemBuilder: (context, i) {
-                    final l = _langs[i];
-                    final selected = _selected == i;
+                  SizedBox(height: 18.h),
 
-                    return _LangPill(
-                      title: l.title,
-                      flagAsset: l.asset,
-                      fallbackEmoji: l.emoji,
-                      selected: selected,
-                      onTap: () => setState(() => _selected = i),
-                    );
-                  },
-                ),
+                  /// LIST
+                  Expanded(
+                    child: ListView.separated(
+                      padding: EdgeInsets.only(
+                        bottom: (54.h + 16.h),
+                      ),
+                      physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics(),
+                      ),
+                      itemCount: _langs.length,
+                      separatorBuilder: (_, __) => SizedBox(height: 12.h),
+                      itemBuilder: (context, i) {
+                        final l = _langs[i];
+                        final selected = _selected == i;
+
+                        return _LangPill(
+                          title: l.title,
+                          flagAsset: l.asset,
+                          fallbackEmoji: l.emoji,
+                          selected: selected,
+                          onTap: () => setState(() => _selected = i),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 16.h),
-              SizedBox(
-                width: double.infinity,
+            ),
+
+            /// NEXT BUTTON
+            Positioned(
+              left: 18.w,
+              right: 18.w,
+              bottom: 20,
+              child: SizedBox(
                 height: 54.h,
                 child: ElevatedButton(
                   onPressed: () =>
@@ -98,8 +113,8 @@ class _SelectLanguageViewState extends State<SelectLanguageView> {
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

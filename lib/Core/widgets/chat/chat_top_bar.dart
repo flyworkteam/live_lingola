@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lingora_app/Core/Utils/assets.dart';
+import 'package:lingola_app/Core/Utils/assets.dart';
 
 class ChatTopBar extends StatelessWidget {
   final VoidCallback onBack;
@@ -21,7 +21,6 @@ class ChatTopBar extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Row(
         children: [
-          // --- GERİ BUTONU (SVG GÜNCELLENDİ) ---
           InkWell(
             borderRadius: BorderRadius.circular(999),
             onTap: onBack,
@@ -76,7 +75,6 @@ class ChatTopBar extends StatelessWidget {
             ],
           ),
           const Spacer(),
-          // Sağ taraftaki dengeleyici boşluk
           SizedBox(width: 44.w, height: 44.w),
         ],
       ),

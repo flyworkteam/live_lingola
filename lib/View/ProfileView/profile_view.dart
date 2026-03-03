@@ -288,6 +288,9 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
+    final topInset = MediaQuery.of(context).padding.top;
+    final bottomInset = MediaQuery.of(context).padding.bottom;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
@@ -300,301 +303,337 @@ class _ProfileViewState extends State<ProfileView> {
               ),
             ),
           ),
-          SafeArea(
+          Positioned.fill(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(
                 parent: ClampingScrollPhysics(),
               ),
-              padding: EdgeInsets.fromLTRB(18.w, 10.h, 18.w, 18.h),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: 4.h),
-                  Row(
-                    children: [
-                      InkWell(
-                        onTap: () => Navigator.of(context).pop(),
-                        borderRadius: BorderRadius.circular(12.r),
-                        child: SizedBox(
-                          width: 44.w,
-                          height: 44.w,
-                          child: Center(
-                            child: SvgPicture.asset(
-                              AppAssets.icBack,
-                              width: 24.w,
-                              height: 24.w,
-                              colorFilter: const ColorFilter.mode(
-                                Colors.white,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            "Profile",
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 44.w),
-                    ],
-                  ),
-                  SizedBox(height: 18.h),
-                  Center(
-                    child: Container(
-                      width: 106.w,
-                      height: 106.w,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(3.w),
-                        child: ClipOval(
-                          child: Image.asset(
-                            _avatarPath,
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Icon(
-                              Icons.person,
-                              color: const Color(0xFF0F172A),
-                              size: _iconSize.sp,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 14.h),
-                  Center(
-                    child: Text(
-                      "Alex Johnson",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 20.sp,
-                        fontWeight: FontWeight.w700,
-                        height: 1.0,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5.h),
-                  Center(
-                    child: Text(
-                      "Free Version",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w500,
-                        height: 26 / 12,
-                        color: const Color(0x80000000),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 18.h),
-                  InkWell(
-                    onTap: () {},
-                    borderRadius: BorderRadius.circular(18.r),
-                    child: Container(
-                      height: 92.h,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 18.w,
-                        vertical: 16.h,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18.r),
-                        gradient: const LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Color(0xFF21B6FF),
-                            Color(0xFF0A70FF),
-                            Color(0xFF0057FF),
-                          ],
-                          stops: [0.0, 0.55, 1.0],
-                        ),
-                        border: Border.all(color: Colors.white, width: 2),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF0A70FF).withOpacity(.25),
-                            blurRadius: 18,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
+                  // 1. Status Bar Boşluğu
+                  SizedBox(height: topInset),
+
+                  // 2. Header
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 18.w),
+                    child: SizedBox(
+                      height: 44.w,
                       child: Row(
                         children: [
-                          Expanded(
-                            child: Text(
-                              "Unlimited access to\nall features",
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 16.sp,
-                                height: 20 / 16,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: -0.3,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          const _ProPill(iconPath: _icPro, text: "Pro"),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 18.h),
-                  _sectionTitle("ACCOUNT SETTINGS"),
-                  SizedBox(height: 8.h),
-                  _whiteCard(
-                    Column(
-                      children: [
-                        _assetTile(
-                          iconBg: const Color(0xFFEAF2FF),
-                          assetPath: _icProfile,
-                          title: "Profile Settings",
-                          onTap: _openProfileSettings,
-                        ),
-                        _divider(),
-                        _assetSwitchTile(
-                          iconBg: const Color(0xFFF4ECFF),
-                          assetPath: _icNotification,
-                          title: "Notifications",
-                          value: _notificationsOn,
-                          onChanged: (v) =>
-                              setState(() => _notificationsOn = v),
-                        ),
-                        _divider(),
-                        _assetTile(
-                          iconBg: const Color(0xFFE9FBF4),
-                          assetPath: _icAppLang,
-                          title: "App Language",
-                          onTap: _openLanguage,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 14.h),
-                  _sectionTitle("GENERAL"),
-                  SizedBox(height: 8.h),
-                  _whiteCard(
-                    Column(
-                      children: [
-                        _assetTile(
-                          iconBg: const Color(0xFFE9FBF4),
-                          assetPath: _icPrivacy,
-                          title: "Privacy Policy",
-                          onTap: () {},
-                        ),
-                        _divider(),
-                        _assetTile(
-                          iconBg: const Color(0xFFEFF6FF),
-                          assetPath: _icTerms,
-                          title: "Terms of Service",
-                          onTap: () {},
-                        ),
-                        _divider(),
-                        _assetTile(
-                          iconBg: const Color(0xFFEFF6FF),
-                          assetPath: _icShareFriend,
-                          title: "Share Friend",
-                          onTap: _openShareFriend,
-                        ),
-                        _divider(),
-                        _assetTile(
-                          iconBg: const Color(0xFFFFF2E6),
-                          assetPath: _icRate,
-                          title: "Rate Us",
-                          onTap: () {},
-                        ),
-                        _divider(),
-                        _assetTile(
-                          iconBg: const Color(0xFFEFF2F9),
-                          assetPath: _icFaq,
-                          title: "F.A.Q.",
-                          onTap: _openFaq,
-                        ),
-                        _divider(),
-                        _assetTile(
-                          iconBg: const Color(0xFFEFF6FF),
-                          assetPath: _icSupport,
-                          title: "Support",
-                          onTap: () {},
-                        ),
-                        _divider(),
-                        _assetTile(
-                          iconBg: const Color(0xFFFFF7ED),
-                          assetPath: _icFeedback,
-                          title: "Feedback",
-                          onTap: () {},
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 14.h),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(14.r),
-                    onTap: _showLogoutDialog,
-                    child: Container(
-                      height: 52.h,
-                      padding: EdgeInsets.symmetric(horizontal: 14.w),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFEFF0),
-                        borderRadius: BorderRadius.circular(14.r),
-                        border: Border.all(color: const Color(0xFFFFD6D9)),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 34.w,
-                            height: 34.w,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10.r),
-                            ),
-                            child: Center(
-                              child: SvgPicture.asset(
-                                _icLogout,
-                                width: 22.w,
-                                height: 22.w,
-                                fit: BoxFit.contain,
-                                colorFilter: const ColorFilter.mode(
-                                  Color(0xFFF87171),
-                                  BlendMode.srcIn,
+                          InkWell(
+                            onTap: () => Navigator.of(context).pop(),
+                            borderRadius: BorderRadius.circular(12.r),
+                            child: SizedBox(
+                              width: 44.w,
+                              height: 44.w,
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  AppAssets.icBack,
+                                  width: 24.w,
+                                  height: 24.w,
+                                  colorFilter: const ColorFilter.mode(
+                                    Colors.white,
+                                    BlendMode.srcIn,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(width: 12.w),
-                          Text(
-                            "Çıkış Yap",
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xFFEF4444),
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                "Profile",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w500,
+                                  height: 26 / 20,
+                                  letterSpacing: 0,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ),
+                          SizedBox(width: 44.w),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(height: 10.h),
-                  Center(
-                    child: Text(
-                      "version 2.1.0",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 11.sp,
-                        color: Colors.black.withOpacity(.35),
-                        fontWeight: FontWeight.w400,
-                      ),
+
+                  // 3. Profil Detayları ve Listeler
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 18.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(height: 18.h),
+
+                        Center(
+                          child: Container(
+                            width: 106.w,
+                            height: 106.w,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(3.w),
+                              child: ClipOval(
+                                child: Image.asset(
+                                  _avatarPath,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, __, ___) => Icon(
+                                    Icons.person,
+                                    color: const Color(0xFF0F172A),
+                                    size: _iconSize.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 14.h),
+
+                        Center(
+                          child: Text(
+                            "Alex Johnson",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w700,
+                              height: 1.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 5.h),
+
+                        Center(
+                          child: Text(
+                            "Free Version",
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                              height: 26 / 12,
+                              color: const Color(0x80000000),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 18.h),
+
+                        InkWell(
+                          onTap: () {},
+                          borderRadius: BorderRadius.circular(18.r),
+                          child: Container(
+                            height: 92.h,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 18.w,
+                              vertical: 16.h,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18.r),
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Color(0xFF21B6FF),
+                                  Color(0xFF0A70FF),
+                                  Color(0xFF0057FF),
+                                ],
+                                stops: [0.0, 0.55, 1.0],
+                              ),
+                              border: Border.all(color: Colors.white, width: 2),
+                              boxShadow: [
+                                BoxShadow(
+                                  color:
+                                      const Color(0xFF0A70FF).withOpacity(.25),
+                                  blurRadius: 18,
+                                  offset: const Offset(0, 10),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    "Unlimited access to\nall features",
+                                    style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 16.sp,
+                                      height: 20 / 16,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: -0.3,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                const _ProPill(iconPath: _icPro, text: "Pro"),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 18.h),
+                        _sectionTitle("ACCOUNT SETTINGS"),
+                        SizedBox(height: 8.h),
+                        _whiteCard(
+                          Column(
+                            children: [
+                              _assetTile(
+                                iconBg: const Color(0xFFEAF2FF),
+                                assetPath: _icProfile,
+                                title: "Profile Settings",
+                                onTap: _openProfileSettings,
+                              ),
+                              _divider(),
+                              _assetSwitchTile(
+                                iconBg: const Color(0xFFF4ECFF),
+                                assetPath: _icNotification,
+                                title: "Notifications",
+                                value: _notificationsOn,
+                                onChanged: (v) =>
+                                    setState(() => _notificationsOn = v),
+                              ),
+                              _divider(),
+                              _assetTile(
+                                iconBg: const Color(0xFFE9FBF4),
+                                assetPath: _icAppLang,
+                                title: "App Language",
+                                onTap: _openLanguage,
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        SizedBox(height: 14.h),
+                        _sectionTitle("GENERAL"),
+                        SizedBox(height: 8.h),
+                        _whiteCard(
+                          Column(
+                            children: [
+                              _assetTile(
+                                iconBg: const Color(0xFFE9FBF4),
+                                assetPath: _icPrivacy,
+                                title: "Privacy Policy",
+                                onTap: () {},
+                              ),
+                              _divider(),
+                              _assetTile(
+                                iconBg: const Color(0xFFEFF6FF),
+                                assetPath: _icTerms,
+                                title: "Terms of Service",
+                                onTap: () {},
+                              ),
+                              _divider(),
+                              _assetTile(
+                                iconBg: const Color(0xFFEFF6FF),
+                                assetPath: _icShareFriend,
+                                title: "Share Friend",
+                                onTap: _openShareFriend,
+                              ),
+                              _divider(),
+                              _assetTile(
+                                iconBg: const Color(0xFFFFF2E6),
+                                assetPath: _icRate,
+                                title: "Rate Us",
+                                onTap: () {},
+                              ),
+                              _divider(),
+                              _assetTile(
+                                iconBg: const Color(0xFFEFF2F9),
+                                assetPath: _icFaq,
+                                title: "F.A.Q.",
+                                onTap: _openFaq,
+                              ),
+                              _divider(),
+                              _assetTile(
+                                iconBg: const Color(0xFFEFF6FF),
+                                assetPath: _icSupport,
+                                title: "Support",
+                                onTap: () {},
+                              ),
+                              _divider(),
+                              _assetTile(
+                                iconBg: const Color(0xFFFFF7ED),
+                                assetPath: _icFeedback,
+                                title: "Feedback",
+                                onTap: () {},
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        SizedBox(height: 14.h),
+                        InkWell(
+                          borderRadius: BorderRadius.circular(14.r),
+                          onTap: _showLogoutDialog,
+                          child: Container(
+                            height: 52.h,
+                            padding: EdgeInsets.symmetric(horizontal: 14.w),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFEFF0),
+                              borderRadius: BorderRadius.circular(14.r),
+                              border:
+                                  Border.all(color: const Color(0xFFFFD6D9)),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 34.w,
+                                  height: 34.w,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10.r),
+                                  ),
+                                  child: Center(
+                                    child: SvgPicture.asset(
+                                      _icLogout,
+                                      width: 22.w,
+                                      height: 22.w,
+                                      fit: BoxFit.contain,
+                                      colorFilter: const ColorFilter.mode(
+                                        Color(0xFFF87171),
+                                        BlendMode.srcIn,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 12.w),
+                                Text(
+                                  "Çıkış Yap",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFFEF4444),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // Alt boşluk ve Versiyon
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: 10.h, bottom: bottomInset + 10.h),
+                          child: Center(
+                            child: Text(
+                              "version 2.1.0",
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 11.sp,
+                                color: Colors.black.withOpacity(.35),
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

@@ -2,8 +2,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lingora_app/Core/Utils/assets.dart';
-import 'package:lingora_app/Core/widgets/navigation/bottom_nav_item_tile.dart';
+import 'package:lingola_app/Core/Utils/assets.dart';
+import 'package:lingola_app/Core/widgets/navigation/bottom_nav_item_tile.dart';
 
 enum _FreeStage { idle, listening, result }
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lingora_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
+import 'package:lingola_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
 
 class OnboardingFlowView1 extends ConsumerWidget {
   final VoidCallback onNext;
@@ -51,7 +51,6 @@ class OnboardingFlowView1 extends ConsumerWidget {
         minimum: EdgeInsets.only(top: 73.h),
         child: Stack(
           children: [
-            // Skip Button
             Align(
               alignment: Alignment.topRight,
               child: Padding(
@@ -79,8 +78,6 @@ class OnboardingFlowView1 extends ConsumerWidget {
                 ),
               ),
             ),
-
-            // Content
             Positioned.fill(
               child: Padding(
                 padding: EdgeInsets.only(bottom: bottomCtaSpace),
@@ -171,8 +168,6 @@ class OnboardingFlowView1 extends ConsumerWidget {
                 ),
               ),
             ),
-
-            // Next Button
             Align(
               alignment: Alignment.bottomCenter,
               child: SafeArea(

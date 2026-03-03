@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lingora_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
-import 'package:lingora_app/View/HomeView/home_and_notifications_view.dart';
+import 'package:lingola_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
+import 'package:lingola_app/View/HomeView/home_and_notifications_view.dart';
 
 import 'onboarding_flow_view1.dart';
 import 'onboarding_flow_view2.dart';
@@ -24,7 +24,7 @@ class _OnboardingFlowSliderState extends ConsumerState<OnboardingFlowSlider> {
   static const _dur = Duration(milliseconds: 320);
   static const _curve = Curves.easeInOut;
 
-  static const int _lastIndex = 4; // 0..4 (View1..View5)
+  static const int _lastIndex = 4;
 
   @override
   void initState() {
@@ -78,7 +78,7 @@ class _OnboardingFlowSliderState extends ConsumerState<OnboardingFlowSlider> {
       children: [
         OnboardingFlowView1(
           onNext: () => _nextOrFinish(context),
-          onSkip: () => _nextOrFinish(context), // ✅ Skip = Next
+          onSkip: () => _nextOrFinish(context),
         ),
         OnboardingFlowView2(
           onNext: () => _nextOrFinish(context),
@@ -87,16 +87,16 @@ class _OnboardingFlowSliderState extends ConsumerState<OnboardingFlowSlider> {
         OnboardingFlowView3(
           onNext: () => _nextOrFinish(context),
           onBack: _back,
-          onSkip: () => _nextOrFinish(context), // ✅ Skip = Next
+          onSkip: () => _nextOrFinish(context),
         ),
         OnboardingFlowView4(
           onNext: () => _nextOrFinish(context),
           onBack: _back,
-          onSkip: () => _nextOrFinish(context), // ✅ Skip = Next
+          onSkip: () => _nextOrFinish(context),
         ),
         OnboardingFlowView5(
-          // ✅ Get Started (progress 1.0 olunca) => direkt Home
-          onFinish: () => _finishToHome(context), onNext: () {},
+          onFinish: () => _finishToHome(context),
+          onNext: () {},
         ),
       ],
     );
