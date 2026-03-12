@@ -61,12 +61,9 @@ class ChatBubble extends StatelessWidget {
               color: const Color(0xFFE7F0FF),
               borderRadius: BorderRadius.circular(10.r),
             ),
-            // ✅ GÜNCELLENDİ: Image.asset yerine SvgPicture.asset kullanıldı
             child: SvgPicture.asset(
               botIconAsset,
               fit: BoxFit.contain,
-              // Eğer ikon çok koyu gelirse rengini buradan zorlayabilirsin:
-              // colorFilter: const ColorFilter.mode(Color(0xFF0A70FF), BlendMode.srcIn),
             ),
           ),
           SizedBox(width: 10.w),

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lingola_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lingola_app/Riverpod/Providers/onboarding_preferences_provider.dart';
 
 class OnboardingFlowView5 extends ConsumerStatefulWidget {
   final VoidCallback onFinish;
@@ -20,18 +21,59 @@ class OnboardingFlowView5 extends ConsumerStatefulWidget {
 
 class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
   bool _started = false;
+  bool _isSaving = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!_started) {
-      _started = true;
+
+    if (_started) return;
+    _started = true;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       ref.read(onboardingControllerProvider.notifier).startCreating();
+    });
+  }
+
+  Future<void> _handleFinish() async {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (_isSaving) return;
+
+    setState(() {
+      _isSaving = true;
+    });
+
+    try {
+      final onboardingState = ref.read(onboardingControllerProvider);
+
+      await ref
+          .read(onboardingRepositoryProvider)
+          .savePreferences(onboardingState);
+
+      if (!mounted) return;
+      widget.onFinish();
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.preferencesSaveFailed('$e')),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final s = ref.watch(onboardingControllerProvider);
 
     final bottomPad = 18.h;
@@ -111,7 +153,7 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 24.w),
                         child: Text(
-                          'Your Personal Account\nIs Being Created',
+                          l10n.onboardingFlow5Title,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Poppins',
@@ -126,7 +168,7 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 32.w),
                         child: Text(
-                          'Your AI assistant is personalizing your experience.\nThis may take a few seconds.',
+                          l10n.onboardingFlow5Subtitle,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Poppins',
@@ -146,7 +188,7 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                               width: 198.w,
                               height: 28.h,
                               child: Text(
-                                'AI personalizing your experience',
+                                l10n.onboardingFlow5ProgressLabel,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w600,
@@ -212,17 +254,17 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                             children: [
                               _CheckRow(
                                 done: s.profileCreated,
-                                text: 'Profile is being created',
+                                text: l10n.onboardingFlow5StepProfile,
                               ),
                               SizedBox(height: 12.h),
                               _CheckRow(
                                 done: s.languageConfigured,
-                                text: 'Language settings are being configured',
+                                text: l10n.onboardingFlow5StepLanguage,
                               ),
                               SizedBox(height: 12.h),
                               _CheckRow(
                                 done: s.aiPrepared,
-                                text: 'AI model is being prepared',
+                                text: l10n.onboardingFlow5StepAi,
                               ),
                             ],
                           ),
@@ -243,8 +285,9 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                     width: 321.w,
                     height: 51.h,
                     child: ElevatedButton(
-                      onPressed:
-                          s.createProgress >= 1.0 ? widget.onFinish : null,
+                      onPressed: (s.createProgress >= 1.0 && !_isSaving)
+                          ? _handleFinish
+                          : null,
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
                         backgroundColor: const Color(0xFF0A70FF),
@@ -254,7 +297,7 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                         ),
                       ),
                       child: Text(
-                        'Get Started',
+                        _isSaving ? l10n.saving : l10n.getStarted,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
@@ -278,7 +321,10 @@ class _CheckRow extends StatelessWidget {
   final bool done;
   final String text;
 
-  const _CheckRow({required this.done, required this.text});
+  const _CheckRow({
+    required this.done,
+    required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {

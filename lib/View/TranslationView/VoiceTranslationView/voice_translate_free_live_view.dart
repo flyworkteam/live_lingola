@@ -1,64 +1,388 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
 import 'package:lingola_app/Core/Utils/assets.dart';
 import 'package:lingola_app/Core/widgets/navigation/bottom_nav_item_tile.dart';
+import 'package:lingola_app/Riverpod/Providers/current_user_provider.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 enum _FreeStage { idle, listening, result }
 
-enum _SpeakLang { tr, en }
+class VoiceTranslateFreeLiveView extends ConsumerStatefulWidget {
+  final String sourceLanguage;
+  final String targetLanguage;
 
-class VoiceTranslateFreeLiveView extends StatefulWidget {
-  const VoiceTranslateFreeLiveView({super.key});
+  const VoiceTranslateFreeLiveView({
+    super.key,
+    required this.sourceLanguage,
+    required this.targetLanguage,
+  });
 
   @override
-  State<VoiceTranslateFreeLiveView> createState() =>
+  ConsumerState<VoiceTranslateFreeLiveView> createState() =>
       _VoiceTranslateFreeLiveViewState();
 }
 
-class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
+class _VoiceTranslateFreeLiveViewState
+    extends ConsumerState<VoiceTranslateFreeLiveView>
     with SingleTickerProviderStateMixin {
+  static const String _baseUrl = "http://127.0.0.1:4000";
+
   _FreeStage _stage = _FreeStage.idle;
-  _SpeakLang _speakLang = _SpeakLang.tr;
 
   late final AnimationController _waveCtrl;
+  final SpeechToText _speech = SpeechToText();
+
+  bool _speechReady = false;
+  bool _isSaving = false;
+
+  late String _leftLanguage;
+  late String _rightLanguage;
+  bool _isLeftSource = true;
+
+  String _recognizedText = "";
+  String _translatedText = "";
+
+  Timer? _translateDebounce;
+  int _translateRequestVersion = 0;
+  String _lastTranslatedSource = "";
 
   @override
   void initState() {
     super.initState();
+
+    _leftLanguage = widget.sourceLanguage;
+    _rightLanguage = widget.targetLanguage;
+    _isLeftSource = true;
+
     _waveCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1400),
     )..repeat();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initSpeech();
+    });
   }
 
   @override
   void dispose() {
+    _translateDebounce?.cancel();
     _waveCtrl.dispose();
+    _speech.cancel();
     super.dispose();
   }
 
   bool get _isListening => _stage == _FreeStage.listening;
 
-  void _toggleMic() {
-    setState(() {
-      if (_stage == _FreeStage.idle) {
-        _stage = _FreeStage.listening;
-      } else if (_stage == _FreeStage.listening) {
-        _stage = _FreeStage.result;
-      } else {
-        _stage = _FreeStage.idle;
+  String get _sourceLanguage => _isLeftSource ? _leftLanguage : _rightLanguage;
+
+  String get _targetLanguage => _isLeftSource ? _rightLanguage : _leftLanguage;
+
+  String _speechLocaleIdForLanguage(String language) {
+    switch (language) {
+      case 'Turkish':
+        return 'tr_TR';
+      case 'English':
+        return 'en_US';
+      case 'German':
+        return 'de_DE';
+      case 'French':
+        return 'fr_FR';
+      case 'Spanish':
+        return 'es_ES';
+      case 'Italian':
+        return 'it_IT';
+      default:
+        return 'tr_TR';
+    }
+  }
+
+  String? _currentFirebaseUid() {
+    final user = ref.read(currentUserProvider);
+    final uid = user?['firebase_uid']?.toString().trim();
+    if (uid == null || uid.isEmpty) return null;
+    return uid;
+  }
+
+  int? _currentUserId() {
+    final user = ref.read(currentUserProvider);
+    final rawId = user?['id'];
+    if (rawId is int) return rawId;
+    return int.tryParse('${rawId ?? ''}');
+  }
+
+  Future<void> _initSpeech() async {
+    try {
+      final ready = await _speech.initialize(
+        onStatus: _onSpeechStatus,
+        onError: (error) {
+          debugPrint('VOICE FREE SPEECH ERROR: $error');
+          if (!mounted) return;
+          setState(() {
+            _stage = _recognizedText.trim().isNotEmpty
+                ? _FreeStage.result
+                : _FreeStage.idle;
+          });
+        },
+        debugLogging: false,
+      );
+
+      if (!mounted) return;
+      setState(() {
+        _speechReady = ready;
+      });
+
+      debugPrint('VOICE FREE SPEECH READY: $_speechReady');
+    } catch (e) {
+      debugPrint('VOICE FREE INIT ERROR: $e');
+      if (!mounted) return;
+      setState(() {
+        _speechReady = false;
+      });
+    }
+  }
+
+  void _onSpeechStatus(String status) {
+    debugPrint('VOICE FREE SPEECH STATUS: $status');
+
+    if (!mounted) return;
+
+    if (status == 'done' || status == 'notListening') {
+      final hasSource = _recognizedText.trim().isNotEmpty;
+
+      setState(() {
+        _stage = hasSource ? _FreeStage.result : _FreeStage.idle;
+      });
+
+      if (hasSource) {
+        _translateDebounce?.cancel();
+        _translateCurrentText(saveToHistory: true);
       }
+    }
+  }
+
+  Future<void> _toggleMic() async {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (!_speechReady) {
+      await _initSpeech();
+    }
+
+    if (!_speechReady) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.microphonePermissionRequired),
+        ),
+      );
+      return;
+    }
+
+    if (_isListening) {
+      await _speech.stop();
+      return;
+    }
+
+    setState(() {
+      _stage = _FreeStage.listening;
+      _recognizedText = "";
+      _translatedText = "";
+      _lastTranslatedSource = "";
+    });
+
+    try {
+      await _speech.listen(
+        onResult: _onSpeechResult,
+        localeId: _speechLocaleIdForLanguage(_sourceLanguage),
+        listenFor: const Duration(seconds: 30),
+        pauseFor: const Duration(seconds: 3),
+        listenOptions: SpeechListenOptions(
+          partialResults: true,
+          listenMode: ListenMode.dictation,
+        ),
+      );
+    } catch (e) {
+      debugPrint('VOICE FREE LISTEN ERROR: $e');
+      if (!mounted) return;
+      setState(() {
+        _stage = _recognizedText.trim().isNotEmpty
+            ? _FreeStage.result
+            : _FreeStage.idle;
+      });
+    }
+  }
+
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    final recognized = result.recognizedWords.trim();
+
+    if (!mounted || recognized.isEmpty) return;
+
+    setState(() {
+      _recognizedText = recognized;
+    });
+
+    _queueTranslate(saveToHistory: false);
+
+    if (result.finalResult) {
+      _translateDebounce?.cancel();
+      _translateCurrentText(saveToHistory: true);
+    }
+  }
+
+  void _queueTranslate({required bool saveToHistory}) {
+    _translateDebounce?.cancel();
+    _translateDebounce = Timer(
+      const Duration(milliseconds: 450),
+      () => _translateCurrentText(saveToHistory: saveToHistory),
+    );
+  }
+
+  Future<void> _translateCurrentText({required bool saveToHistory}) async {
+    final firebaseUid = _currentFirebaseUid();
+    final userId = _currentUserId();
+    final sourceText = _recognizedText.trim();
+
+    if (sourceText.isEmpty) return;
+    if (firebaseUid == null && userId == null) return;
+    if (!saveToHistory && sourceText == _lastTranslatedSource) return;
+
+    final requestVersion = ++_translateRequestVersion;
+
+    try {
+      final payload = {
+        if (userId != null) "user_id": userId,
+        if (firebaseUid != null) "firebase_uid": firebaseUid,
+        "source_text": sourceText,
+        "source_language": _sourceLanguage,
+        "target_language": _targetLanguage,
+        "expert": "General",
+        "translation_type": "voice",
+        "save_to_history": saveToHistory,
+      };
+
+      debugPrint('VOICE FREE TRANSLATE URL: $_baseUrl/translate/text');
+      debugPrint('VOICE FREE TRANSLATE PAYLOAD: ${jsonEncode(payload)}');
+
+      if (saveToHistory && mounted) {
+        setState(() => _isSaving = true);
+      }
+
+      final response = await http.post(
+        Uri.parse("$_baseUrl/translate/text"),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode(payload),
+      );
+
+      debugPrint('VOICE FREE TRANSLATE STATUS: ${response.statusCode}');
+      debugPrint('VOICE FREE TRANSLATE BODY: ${response.body}');
+
+      final data = response.body.isNotEmpty ? jsonDecode(response.body) : {};
+
+      if (!mounted || requestVersion != _translateRequestVersion) return;
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final translated = _extractTranslatedText(data, sourceText);
+
+        setState(() {
+          _translatedText = translated;
+          _lastTranslatedSource = sourceText;
+          _stage = _FreeStage.result;
+        });
+      } else {
+        setState(() {
+          _translatedText = "";
+          _stage = _FreeStage.result;
+        });
+      }
+    } catch (e) {
+      debugPrint('VOICE FREE TRANSLATE ERROR: $e');
+    } finally {
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
+    }
+  }
+
+  String _extractTranslatedText(dynamic data, String sourceFallback) {
+    if (data is Map<String, dynamic>) {
+      if (data["translated_text"] is String &&
+          (data["translated_text"] as String).trim().isNotEmpty) {
+        return data["translated_text"] as String;
+      }
+
+      if (data["translatedText"] is String &&
+          (data["translatedText"] as String).trim().isNotEmpty) {
+        return data["translatedText"] as String;
+      }
+
+      if (data["translation"] is String &&
+          (data["translation"] as String).trim().isNotEmpty) {
+        return data["translation"] as String;
+      }
+
+      if (data["data"] is Map<String, dynamic>) {
+        final inner = data["data"] as Map<String, dynamic>;
+
+        if (inner["translated_text"] is String &&
+            (inner["translated_text"] as String).trim().isNotEmpty) {
+          return inner["translated_text"] as String;
+        }
+
+        if (inner["translatedText"] is String &&
+            (inner["translatedText"] as String).trim().isNotEmpty) {
+          return inner["translatedText"] as String;
+        }
+
+        if (inner["translation"] is String &&
+            (inner["translation"] as String).trim().isNotEmpty) {
+          return inner["translation"] as String;
+        }
+      }
+    }
+
+    return sourceFallback;
+  }
+
+  void _selectLeftLanguage() {
+    if (_isListening) return;
+
+    setState(() {
+      _isLeftSource = true;
+      _stage = _FreeStage.idle;
+      _recognizedText = "";
+      _translatedText = "";
+      _lastTranslatedSource = "";
     });
   }
 
-  void _setSpeakLang(_SpeakLang lang) {
-    setState(() => _speakLang = lang);
+  void _selectRightLanguage() {
+    if (_isListening) return;
+
+    setState(() {
+      _isLeftSource = false;
+      _stage = _FreeStage.idle;
+      _recognizedText = "";
+      _translatedText = "";
+      _lastTranslatedSource = "";
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(currentUserProvider);
+    final l10n = AppLocalizations.of(context)!;
+
     final topPad = MediaQuery.of(context).padding.top;
     final bottomPad = MediaQuery.of(context).padding.bottom;
     final bottomNavReserve = 62.h + 20.h + bottomPad;
@@ -73,8 +397,6 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
           Column(
             children: [
               SizedBox(height: topPad + 10.h),
-
-              // TOP BAR
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: SizedBox(
@@ -103,7 +425,7 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                       Expanded(
                         child: Center(
                           child: Text(
-                            "Voice Translate",
+                            l10n.voiceTranslateTitle,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 18.sp,
@@ -118,17 +440,14 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                   ),
                 ),
               ),
-
               SizedBox(height: 51.h),
-
-              // HEADER ROW
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
                   children: [
                     Expanded(
                       child: Text(
-                        "Real-Time Translation - Faster,\nSmarter Artificial Intelligence",
+                        l10n.voiceTranslateSubtitle,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11.sp,
@@ -147,7 +466,7 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                         borderRadius: BorderRadius.circular(999.r),
                       ),
                       child: Text(
-                        "Try Now!",
+                        l10n.tryNow,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11.sp,
@@ -159,10 +478,7 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                   ],
                 ),
               ),
-
               SizedBox(height: 18.h),
-
-              // TOP WAVE
               SizedBox(
                 height: 140.h,
                 child: _isListening
@@ -178,14 +494,11 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                       )
                     : const SizedBox.shrink(),
               ),
-
-              // Divider line
               Container(
                 height: 2.h,
                 width: double.infinity,
                 color: const Color(0xFF0A70FF),
               ),
-
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(20.w, 18.h, 20.w, 0),
@@ -193,7 +506,7 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                     children: [
                       if (_stage == _FreeStage.listening) ...[
                         Text(
-                          "Listening",
+                          l10n.listening,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12.sp,
@@ -203,9 +516,8 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                         ),
                         SizedBox(height: 8.h),
                         Text(
-                          _speakLang == _SpeakLang.tr
-                              ? "Merhaba, nasılsın?"
-                              : "Hello, how are you?",
+                          _recognizedText.isEmpty ? "..." : _recognizedText,
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 22.sp,
@@ -215,7 +527,9 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                         ),
                       ] else if (_stage == _FreeStage.result) ...[
                         Text(
-                          "Translation results",
+                          _isSaving
+                              ? l10n.savingResult
+                              : l10n.translationResults,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 12.sp,
@@ -225,9 +539,8 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                         ),
                         SizedBox(height: 8.h),
                         Text(
-                          _speakLang == _SpeakLang.tr
-                              ? "Hello, how are you?"
-                              : "Merhaba, nasılsın?",
+                          _translatedText.isEmpty ? "-" : _translatedText,
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 22.sp,
@@ -240,8 +553,6 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                         const Spacer(),
                       ],
                       const Spacer(),
-
-                      // Pill
                       Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: 18.w,
@@ -269,7 +580,7 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                             ),
                             SizedBox(width: 8.w),
                             Text(
-                              "Real-Time Translation",
+                              l10n.realTimeTranslation,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 11.sp,
@@ -280,24 +591,22 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                           ],
                         ),
                       ),
-
                       SizedBox(height: 14.h),
-
                       _UnifiedLangBar(
                         height: 74.h,
                         isListening: _isListening,
-                        speakLang: _speakLang,
-                        onSelectTR: () => _setSpeakLang(_SpeakLang.tr),
-                        onSelectEN: () => _setSpeakLang(_SpeakLang.en),
+                        isLeftSource: _isLeftSource,
+                        leftLanguage: _leftLanguage,
+                        rightLanguage: _rightLanguage,
+                        onSelectLeft: _selectLeftLanguage,
+                        onSelectRight: _selectRightLanguage,
                         onMicTap: _toggleMic,
                       ),
-
                       SizedBox(height: 10.h),
-
                       Text(
                         _isListening
-                            ? "Tap to translate now"
-                            : "Please select the language you wish to speak in",
+                            ? l10n.tapToTranslateNow
+                            : l10n.selectLanguageToSpeak,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 11.sp,
@@ -305,7 +614,6 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
                           color: const Color(0xFF64748B),
                         ),
                       ),
-
                       SizedBox(height: 18.h),
                       SizedBox(height: bottomNavReserve),
                     ],
@@ -314,8 +622,6 @@ class _VoiceTranslateFreeLiveViewState extends State<VoiceTranslateFreeLiveView>
               ),
             ],
           ),
-
-          // Bottom Nav
           Positioned(
             left: 0,
             right: 0,
@@ -363,7 +669,7 @@ class _TopStrandsWavePainter extends CustomPainter {
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2.0
         ..strokeCap = StrokeCap.round
-        ..color = const Color(0xFF0A70FF).withOpacity(alpha);
+        ..color = const Color(0xFF0A70FF).withValues(alpha: alpha);
 
       final path = Path();
       path.moveTo(0, baseY);
@@ -393,17 +699,21 @@ class _TopStrandsWavePainter extends CustomPainter {
 class _UnifiedLangBar extends StatelessWidget {
   final double height;
   final bool isListening;
-  final _SpeakLang speakLang;
-  final VoidCallback onSelectTR;
-  final VoidCallback onSelectEN;
+  final bool isLeftSource;
+  final String leftLanguage;
+  final String rightLanguage;
+  final VoidCallback onSelectLeft;
+  final VoidCallback onSelectRight;
   final VoidCallback onMicTap;
 
   const _UnifiedLangBar({
     required this.height,
     required this.isListening,
-    required this.speakLang,
-    required this.onSelectTR,
-    required this.onSelectEN,
+    required this.isLeftSource,
+    required this.leftLanguage,
+    required this.rightLanguage,
+    required this.onSelectLeft,
+    required this.onSelectRight,
     required this.onMicTap,
   });
 
@@ -412,8 +722,8 @@ class _UnifiedLangBar extends StatelessWidget {
     const blue = Color(0xFF0A70FF);
     const dark = Color(0xFF0F172A);
 
-    final isTrActive = isListening && speakLang == _SpeakLang.tr;
-    final isEnActive = isListening && speakLang == _SpeakLang.en;
+    final isLeftActive = isListening && isLeftSource;
+    final isRightActive = isListening && !isLeftSource;
 
     final r = 16.r;
 
@@ -439,7 +749,7 @@ class _UnifiedLangBar extends StatelessWidget {
                   child: Container(color: Colors.white),
                 ),
               ),
-              if (isTrActive)
+              if (isLeftActive)
                 Positioned(
                   left: 0,
                   top: 0,
@@ -450,7 +760,7 @@ class _UnifiedLangBar extends StatelessWidget {
                     child: Container(color: blue),
                   ),
                 ),
-              if (isEnActive)
+              if (isRightActive)
                 Positioned(
                   left: micCenter,
                   top: 0,
@@ -466,15 +776,15 @@ class _UnifiedLangBar extends StatelessWidget {
                   children: [
                     Expanded(
                       child: InkWell(
-                        onTap: onSelectTR,
+                        onTap: onSelectLeft,
                         child: Center(
                           child: Text(
-                            "Turkish",
+                            leftLanguage,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14.sp,
                               fontWeight: FontWeight.w700,
-                              color: isTrActive ? Colors.white : dark,
+                              color: isLeftActive ? Colors.white : dark,
                             ),
                           ),
                         ),
@@ -483,15 +793,15 @@ class _UnifiedLangBar extends StatelessWidget {
                     SizedBox(width: micSlotW),
                     Expanded(
                       child: InkWell(
-                        onTap: onSelectEN,
+                        onTap: onSelectRight,
                         child: Center(
                           child: Text(
-                            "English",
+                            rightLanguage,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 14.sp,
                               fontWeight: FontWeight.w700,
-                              color: isEnActive ? Colors.white : dark,
+                              color: isRightActive ? Colors.white : dark,
                             ),
                           ),
                         ),

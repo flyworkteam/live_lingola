@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lingola_app/Core/Utils/assets.dart';
@@ -23,7 +24,7 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
     _LangItem(name: "German", flagAsset: "assets/images/flags/German.png"),
     _LangItem(name: "Italian", flagAsset: "assets/images/flags/Italian.png"),
     _LangItem(name: "French", flagAsset: "assets/images/flags/French.png"),
-    _LangItem(name: "Spain", flagAsset: "assets/images/flags/Spanish.png"),
+    _LangItem(name: "Spanish", flagAsset: "assets/images/flags/Spanish.png"),
   ];
 
   String _sourceLang = "Turkish";
@@ -45,7 +46,9 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
             CurveTween(curve: Curves.easeOutCubic),
           );
           return SlideTransition(
-              position: animation.drive(tween), child: child);
+            position: animation.drive(tween),
+            child: child,
+          );
         },
       ),
     );
@@ -105,8 +108,24 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
                             setState(() {
                               if (forSource) {
                                 _sourceLang = _langs[i].name;
+                                if (_sourceLang == _targetLang) {
+                                  _targetLang = _langs
+                                      .firstWhere(
+                                        (e) => e.name != _sourceLang,
+                                        orElse: () => _langs.first,
+                                      )
+                                      .name;
+                                }
                               } else {
                                 _targetLang = _langs[i].name;
+                                if (_sourceLang == _targetLang) {
+                                  _sourceLang = _langs
+                                      .firstWhere(
+                                        (e) => e.name != _targetLang,
+                                        orElse: () => _langs.first,
+                                      )
+                                      .name;
+                                }
                               }
                             });
                             _closeOverlay();
@@ -114,10 +133,11 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
                         ),
                         if (i != _langs.length - 1)
                           const Divider(
-                              height: 1,
-                              color: Color(0xFFE9EEF7),
-                              indent: 14,
-                              endIndent: 14),
+                            height: 1,
+                            color: Color(0xFFE9EEF7),
+                            indent: 14,
+                            endIndent: 14,
+                          ),
                       ],
                     ],
                   ),
@@ -139,6 +159,7 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     final bottomReserve = 62.h + 20.h + 22.h;
     final src = _find(_sourceLang);
     final trg = _find(_targetLang);
@@ -157,7 +178,7 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
                     Color(0xFF0A70FF),
                     Color(0xFF03B7FF),
                     Color(0xFFEFF2F9),
-                    Color(0xFFFFFFFF)
+                    Color(0xFFFFFFFF),
                   ],
                   stops: [0.0, 0.35, 0.70, 1.0],
                 ),
@@ -181,7 +202,7 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16.w),
                             child: VoiceTopBar(
-                              title: "Voice Translate",
+                              title: t.voiceTranslate,
                               onBack: () => widget.onBackToHome != null
                                   ? widget.onBackToHome!()
                                   : Navigator.of(context).maybePop(),
@@ -209,21 +230,27 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
                             ),
                           ),
                           SizedBox(height: 40.h),
-                          SvgPicture.asset(AppAssets.icAltok,
-                              width: 16.w,
-                              height: 8.w,
-                              colorFilter: ColorFilter.mode(
-                                  Colors.white.withOpacity(.92),
-                                  BlendMode.srcIn)),
+                          SvgPicture.asset(
+                            AppAssets.icAltok,
+                            width: 16.w,
+                            height: 8.w,
+                            colorFilter: ColorFilter.mode(
+                              Colors.white.withValues(alpha: .92),
+                              BlendMode.srcIn,
+                            ),
+                          ),
                           SizedBox(height: 30.h),
-                          Text("Select a voice mode to begin",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w500,
-                                  height: 26 / 12,
-                                  color: const Color(0xFF4B5563))),
+                          Text(
+                            t.selectVoiceModeToBegin,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w500,
+                              height: 26 / 12,
+                              color: const Color(0xFF4B5563),
+                            ),
+                          ),
                           SizedBox(height: 50.h),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -232,12 +259,24 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 VoicePlanCard.free(
-                                    onStart: () => _push(context,
-                                        const VoiceTranslateFreeLiveView())),
+                                  onStart: () => _push(
+                                    context,
+                                    VoiceTranslateFreeLiveView(
+                                      sourceLanguage: _sourceLang,
+                                      targetLanguage: _targetLang,
+                                    ),
+                                  ),
+                                ),
                                 SizedBox(width: 18.w),
                                 VoicePlanCard.pro(
-                                    onStart: () => _push(context,
-                                        const VoiceTranslateProLiveView())),
+                                  onStart: () => _push(
+                                    context,
+                                    VoiceTranslateProLiveView(
+                                      sourceLanguage: _sourceLang,
+                                      targetLanguage: _targetLang,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -266,22 +305,30 @@ class _DropdownCard extends StatelessWidget {
   final double width;
   final Widget child;
   const _DropdownCard({required this.width, required this.child});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width,
       constraints: BoxConstraints(maxHeight: 310.h),
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(18.r),
-          boxShadow: const [
-            BoxShadow(
-                color: Color(0x1F0B2B6B), blurRadius: 18, offset: Offset(0, 10))
-          ]),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18.r),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x1F0B2B6B),
+            blurRadius: 18,
+            offset: Offset(0, 10),
+          ),
+        ],
+      ),
       child: ClipRRect(
-          borderRadius: BorderRadius.circular(18.r),
-          child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(), child: child)),
+        borderRadius: BorderRadius.circular(18.r),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: child,
+        ),
+      ),
     );
   }
 }
@@ -290,8 +337,12 @@ class _LangRow extends StatelessWidget {
   final _LangItem item;
   final bool active;
   final VoidCallback onTap;
-  const _LangRow(
-      {required this.item, required this.active, required this.onTap});
+  const _LangRow({
+    required this.item,
+    required this.active,
+    required this.onTap,
+  });
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -300,19 +351,30 @@ class _LangRow extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
         child: Row(
           children: [
-            Image.asset(item.flagAsset,
-                width: 26.w, height: 18.h, fit: BoxFit.cover),
+            Image.asset(
+              item.flagAsset,
+              width: 26.w,
+              height: 18.h,
+              fit: BoxFit.cover,
+            ),
             SizedBox(width: 10.w),
             Expanded(
-                child: Text(item.name,
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14.sp,
-                        color: const Color(0xFF0F172A)))),
+              child: Text(
+                item.name,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14.sp,
+                  color: const Color(0xFF0F172A),
+                ),
+              ),
+            ),
             if (active)
-              Icon(Icons.check_rounded,
-                  size: 18.sp, color: const Color(0xFF0A70FF)),
+              Icon(
+                Icons.check_rounded,
+                size: 18.sp,
+                color: const Color(0xFF0A70FF),
+              ),
           ],
         ),
       ),
@@ -323,10 +385,17 @@ class _LangRow extends StatelessWidget {
 class _TapOutsideToClose extends StatelessWidget {
   final VoidCallback onClose;
   final Widget child;
-  const _TapOutsideToClose({required this.onClose, required this.child});
+  const _TapOutsideToClose({
+    required this.onClose,
+    required this.child,
+  });
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        behavior: HitTestBehavior.translucent, onTap: onClose, child: child);
+      behavior: HitTestBehavior.translucent,
+      onTap: onClose,
+      child: child,
+    );
   }
 }

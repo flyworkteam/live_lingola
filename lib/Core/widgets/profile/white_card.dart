@@ -13,7 +13,7 @@ class WhiteCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFFDEE5F7).withOpacity(.75),
+            color: const Color(0xFFDEE5F7).withValues(alpha: .75),
             blurRadius: 16,
             offset: const Offset(0, 10),
           ),

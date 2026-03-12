@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lingola_app/Core/Utils/assets.dart';
 
 class PremiumOfferCard extends StatelessWidget {
@@ -8,6 +9,8 @@ class PremiumOfferCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     const double imageWidth = 110;
     const double imageRight = 20;
     const double imageTop = -8;
@@ -60,7 +63,7 @@ class PremiumOfferCard extends StatelessWidget {
                     colors: [Color(0xFF03B7FF), Color(0xFF0A70FF)],
                   ).createShader(bounds),
                   child: Text(
-                    "Unlimited Live Translation",
+                    l10n.unlimitedLiveTranslation,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -75,7 +78,7 @@ class PremiumOfferCard extends StatelessWidget {
                 ),
                 SizedBox(height: 10.h),
                 Text(
-                  "Remove daily limits\non voice and text.",
+                  l10n.removeDailyLimits,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 22.sp,
@@ -116,7 +119,7 @@ class PremiumOfferCard extends StatelessWidget {
                         width: 20.w,
                         height: 20.w,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.20),
+                          color: Colors.white.withValues(alpha: 0.20),
                           shape: BoxShape.circle,
                         ),
                         child: Padding(
@@ -133,7 +136,7 @@ class PremiumOfferCard extends StatelessWidget {
                       ),
                       SizedBox(width: 8.w),
                       Text(
-                        "Get Premium",
+                        l10n.getPremium,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 14.sp,

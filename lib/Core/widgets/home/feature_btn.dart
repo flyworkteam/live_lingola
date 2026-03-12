@@ -46,7 +46,7 @@ class FeatureBtn extends StatelessWidget {
                   width: 31.w,
                   height: 31.w,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF0A70FF).withOpacity(0.15),
+                    color: const Color(0xFF0A70FF).withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(5.r),
                   ),
                   child: Center(

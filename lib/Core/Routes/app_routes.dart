@@ -4,4 +4,5 @@ class AppRoutes {
   static const String login = '/login';
   static const String onboardingFlow = '/onboardingFlow';
   static const String homeAndNotifications = '/home_and_notifications';
+  static const String paywall = '/paywall';
 }

@@ -1,23 +1,133 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+
 import '../../Core/Routes/app_routes.dart';
 import '../../Core/Theme/app_text_styles.dart';
+import '../../Riverpod/Providers/current_user_provider.dart';
+import '../../Services/backend_auth_service.dart';
+import '../../Services/subscription_service.dart';
 
-class SplashView extends StatefulWidget {
+class SplashView extends ConsumerStatefulWidget {
   const SplashView({super.key});
 
   @override
-  State<SplashView> createState() => _SplashViewState();
+  ConsumerState<SplashView> createState() => _SplashViewState();
 }
 
-class _SplashViewState extends State<SplashView> {
+class _SplashViewState extends ConsumerState<SplashView> {
   @override
   void initState() {
     super.initState();
+    _bootstrap();
+  }
 
-    Future.delayed(const Duration(seconds: 2), () {
+  bool _isOnboardingCompleted(Map<String, dynamic> user) {
+    final usagePurpose = user['usage_purpose']?.toString().trim() ?? '';
+    final fromLanguage = user['from_language']?.toString().trim() ?? '';
+    final toLanguage = user['to_language']?.toString().trim() ?? '';
+    final desiredFeature = user['desired_feature']?.toString().trim() ?? '';
+    final usedAiBefore = user['used_ai_before'];
+
+    final hasUsedAiBefore = usedAiBefore != null &&
+        usedAiBefore.toString().trim().isNotEmpty &&
+        usedAiBefore.toString().trim() != 'null';
+
+    return usagePurpose.isNotEmpty &&
+        fromLanguage.isNotEmpty &&
+        toLanguage.isNotEmpty &&
+        desiredFeature.isNotEmpty &&
+        hasUsedAiBefore;
+  }
+
+  Future<void> _bootstrap() async {
+    await Future.delayed(const Duration(seconds: 2));
+
+    final firebaseUser = FirebaseAuth.instance.currentUser;
+    debugPrint('SPLASH FIREBASE USER: ${firebaseUser?.uid}');
+    debugPrint('SPLASH FIREBASE EMAIL: ${firebaseUser?.email}');
+    debugPrint('SPLASH FIREBASE DISPLAY NAME: ${firebaseUser?.displayName}');
+    debugPrint('SPLASH FIREBASE PHOTO URL: ${firebaseUser?.photoURL}');
+
+    if (!mounted) return;
+
+    if (firebaseUser == null) {
+      debugPrint('SPLASH -> NO ACTIVE SESSION -> GO LOGIN');
+      Navigator.pushReplacementNamed(context, AppRoutes.login);
+      return;
+    }
+
+    try {
+      debugPrint('SPLASH -> ACTIVE SESSION FOUND -> SYNC USER');
+
+      final user = await BackendAuthService.syncMe();
+      debugPrint('SPLASH SYNCED USER RAW: $user');
+
+      final userMap = Map<String, dynamic>.from(user! as Map);
+
+      debugPrint('SPLASH USER ID: ${userMap['id']}');
+      debugPrint('SPLASH USER FIREBASE UID: ${userMap['firebase_uid']}');
+      debugPrint('SPLASH USER NAME: ${userMap['name']}');
+      debugPrint('SPLASH USER EMAIL: ${userMap['email']}');
+      debugPrint('SPLASH USER PHOTO URL: ${userMap['photo_url']}');
+      debugPrint('SPLASH USER AGE: ${userMap['age']}');
+      debugPrint('SPLASH USER UPDATED AT: ${userMap['updated_at']}');
+
+      ref.read(currentUserProvider.notifier).state = userMap;
+      debugPrint('SPLASH -> CURRENT USER PROVIDER FILLED');
+
+      try {
+        await OneSignal.login('user_${userMap['id']}');
+        debugPrint("ONESIGNAL LOGIN OK: user_${userMap['id']}");
+      } catch (e) {
+        debugPrint("ONESIGNAL LOGIN ERROR: $e");
+      }
+
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, AppRoutes.onboarding);
-    });
+
+      final onboardingCompleted = _isOnboardingCompleted(userMap);
+      debugPrint('SPLASH -> ONBOARDING COMPLETED: $onboardingCompleted');
+
+      if (!onboardingCompleted) {
+        debugPrint('SPLASH -> GO ONBOARDING FLOW');
+        Navigator.pushReplacementNamed(
+          context,
+          AppRoutes.onboardingFlow,
+        );
+        return;
+      }
+
+      final userId = userMap['id'] as int;
+      final isPro = await SubscriptionService.isPro(userId);
+
+      debugPrint('SPLASH -> USER PRO STATUS: $isPro');
+
+      if (!mounted) return;
+
+      if (!isPro) {
+        debugPrint('SPLASH -> GO PAYWALL');
+        Navigator.pushReplacementNamed(
+          context,
+          AppRoutes.paywall,
+        );
+        return;
+      }
+
+      debugPrint('SPLASH -> GO HOME');
+      Navigator.pushReplacementNamed(
+        context,
+        AppRoutes.homeAndNotifications,
+      );
+    } catch (e, st) {
+      debugPrint('SPLASH SYNC ERROR: $e');
+      debugPrintStack(stackTrace: st);
+
+      ref.read(currentUserProvider.notifier).state = null;
+
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, AppRoutes.login);
+    }
   }
 
   @override
@@ -53,7 +163,10 @@ class _SplashViewState extends State<SplashView> {
                 fit: BoxFit.contain,
               ),
               const SizedBox(height: 24),
-              Text('Live Lingola', style: AppTextStyles.splashTitle42),
+              Text(
+                'Live Lingola',
+                style: AppTextStyles.splashTitle42,
+              ),
             ],
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -7,10 +8,18 @@ import '../../../Core/Routes/app_routes.dart';
 import '../../../Core/Theme/app_colors.dart';
 import '../../../Core/Theme/app_text_styles.dart';
 import '../../../Core/Utils/assets.dart';
+import '../../../Riverpod/Providers/all_auth_providers.dart';
+import '../../../Riverpod/Providers/current_user_provider.dart';
+import '../../../Services/backend_auth_service.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends ConsumerStatefulWidget {
   const LoginView({super.key});
 
+  @override
+  ConsumerState<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends ConsumerState<LoginView> {
   static const Alignment _gradBegin = Alignment(0.198, -0.980);
   static const Alignment _gradEnd = Alignment(-0.198, 0.980);
 
@@ -37,18 +46,158 @@ class LoginView extends StatelessWidget {
       'https://fly-work.com/livelingola/privacy-policy/';
   static const String _cookiesUrl = 'https://fly-work.com/livelingola/cookies/';
 
-  void _goOnboarding(BuildContext context) {
+  void _goOnboarding() {
     Navigator.pushReplacementNamed(context, AppRoutes.onboardingFlow);
+  }
+
+  void _goHome() {
+    Navigator.pushReplacementNamed(context, AppRoutes.homeAndNotifications);
   }
 
   Future<void> _openUrl(String url) async {
     final uri = Uri.parse(url);
-    final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
-    if (!ok) {}
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
+  void _snack(String msg) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(msg)),
+    );
+  }
+
+  String _readableError(Object e, {required String provider}) {
+    final message = e.toString().toLowerCase();
+
+    if (message.contains('cancelled') ||
+        message.contains('canceled') ||
+        message.contains('aborted_by_user') ||
+        message.contains('sign_in_canceled') ||
+        message.contains('user cancelled')) {
+      return '$provider sign-in cancelled.';
+    }
+
+    if (provider == 'Apple') {
+      return 'Apple sign-in failed. Please check Apple setup in Firebase, Xcode capabilities and Apple Developer account.';
+    }
+
+    if (provider == 'Facebook') {
+      return 'Facebook sign-in failed. Please check Meta app status and Firebase Facebook settings.';
+    }
+
+    if (provider == 'Google') {
+      return 'Google sign-in failed. Please check Firebase and Google sign-in configuration.';
+    }
+
+    return '$provider sign-in failed.';
+  }
+
+  bool _isOnboardingCompleted(Map<String, dynamic> user) {
+    final usagePurpose = user['usage_purpose']?.toString().trim() ?? '';
+    final fromLanguage = user['from_language']?.toString().trim() ?? '';
+    final toLanguage = user['to_language']?.toString().trim() ?? '';
+    final desiredFeature = user['desired_feature']?.toString().trim() ?? '';
+    final usedAiBefore = user['used_ai_before'];
+
+    final hasUsedAiBefore = usedAiBefore != null &&
+        usedAiBefore.toString().trim().isNotEmpty &&
+        usedAiBefore.toString().trim() != 'null';
+
+    return usagePurpose.isNotEmpty &&
+        fromLanguage.isNotEmpty &&
+        toLanguage.isNotEmpty &&
+        desiredFeature.isNotEmpty &&
+        hasUsedAiBefore;
+  }
+
+  Future<void> _handlePostLogin() async {
+    try {
+      debugPrint('AUTH SUCCESS -> SYNC USER');
+
+      final user = await BackendAuthService.syncMe();
+      debugPrint('SYNCED USER: $user');
+
+      final userMap = user as Map<String, dynamic>;
+      ref.read(currentUserProvider.notifier).state = userMap;
+      debugPrint('CURRENT USER PROVIDER FILLED');
+
+      if (!mounted) return;
+
+      final onboardingCompleted = _isOnboardingCompleted(userMap);
+      debugPrint('ONBOARDING COMPLETED: $onboardingCompleted');
+
+      if (onboardingCompleted) {
+        debugPrint('AUTH SUCCESS -> GO HOME');
+        _goHome();
+      } else {
+        debugPrint('AUTH SUCCESS -> GO ONBOARDING');
+        _goOnboarding();
+      }
+
+      ref.read(authControllerProvider.notifier).clearStatus();
+    } catch (e, st) {
+      debugPrint('SYNC USER ERROR: $e');
+      debugPrintStack(stackTrace: st);
+
+      if (!mounted) return;
+      _snack('User sync failed.');
+    }
+  }
+
+  Future<void> _signInWithGoogle() async {
+    try {
+      debugPrint('GOOGLE SIGN IN STARTED');
+      await ref.read(authControllerProvider.notifier).signInWithGoogle();
+      debugPrint('GOOGLE SIGN IN REQUEST SENT');
+    } catch (e, st) {
+      debugPrint('GOOGLE SIGN IN ERROR: $e');
+      debugPrintStack(stackTrace: st);
+      _snack(_readableError(e, provider: 'Google'));
+    }
+  }
+
+  Future<void> _signInWithApple() async {
+    try {
+      debugPrint('APPLE SIGN IN STARTED');
+      await ref.read(authControllerProvider.notifier).signInWithApple();
+      debugPrint('APPLE SIGN IN REQUEST SENT');
+    } catch (e, st) {
+      debugPrint('APPLE SIGN IN ERROR: $e');
+      debugPrintStack(stackTrace: st);
+      _snack(_readableError(e, provider: 'Apple'));
+    }
+  }
+
+  Future<void> _signInWithFacebook() async {
+    try {
+      debugPrint('FACEBOOK SIGN IN STARTED');
+      await ref.read(authControllerProvider.notifier).signInWithFacebook();
+      debugPrint('FACEBOOK SIGN IN REQUEST SENT');
+    } catch (e, st) {
+      debugPrint('FACEBOOK SIGN IN ERROR: $e');
+      debugPrintStack(stackTrace: st);
+      _snack(_readableError(e, provider: 'Facebook'));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(authControllerProvider, (previous, next) {
+      final oldError = previous?.errorMessage;
+      final newError = next.errorMessage;
+
+      if (newError != null && newError != oldError) {
+        debugPrint('AUTH STATE ERROR: $newError');
+        _snack(newError);
+      }
+
+      if (next.isSuccess && previous?.isSuccess != true) {
+        Future.microtask(_handlePostLogin);
+      }
+    });
+
+    final authState = ref.watch(authControllerProvider);
     final bottomPad = MediaQuery.of(context).padding.bottom;
 
     return Scaffold(
@@ -129,7 +278,7 @@ class LoginView extends StatelessWidget {
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                   height: 1.0,
-                  color: Colors.black.withOpacity(0.85),
+                  color: Colors.black.withValues(alpha: 0.85),
                 ),
               ),
             ),
@@ -138,9 +287,10 @@ class LoginView extends StatelessWidget {
             top: 389,
             left: 37,
             child: _LoginButtonAligned(
-              label: "Continue with Gmail",
+              label:
+                  authState.isLoading ? "Signing in..." : "Continue with Gmail",
               provider: _AuthProvider.google,
-              onTap: () => _goOnboarding(context),
+              onTap: authState.isLoading ? null : _signInWithGoogle,
               iconSize: const Size(18, 18.64),
             ),
           ),
@@ -148,9 +298,11 @@ class LoginView extends StatelessWidget {
             top: 453,
             left: 37,
             child: _LoginButtonAligned(
-              label: "Continue with Facebook",
+              label: authState.isLoading
+                  ? "Signing in..."
+                  : "Continue with Facebook",
               provider: _AuthProvider.facebook,
-              onTap: () => _goOnboarding(context),
+              onTap: authState.isLoading ? null : _signInWithFacebook,
               iconSize: const Size(12, 21.81),
             ),
           ),
@@ -158,9 +310,10 @@ class LoginView extends StatelessWidget {
             top: 517,
             left: 37,
             child: _LoginButtonAligned(
-              label: "Continue with Apple",
+              label:
+                  authState.isLoading ? "Signing in..." : "Continue with Apple",
               provider: _AuthProvider.apple,
-              onTap: () => _goOnboarding(context),
+              onTap: authState.isLoading ? null : _signInWithApple,
               iconSize: const Size(18, 22),
             ),
           ),
@@ -171,7 +324,7 @@ class LoginView extends StatelessWidget {
             child: Center(
               child: InkWell(
                 borderRadius: BorderRadius.circular(999),
-                onTap: () => _goOnboarding(context),
+                onTap: authState.isLoading ? null : _goOnboarding,
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -301,7 +454,6 @@ class _LoginButtonAligned extends StatelessWidget {
   final String label;
   final _AuthProvider provider;
   final VoidCallback? onTap;
-
   final Size iconSize;
 
   const _LoginButtonAligned({
@@ -326,64 +478,67 @@ class _LoginButtonAligned extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(50),
         onTap: onTap,
-        child: Container(
-          width: buttonW,
-          height: buttonH,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(50),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0xFFDEE5F7),
-                offset: Offset(0, 4),
-                blurRadius: 4,
-              ),
-            ],
-          ),
-          child: Center(
-            child: SizedBox(
-              width: contentW,
-              height: buttonH,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: iconSlotW,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: SizedBox(
-                        width: iconSize.width,
-                        height: iconSize.height,
-                        child: SvgPicture.asset(
-                          provider.assetPath,
-                          fit: BoxFit.contain,
-                          semanticsLabel: provider.semanticLabel,
+        child: Opacity(
+          opacity: onTap == null ? 0.65 : 1,
+          child: Container(
+            width: buttonW,
+            height: buttonH,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(50),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0xFFDEE5F7),
+                  offset: Offset(0, 4),
+                  blurRadius: 4,
+                ),
+              ],
+            ),
+            child: Center(
+              child: SizedBox(
+                width: contentW,
+                height: buttonH,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: iconSlotW,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: SizedBox(
+                          width: iconSize.width,
+                          height: iconSize.height,
+                          child: SvgPicture.asset(
+                            provider.assetPath,
+                            fit: BoxFit.contain,
+                            semanticsLabel: provider.semanticLabel,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: gap),
-                  SizedBox(
-                    width: textW,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        label,
-                        maxLines: 1,
-                        softWrap: false,
-                        overflow: TextOverflow.clip,
-                        style: const TextStyle(
-                          fontFamily: AppTextStyles.fontFamily,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          height: 1.0,
-                          letterSpacing: 0.0,
-                          color: Colors.black,
+                    const SizedBox(width: gap),
+                    SizedBox(
+                      width: textW,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          label,
+                          maxLines: 1,
+                          softWrap: false,
+                          overflow: TextOverflow.clip,
+                          style: const TextStyle(
+                            fontFamily: AppTextStyles.fontFamily,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            height: 1.0,
+                            letterSpacing: 0.0,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

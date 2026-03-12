@@ -10,9 +10,9 @@ class GreetingPill extends StatelessWidget {
       height: 44.h,
       padding: EdgeInsets.symmetric(horizontal: 14.w),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
+        color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(30.r),
-        border: Border.all(color: Colors.white.withOpacity(0.22)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -21,9 +21,9 @@ class GreetingPill extends StatelessWidget {
             width: 32.w,
             height: 32.w,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.22),
+              color: Colors.white.withValues(alpha: 0.22),
               borderRadius: BorderRadius.circular(16.r),
-              border: Border.all(color: Colors.white.withOpacity(0.20)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.20)),
             ),
             child: const Icon(Icons.waving_hand_rounded, color: Colors.white),
           ),
@@ -39,7 +39,7 @@ class GreetingPill extends StatelessWidget {
                   fontSize: 12.sp,
                   height: 1.0,
                   fontWeight: FontWeight.w400,
-                  color: Colors.white.withOpacity(0.9),
+                  color: Colors.white.withValues(alpha: 0.9),
                 ),
               ),
               SizedBox(height: 2.h),

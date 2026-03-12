@@ -10,7 +10,7 @@ class LogoutDialog {
       context: context,
       barrierDismissible: true,
       barrierLabel: 'logout',
-      barrierColor: Colors.black.withOpacity(.10),
+      barrierColor: Colors.black.withValues(alpha: .10),
       transitionDuration: const Duration(milliseconds: 180),
       pageBuilder: (context, anim1, anim2) {
         return SafeArea(
@@ -31,7 +31,7 @@ class LogoutDialog {
                       borderRadius: BorderRadius.circular(18.r),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(.08),
+                          color: Colors.black.withValues(alpha: .08),
                           blurRadius: 24,
                           offset: const Offset(0, 14),
                         ),
@@ -89,7 +89,8 @@ class LogoutDialog {
                             fontSize: 12.sp,
                             height: 1.25,
                             fontWeight: FontWeight.w400,
-                            color: const Color(0xFF0F172A).withOpacity(.70),
+                            color:
+                                const Color(0xFF0F172A).withValues(alpha: .70),
                           ),
                         ),
                         SizedBox(height: 14.h),

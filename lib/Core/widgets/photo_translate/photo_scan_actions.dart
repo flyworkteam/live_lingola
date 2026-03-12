@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PhotoScanActions extends StatelessWidget {
-  final VoidCallback onGalleryTap;
-  final VoidCallback onCameraTap;
+  final VoidCallback? onGalleryTap;
+  final VoidCallback? onCameraTap;
 
   const PhotoScanActions({
     super.key,

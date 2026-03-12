@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../../Core/Utils/assets.dart';
 
 class ShareFriendView extends StatefulWidget {
@@ -15,19 +17,26 @@ class _ShareFriendViewState extends State<ShareFriendView> {
   final String _link = "https://lingolalive.app/invite?friend=alex_johnson";
 
   void _copy() async {
+    final l10n = AppLocalizations.of(context)!;
+
     await Clipboard.setData(ClipboardData(text: _link));
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Link copied", style: TextStyle(fontFamily: 'Lato')),
+      SnackBar(
+        content: Text(
+          l10n.linkCopied,
+          style: const TextStyle(fontFamily: 'Lato'),
+        ),
         behavior: SnackBarBehavior.floating,
-        duration: Duration(milliseconds: 1500),
+        duration: const Duration(milliseconds: 1500),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -59,7 +68,7 @@ class _ShareFriendViewState extends State<ShareFriendView> {
                     ),
                     const Spacer(),
                     Text(
-                      "Share with Friend",
+                      l10n.shareWithFriendTitle,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -81,14 +90,15 @@ class _ShareFriendViewState extends State<ShareFriendView> {
                   width: 300.w,
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) => const Icon(
-                      Icons.people_alt_outlined,
-                      size: 100,
-                      color: Colors.grey),
+                    Icons.people_alt_outlined,
+                    size: 100,
+                    color: Colors.grey,
+                  ),
                 ),
               ),
               SizedBox(height: 35.h),
               Text(
-                "Share with Friend",
+                l10n.shareWithFriendTitle,
                 style: TextStyle(
                   fontFamily: 'Lato',
                   fontWeight: FontWeight.w700,
@@ -99,7 +109,7 @@ class _ShareFriendViewState extends State<ShareFriendView> {
               ),
               SizedBox(height: 10.h),
               Text(
-                "Invite your friends and enjoy\ntranslate together",
+                l10n.shareWithFriendSubtitle,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Lato',
@@ -122,7 +132,7 @@ class _ShareFriendViewState extends State<ShareFriendView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "LINK",
+                      l10n.linkLabel,
                       style: TextStyle(
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.w700,
@@ -135,7 +145,9 @@ class _ShareFriendViewState extends State<ShareFriendView> {
                     Container(
                       width: 260.w,
                       padding: EdgeInsets.symmetric(
-                          horizontal: 16.w, vertical: 10.h),
+                        horizontal: 16.w,
+                        vertical: 10.h,
+                      ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(25.r),
                         border: Border.all(color: const Color(0xFFEFEFEF)),
@@ -171,12 +183,15 @@ class _ShareFriendViewState extends State<ShareFriendView> {
                               height: 18.h,
                               color: Colors.white,
                               errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.copy,
-                                      color: Colors.white, size: 18),
+                                  const Icon(
+                                Icons.copy,
+                                color: Colors.white,
+                                size: 18,
+                              ),
                             ),
                             SizedBox(width: 10.w),
                             Text(
-                              "Copy the link",
+                              l10n.copyTheLink,
                               style: TextStyle(
                                 fontFamily: 'Lato',
                                 fontWeight: FontWeight.w400,

@@ -4,31 +4,50 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: "3.3.4"
-
+  sdk: ">=3.3.4 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+
+  flutter_localizations:
+    sdk: flutter
+
+  shared_preferences: ^2.2.3
   rive: ^0.13.0
   flutter_svg: ^2.0.10
   lottie: ^3.0.0
-  flutter_launcher_icons: ^0.13.1
-
+  image_picker: ^1.1.2
+  flutter_secure_storage: any
+  flutter_facebook_auth: any
+  sign_in_with_apple: ^7.0.1
+  crypto: ^3.0.3
   url_launcher: ^6.2.6
-
   cupertino_icons: ^1.0.8
   flutter_riverpod: ^2.5.1
   flutter_screenutil: ^5.9.3
+  firebase_auth: ^4.20.0
+  google_sign_in: ^6.2.2
+  http: ^1.2.2
+  firebase_core: ^2.32.0
+  onesignal_flutter: ^5.4.1
+  purchases_flutter: 6.30.2
+  purchases_ui_flutter: 6.30.2
+  speech_to_text: ^6.6.0
+  flutter_tts: ^4.2.5
 
+dependency_overrides:
+  win32: 5.8.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
+  generate: true
 
   assets:
     - assets/images/logo/live_lingola_logo.png
@@ -42,7 +61,6 @@ flutter:
     - assets/images/icons/actions/
     - assets/images/icons/notifications/
     - assets/images/icons/nav/
-    - assets/images/icons/nav/
     - assets/images/onboarding1/
     - assets/images/flags/
     - assets/images/notificationspage/
@@ -50,7 +68,6 @@ flutter:
     - assets/images/icons/translate/
     - assets/images/ProfileSettings/
     - assets/images/PhotoTranslate/
-    - assets/images/icons/features/
     - assets/images/demo/
     - assets/animations/
 

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lingola_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
+import 'package:lingola_app/Riverpod/Providers/onboarding_preferences_provider.dart';
 
 class OnboardingFlowView1 extends ConsumerWidget {
   final VoidCallback onNext;
@@ -16,6 +18,7 @@ class OnboardingFlowView1 extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final s = ref.watch(onboardingControllerProvider);
     final c = ref.read(onboardingControllerProvider.notifier);
 
@@ -24,6 +27,11 @@ class OnboardingFlowView1 extends ConsumerWidget {
     const blockHeight = 516.0;
 
     final bottomCtaSpace = (51 + 18 + 12).h;
+
+    void handleNext() {
+      if (!s.canGoNext) return;
+      onNext();
+    }
 
     Widget choice({
       required double figmaTop,
@@ -63,7 +71,7 @@ class OnboardingFlowView1 extends ConsumerWidget {
                     onTap: onSkip,
                     child: Center(
                       child: Text(
-                        'Skip',
+                        l10n.skip,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -95,7 +103,7 @@ class OnboardingFlowView1 extends ConsumerWidget {
                             width: 255.w,
                             height: 60.h,
                             child: Text(
-                              'What do you use the\ntranslation for most?',
+                              l10n.onboardingFlow1Title,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
@@ -114,7 +122,7 @@ class OnboardingFlowView1 extends ConsumerWidget {
                             width: 275.w,
                             height: 23.h,
                             child: Text(
-                              'Please indicate your preference.',
+                              l10n.onboardingFlow1Subtitle,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
@@ -128,37 +136,37 @@ class OnboardingFlowView1 extends ConsumerWidget {
                         ),
                         choice(
                           figmaTop: 265,
-                          text: 'Daily Communication',
+                          text: l10n.onboardingFlow1OptionDaily,
                           v: TranslationUsage.daily,
                           iconAsset: 'assets/images/onboarding1/messages.svg',
                         ),
                         choice(
                           figmaTop: 331,
-                          text: 'Business World',
+                          text: l10n.onboardingFlow1OptionBusiness,
                           v: TranslationUsage.business,
                           iconAsset: 'assets/images/onboarding1/business.svg',
                         ),
                         choice(
                           figmaTop: 397,
-                          text: 'Language Learning',
+                          text: l10n.onboardingFlow1OptionLearning,
                           v: TranslationUsage.learning,
                           iconAsset: 'assets/images/onboarding1/translate.svg',
                         ),
                         choice(
                           figmaTop: 463,
-                          text: 'Travel',
+                          text: l10n.onboardingFlow1OptionTravel,
                           v: TranslationUsage.travel,
                           iconAsset: 'assets/images/onboarding1/travel.svg',
                         ),
                         choice(
                           figmaTop: 529,
-                          text: 'Entertainment',
+                          text: l10n.onboardingFlow1OptionEntertainment,
                           v: TranslationUsage.entertainment,
                           iconAsset: 'assets/images/onboarding1/game.svg',
                         ),
                         choice(
                           figmaTop: 595,
-                          text: 'Other',
+                          text: l10n.onboardingFlow1OptionOther,
                           v: TranslationUsage.other,
                           iconAsset: 'assets/images/onboarding1/other.svg',
                         ),
@@ -178,7 +186,7 @@ class OnboardingFlowView1 extends ConsumerWidget {
                     width: 321.w,
                     height: 51.h,
                     child: ElevatedButton(
-                      onPressed: s.canGoNext ? onNext : null,
+                      onPressed: s.canGoNext ? handleNext : null,
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
                         backgroundColor: const Color(0xFF0A70FF),
@@ -188,7 +196,7 @@ class OnboardingFlowView1 extends ConsumerWidget {
                         ),
                       ),
                       child: Text(
-                        'Next',
+                        l10n.next,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
@@ -260,9 +268,7 @@ class _UsageChoiceButton extends StatelessWidget {
                   ),
                   SizedBox(width: 10.w),
                   ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxWidth: 230.w,
-                    ),
+                    constraints: BoxConstraints(maxWidth: 230.w),
                     child: Text(
                       text,
                       maxLines: 1,

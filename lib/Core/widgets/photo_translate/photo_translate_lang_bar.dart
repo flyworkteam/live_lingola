@@ -52,13 +52,16 @@ class PhotoTranslateLangBar extends StatelessWidget {
                 children: [
                   _Flag(leftFlagAssetOrEmoji),
                   SizedBox(width: 10.w),
-                  Text(
-                    leftText,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF0F172A),
+                  Flexible(
+                    child: Text(
+                      leftText,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF0F172A),
+                      ),
                     ),
                   ),
                 ],
@@ -97,13 +100,16 @@ class PhotoTranslateLangBar extends StatelessWidget {
                 children: [
                   _Flag(rightFlagAssetOrEmoji),
                   SizedBox(width: 10.w),
-                  Text(
-                    rightText,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF0F172A),
+                  Flexible(
+                    child: Text(
+                      rightText,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF0F172A),
+                      ),
                     ),
                   ),
                 ],

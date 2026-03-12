@@ -22,7 +22,7 @@ class NotificationSectionLabel extends StatelessWidget {
           fontSize: 12.sp,
           fontWeight: FontWeight.w500,
           color: isOnBlue
-              ? Colors.white.withOpacity(0.85)
+              ? Colors.white.withValues(alpha: 0.85)
               : const Color(0xFF94A3B8),
         ),
       ),

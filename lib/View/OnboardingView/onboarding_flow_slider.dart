@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lingola_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
+import 'package:lingola_app/Riverpod/Providers/onboarding_preferences_provider.dart';
 import 'package:lingola_app/View/HomeView/home_and_notifications_view.dart';
 
 import 'onboarding_flow_view1.dart';

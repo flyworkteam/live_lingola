@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lingola_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
+import 'package:lingola_app/Riverpod/Providers/onboarding_preferences_provider.dart';
 
 class OnboardingFlowView4 extends ConsumerWidget {
   final VoidCallback onNext;
@@ -17,6 +19,7 @@ class OnboardingFlowView4 extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final s = ref.watch(onboardingControllerProvider);
     final c = ref.read(onboardingControllerProvider.notifier);
 
@@ -26,6 +29,11 @@ class OnboardingFlowView4 extends ConsumerWidget {
     final bottomPad = 18.h;
     final bottomCtaSpace = (51 + bottomPad + 12).h;
 
+    void handleNext() {
+      if (!canNext) return;
+      onNext();
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: SafeArea(
@@ -33,7 +41,6 @@ class OnboardingFlowView4 extends ConsumerWidget {
         bottom: false,
         child: Stack(
           children: [
-            // BACK
             Align(
               alignment: Alignment.topLeft,
               child: Padding(
@@ -47,7 +54,7 @@ class OnboardingFlowView4 extends ConsumerWidget {
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                     ),
                     child: Text(
-                      'Back',
+                      l10n.back,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16.sp,
@@ -58,8 +65,6 @@ class OnboardingFlowView4 extends ConsumerWidget {
                 ),
               ),
             ),
-
-            // SKIP
             Align(
               alignment: Alignment.topRight,
               child: Padding(
@@ -72,7 +77,7 @@ class OnboardingFlowView4 extends ConsumerWidget {
                     onTap: onSkip,
                     child: Center(
                       child: Text(
-                        'Skip',
+                        l10n.skip,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -87,8 +92,6 @@ class OnboardingFlowView4 extends ConsumerWidget {
                 ),
               ),
             ),
-
-            // CONTENT
             Positioned.fill(
               child: Padding(
                 padding: EdgeInsets.only(bottom: bottomCtaSpace),
@@ -100,7 +103,7 @@ class OnboardingFlowView4 extends ConsumerWidget {
                       width: 354.w,
                       height: 60.h,
                       child: Text(
-                        'What features would you like\nin a translation app?',
+                        l10n.onboardingFlow4Title,
                         textAlign: TextAlign.center,
                         maxLines: 2,
                         overflow: TextOverflow.visible,
@@ -118,7 +121,7 @@ class OnboardingFlowView4 extends ConsumerWidget {
                       width: 275.w,
                       height: 51.h,
                       child: Text(
-                        'Please indicate your preference.',
+                        l10n.onboardingFlow4Subtitle,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -131,31 +134,31 @@ class OnboardingFlowView4 extends ConsumerWidget {
                     ),
                     SizedBox(height: 26.h),
                     _SimpleSelectButton(
-                      text: 'Accurate Translation',
+                      text: l10n.onboardingFlow4OptionAccurate,
                       selected: s.feature == AppFeature.accurate,
                       onTap: () => c.setFeature(AppFeature.accurate),
                     ),
                     SizedBox(height: 15.h),
                     _SimpleSelectButton(
-                      text: 'Easy To Use',
+                      text: l10n.onboardingFlow4OptionEasy,
                       selected: s.feature == AppFeature.easy,
                       onTap: () => c.setFeature(AppFeature.easy),
                     ),
                     SizedBox(height: 15.h),
                     _SimpleSelectButton(
-                      text: 'Privacy Protection',
+                      text: l10n.onboardingFlow4OptionPrivacy,
                       selected: s.feature == AppFeature.privacy,
                       onTap: () => c.setFeature(AppFeature.privacy),
                     ),
                     SizedBox(height: 15.h),
                     _SimpleSelectButton(
-                      text: 'Teach Me A Language',
+                      text: l10n.onboardingFlow4OptionTeach,
                       selected: s.feature == AppFeature.teach,
                       onTap: () => c.setFeature(AppFeature.teach),
                     ),
                     SizedBox(height: 15.h),
                     _SimpleSelectButton(
-                      text: 'All Of Them',
+                      text: l10n.onboardingFlow4OptionAll,
                       selected: s.feature == AppFeature.all,
                       onTap: () => c.setFeature(AppFeature.all),
                     ),
@@ -164,8 +167,6 @@ class OnboardingFlowView4 extends ConsumerWidget {
                 ),
               ),
             ),
-
-            // NEXT
             Align(
               alignment: Alignment.bottomCenter,
               child: SafeArea(
@@ -176,7 +177,7 @@ class OnboardingFlowView4 extends ConsumerWidget {
                     width: 321.w,
                     height: 51.h,
                     child: ElevatedButton(
-                      onPressed: canNext ? onNext : null,
+                      onPressed: canNext ? handleNext : null,
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
                         backgroundColor: const Color(0xFF0A70FF),
@@ -186,7 +187,7 @@ class OnboardingFlowView4 extends ConsumerWidget {
                         ),
                       ),
                       child: Text(
-                        'Next',
+                        l10n.next,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,

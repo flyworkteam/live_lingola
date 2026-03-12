@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "479984027693",
+    "project_id": "live-lingola",
+    "storage_bucket": "live-lingola.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:479984027693:android:3543ed810d99e7cea290a4",
+        "android_client_info": {
+          "package_name": "com.flywork.livelingolaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "479984027693-6udnl80o70m3atu4pa7vam64cl47inuk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHvk33LxYHkwaovAM3vZgMpMvZgfpwJAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "479984027693-6udnl80o70m3atu4pa7vam64cl47inuk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "479984027693-sk1rqp1qk2laktpj786otccm4ef6rtv7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.flywork.livelingolaapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

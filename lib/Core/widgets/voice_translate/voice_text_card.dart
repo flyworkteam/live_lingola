@@ -17,6 +17,7 @@ class VoiceTextCard extends StatelessWidget {
     this.labelWidget,
     required this.showBottomIcons,
     this.showEmptyPlaceholder = false,
+    Row? bottomRow,
   });
 
   @override
@@ -25,7 +26,7 @@ class VoiceTextCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.fromLTRB(16.w, 14.h, 16.w, 12.h),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.92),
+        color: Colors.white.withValues(alpha: 0.92),
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: const [
           BoxShadow(

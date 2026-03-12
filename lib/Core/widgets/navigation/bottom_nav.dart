@@ -63,7 +63,7 @@ class BottomNavBar extends StatelessWidget {
                 height: 44.h,
                 decoration: BoxDecoration(
                   color: selected
-                      ? const Color(0xFF0A70FF).withOpacity(0.12)
+                      ? const Color(0xFF0A70FF).withValues(alpha: 0.12)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(18.r),
                 ),

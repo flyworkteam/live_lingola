@@ -64,7 +64,7 @@ class ProfileHeader extends StatelessWidget {
             fontFamily: 'Poppins',
             fontSize: 12.sp,
             fontWeight: FontWeight.w400,
-            color: Colors.white.withOpacity(.85),
+            color: Colors.white.withValues(alpha: .85),
           ),
         ),
       ],

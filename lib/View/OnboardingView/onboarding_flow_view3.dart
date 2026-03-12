@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lingola_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lingola_app/Riverpod/Providers/onboarding_preferences_provider.dart';
 
 class OnboardingFlowView3 extends ConsumerWidget {
   final VoidCallback onNext;
@@ -17,6 +18,7 @@ class OnboardingFlowView3 extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final s = ref.watch(onboardingControllerProvider);
     final c = ref.read(onboardingControllerProvider.notifier);
 
@@ -26,6 +28,11 @@ class OnboardingFlowView3 extends ConsumerWidget {
     final bottomPad = 18.h;
     final bottomCtaSpace = (51 + bottomPad + 12).h;
 
+    void handleNext() {
+      if (!canNext) return;
+      onNext();
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: SafeArea(
@@ -33,7 +40,6 @@ class OnboardingFlowView3 extends ConsumerWidget {
         bottom: false,
         child: Stack(
           children: [
-            // BACK
             Align(
               alignment: Alignment.topLeft,
               child: Padding(
@@ -47,7 +53,7 @@ class OnboardingFlowView3 extends ConsumerWidget {
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                     ),
                     child: Text(
-                      'Back',
+                      l10n.back,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16.sp,
@@ -58,8 +64,6 @@ class OnboardingFlowView3 extends ConsumerWidget {
                 ),
               ),
             ),
-
-            // SKIP
             Align(
               alignment: Alignment.topRight,
               child: Padding(
@@ -72,7 +76,7 @@ class OnboardingFlowView3 extends ConsumerWidget {
                     onTap: onSkip,
                     child: Center(
                       child: Text(
-                        'Skip',
+                        l10n.skip,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -87,8 +91,6 @@ class OnboardingFlowView3 extends ConsumerWidget {
                 ),
               ),
             ),
-
-            // CONTENT
             Positioned.fill(
               child: Padding(
                 padding: EdgeInsets.only(bottom: bottomCtaSpace),
@@ -100,7 +102,7 @@ class OnboardingFlowView3 extends ConsumerWidget {
                       width: 255.w,
                       height: 60.h,
                       child: Text(
-                        'Have you used AI\ntranslation before?',
+                        l10n.onboardingFlow3Title,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -116,7 +118,7 @@ class OnboardingFlowView3 extends ConsumerWidget {
                       width: 275.w,
                       height: 51.h,
                       child: Text(
-                        'Please indicate your preference.',
+                        l10n.onboardingFlow3Subtitle,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -129,13 +131,13 @@ class OnboardingFlowView3 extends ConsumerWidget {
                     ),
                     SizedBox(height: 26.h),
                     _SimpleSelectButton(
-                      text: 'Yes',
+                      text: l10n.yes,
                       selected: s.usedAiBefore == true,
                       onTap: () => c.setUsedAiBefore(true),
                     ),
                     SizedBox(height: 15.h),
                     _SimpleSelectButton(
-                      text: 'No',
+                      text: l10n.no,
                       selected: s.usedAiBefore == false,
                       onTap: () => c.setUsedAiBefore(false),
                     ),
@@ -144,8 +146,6 @@ class OnboardingFlowView3 extends ConsumerWidget {
                 ),
               ),
             ),
-
-            // NEXT
             Align(
               alignment: Alignment.bottomCenter,
               child: SafeArea(
@@ -156,7 +156,7 @@ class OnboardingFlowView3 extends ConsumerWidget {
                     width: 321.w,
                     height: 51.h,
                     child: ElevatedButton(
-                      onPressed: canNext ? onNext : null,
+                      onPressed: canNext ? handleNext : null,
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
                         backgroundColor: const Color(0xFF0A70FF),
@@ -166,7 +166,7 @@ class OnboardingFlowView3 extends ConsumerWidget {
                         ),
                       ),
                       child: Text(
-                        'Next',
+                        l10n.next,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,

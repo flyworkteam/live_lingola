@@ -22,7 +22,7 @@ class ProOfferCard extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF0B62FF).withOpacity(.20),
+              color: const Color(0xFF0B62FF).withValues(alpha: .20),
               blurRadius: 18,
               offset: const Offset(0, 10),
             ),

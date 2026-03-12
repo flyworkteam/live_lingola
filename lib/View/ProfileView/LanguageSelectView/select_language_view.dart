@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../Core/Utils/assets.dart';
 
-class SelectLanguageView extends StatefulWidget {
+import '../../../Core/Utils/assets.dart';
+import '../../../Riverpod/Providers/app_locale_provider.dart';
+
+class SelectLanguageView extends ConsumerStatefulWidget {
   const SelectLanguageView({super.key});
 
   @override
-  State<SelectLanguageView> createState() => _SelectLanguageViewState();
+  ConsumerState<SelectLanguageView> createState() => _SelectLanguageViewState();
 }
 
-class _SelectLanguageViewState extends State<SelectLanguageView> {
-  int _selected = 0;
+class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
+  late int _selected;
 
   final List<_Lang> _langs = const [
     _Lang("Turkish", "assets/images/flags/Turkish.png", "🇹🇷"),
@@ -27,6 +31,28 @@ class _SelectLanguageViewState extends State<SelectLanguageView> {
     _Lang("Portuguese", "assets/images/flags/Portuguese.png", "🇵🇹"),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _selected = 1;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final locale = ref.read(appLocaleProvider);
+    final currentCode = locale.languageCode.toLowerCase();
+
+    final index = _langs.indexWhere(
+      (e) => e.locale.languageCode.toLowerCase() == currentCode,
+    );
+
+    if (index != -1) {
+      _selected = index;
+    }
+  }
+
   void _toast(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -37,31 +63,73 @@ class _SelectLanguageViewState extends State<SelectLanguageView> {
     );
   }
 
+  String _localizedLanguageTitle(AppLocalizations t, String title) {
+    switch (title) {
+      case "Turkish":
+        return t.languageTurkish;
+      case "English":
+        return t.languageEnglish;
+      case "German":
+        return t.languageGerman;
+      case "Italian":
+        return t.languageItalian;
+      case "French":
+        return t.languageFrench;
+      case "Japanese":
+        return t.languageJapanese;
+      case "Spanish":
+        return t.languageSpanish;
+      case "Russian":
+        return t.languageRussian;
+      case "Korean":
+        return t.languageKorean;
+      case "Hindi":
+        return t.languageHindi;
+      case "Portuguese":
+        return t.languagePortuguese;
+      default:
+        return title;
+    }
+  }
+
+  Future<void> _applyLanguage() async {
+    final t = AppLocalizations.of(context)!;
+    final selectedLang = _langs[_selected];
+
+    await ref.read(appLocaleProvider.notifier).setLocale(selectedLang.locale);
+
+    if (!mounted) return;
+
+    _toast(
+      t.appLanguageChangedTo(
+        _localizedLanguageTitle(t, selectedLang.title),
+      ),
+    );
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         bottom: false,
         child: Stack(
           children: [
-            /// CONTENT
             Padding(
               padding: EdgeInsets.fromLTRB(18.w, 10.h, 18.w, 0),
               child: Column(
                 children: [
                   _TopBar(
-                    title: "Select Language",
+                    title: t.selectLanguage,
                     onBack: () => Navigator.of(context).pop(),
                   ),
                   SizedBox(height: 18.h),
-
-                  /// LIST
                   Expanded(
                     child: ListView.separated(
-                      padding: EdgeInsets.only(
-                        bottom: (54.h + 16.h),
-                      ),
+                      padding: EdgeInsets.only(bottom: (54.h + 16.h)),
                       physics: const BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics(),
                       ),
@@ -72,7 +140,7 @@ class _SelectLanguageViewState extends State<SelectLanguageView> {
                         final selected = _selected == i;
 
                         return _LangPill(
-                          title: l.title,
+                          title: _localizedLanguageTitle(t, l.title),
                           flagAsset: l.asset,
                           fallbackEmoji: l.emoji,
                           selected: selected,
@@ -84,8 +152,6 @@ class _SelectLanguageViewState extends State<SelectLanguageView> {
                 ],
               ),
             ),
-
-            /// NEXT BUTTON
             Positioned(
               left: 18.w,
               right: 18.w,
@@ -93,8 +159,7 @@ class _SelectLanguageViewState extends State<SelectLanguageView> {
               child: SizedBox(
                 height: 54.h,
                 child: ElevatedButton(
-                  onPressed: () =>
-                      _toast("Selected: ${_langs[_selected].title}"),
+                  onPressed: _applyLanguage,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1677FF),
                     foregroundColor: Colors.white,
@@ -104,7 +169,7 @@ class _SelectLanguageViewState extends State<SelectLanguageView> {
                     ),
                   ),
                   child: Text(
-                    "Next",
+                    t.next,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14.sp,
@@ -125,13 +190,47 @@ class _Lang {
   final String title;
   final String asset;
   final String emoji;
-  const _Lang(this.title, this.asset, this.emoji);
+  final Locale locale;
+
+  const _Lang(
+    this.title,
+    this.asset,
+    this.emoji, {
+    Locale? locale,
+  }) : locale = locale ??
+            (title == "Turkish"
+                ? const Locale('tr')
+                : title == "English"
+                    ? const Locale('en')
+                    : title == "German"
+                        ? const Locale('de')
+                        : title == "Italian"
+                            ? const Locale('it')
+                            : title == "French"
+                                ? const Locale('fr')
+                                : title == "Japanese"
+                                    ? const Locale('ja')
+                                    : title == "Spanish"
+                                        ? const Locale('es')
+                                        : title == "Russian"
+                                            ? const Locale('ru')
+                                            : title == "Korean"
+                                                ? const Locale('ko')
+                                                : title == "Hindi"
+                                                    ? const Locale('hi')
+                                                    : title == "Portuguese"
+                                                        ? const Locale('pt')
+                                                        : const Locale('en'));
 }
 
 class _TopBar extends StatelessWidget {
   final String title;
   final VoidCallback onBack;
-  const _TopBar({required this.title, required this.onBack});
+
+  const _TopBar({
+    required this.title,
+    required this.onBack,
+  });
 
   @override
   Widget build(BuildContext context) {

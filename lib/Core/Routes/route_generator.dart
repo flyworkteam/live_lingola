@@ -4,13 +4,11 @@ import 'app_routes.dart';
 
 import '../../View/SplashView/splash_screen.dart';
 import '../../View/OnboardingView/onboarding_view.dart';
-import '../../View/AuthView/LoginView/login_view.dart';
-
 import '../../View/OnboardingView/onboarding_flow_slider.dart';
-
 import '../../View/HomeView/home_and_notifications_view.dart';
-
 import '../../View/ProfileView/profile_view.dart';
+import '../../View/AuthView/LoginView/login_view.dart';
+import '../../View/PaywallView/paywall_view.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -30,6 +28,11 @@ class RouteGenerator {
       case AppRoutes.homeAndNotifications:
         return MaterialPageRoute(
           builder: (_) => const HomeAndNotificationsView(),
+        );
+
+      case AppRoutes.paywall:
+        return MaterialPageRoute(
+          builder: (_) => const PaywallView(),
         );
 
       case '/profile':

@@ -15,7 +15,7 @@ class SectionTitle extends StatelessWidget {
           fontFamily: 'Poppins',
           fontSize: 11.sp,
           fontWeight: FontWeight.w700,
-          color: Colors.black.withOpacity(.35),
+          color: Colors.black.withValues(alpha: .35),
           letterSpacing: 0.6,
         ),
       ),

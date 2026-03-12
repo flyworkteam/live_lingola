@@ -1,100 +1,266 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../Core/Utils/assets.dart';
 import '../../Core/widgets/navigation/bottom_nav_item_tile.dart';
+import '../../Riverpod/Providers/current_user_provider.dart';
 
-class HistoryFavoriteView extends StatefulWidget {
+class HistoryFavoriteView extends ConsumerStatefulWidget {
   final int initialTab;
 
   const HistoryFavoriteView({super.key, this.initialTab = 0});
 
   @override
-  State<HistoryFavoriteView> createState() => _HistoryFavoriteViewState();
+  ConsumerState<HistoryFavoriteView> createState() =>
+      _HistoryFavoriteViewState();
 }
 
-class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
+class _HistoryFavoriteViewState extends ConsumerState<HistoryFavoriteView> {
+  static const String _baseUrl = "http://127.0.0.1:4000";
+
   late int _tab;
   String _query = '';
 
-  final List<_HFItem> _history = [
-    _HFItem(
-      fromCode: 'TR',
-      toCode: 'EN',
-      title: 'Bu akşam yemeğe çıkıyor muyuz?',
-      subtitle: 'Are we going out for dinner tonight?',
-      time: '14:20',
-      starred: false,
-    ),
-    _HFItem(
-      fromCode: 'EN',
-      toCode: 'TR',
-      title: 'Where is the nearest subway station?',
-      subtitle: 'En yakın metro istasyonu nerede?',
-      time: '11:05',
-      starred: true,
-    ),
-    _HFItem(
-      fromCode: 'TR',
-      toCode: 'DE',
-      title: 'Bize yardım ettiğiniz için teşekkürler',
-      subtitle: 'Vielen Dank für Ihre Hilfe.',
-      time: '09:12',
-      starred: true,
-    ),
-  ];
+  bool _isLoading = false;
+  bool _isActionLoading = false;
 
-  final List<_HFItem> _favorite = [
-    _HFItem(
-      fromCode: 'TR',
-      toCode: 'EN',
-      title: 'Bu akşam yemeğe çıkıyor muyuz?',
-      subtitle: 'Are we going out for dinner tonight?',
-      time: '14:20',
-      starred: true,
-    ),
-    _HFItem(
-      fromCode: 'EN',
-      toCode: 'TR',
-      title: 'Where is the nearest subway station?',
-      subtitle: 'En yakın metro istasyonu nerede?',
-      time: '11:05',
-      starred: true,
-    ),
-    _HFItem(
-      fromCode: 'TR',
-      toCode: 'DE',
-      title: 'Bize yardım ettiğiniz için teşekkürler',
-      subtitle: 'Vielen Dank für Ihre Hilfe.',
-      time: '09:12',
-      starred: true,
-    ),
-  ];
+  List<_HFItem> _history = [];
+  List<_HFItem> _favorite = [];
+
+  String? get _currentFirebaseUid {
+    final user = ref.read(currentUserProvider);
+    final uid = user?['firebase_uid']?.toString().trim();
+
+    if (uid == null || uid.isEmpty) return null;
+    return uid;
+  }
 
   @override
   void initState() {
     super.initState();
     _tab = widget.initialTab.clamp(0, 1);
+    Future.microtask(_loadCurrentTab);
   }
 
   List<_HFItem> get _activeList => _tab == 0 ? _history : _favorite;
 
-  void _toggleStar(int index) {
-    setState(() {
-      _activeList[index].starred = !_activeList[index].starred;
-    });
+  Future<void> _loadCurrentTab() async {
+    final l10n = AppLocalizations.of(context)!;
+    final firebaseUid = _currentFirebaseUid;
+
+    debugPrint('HF CURRENT FIREBASE UID: $firebaseUid');
+    debugPrint('HF CURRENT TAB: $_tab');
+
+    if (firebaseUid == null) {
+      if (!mounted) return;
+      setState(() {
+        _history = [];
+        _favorite = [];
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.userNotFound)),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      if (_tab == 0) {
+        final items = await _fetchHistory(firebaseUid);
+        if (!mounted) return;
+        setState(() => _history = items);
+      } else {
+        final items = await _fetchFavorites(firebaseUid);
+        if (!mounted) return;
+        setState(() => _favorite = items);
+      }
+    } catch (e) {
+      debugPrint('HF LOAD ERROR: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.couldNotLoadData)),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<List<_HFItem>> _fetchHistory(String firebaseUid) async {
+    final url = "$_baseUrl/translate/history/$firebaseUid";
+    debugPrint('HF HISTORY URL: $url');
+
+    final response = await http.get(Uri.parse(url));
+
+    debugPrint('HF HISTORY STATUS: ${response.statusCode}');
+    debugPrint('HF HISTORY BODY: ${response.body}');
+
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw Exception("History request failed");
+    }
+
+    final dynamic data = jsonDecode(response.body);
+    final List<dynamic> items = _extractItems(data);
+
+    return items
+        .map((e) => _HFItem.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<List<_HFItem>> _fetchFavorites(String firebaseUid) async {
+    final url = "$_baseUrl/translate/favorites/$firebaseUid";
+    debugPrint('HF FAVORITES URL: $url');
+
+    final response = await http.get(Uri.parse(url));
+
+    debugPrint('HF FAVORITES STATUS: ${response.statusCode}');
+    debugPrint('HF FAVORITES BODY: ${response.body}');
+
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw Exception("Favorites request failed");
+    }
+
+    final dynamic data = jsonDecode(response.body);
+    final List<dynamic> items = _extractItems(data);
+
+    return items
+        .map((e) => _HFItem.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  List<dynamic> _extractItems(dynamic data) {
+    if (data is Map<String, dynamic>) {
+      if (data["items"] is List) return data["items"] as List<dynamic>;
+      if (data["rows"] is List) return data["rows"] as List<dynamic>;
+      if (data["data"] is List) return data["data"] as List<dynamic>;
+      if (data["history"] is List) return data["history"] as List<dynamic>;
+      if (data["favorites"] is List) return data["favorites"] as List<dynamic>;
+    }
+    if (data is List) return data;
+    return [];
+  }
+
+  Future<void> _changeTab(int value) async {
+    if (_tab == value) return;
+    setState(() => _tab = value);
+    await _loadCurrentTab();
+  }
+
+  Future<void> _toggleStar(_HFItem item) async {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (item.id == null) return;
+
+    setState(() => _isActionLoading = true);
+
+    try {
+      final response = await http.post(
+        Uri.parse("$_baseUrl/translate/favorite"),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({
+          "translation_id": item.id,
+          "is_favorite": !item.starred,
+        }),
+      );
+
+      debugPrint('HF TOGGLE FAVORITE STATUS: ${response.statusCode}');
+      debugPrint('HF TOGGLE FAVORITE BODY: ${response.body}');
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        setState(() {
+          item.starred = !item.starred;
+
+          if (_tab == 0) {
+            final favIndex = _favorite.indexWhere((e) => e.id == item.id);
+            if (item.starred) {
+              if (favIndex == -1) {
+                _favorite.insert(0, item.copyWith(starred: true));
+              }
+            } else {
+              if (favIndex != -1) {
+                _favorite.removeAt(favIndex);
+              }
+            }
+          } else {
+            if (!item.starred) {
+              _favorite.removeWhere((e) => e.id == item.id);
+              final histIndex = _history.indexWhere((e) => e.id == item.id);
+              if (histIndex != -1) {
+                _history[histIndex].starred = false;
+              }
+            }
+          }
+        });
+      } else {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.favoriteUpdateFailed)),
+        );
+      }
+    } catch (e) {
+      debugPrint('HF TOGGLE FAVORITE ERROR: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.favoriteUpdateFailed)),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isActionLoading = false);
+      }
+    }
   }
 
   Future<void> _confirmClear() async {
+    final l10n = AppLocalizations.of(context)!;
+
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: true,
-      barrierColor: const Color(0xFF000000).withOpacity(0.35),
-      builder: (context) => const _ClearConfirmDialog(),
+      barrierColor: const Color(0xFF000000).withValues(alpha: 0.35),
+      builder: (context) => _ClearConfirmDialog(
+        title: _tab == 0 ? l10n.clearHistoryTitle : l10n.clearFavoriteTitle,
+        description: _tab == 0
+            ? l10n.clearHistoryDescription
+            : l10n.clearFavoriteDescription,
+      ),
     );
 
     if (confirmed == true) {
+      await _clearCurrentTab();
+    }
+  }
+
+  Future<void> _clearCurrentTab() async {
+    final firebaseUid = _currentFirebaseUid;
+    if (firebaseUid == null) return;
+
+    setState(() => _isActionLoading = true);
+
+    try {
+      final endpoint = _tab == 0
+          ? "$_baseUrl/translate/history/$firebaseUid"
+          : "$_baseUrl/translate/favorites/$firebaseUid";
+
+      debugPrint('HF CLEAR URL: $endpoint');
+
+      final response = await http.delete(Uri.parse(endpoint));
+
+      debugPrint('HF CLEAR STATUS: ${response.statusCode}');
+      debugPrint('HF CLEAR BODY: ${response.body}');
+
+      if (!mounted) return;
+
       setState(() {
         if (_tab == 0) {
           _history.clear();
@@ -102,16 +268,35 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
           _favorite.clear();
         }
       });
+    } catch (e) {
+      debugPrint('HF CLEAR ERROR: $e');
+      if (!mounted) return;
+      setState(() {
+        if (_tab == 0) {
+          _history.clear();
+        } else {
+          _favorite.clear();
+        }
+      });
+    } finally {
+      if (mounted) {
+        setState(() => _isActionLoading = false);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    ref.watch(currentUserProvider);
+
     final filtered = _activeList.where((e) {
       if (_query.trim().isEmpty) return true;
       final q = _query.toLowerCase();
       return e.title.toLowerCase().contains(q) ||
-          e.subtitle.toLowerCase().contains(q);
+          e.subtitle.toLowerCase().contains(q) ||
+          e.fromCode.toLowerCase().contains(q) ||
+          e.toCode.toLowerCase().contains(q);
     }).toList();
 
     return Scaffold(
@@ -145,7 +330,7 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
                 Expanded(
                   child: Center(
                     child: Text(
-                      "History & Favorite",
+                      l10n.historyFavoriteTitle,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 18.sp,
@@ -199,7 +384,7 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
                       ),
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Search',
+                        hintText: l10n.search,
                         hintStyle: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 12.sp,
@@ -227,17 +412,17 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
                 children: [
                   Expanded(
                     child: _SegmentBtn(
-                      title: 'History',
+                      title: l10n.historyTab,
                       active: _tab == 0,
-                      onTap: () => setState(() => _tab = 0),
+                      onTap: () => _changeTab(0),
                     ),
                   ),
                   SizedBox(width: 10.w),
                   Expanded(
                     child: _SegmentBtn(
-                      title: 'Favorite',
+                      title: l10n.favoriteTab,
                       active: _tab == 1,
-                      onTap: () => setState(() => _tab = 1),
+                      onTap: () => _changeTab(1),
                     ),
                   ),
                 ],
@@ -250,7 +435,7 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
             child: Row(
               children: [
                 Text(
-                  'Today',
+                  _tab == 0 ? l10n.today : l10n.favoriteTab,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13.sp,
@@ -262,7 +447,7 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
                 InkWell(
                   onTap: _confirmClear,
                   child: Text(
-                    'Clear history',
+                    _tab == 0 ? l10n.clearHistory : l10n.clearFavorite,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12.sp,
@@ -276,24 +461,41 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
           ),
           SizedBox(height: 10.h),
           Expanded(
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 18.h),
-              itemCount: filtered.length,
-              itemBuilder: (context, i) {
-                final item = filtered[i];
-                return Padding(
-                  padding: EdgeInsets.only(bottom: 12.h),
-                  child: _HFCard(
-                    item: item,
-                    onStarTap: () {
-                      final realIndex = _activeList.indexOf(item);
-                      if (realIndex != -1) _toggleStar(realIndex);
-                    },
-                  ),
-                );
-              },
-            ),
+            child: _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : filtered.isEmpty
+                    ? Center(
+                        child: Text(
+                          _tab == 0
+                              ? l10n.noHistoryFound
+                              : l10n.noFavoritesFound,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w500,
+                            color: const Color(0xFF94A3B8),
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 18.h),
+                        itemCount: filtered.length,
+                        itemBuilder: (context, i) {
+                          final item = filtered[i];
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 12.h),
+                            child: _HFCard(
+                              item: item,
+                              onStarTap: _isActionLoading
+                                  ? null
+                                  : () => _toggleStar(item),
+                            ),
+                          );
+                        },
+                      ),
           ),
           BottomNavBar(
             currentIndex: 0,
@@ -313,10 +515,18 @@ class _HistoryFavoriteViewState extends State<HistoryFavoriteView> {
 }
 
 class _ClearConfirmDialog extends StatelessWidget {
-  const _ClearConfirmDialog();
+  final String title;
+  final String description;
+
+  const _ClearConfirmDialog({
+    required this.title,
+    required this.description,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Dialog(
       insetPadding: EdgeInsets.zero,
       backgroundColor: Colors.transparent,
@@ -359,7 +569,7 @@ class _ClearConfirmDialog extends StatelessWidget {
             SizedBox(height: 12.h),
             Center(
               child: Text(
-                'Clear History',
+                title,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
@@ -370,7 +580,7 @@ class _ClearConfirmDialog extends StatelessWidget {
             ),
             SizedBox(height: 8.h),
             Text(
-              'Are you sure you want to\nclear your history?',
+              description,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Poppins',
@@ -387,7 +597,7 @@ class _ClearConfirmDialog extends StatelessWidget {
                   InkWell(
                     onTap: () => Navigator.pop(context, false),
                     child: Text(
-                      'Cancel',
+                      l10n.cancel,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.w400,
@@ -409,7 +619,7 @@ class _ClearConfirmDialog extends StatelessWidget {
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        'Clear',
+                        l10n.clear,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w400,
@@ -430,6 +640,7 @@ class _ClearConfirmDialog extends StatelessWidget {
 }
 
 class _HFItem {
+  final int? id;
   final String fromCode;
   final String toCode;
   final String title;
@@ -438,6 +649,7 @@ class _HFItem {
   bool starred;
 
   _HFItem({
+    required this.id,
     required this.fromCode,
     required this.toCode,
     required this.title,
@@ -445,6 +657,79 @@ class _HFItem {
     required this.time,
     required this.starred,
   });
+
+  factory _HFItem.fromJson(Map<String, dynamic> json) {
+    final sourceLanguage = (json['source_language'] ?? '').toString();
+    final targetLanguage = (json['target_language'] ?? '').toString();
+
+    return _HFItem(
+      id: json['id'] is int ? json['id'] as int : int.tryParse('${json['id']}'),
+      fromCode: _languageToCode(sourceLanguage),
+      toCode: _languageToCode(targetLanguage),
+      title: (json['source_text'] ?? '').toString(),
+      subtitle: (json['translated_text'] ?? '').toString(),
+      time: _formatTime((json['created_at'] ?? '').toString()),
+      starred: _parseBool(json['is_favorite']),
+    );
+  }
+
+  _HFItem copyWith({
+    int? id,
+    String? fromCode,
+    String? toCode,
+    String? title,
+    String? subtitle,
+    String? time,
+    bool? starred,
+  }) {
+    return _HFItem(
+      id: id ?? this.id,
+      fromCode: fromCode ?? this.fromCode,
+      toCode: toCode ?? this.toCode,
+      title: title ?? this.title,
+      subtitle: subtitle ?? this.subtitle,
+      time: time ?? this.time,
+      starred: starred ?? this.starred,
+    );
+  }
+
+  static bool _parseBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is int) return value == 1;
+    return value.toString() == '1' || value.toString().toLowerCase() == 'true';
+  }
+
+  static String _languageToCode(String value) {
+    switch (value.toLowerCase()) {
+      case 'turkish':
+        return 'TR';
+      case 'english':
+        return 'EN';
+      case 'german':
+        return 'DE';
+      case 'italian':
+        return 'IT';
+      case 'french':
+        return 'FR';
+      case 'spanish':
+      case 'spain':
+        return 'ES';
+      case 'japanese':
+        return 'JP';
+      default:
+        return value.isEmpty ? 'EN' : value.substring(0, 2).toUpperCase();
+    }
+  }
+
+  static String _formatTime(String raw) {
+    if (raw.isEmpty) return '--:--';
+    final dt = DateTime.tryParse(raw);
+    if (dt == null) return '--:--';
+
+    final h = dt.hour.toString().padLeft(2, '0');
+    final m = dt.minute.toString().padLeft(2, '0');
+    return '$h:$m';
+  }
 }
 
 class _SegmentBtn extends StatelessWidget {
@@ -495,9 +780,12 @@ class _SegmentBtn extends StatelessWidget {
 
 class _HFCard extends StatelessWidget {
   final _HFItem item;
-  final VoidCallback onStarTap;
+  final VoidCallback? onStarTap;
 
-  const _HFCard({required this.item, required this.onStarTap});
+  const _HFCard({
+    required this.item,
+    required this.onStarTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -592,6 +880,14 @@ class _LangPill extends StatelessWidget {
         return 'English';
       case 'DE':
         return 'German';
+      case 'IT':
+        return 'Italian';
+      case 'FR':
+        return 'French';
+      case 'ES':
+        return 'Spanish';
+      case 'JP':
+        return 'Japanese';
       default:
         return 'English';
     }

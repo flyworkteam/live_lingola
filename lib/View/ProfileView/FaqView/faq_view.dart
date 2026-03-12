@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lingola_app/Core/Utils/assets.dart';
 
 class FaqView extends StatefulWidget {
@@ -11,23 +12,20 @@ class FaqView extends StatefulWidget {
 }
 
 class _FaqViewState extends State<FaqView> {
-  final List<_FaqItem> _items = const [
-    _FaqItem("Live Lingola nasıl çalışır?", "Lorem ipsum..."),
-    _FaqItem("Verilerim güvende mi?", "Lorem ipsum..."),
-    _FaqItem("Çevrimdışı kullanabilir miyim?", "Lorem ipsum..."),
-    _FaqItem("Aboneliğimi nasıl iptal ederim?", "Lorem ipsum..."),
-    _FaqItem(
-      "Aile paylaşımı var mı?",
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
-          "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, "
-          "when an unknown printer took a galley of type and scrambled it to",
-    ),
-  ];
-
   int _openIndex = 4;
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+
+    final List<_FaqItem> items = [
+      _FaqItem(t.faqQuestion1, t.faqAnswer1),
+      _FaqItem(t.faqQuestion2, t.faqAnswer2),
+      _FaqItem(t.faqQuestion3, t.faqAnswer3),
+      _FaqItem(t.faqQuestion4, t.faqAnswer4),
+      _FaqItem(t.faqQuestion5, t.faqAnswer5),
+    ];
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -36,7 +34,7 @@ class _FaqViewState extends State<FaqView> {
           child: Column(
             children: [
               _TopBar(
-                title: "F.A.Q.",
+                title: t.faqTitleShort,
                 onBack: () => Navigator.of(context).pop(),
               ),
               SizedBox(height: 18.h),
@@ -45,10 +43,10 @@ class _FaqViewState extends State<FaqView> {
                   physics: const BouncingScrollPhysics(
                     parent: ClampingScrollPhysics(),
                   ),
-                  itemCount: _items.length,
+                  itemCount: items.length,
                   separatorBuilder: (_, __) => SizedBox(height: 12.h),
                   itemBuilder: (context, i) {
-                    final item = _items[i];
+                    final item = items[i];
                     final isOpen = _openIndex == i;
 
                     return _FaqCard(
@@ -150,7 +148,7 @@ class _FaqCard extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE2E8F0)),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFFDEE5F7).withOpacity(.55),
+            color: const Color(0xFFDEE5F7).withValues(alpha: .55),
             blurRadius: 14,
             offset: const Offset(0, 10),
           ),
@@ -202,7 +200,7 @@ class _FaqCard extends StatelessWidget {
                       fontSize: 12.2.sp,
                       height: 1.3,
                       fontWeight: FontWeight.w400,
-                      color: const Color(0xFF0F172A).withOpacity(.65),
+                      color: const Color(0xFF0F172A).withValues(alpha: .65),
                     ),
                   ),
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../HomeView/home_and_notifications_view.dart';
@@ -8,61 +9,20 @@ import '../../Core/Utils/assets.dart';
 import '../../Core/widgets/notification/notification_card.dart';
 import '../../Core/widgets/notification/selectable_notification_row.dart';
 import '../../Models/notification_model.dart';
+import '../../Riverpod/Providers/notifications_inbox_provider.dart';
 
-class NotificationsView extends StatefulWidget {
+class NotificationsView extends ConsumerStatefulWidget {
   const NotificationsView({super.key});
 
   @override
-  State<NotificationsView> createState() => _NotificationsViewState();
+  ConsumerState<NotificationsView> createState() => _NotificationsViewState();
 }
 
-class _NotificationsViewState extends State<NotificationsView> {
+class _NotificationsViewState extends ConsumerState<NotificationsView> {
   bool _deleteMode = false;
 
-  late final List<NotifItem> _items = [
-    const NotifItem(
-      id: 't1',
-      section: NotifSection.today,
-      iconBg: Color(0xFFE7F0FF),
-      iconAsset: AppAssets.icStatus,
-      iconColor: Color(0xFF0A70FF),
-      title: 'New Translation Ready',
-      body:
-          'Your audio translation file has been successfully converted to text and translated.',
-      time: '10 min. ago',
-      unread: true,
-    ),
-    const NotifItem(
-      id: 't2',
-      section: NotifSection.today,
-      iconBg: Color(0xFFFFE9D6),
-      iconAsset: AppAssets.icTicket,
-      iconColor: Color(0xFFFF8A00),
-      title: 'A Special Offer Awaits You',
-      body: 'Upgrade to Premium for unlimited photo translations at 50% off.',
-      time: '2h ago',
-      unread: true,
-      action: 'SEE THE OPPORTUNITY',
-    ),
-    const NotifItem(
-      id: 'y1',
-      section: NotifSection.yesterday,
-      iconBg: Color(0xFFE7F7EF),
-      iconAsset: AppAssets.icRobot,
-      iconColor: Color(0xFF10B981),
-      title: 'Ai Chat ile Sohbet et',
-      body: 'Ai chat ile aklına takılan sorular anında yanıt bul.',
-      time: '2:20 PM',
-      unread: false,
-    ),
-  ];
-
-  late final List<NotifItem> _mutableItems = List<NotifItem>.from(_items);
-
   void _deleteOne(String id) {
-    setState(() {
-      _mutableItems.removeWhere((e) => e.id == id);
-    });
+    ref.read(notificationsInboxProvider.notifier).removeNotification(id);
   }
 
   void _toggleDeleteMode() {
@@ -83,12 +43,12 @@ class _NotificationsViewState extends State<NotificationsView> {
 
   @override
   Widget build(BuildContext context) {
+    final items = ref.watch(notificationsInboxProvider);
+
     final topPad = MediaQuery.of(context).padding.top;
-    final today =
-        _mutableItems.where((e) => e.section == NotifSection.today).toList();
-    final yesterday = _mutableItems
-        .where((e) => e.section == NotifSection.yesterday)
-        .toList();
+    final today = items.where((e) => e.section == NotifSection.today).toList();
+    final yesterday =
+        items.where((e) => e.section == NotifSection.yesterday).toList();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -108,28 +68,42 @@ class _NotificationsViewState extends State<NotificationsView> {
                   children: [
                     InkWell(
                       onTap: _onBack,
-                      child: SvgPicture.asset(AppAssets.icBack,
-                          width: 18.sp,
-                          colorFilter: const ColorFilter.mode(
-                              Colors.white, BlendMode.srcIn)),
+                      child: SvgPicture.asset(
+                        AppAssets.icBack,
+                        width: 18.sp,
+                        colorFilter: const ColorFilter.mode(
+                          Colors.white,
+                          BlendMode.srcIn,
+                        ),
+                      ),
                     ),
                     const Spacer(),
-                    Text("Notifications",
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white)),
+                    Text(
+                      "Notifications",
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
                     const Spacer(),
                     InkWell(
                       onTap: _toggleDeleteMode,
                       child: _deleteMode
-                          ? Icon(Icons.close_rounded,
-                              size: 24.sp, color: Colors.white)
-                          : SvgPicture.asset(AppAssets.icTrash,
+                          ? Icon(
+                              Icons.close_rounded,
+                              size: 24.sp,
+                              color: Colors.white,
+                            )
+                          : SvgPicture.asset(
+                              AppAssets.icTrash,
                               width: 22.sp,
                               colorFilter: const ColorFilter.mode(
-                                  Colors.white, BlendMode.srcIn)),
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
                     ),
                   ],
                 ),
@@ -150,14 +124,18 @@ class _NotificationsViewState extends State<NotificationsView> {
                         SizedBox(height: 10.h),
                         ...yesterday.map((e) => _buildRow(e)),
                       ],
-                      if (_mutableItems.isEmpty)
+                      if (items.isEmpty)
                         Padding(
                           padding: EdgeInsets.only(top: 100.h),
                           child: Center(
-                              child: Text("No notifications",
-                                  style: TextStyle(
-                                      color: Colors.white.withOpacity(0.7),
-                                      fontSize: 16.sp))),
+                            child: Text(
+                              "No notifications",
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.7),
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ),
                         ),
                     ],
                   ),

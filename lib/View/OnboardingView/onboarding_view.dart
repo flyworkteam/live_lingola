@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../Core/Routes/app_routes.dart';
 import '../../Core/Theme/app_colors.dart';
@@ -90,6 +91,8 @@ class _OnboardingViewState extends State<OnboardingView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     final t = (_page).clamp(0.0, 1.0);
     final e = Curves.easeInOutCubic.transform(t);
 
@@ -262,8 +265,8 @@ class _OnboardingViewState extends State<OnboardingView> {
                   right: 20,
                   child: _TextSwap(
                     progress: e,
-                    t1: 'Break Down\nLanguage Barriers',
-                    t2: 'Live Translation\nExperience',
+                    t1: l10n.onboardingTitle1,
+                    t2: l10n.onboardingTitle2,
                   ),
                 ),
                 Positioned(
@@ -272,8 +275,8 @@ class _OnboardingViewState extends State<OnboardingView> {
                   right: 30,
                   child: _BodySwap(
                     progress: e,
-                    b1: 'With Live Lingola, no matter where you are in the world, foreign languages are no longer a barrier. Experience communication at its most fluid.',
-                    b2: 'Instantly translate your voice and surrounding text into your own language. Conversations are now seamless with our AI-powered technology.',
+                    b1: l10n.onboardingBody1,
+                    b2: l10n.onboardingBody2,
                   ),
                 ),
               ],
@@ -294,9 +297,9 @@ class _OnboardingViewState extends State<OnboardingView> {
                   elevation: 0,
                 ),
                 onPressed: _goLogin,
-                child: const Text(
-                  'Get Started',
-                  style: TextStyle(
+                child: Text(
+                  l10n.getStarted,
+                  style: const TextStyle(
                     fontFamily: AppTextStyles.fontFamily,
                     fontWeight: FontWeight.w600,
                     fontSize: 16,

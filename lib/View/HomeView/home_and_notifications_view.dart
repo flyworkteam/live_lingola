@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lingola_app/View/PhotoTranslateView/photo_translate_view.dart';
 
 import '../../Core/Theme/app_colors.dart';
@@ -47,7 +48,9 @@ class _HomeAndNotificationsViewState extends State<HomeAndNotificationsView> {
             CurveTween(curve: Curves.easeOutCubic),
           );
           return SlideTransition(
-              position: animation.drive(tween), child: child);
+            position: animation.drive(tween),
+            child: child,
+          );
         },
       ),
     );
@@ -66,8 +69,8 @@ class _HomeAndNotificationsViewState extends State<HomeAndNotificationsView> {
     _pushSlide(const AiChatView());
   }
 
-  void _handleQuickActionTap(dynamic data) {
-    final String title = ((data.title ?? '') as String).toLowerCase();
+  void _handleQuickActionTap(QuickActionData data) {
+    final String title = data.title.toLowerCase();
 
     if (title.contains('ai') || title.contains('chat')) {
       _openAiChat();
@@ -142,7 +145,7 @@ class _HomeTab extends StatelessWidget {
 
   final VoidCallback onProfileTap;
 
-  final void Function(dynamic data) onQuickActionTap;
+  final void Function(QuickActionData data) onQuickActionTap;
 
   const _HomeTab({
     required this.onNotificationsTap,
@@ -158,7 +161,9 @@ class _HomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final bottomPadding = MediaQuery.of(context).padding.bottom;
+    final actions = quickActions(context);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 18.w),
@@ -212,7 +217,7 @@ class _HomeTab extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Let’s start translating into\nyour desired language",
+                    l10n.homeWelcomeTitle,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 22.sp,
@@ -228,17 +233,17 @@ class _HomeTab extends StatelessWidget {
                   children: [
                     FeatureBtn(
                       svgPath: AppAssets.icMicFeature,
-                      title: "Instant Voice\nTranslation",
+                      title: l10n.homeFeatureVoice,
                       onTap: onVoiceTap,
                     ),
                     FeatureBtn(
                       svgPath: AppAssets.icCameraFeature,
-                      title: "Instant Photo\nTranslation",
+                      title: l10n.homeFeaturePhoto,
                       onTap: onPhotoTap,
                     ),
                     FeatureBtn(
                       svgPath: AppAssets.icTextFeature,
-                      title: "Instant Text\nTranslation",
+                      title: l10n.homeFeatureText,
                       onTap: onTextTap,
                     ),
                   ],
@@ -255,7 +260,7 @@ class _HomeTab extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Quick Actions",
+                    l10n.quickActionsTitle,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 20.sp,
@@ -273,10 +278,10 @@ class _HomeTab extends StatelessWidget {
             sliver: SliverGrid(
               delegate: SliverChildBuilderDelegate(
                 (context, i) => QuickActionItem(
-                  data: quickActions[i],
-                  onTap: () => onQuickActionTap(quickActions[i]),
+                  data: actions[i],
+                  onTap: () => onQuickActionTap(actions[i]),
                 ),
-                childCount: quickActions.length,
+                childCount: actions.length,
               ),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:lingola_app/Riverpod/Controllers/OnboardingController/onboarding_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lingola_app/Riverpod/Providers/onboarding_preferences_provider.dart';
 
 class OnboardingFlowView2 extends ConsumerWidget {
   final VoidCallback onNext;
@@ -13,13 +14,48 @@ class OnboardingFlowView2 extends ConsumerWidget {
     required this.onBack,
   });
 
+  String _localizedLanguageName(AppLocalizations l10n, String code) {
+    switch (code) {
+      case 'tr':
+        return l10n.languageTurkish;
+      case 'en':
+        return l10n.languageEnglish;
+      case 'de':
+        return l10n.languageGerman;
+      case 'it':
+        return l10n.languageItalian;
+      case 'fr':
+        return l10n.languageFrench;
+      case 'ja':
+        return l10n.languageJapanese;
+      case 'es':
+        return l10n.languageSpanish;
+      case 'ru':
+        return l10n.languageRussian;
+      case 'pt':
+        return l10n.languagePortuguese;
+      case 'ko':
+        return l10n.languageKorean;
+      case 'hi':
+        return l10n.languageHindi;
+      default:
+        return code;
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final s = ref.watch(onboardingControllerProvider);
     final c = ref.read(onboardingControllerProvider.notifier);
 
     final bottomPad = 18.h;
     final bottomCtaSpace = (51 + bottomPad + 12).h;
+
+    void handleNext() {
+      if (!s.canGoNext) return;
+      onNext();
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
@@ -28,14 +64,12 @@ class OnboardingFlowView2 extends ConsumerWidget {
         bottom: false,
         child: Stack(
           children: [
-            // -------- CONTENT--------
             Positioned.fill(
               child: Padding(
                 padding: EdgeInsets.only(bottom: bottomCtaSpace),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // BACK
                     Align(
                       alignment: Alignment.topLeft,
                       child: Padding(
@@ -49,7 +83,7 @@ class OnboardingFlowView2 extends ConsumerWidget {
                               padding: EdgeInsets.symmetric(horizontal: 12.w),
                             ),
                             child: Text(
-                              'Back',
+                              l10n.back,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 16.sp,
@@ -60,16 +94,13 @@ class OnboardingFlowView2 extends ConsumerWidget {
                         ),
                       ),
                     ),
-
                     SizedBox(height: 69.h),
-
-                    // TITLE
                     SizedBox(
                       key: const ValueKey('onboarding_title'),
                       width: 255.w,
                       height: 30.h,
                       child: Text(
-                        'Select Language',
+                        l10n.onboardingFlow2Title,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -80,15 +111,12 @@ class OnboardingFlowView2 extends ConsumerWidget {
                         ),
                       ),
                     ),
-
                     SizedBox(height: 2.h),
-
-                    // SUBTITLE
                     SizedBox(
                       width: 341.w,
                       height: 46.h,
                       child: Text(
-                        'Select the language you want to translate.\nYour selection affects the entire application.',
+                        l10n.onboardingFlow2Subtitle,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -99,18 +127,15 @@ class OnboardingFlowView2 extends ConsumerWidget {
                         ),
                       ),
                     ),
-
                     SizedBox(height: 18.h),
-
                     _FromToSegmentFigma(
+                      fromText: l10n.from,
+                      toText: l10n.to,
                       isFrom: s.isSelectingFrom,
                       onFromTap: () => c.setSelectingFrom(true),
                       onToTap: () => c.setSelectingFrom(false),
                     ),
-
                     SizedBox(height: 40.h),
-
-                    // LIST
                     Expanded(
                       child: ListView.separated(
                         padding: EdgeInsets.fromLTRB(36.w, 0, 36.w, 0),
@@ -120,12 +145,12 @@ class OnboardingFlowView2 extends ConsumerWidget {
                           final lang = kLanguages[i];
 
                           final selected = s.isSelectingFrom
-                              ? (lang.code == s.fromLangCode)
-                              : (lang.code == s.toLangCode);
+                              ? lang.code == s.fromLangCode
+                              : lang.code == s.toLangCode;
 
                           return _LanguagePill(
                             flagAsset: lang.flagAsset,
-                            name: lang.name,
+                            name: _localizedLanguageName(l10n, lang.code),
                             selected: selected,
                             onTap: () {
                               if (s.isSelectingFrom) {
@@ -142,8 +167,6 @@ class OnboardingFlowView2 extends ConsumerWidget {
                 ),
               ),
             ),
-
-            // -------- NEXT--------
             Align(
               alignment: Alignment.bottomCenter,
               child: SafeArea(
@@ -154,7 +177,7 @@ class OnboardingFlowView2 extends ConsumerWidget {
                     width: 321.w,
                     height: 51.h,
                     child: ElevatedButton(
-                      onPressed: s.canGoNext ? onNext : null,
+                      onPressed: s.canGoNext ? handleNext : null,
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
                         backgroundColor: const Color(0xFF0A70FF),
@@ -164,7 +187,7 @@ class OnboardingFlowView2 extends ConsumerWidget {
                         ),
                       ),
                       child: Text(
-                        'Next',
+                        l10n.next,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 16.sp,
@@ -186,11 +209,15 @@ class OnboardingFlowView2 extends ConsumerWidget {
 
 class _FromToSegmentFigma extends StatelessWidget {
   final bool isFrom;
+  final String fromText;
+  final String toText;
   final VoidCallback onFromTap;
   final VoidCallback onToTap;
 
   const _FromToSegmentFigma({
     required this.isFrom,
+    required this.fromText,
+    required this.toText,
     required this.onFromTap,
     required this.onToTap,
   });
@@ -224,7 +251,7 @@ class _FromToSegmentFigma extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'From',
+                      fromText,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -250,7 +277,7 @@ class _FromToSegmentFigma extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'To',
+                      toText,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -336,7 +363,6 @@ class _LanguagePill extends StatelessWidget {
   }
 }
 
-/// ---- Languages list ----
 class LanguageOption {
   final String code;
   final String name;

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>479984027693-l703ot47orm9unh8ssasbgqn7a739a3s.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.479984027693-l703ot47orm9unh8ssasbgqn7a739a3s</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAHSDvtxk1vGWCNa6SGdYONpZ3F_ad_Ze4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>479984027693</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.lingoraApp</string>
+	<key>PROJECT_ID</key>
+	<string>live-lingola</string>
+	<key>STORAGE_BUCKET</key>
+	<string>live-lingola.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:479984027693:ios:65d2ecfd877ded12a290a4</string>
+</dict>
+</plist>

@@ -29,8 +29,8 @@ class VoiceProBackgroundPainter extends CustomPainter {
       colors: [
         const Color(0xFF0A70FF),
         const Color(0xFF03B7FF),
-        const Color(0xFFEFF2F9).withOpacity(0.72),
-        const Color(0xFFEFF2F9).withOpacity(0.0),
+        const Color(0xFFEFF2F9).withValues(alpha: 0.72),
+        const Color(0xFFEFF2F9).withValues(alpha: 0.0),
       ],
       stops: const [0.0043, 0.2741, 0.575, 0.9957],
     );
@@ -66,7 +66,7 @@ class VoiceProBackgroundPainter extends CustomPainter {
 
     if (stage != ProStage.empty) {
       final wavePaint = Paint()
-        ..color = const Color(0xFF0A70FF).withOpacity(0.75)
+        ..color = const Color(0xFF0A70FF).withValues(alpha: 0.75)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.0;
 

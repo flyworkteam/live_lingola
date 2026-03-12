@@ -1,28 +1,37 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../Core/Theme/app_colors.dart';
 import '../../Core/Routes/app_routes.dart';
 import '../../Core/Utils/assets.dart';
+import '../../Riverpod/Providers/current_user_provider.dart';
+import '../../Riverpod/Controllers/NotificationController/notification_settings_controller.dart';
 
 import '../ProfileView/ProfileSettingsView/profile_settings_view.dart';
 import '../ProfileView/ShareFriendView/share_friend_view.dart';
 import '../ProfileView/FaqView/faq_view.dart';
 import '../ProfileView/LanguageSelectView/select_language_view.dart';
 
-class ProfileView extends StatefulWidget {
+class ProfileView extends ConsumerStatefulWidget {
   const ProfileView({super.key});
 
   @override
-  State<ProfileView> createState() => _ProfileViewState();
+  ConsumerState<ProfileView> createState() => _ProfileViewState();
 }
 
 class _ProPill extends StatelessWidget {
   final String iconPath;
   final String text;
-  const _ProPill({required this.iconPath, required this.text});
+
+  const _ProPill({
+    required this.iconPath,
+    required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +48,7 @@ class _ProPill extends StatelessWidget {
         border: Border.all(color: Colors.white, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(.08),
+            color: Colors.black.withValues(alpha: .08),
             blurRadius: 10,
             offset: const Offset(0, 6),
           ),
@@ -71,9 +80,7 @@ class _ProPill extends StatelessWidget {
   }
 }
 
-class _ProfileViewState extends State<ProfileView> {
-  static const String _avatarPath = 'assets/images/logout/Alex.png';
-
+class _ProfileViewState extends ConsumerState<ProfileView> {
   static const String _icProfile = AppAssets.icProfile;
   static const String _icNotification = AppAssets.icProfileNotification;
   static const String _icAppLang = AppAssets.icAppLang;
@@ -89,17 +96,16 @@ class _ProfileViewState extends State<ProfileView> {
 
   static const double _iconSize = 23;
 
-  bool _notificationsOn = true;
-
-  void _pushSlide(Widget page) {
-    Navigator.of(context).push(
+  Future<void> _pushSlide(Widget page) async {
+    await Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (_, __, ___) => page,
         transitionsBuilder: (_, animation, __, child) {
-          final tween =
-              Tween(begin: const Offset(1, 0), end: Offset.zero).chain(
-            CurveTween(curve: Curves.easeOutCubic),
-          );
+          final tween = Tween<Offset>(
+            begin: const Offset(1, 0),
+            end: Offset.zero,
+          ).chain(CurveTween(curve: Curves.easeOutCubic));
+
           return SlideTransition(
             position: animation.drive(tween),
             child: child,
@@ -107,6 +113,10 @@ class _ProfileViewState extends State<ProfileView> {
         },
       ),
     );
+
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   void _openProfileSettings() => _pushSlide(const ProfileSettingsView());
@@ -114,12 +124,71 @@ class _ProfileViewState extends State<ProfileView> {
   void _openFaq() => _pushSlide(const FaqView());
   void _openLanguage() => _pushSlide(const SelectLanguageView());
 
+  String _displayName(Map<String, dynamic>? user) {
+    final name = user?['name']?.toString().trim();
+    if (name != null && name.isNotEmpty) return name;
+
+    final email = user?['email']?.toString().trim();
+    if (email != null && email.isNotEmpty) {
+      return email.split('@').first;
+    }
+
+    return 'User';
+  }
+
+  String? _photoUrl(Map<String, dynamic>? user) {
+    final url = user?['photo_url']?.toString().trim();
+    if (url == null || url.isEmpty) return null;
+    return url;
+  }
+
+  Widget _buildAvatar(String? photoUrl) {
+    return Container(
+      width: 106.w,
+      height: 106.w,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(3.w),
+        child: ClipOval(
+          child: photoUrl != null
+              ? Image.network(
+                  photoUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => Container(
+                    color: Colors.white,
+                    alignment: Alignment.center,
+                    child: Icon(
+                      Icons.person,
+                      color: const Color(0xFF0F172A),
+                      size: 34.sp,
+                    ),
+                  ),
+                )
+              : Container(
+                  color: Colors.white,
+                  alignment: Alignment.center,
+                  child: Icon(
+                    Icons.person,
+                    color: const Color(0xFF0F172A),
+                    size: 34.sp,
+                  ),
+                ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _showLogoutDialog() async {
+    final l10n = AppLocalizations.of(context)!;
+
     final confirmed = await showGeneralDialog<bool>(
       context: context,
       barrierDismissible: true,
       barrierLabel: 'logout',
-      barrierColor: Colors.black.withOpacity(.10),
+      barrierColor: Colors.black.withValues(alpha: 0.10),
       transitionDuration: const Duration(milliseconds: 180),
       pageBuilder: (context, anim1, anim2) {
         return SafeArea(
@@ -140,7 +209,6 @@ class _ProfileViewState extends State<ProfileView> {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [Color(0xFFFEF4F4), Color(0xFFFFFFFF)],
-                        stops: [0.0, 1.0],
                       ),
                       borderRadius: BorderRadius.circular(22.r),
                       boxShadow: const [
@@ -186,26 +254,25 @@ class _ProfileViewState extends State<ProfileView> {
                         ),
                         SizedBox(height: 18.h),
                         Text(
-                          "You are about to log out",
+                          l10n.profileLogoutDialogTitle,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Lato',
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w700,
-                            height: 1.0,
                             color: const Color(0xFF0F172A),
                           ),
                         ),
                         SizedBox(height: 12.h),
                         Text(
-                          "See you again soon! We'll miss your\nbreathing exercises.",
+                          l10n.profileLogoutDialogSubtitle,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Lato',
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w300,
-                            height: 1.0,
-                            color: const Color(0xFF0F172A).withOpacity(.70),
+                            color:
+                                const Color(0xFF0F172A).withValues(alpha: 0.70),
                           ),
                         ),
                         SizedBox(height: 22.h),
@@ -223,12 +290,11 @@ class _ProfileViewState extends State<ProfileView> {
                               ),
                             ),
                             child: Text(
-                              "Log out",
+                              l10n.logOut,
                               style: TextStyle(
                                 fontFamily: 'Lato',
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
-                                height: 1.0,
                               ),
                             ),
                           ),
@@ -243,12 +309,11 @@ class _ProfileViewState extends State<ProfileView> {
                               vertical: 6.h,
                             ),
                             child: Text(
-                              "Cancel",
+                              l10n.cancel,
                               style: TextStyle(
                                 fontFamily: 'Lato',
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
-                                height: 1.0,
                                 color: const Color(0xFF0A70FF),
                               ),
                             ),
@@ -276,9 +341,18 @@ class _ProfileViewState extends State<ProfileView> {
       },
     );
 
-    if (!mounted) return;
-
     if (confirmed == true) {
+      try {
+        await OneSignal.logout();
+        debugPrint('ONESIGNAL LOGOUT OK');
+      } catch (e) {
+        debugPrint('ONESIGNAL LOGOUT ERROR: $e');
+      }
+
+      if (!mounted) return;
+
+      ref.read(currentUserProvider.notifier).state = null;
+
       Navigator.of(context).pushNamedAndRemoveUntil(
         AppRoutes.login,
         (route) => false,
@@ -288,6 +362,15 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final user = ref.watch(currentUserProvider);
+    final userName = _displayName(user);
+    final photoUrl = _photoUrl(user);
+    final notificationSettings =
+        ref.watch(notificationSettingsControllerProvider);
+    final notificationController =
+        ref.read(notificationSettingsControllerProvider.notifier);
+
     final topInset = MediaQuery.of(context).padding.top;
     final bottomInset = MediaQuery.of(context).padding.bottom;
 
@@ -310,10 +393,7 @@ class _ProfileViewState extends State<ProfileView> {
               ),
               child: Column(
                 children: [
-                  // 1. Status Bar Boşluğu
                   SizedBox(height: topInset),
-
-                  // 2. Header
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 18.w),
                     child: SizedBox(
@@ -342,13 +422,11 @@ class _ProfileViewState extends State<ProfileView> {
                           Expanded(
                             child: Center(
                               child: Text(
-                                "Profile",
+                                l10n.profileTitle,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.w500,
-                                  height: 26 / 20,
-                                  letterSpacing: 0,
                                   color: Colors.white,
                                 ),
                               ),
@@ -359,72 +437,39 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                     ),
                   ),
-
-                  // 3. Profil Detayları ve Listeler
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 18.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         SizedBox(height: 18.h),
-
-                        Center(
-                          child: Container(
-                            width: 106.w,
-                            height: 106.w,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(3.w),
-                              child: ClipOval(
-                                child: Image.asset(
-                                  _avatarPath,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) => Icon(
-                                    Icons.person,
-                                    color: const Color(0xFF0F172A),
-                                    size: _iconSize.sp,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
+                        Center(child: _buildAvatar(photoUrl)),
                         SizedBox(height: 14.h),
-
                         Center(
                           child: Text(
-                            "Alex Johnson",
+                            userName,
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 20.sp,
                               fontWeight: FontWeight.w700,
-                              height: 1.0,
                               color: Colors.white,
                             ),
                           ),
                         ),
-
                         SizedBox(height: 5.h),
-
                         Center(
                           child: Text(
-                            "Free Version",
+                            l10n.freeVersion,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 12.sp,
                               fontWeight: FontWeight.w500,
-                              height: 26 / 12,
                               color: const Color(0x80000000),
                             ),
                           ),
                         ),
-
                         SizedBox(height: 18.h),
-
                         InkWell(
                           onTap: () {},
                           borderRadius: BorderRadius.circular(18.r),
@@ -449,8 +494,8 @@ class _ProfileViewState extends State<ProfileView> {
                               border: Border.all(color: Colors.white, width: 2),
                               boxShadow: [
                                 BoxShadow(
-                                  color:
-                                      const Color(0xFF0A70FF).withOpacity(.25),
+                                  color: const Color(0xFF0A70FF)
+                                      .withValues(alpha: 0.25),
                                   blurRadius: 18,
                                   offset: const Offset(0, 10),
                                 ),
@@ -460,7 +505,7 @@ class _ProfileViewState extends State<ProfileView> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    "Unlimited access to\nall features",
+                                    l10n.profileProBannerTitle,
                                     style: TextStyle(
                                       fontFamily: 'Poppins',
                                       fontSize: 16.sp,
@@ -471,14 +516,16 @@ class _ProfileViewState extends State<ProfileView> {
                                     ),
                                   ),
                                 ),
-                                const _ProPill(iconPath: _icPro, text: "Pro"),
+                                _ProPill(
+                                  iconPath: _icPro,
+                                  text: l10n.pro,
+                                ),
                               ],
                             ),
                           ),
                         ),
-
                         SizedBox(height: 18.h),
-                        _sectionTitle("ACCOUNT SETTINGS"),
+                        _sectionTitle(l10n.accountSettingsSection),
                         SizedBox(height: 8.h),
                         _whiteCard(
                           Column(
@@ -486,31 +533,32 @@ class _ProfileViewState extends State<ProfileView> {
                               _assetTile(
                                 iconBg: const Color(0xFFEAF2FF),
                                 assetPath: _icProfile,
-                                title: "Profile Settings",
+                                title: l10n.profileSettings,
                                 onTap: _openProfileSettings,
                               ),
                               _divider(),
                               _assetSwitchTile(
                                 iconBg: const Color(0xFFF4ECFF),
                                 assetPath: _icNotification,
-                                title: "Notifications",
-                                value: _notificationsOn,
-                                onChanged: (v) =>
-                                    setState(() => _notificationsOn = v),
+                                title: l10n.notifications,
+                                value:
+                                    notificationSettings.notificationsEnabled,
+                                onChanged: (v) {
+                                  notificationController.toggleNotifications(v);
+                                },
                               ),
                               _divider(),
                               _assetTile(
                                 iconBg: const Color(0xFFE9FBF4),
                                 assetPath: _icAppLang,
-                                title: "App Language",
+                                title: l10n.appLanguage,
                                 onTap: _openLanguage,
                               ),
                             ],
                           ),
                         ),
-
                         SizedBox(height: 14.h),
-                        _sectionTitle("GENERAL"),
+                        _sectionTitle(l10n.generalSection),
                         SizedBox(height: 8.h),
                         _whiteCard(
                           Column(
@@ -518,55 +566,54 @@ class _ProfileViewState extends State<ProfileView> {
                               _assetTile(
                                 iconBg: const Color(0xFFE9FBF4),
                                 assetPath: _icPrivacy,
-                                title: "Privacy Policy",
+                                title: l10n.privacyPolicy,
                                 onTap: () {},
                               ),
                               _divider(),
                               _assetTile(
                                 iconBg: const Color(0xFFEFF6FF),
                                 assetPath: _icTerms,
-                                title: "Terms of Service",
+                                title: l10n.termsOfService,
                                 onTap: () {},
                               ),
                               _divider(),
                               _assetTile(
                                 iconBg: const Color(0xFFEFF6FF),
                                 assetPath: _icShareFriend,
-                                title: "Share Friend",
+                                title: l10n.shareFriend,
                                 onTap: _openShareFriend,
                               ),
                               _divider(),
                               _assetTile(
                                 iconBg: const Color(0xFFFFF2E6),
                                 assetPath: _icRate,
-                                title: "Rate Us",
+                                title: l10n.rateUs,
                                 onTap: () {},
                               ),
                               _divider(),
                               _assetTile(
                                 iconBg: const Color(0xFFEFF2F9),
                                 assetPath: _icFaq,
-                                title: "F.A.Q.",
+                                title: l10n.faqTitleShort,
                                 onTap: _openFaq,
                               ),
                               _divider(),
                               _assetTile(
                                 iconBg: const Color(0xFFEFF6FF),
                                 assetPath: _icSupport,
-                                title: "Support",
+                                title: l10n.support,
                                 onTap: () {},
                               ),
                               _divider(),
                               _assetTile(
                                 iconBg: const Color(0xFFFFF7ED),
                                 assetPath: _icFeedback,
-                                title: "Feedback",
+                                title: l10n.feedback,
                                 onTap: () {},
                               ),
                             ],
                           ),
                         ),
-
                         SizedBox(height: 14.h),
                         InkWell(
                           borderRadius: BorderRadius.circular(14.r),
@@ -577,8 +624,9 @@ class _ProfileViewState extends State<ProfileView> {
                             decoration: BoxDecoration(
                               color: const Color(0xFFFFEFF0),
                               borderRadius: BorderRadius.circular(14.r),
-                              border:
-                                  Border.all(color: const Color(0xFFFFD6D9)),
+                              border: Border.all(
+                                color: const Color(0xFFFFD6D9),
+                              ),
                             ),
                             child: Row(
                               children: [
@@ -604,7 +652,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 ),
                                 SizedBox(width: 12.w),
                                 Text(
-                                  "Çıkış Yap",
+                                  l10n.logOut,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 14.sp,
@@ -616,18 +664,18 @@ class _ProfileViewState extends State<ProfileView> {
                             ),
                           ),
                         ),
-
-                        // Alt boşluk ve Versiyon
                         Padding(
                           padding: EdgeInsets.only(
-                              top: 10.h, bottom: bottomInset + 10.h),
+                            top: 10.h,
+                            bottom: bottomInset + 10.h,
+                          ),
                           child: Center(
                             child: Text(
                               "version 2.1.0",
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 11.sp,
-                                color: Colors.black.withOpacity(.35),
+                                color: Colors.black.withValues(alpha: 0.35),
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
@@ -654,8 +702,6 @@ class _ProfileViewState extends State<ProfileView> {
           fontFamily: 'Poppins',
           fontSize: 12.sp,
           fontWeight: FontWeight.w500,
-          height: 1.0,
-          letterSpacing: 0,
           color: const Color(0x80000000),
         ),
       ),
@@ -669,7 +715,7 @@ class _ProfileViewState extends State<ProfileView> {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFFDEE5F7).withOpacity(.75),
+            color: const Color(0xFFDEE5F7).withValues(alpha: 0.75),
             blurRadius: 16,
             offset: const Offset(0, 10),
           ),
@@ -693,7 +739,6 @@ class _ProfileViewState extends State<ProfileView> {
         fontFamily: 'Poppins',
         fontSize: 14.sp,
         fontWeight: FontWeight.w500,
-        height: 1.0,
         letterSpacing: -0.3,
         color: const Color(0xFF0F172A),
       );
