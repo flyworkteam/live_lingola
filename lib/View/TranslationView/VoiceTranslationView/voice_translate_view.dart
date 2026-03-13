@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lingola_app/Core/Utils/assets.dart';
@@ -8,6 +7,7 @@ import 'package:lingola_app/Core/widgets/voice_translate/voice_plan_card.dart';
 import 'package:lingola_app/Core/widgets/voice_translate/voice_top_bar.dart';
 import 'package:lingola_app/View/TranslationView/VoiceTranslationView/voice_translate_free_live_view.dart';
 import 'package:lingola_app/View/TranslationView/VoiceTranslationView/voice_translate_pro_live_view.dart';
+import 'package:lingola_app/l10n/app_localizations.dart';
 
 class VoiceTranslateView extends StatefulWidget {
   final VoidCallback? onBackToHome;

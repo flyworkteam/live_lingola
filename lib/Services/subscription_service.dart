@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class SubscriptionService {
-  static const String baseUrl = "http://YOUR_IP:4000";
+  static const String baseUrl = 'https://livelingolaapp.fly-work.com';
 
   static Future<bool> isPro(int userId) async {
     try {

@@ -15,7 +15,7 @@ class GeminiService {
 
   static final GeminiService instance = GeminiService._();
 
-  static const String _baseUrl = 'http://127.0.0.1:4000';
+  static const String _baseUrl = 'https://livelingolaapp.fly-work.com';
   static const String _systemPrompt = '''
 You are Lingola AI, a helpful assistant inside a language learning and translation app.
 

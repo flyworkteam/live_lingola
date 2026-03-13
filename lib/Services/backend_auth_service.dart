@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class BackendAuthService {
-  static const String baseUrl = "http://127.0.0.1:4000";
+  static const String baseUrl = 'https://livelingolaapp.fly-work.com';
 
   static Future<String?> _getIdToken() async {
     final user = FirebaseAuth.instance.currentUser;

@@ -22,7 +22,7 @@ class AppTheme {
           bodyMedium: AppTextStyles.onboardingBody15l,
           labelLarge: AppTextStyles.button16r,
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           color: AppColors.card,
           surfaceTintColor: Colors.transparent,
           elevation: 0,

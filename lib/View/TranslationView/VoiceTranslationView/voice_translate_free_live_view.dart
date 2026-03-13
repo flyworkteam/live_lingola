@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:lingola_app/Core/Utils/assets.dart';
 import 'package:lingola_app/Core/widgets/navigation/bottom_nav_item_tile.dart';
 import 'package:lingola_app/Riverpod/Providers/current_user_provider.dart';
+import 'package:lingola_app/l10n/app_localizations.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
@@ -34,7 +34,7 @@ class VoiceTranslateFreeLiveView extends ConsumerStatefulWidget {
 class _VoiceTranslateFreeLiveViewState
     extends ConsumerState<VoiceTranslateFreeLiveView>
     with SingleTickerProviderStateMixin {
-  static const String _baseUrl = "http://127.0.0.1:4000";
+static const String _baseUrl = "https://livelingolaapp.fly-work.com";
 
   _FreeStage _stage = _FreeStage.idle;
 

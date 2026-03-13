@@ -3,11 +3,11 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:lingola_app/l10n/app_localizations.dart';
 
 import '../../../Core/Utils/assets.dart';
 import '../../../Riverpod/Providers/current_user_provider.dart';
@@ -22,7 +22,7 @@ class ProfileSettingsView extends ConsumerStatefulWidget {
 
 class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
   static const double _iconPx = 24;
-  static const String _baseUrl = "http://127.0.0.1:4000";
+static const String _baseUrl = "https://livelingolaapp.fly-work.com";
 
   final TextEditingController _nameCtrl = TextEditingController();
   final TextEditingController _mailCtrl = TextEditingController();

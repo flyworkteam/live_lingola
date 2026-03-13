@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:lingola_app/Core/Utils/assets.dart';
 import 'package:lingola_app/Core/widgets/common/app_card.dart';
@@ -17,6 +16,7 @@ import 'package:lingola_app/Core/widgets/text_translation/example_tile.dart';
 import 'package:lingola_app/Core/widgets/text_translation/lang_bar.dart';
 import 'package:lingola_app/Core/widgets/text_translation/lang_row.dart';
 import 'package:lingola_app/Core/widgets/text_translation/models.dart';
+import 'package:lingola_app/l10n/app_localizations.dart';
 
 class TextTranslationView extends StatefulWidget {
   final VoidCallback? onBackToHome;
@@ -29,7 +29,7 @@ class TextTranslationView extends StatefulWidget {
 
 class _TextTranslationViewState extends State<TextTranslationView> {
   static const int _charLimit = 2000;
-  static const String _baseUrl = "http://127.0.0.1:4000";
+static const String _baseUrl = "https://livelingolaapp.fly-work.com";
 
   final TextEditingController _sourceCtrl = TextEditingController(
     text: "Bugün hava çok güzel, biraz\nyürüyüş yapmak istiyorum.",

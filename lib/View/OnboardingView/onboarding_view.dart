@@ -3,7 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lingola_app/l10n/app_localizations.dart';
 
 import '../../Core/Routes/app_routes.dart';
 import '../../Core/Theme/app_colors.dart';

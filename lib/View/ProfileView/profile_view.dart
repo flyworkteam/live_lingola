@@ -1,21 +1,22 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lingola_app/Services/revenuecat_service.dart';
+import 'package:lingola_app/l10n/app_localizations.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
-import '../../Core/Theme/app_colors.dart';
 import '../../Core/Routes/app_routes.dart';
+import '../../Core/Theme/app_colors.dart';
 import '../../Core/Utils/assets.dart';
-import '../../Riverpod/Providers/current_user_provider.dart';
 import '../../Riverpod/Controllers/NotificationController/notification_settings_controller.dart';
-
-import '../ProfileView/ProfileSettingsView/profile_settings_view.dart';
-import '../ProfileView/ShareFriendView/share_friend_view.dart';
+import '../../Riverpod/Providers/current_user_provider.dart';
 import '../ProfileView/FaqView/faq_view.dart';
 import '../ProfileView/LanguageSelectView/select_language_view.dart';
+import '../ProfileView/ProfileSettingsView/profile_settings_view.dart';
+import '../ProfileView/ShareFriendView/share_friend_view.dart';
 
 class ProfileView extends ConsumerStatefulWidget {
   const ProfileView({super.key});
@@ -95,6 +96,38 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
   static const String _icPro = AppAssets.icPro;
 
   static const double _iconSize = 23;
+
+  // PREMIUM DURUMUNU TUTMAK İÇİN STATE
+  bool _isPremiumUser = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkPremiumStatus();
+  }
+
+  // EKRAN AÇILDIĞINDA REVENUECAT'TEN DURUMU KONTROL ET
+  Future<void> _checkPremiumStatus() async {
+    final isPro = await RevenueCatService.isProEntitlementActive();
+    if (mounted) {
+      setState(() {
+        _isPremiumUser = isPro;
+      });
+    }
+  }
+
+  // PAYWALL AÇMA METODU (YENİ)
+  Future<void> _handlePremiumTap() async {
+    // Eğer kullanıcı zaten Premium ise hiçbir şey yapma
+    if (_isPremiumUser) return;
+
+    final isProNow = await RevenueCatService.showPaywall();
+    if (isProNow && mounted) {
+      setState(() {
+        _isPremiumUser = true;
+      });
+    }
+  }
 
   Future<void> _pushSlide(Widget page) async {
     await Navigator.of(context).push(
@@ -458,73 +491,88 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                           ),
                         ),
                         SizedBox(height: 5.h),
+                        // PREMIUM DURUMUNA GÖRE YAZIYI DEĞİŞTİR
                         Center(
-                          child: Text(
-                            l10n.freeVersion,
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w500,
-                              color: const Color(0x80000000),
+                          child: InkWell(
+                            onTap: _isPremiumUser ? null : _handlePremiumTap,
+                            child: Text(
+                              _isPremiumUser ? l10n.pro : l10n.freeVersion,
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w500,
+                                color: _isPremiumUser
+                                    ? const Color(
+                                        0xFFFFD700) // Premium ise altın sarısı
+                                    : const Color(
+                                        0x80000000), // Değilse siyahımtırak
+                              ),
                             ),
                           ),
                         ),
                         SizedBox(height: 18.h),
-                        InkWell(
-                          onTap: () {},
-                          borderRadius: BorderRadius.circular(18.r),
-                          child: Container(
-                            height: 92.h,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 18.w,
-                              vertical: 16.h,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18.r),
-                              gradient: const LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Color(0xFF21B6FF),
-                                  Color(0xFF0A70FF),
-                                  Color(0xFF0057FF),
-                                ],
-                                stops: [0.0, 0.55, 1.0],
+
+                        // KULLANICI PREMIUM DEĞİLSE REKLAM BANNERINI GÖSTER
+                        if (!_isPremiumUser) ...[
+                          InkWell(
+                            onTap:
+                                _handlePremiumTap, // TIKLANDIĞINDA PAYWALL AÇILACAK
+                            borderRadius: BorderRadius.circular(18.r),
+                            child: Container(
+                              height: 92.h,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 18.w,
+                                vertical: 16.h,
                               ),
-                              border: Border.all(color: Colors.white, width: 2),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color(0xFF0A70FF)
-                                      .withValues(alpha: 0.25),
-                                  blurRadius: 18,
-                                  offset: const Offset(0, 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(18.r),
+                                gradient: const LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Color(0xFF21B6FF),
+                                    Color(0xFF0A70FF),
+                                    Color(0xFF0057FF),
+                                  ],
+                                  stops: [0.0, 0.55, 1.0],
                                 ),
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    l10n.profileProBannerTitle,
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16.sp,
-                                      height: 20 / 16,
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: -0.3,
-                                      color: Colors.white,
+                                border:
+                                    Border.all(color: Colors.white, width: 2),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF0A70FF)
+                                        .withValues(alpha: 0.25),
+                                    blurRadius: 18,
+                                    offset: const Offset(0, 10),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      l10n.profileProBannerTitle,
+                                      style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16.sp,
+                                        height: 20 / 16,
+                                        fontWeight: FontWeight.w600,
+                                        letterSpacing: -0.3,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                _ProPill(
-                                  iconPath: _icPro,
-                                  text: l10n.pro,
-                                ),
-                              ],
+                                  _ProPill(
+                                    iconPath: _icPro,
+                                    text: l10n.pro,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 18.h),
+                          SizedBox(height: 18.h),
+                        ],
+
                         _sectionTitle(l10n.accountSettingsSection),
                         SizedBox(height: 8.h),
                         _whiteCard(
