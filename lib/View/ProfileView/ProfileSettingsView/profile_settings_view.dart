@@ -3,11 +3,11 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../Core/Utils/assets.dart';
 import '../../../Riverpod/Providers/current_user_provider.dart';
@@ -24,8 +24,8 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
   static const double _iconPx = 24;
   static const String _baseUrl = "http://127.0.0.1:4000";
 
-  final _nameCtrl = TextEditingController();
-  final _mailCtrl = TextEditingController();
+  final TextEditingController _nameCtrl = TextEditingController();
+  final TextEditingController _mailCtrl = TextEditingController();
 
   int _age = 28;
   bool _isLoading = true;
@@ -37,7 +37,11 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
   @override
   void initState() {
     super.initState();
-    _loadProfile();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _loadProfile();
+    });
   }
 
   @override
@@ -79,13 +83,15 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
       debugPrint("PROFILE BODY: ${response.body}");
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        final data = response.body.isNotEmpty ? jsonDecode(response.body) : {};
+        final dynamic decoded =
+            response.body.isNotEmpty ? jsonDecode(response.body) : {};
 
-        final user = data["user"] is Map<String, dynamic>
-            ? Map<String, dynamic>.from(data["user"])
-            : data is Map<String, dynamic>
-                ? Map<String, dynamic>.from(data)
-                : <String, dynamic>{};
+        final Map<String, dynamic> user =
+            decoded is Map<String, dynamic> && decoded["user"] is Map
+                ? Map<String, dynamic>.from(decoded["user"] as Map)
+                : decoded is Map<String, dynamic>
+                    ? Map<String, dynamic>.from(decoded)
+                    : <String, dynamic>{};
 
         _setCurrentUser(user);
 
@@ -119,6 +125,7 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
   Future<void> _saveProfile() async {
     final l10n = AppLocalizations.of(context)!;
     final firebaseUid = _firebaseUid;
+
     if (firebaseUid == null || firebaseUid.isEmpty || _isSaving) return;
 
     setState(() {
@@ -145,10 +152,10 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
         Map<String, dynamic> updatedUser;
 
         if (response.body.isNotEmpty) {
-          final data = jsonDecode(response.body);
-          if (data is Map<String, dynamic> &&
-              data["user"] is Map<String, dynamic>) {
-            updatedUser = Map<String, dynamic>.from(data["user"]);
+          final dynamic data = jsonDecode(response.body);
+
+          if (data is Map<String, dynamic> && data["user"] is Map) {
+            updatedUser = Map<String, dynamic>.from(data["user"] as Map);
           } else if (data is Map<String, dynamic>) {
             updatedUser = Map<String, dynamic>.from(data);
           } else {
@@ -176,17 +183,18 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
       if (!mounted) return;
       _toast(l10n.saveFailed);
     } finally {
-      if (mounted) {
-        setState(() {
-          _isSaving = false;
-        });
-      }
+      // ignore: control_flow_in_finally
+      if (!mounted) return;
+      setState(() {
+        _isSaving = false;
+      });
     }
   }
 
   Future<void> _deleteAccount() async {
     final l10n = AppLocalizations.of(context)!;
     final firebaseUid = _firebaseUid;
+
     if (firebaseUid == null || firebaseUid.isEmpty) return;
 
     try {
@@ -205,7 +213,6 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
         await FirebaseAuth.instance.signOut();
 
         if (!mounted) return;
-
         _toast(l10n.accountDeleted);
         Navigator.of(context).pop();
       } else {
@@ -218,74 +225,13 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
     }
   }
 
-  TextStyle get _titleStyle => TextStyle(
-        fontFamily: 'Poppins',
-        fontWeight: FontWeight.w500,
-        fontSize: 20.sp,
-        height: 26 / 20,
-        color: const Color(0xFF0F172A),
-      );
-
-  TextStyle get _labelStyle => TextStyle(
-        fontFamily: 'Lato',
-        fontWeight: FontWeight.w700,
-        fontSize: 14.sp,
-        height: 1.0,
-        color: const Color(0xFF64748B),
-      );
-
-  TextStyle get _inputTextStyle => TextStyle(
-        fontFamily: 'Lato',
-        fontWeight: FontWeight.w700,
-        fontSize: 14.sp,
-        height: 1.0,
-        color: const Color(0xFF0F172A),
-      );
-
-  TextStyle get _mailTextStyle => TextStyle(
-        fontFamily: 'Lato',
-        fontWeight: FontWeight.w700,
-        fontSize: 14.sp,
-        height: 1.0,
-        color: const Color(0xFF5F8486),
-      );
-
-  TextStyle get _saveTextStyle => TextStyle(
-        fontFamily: 'Poppins',
-        fontWeight: FontWeight.w400,
-        fontSize: 16.sp,
-        height: 24 / 16,
-        color: Colors.white,
-      );
-
-  TextStyle get _dialogTitleStyle => TextStyle(
-        fontFamily: 'Lato',
-        fontWeight: FontWeight.w700,
-        fontSize: 18.sp,
-        height: 1.0,
-        color: const Color(0xFF0F172A),
-      );
-
-  TextStyle get _dialogDescStyle => TextStyle(
-        fontFamily: 'Lato',
-        fontWeight: FontWeight.w300,
-        fontSize: 14.sp,
-        height: 1.0,
-        color: const Color(0xFF0F172A).withValues(alpha: 0.70),
-      );
-
-  TextStyle get _dialogDeleteBtnStyle => TextStyle(
-        fontFamily: 'Lato',
-        fontWeight: FontWeight.w500,
-        fontSize: 14.sp,
-        height: 1.0,
-        color: Colors.white,
-      );
-
   void _toast(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(msg, style: const TextStyle(fontFamily: 'Poppins')),
+        content: Text(
+          msg,
+          style: const TextStyle(fontFamily: 'Poppins'),
+        ),
         behavior: SnackBarBehavior.floating,
         duration: const Duration(milliseconds: 900),
       ),
@@ -431,6 +377,70 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
     }
   }
 
+  TextStyle get _titleStyle => TextStyle(
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.w500,
+        fontSize: 20.sp,
+        height: 26 / 20,
+        color: const Color(0xFF0F172A),
+      );
+
+  TextStyle get _labelStyle => TextStyle(
+        fontFamily: 'Lato',
+        fontWeight: FontWeight.w700,
+        fontSize: 14.sp,
+        height: 1.0,
+        color: const Color(0xFF64748B),
+      );
+
+  TextStyle get _inputTextStyle => TextStyle(
+        fontFamily: 'Lato',
+        fontWeight: FontWeight.w700,
+        fontSize: 14.sp,
+        height: 1.0,
+        color: const Color(0xFF0F172A),
+      );
+
+  TextStyle get _mailTextStyle => TextStyle(
+        fontFamily: 'Lato',
+        fontWeight: FontWeight.w700,
+        fontSize: 14.sp,
+        height: 1.0,
+        color: const Color(0xFF5F8486),
+      );
+
+  TextStyle get _saveTextStyle => TextStyle(
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.w400,
+        fontSize: 16.sp,
+        height: 24 / 16,
+        color: Colors.white,
+      );
+
+  TextStyle get _dialogTitleStyle => TextStyle(
+        fontFamily: 'Lato',
+        fontWeight: FontWeight.w700,
+        fontSize: 18.sp,
+        height: 1.0,
+        color: const Color(0xFF0F172A),
+      );
+
+  TextStyle get _dialogDescStyle => TextStyle(
+        fontFamily: 'Lato',
+        fontWeight: FontWeight.w300,
+        fontSize: 14.sp,
+        height: 1.0,
+        color: const Color(0xFF0F172A).withValues(alpha: 0.70),
+      );
+
+  TextStyle get _dialogDeleteBtnStyle => TextStyle(
+        fontFamily: 'Lato',
+        fontWeight: FontWeight.w500,
+        fontSize: 14.sp,
+        height: 1.0,
+        color: Colors.white,
+      );
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -475,7 +485,10 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
                             ),
                           ),
                         ),
-                        Text(l10n.profileSettings, style: _titleStyle),
+                        Text(
+                          l10n.profileSettings,
+                          style: _titleStyle,
+                        ),
                         SizedBox(width: 44.w),
                       ],
                     ),
@@ -660,8 +673,10 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
                                             ),
                                           ),
                                           SizedBox(width: 8.w),
-                                          Text(l10n.save,
-                                              style: _saveTextStyle),
+                                          Text(
+                                            l10n.save,
+                                            style: _saveTextStyle,
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -723,7 +738,9 @@ class _Label extends StatelessWidget {
   const _Label(this.text, {required this.style});
 
   @override
-  Widget build(BuildContext context) => Text(text, style: style);
+  Widget build(BuildContext context) {
+    return Text(text, style: style);
+  }
 }
 
 class _InputPill extends StatelessWidget {
@@ -781,16 +798,15 @@ class _InputPill extends StatelessWidget {
               ),
             ),
           ),
-          if (trailingIcon != null) ...[
+          if (trailingIcon != null)
             SvgPicture.asset(
               trailingIcon!,
+              width: iconPx.sp,
               colorFilter: const ColorFilter.mode(
                 Color(0xFF94A3B8),
                 BlendMode.srcIn,
               ),
-              width: iconPx.sp,
             ),
-          ],
         ],
       ),
     );
@@ -840,17 +856,32 @@ class _DropdownPill extends StatelessWidget {
               child: DropdownButton<int>(
                 value: value,
                 isExpanded: true,
-                icon: SvgPicture.asset(AppAssets.icBack, width: iconPx.sp),
+                icon: Transform.rotate(
+                  angle: -1.5708,
+                  child: SvgPicture.asset(
+                    AppAssets.icBack,
+                    width: iconPx.sp,
+                    colorFilter: const ColorFilter.mode(
+                      Color(0xFF64748B),
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
                 items: items
                     .map(
                       (e) => DropdownMenuItem<int>(
                         value: e,
-                        child: Text("$e", style: textStyle),
+                        child: Text(
+                          "$e",
+                          style: textStyle,
+                        ),
                       ),
                     )
                     .toList(),
                 onChanged: (v) {
-                  if (v != null) onChanged(v);
+                  if (v != null) {
+                    onChanged(v);
+                  }
                 },
               ),
             ),
