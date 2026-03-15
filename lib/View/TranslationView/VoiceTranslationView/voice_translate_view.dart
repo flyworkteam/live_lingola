@@ -19,22 +19,51 @@ class VoiceTranslateView extends StatefulWidget {
 
 class _VoiceTranslateViewState extends State<VoiceTranslateView> {
   final List<_LangItem> _langs = const [
-    _LangItem(name: "Turkish", flagAsset: "assets/images/flags/Turkish.png"),
-    _LangItem(name: "English", flagAsset: "assets/images/flags/English.png"),
-    _LangItem(name: "German", flagAsset: "assets/images/flags/German.png"),
-    _LangItem(name: "Italian", flagAsset: "assets/images/flags/Italian.png"),
-    _LangItem(name: "French", flagAsset: "assets/images/flags/French.png"),
-    _LangItem(name: "Spanish", flagAsset: "assets/images/flags/Spanish.png"),
+    _LangItem(code: "tr", flagAsset: "assets/images/flags/Turkish.png"),
+    _LangItem(code: "en", flagAsset: "assets/images/flags/English.png"),
+    _LangItem(code: "de", flagAsset: "assets/images/flags/German.png"),
+    _LangItem(code: "it", flagAsset: "assets/images/flags/Italian.png"),
+    _LangItem(code: "fr", flagAsset: "assets/images/flags/French.png"),
+    _LangItem(code: "es", flagAsset: "assets/images/flags/Spanish.png"),
   ];
 
-  String _sourceLang = "Turkish";
-  String _targetLang = "English";
+  String _sourceLangCode = "tr";
+  String _targetLangCode = "en";
   final GlobalKey _langBarKey = GlobalKey();
   OverlayEntry? _langOverlay;
   bool? _overlayForSource;
 
-  _LangItem _find(String name) =>
-      _langs.firstWhere((e) => e.name == name, orElse: () => _langs.first);
+  _LangItem _find(String code) =>
+      _langs.firstWhere((e) => e.code == code, orElse: () => _langs.first);
+
+  String _localizedLanguageName(AppLocalizations l10n, String code) {
+    switch (code) {
+      case 'tr':
+        return l10n.languageTurkish;
+      case 'en':
+        return l10n.languageEnglish;
+      case 'de':
+        return l10n.languageGerman;
+      case 'it':
+        return l10n.languageItalian;
+      case 'fr':
+        return l10n.languageFrench;
+      case 'es':
+        return l10n.languageSpanish;
+      case 'ru':
+        return l10n.languageRussian;
+      case 'pt':
+        return l10n.languagePortuguese;
+      case 'ko':
+        return l10n.languageKorean;
+      case 'hi':
+        return l10n.languageHindi;
+      case 'ja':
+        return l10n.languageJapanese;
+      default:
+        return code;
+    }
+  }
 
   void _push(BuildContext context, Widget page) {
     Navigator.of(context).push(
@@ -56,9 +85,9 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
 
   void _swapLang() {
     setState(() {
-      final t = _sourceLang;
-      _sourceLang = _targetLang;
-      _targetLang = t;
+      final t = _sourceLangCode;
+      _sourceLangCode = _targetLangCode;
+      _targetLangCode = t;
     });
   }
 
@@ -69,6 +98,8 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
   }
 
   void _toggleDropdown({required bool forSource}) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (_langOverlay != null && _overlayForSource == forSource) {
       _closeOverlay();
       return;
@@ -101,30 +132,31 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
                       for (int i = 0; i < _langs.length; i++) ...[
                         _LangRow(
                           item: _langs[i],
+                          title: _localizedLanguageName(l10n, _langs[i].code),
                           active: forSource
-                              ? _langs[i].name == _sourceLang
-                              : _langs[i].name == _targetLang,
+                              ? _langs[i].code == _sourceLangCode
+                              : _langs[i].code == _targetLangCode,
                           onTap: () {
                             setState(() {
                               if (forSource) {
-                                _sourceLang = _langs[i].name;
-                                if (_sourceLang == _targetLang) {
-                                  _targetLang = _langs
+                                _sourceLangCode = _langs[i].code;
+                                if (_sourceLangCode == _targetLangCode) {
+                                  _targetLangCode = _langs
                                       .firstWhere(
-                                        (e) => e.name != _sourceLang,
+                                        (e) => e.code != _sourceLangCode,
                                         orElse: () => _langs.first,
                                       )
-                                      .name;
+                                      .code;
                                 }
                               } else {
-                                _targetLang = _langs[i].name;
-                                if (_sourceLang == _targetLang) {
-                                  _sourceLang = _langs
+                                _targetLangCode = _langs[i].code;
+                                if (_sourceLangCode == _targetLangCode) {
+                                  _sourceLangCode = _langs
                                       .firstWhere(
-                                        (e) => e.name != _targetLang,
+                                        (e) => e.code != _targetLangCode,
                                         orElse: () => _langs.first,
                                       )
-                                      .name;
+                                      .code;
                                 }
                               }
                             });
@@ -161,8 +193,8 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     final bottomReserve = 62.h + 20.h + 22.h;
-    final src = _find(_sourceLang);
-    final trg = _find(_targetLang);
+    final src = _find(_sourceLangCode);
+    final trg = _find(_targetLangCode);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF3F6FB),
@@ -215,9 +247,11 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
                               key: _langBarKey,
                               child: VoiceLangBar(
                                 leftFlagAsset: src.flagAsset,
-                                leftText: _sourceLang,
+                                leftText:
+                                    _localizedLanguageName(t, _sourceLangCode),
                                 rightFlagAsset: trg.flagAsset,
-                                rightText: _targetLang,
+                                rightText:
+                                    _localizedLanguageName(t, _targetLangCode),
                                 onSwap: () {
                                   _closeOverlay();
                                   _swapLang();
@@ -262,8 +296,8 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
                                   onStart: () => _push(
                                     context,
                                     VoiceTranslateFreeLiveView(
-                                      sourceLanguage: _sourceLang,
-                                      targetLanguage: _targetLang,
+                                      sourceLanguage: _sourceLangCode,
+                                      targetLanguage: _targetLangCode,
                                     ),
                                   ),
                                 ),
@@ -272,8 +306,8 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
                                   onStart: () => _push(
                                     context,
                                     VoiceTranslateProLiveView(
-                                      sourceLanguage: _sourceLang,
-                                      targetLanguage: _targetLang,
+                                      sourceLanguage: _sourceLangCode,
+                                      targetLanguage: _targetLangCode,
                                     ),
                                   ),
                                 ),
@@ -296,9 +330,9 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
 }
 
 class _LangItem {
-  final String name;
+  final String code;
   final String flagAsset;
-  const _LangItem({required this.name, required this.flagAsset});
+  const _LangItem({required this.code, required this.flagAsset});
 }
 
 class _DropdownCard extends StatelessWidget {
@@ -335,10 +369,12 @@ class _DropdownCard extends StatelessWidget {
 
 class _LangRow extends StatelessWidget {
   final _LangItem item;
+  final String title;
   final bool active;
   final VoidCallback onTap;
   const _LangRow({
     required this.item,
+    required this.title,
     required this.active,
     required this.onTap,
   });
@@ -360,7 +396,7 @@ class _LangRow extends StatelessWidget {
             SizedBox(width: 10.w),
             Expanded(
               child: Text(
-                item.name,
+                title,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500,

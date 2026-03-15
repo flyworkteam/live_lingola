@@ -156,6 +156,8 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                         child: Text(
                           l10n.onboardingFlow5Title,
                           textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w600,
@@ -171,6 +173,8 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                         child: Text(
                           l10n.onboardingFlow5Subtitle,
                           textAlign: TextAlign.center,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w300,
@@ -185,11 +189,11 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                         padding: EdgeInsets.symmetric(horizontal: 36.w),
                         child: Row(
                           children: [
-                            SizedBox(
-                              width: 198.w,
-                              height: 28.h,
+                            Expanded(
                               child: Text(
                                 l10n.onboardingFlow5ProgressLabel,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w600,
@@ -199,7 +203,7 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                                 ),
                               ),
                             ),
-                            const Spacer(),
+                            SizedBox(width: 8.w),
                             SizedBox(
                               width: 40.w,
                               height: 28.h,
@@ -299,6 +303,8 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
                       ),
                       child: Text(
                         _isSaving ? l10n.saving : l10n.getStarted,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
@@ -350,11 +356,13 @@ class _CheckRow extends StatelessWidget {
         Expanded(
           child: Text(
             text,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w400,
               fontSize: 12.sp,
-              height: 30 / 12,
+              height: 1.3,
               color: const Color(0xFF000000),
             ),
           ),

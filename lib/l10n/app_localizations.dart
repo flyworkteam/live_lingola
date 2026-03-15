@@ -71,7 +71,8 @@ import 'app_localizations_tr.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale)
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -79,7 +80,8 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -91,7 +93,8 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
     delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
@@ -1288,9 +1291,394 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Popular'**
   String get popular;
+
+  /// No description provided for @signInCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in was cancelled.'**
+  String get signInCancelled;
+
+  /// No description provided for @appleSignInFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Apple sign in failed.'**
+  String get appleSignInFailed;
+
+  /// No description provided for @facebookSignInFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Facebook sign in failed.'**
+  String get facebookSignInFailed;
+
+  /// No description provided for @googleSignInFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Google sign in failed.'**
+  String get googleSignInFailed;
+
+  /// No description provided for @genericSignInFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in failed: {error}'**
+  String genericSignInFailed(Object error);
+
+  /// No description provided for @userSyncFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to sync user information.'**
+  String get userSyncFailed;
+
+  /// No description provided for @loginTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Live Lingola'**
+  String get loginTitle;
+
+  /// No description provided for @loginSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with your preferred account to start translating.'**
+  String get loginSubtitle;
+
+  /// No description provided for @signingIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing in...'**
+  String get signingIn;
+
+  /// No description provided for @continueWithGoogle.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Google'**
+  String get continueWithGoogle;
+
+  /// No description provided for @continueWithFacebook.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Facebook'**
+  String get continueWithFacebook;
+
+  /// No description provided for @continueWithApple.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with Apple'**
+  String get continueWithApple;
+
+  /// No description provided for @continueAsGuest.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue as Guest'**
+  String get continueAsGuest;
+
+  /// No description provided for @loginLegalPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'By continuing, you agree to our '**
+  String get loginLegalPrefix;
+
+  /// No description provided for @termsOfServiceLinkText.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get termsOfServiceLinkText;
+
+  /// No description provided for @loginLegalMiddle.
+  ///
+  /// In en, this message translates to:
+  /// **', '**
+  String get loginLegalMiddle;
+
+  /// No description provided for @privacyPolicyLinkText.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicyLinkText;
+
+  /// No description provided for @loginLegalAnd.
+  ///
+  /// In en, this message translates to:
+  /// **' and '**
+  String get loginLegalAnd;
+
+  /// No description provided for @cookiesPolicyLinkText.
+  ///
+  /// In en, this message translates to:
+  /// **'Cookies Policy'**
+  String get cookiesPolicyLinkText;
+
+  /// No description provided for @faqQuestion6.
+  ///
+  /// In en, this message translates to:
+  /// **'Which languages does Live Lingola support?'**
+  String get faqQuestion6;
+
+  /// No description provided for @faqAnswer6.
+  ///
+  /// In en, this message translates to:
+  /// **'Our app supports text, voice, and image translation in more than 100 languages.'**
+  String get faqAnswer6;
+
+  /// No description provided for @faqQuestion7.
+  String get faqQuestion7;
+
+  /// No description provided for @faqAnswer7.
+  String get faqAnswer7;
+
+  /// No description provided for @faqQuestion8.
+  String get faqQuestion8;
+
+  /// No description provided for @faqAnswer8.
+  String get faqAnswer8;
+
+  /// No description provided for @faqQuestion9.
+  String get faqQuestion9;
+
+  /// No description provided for @faqAnswer9.
+  String get faqAnswer9;
+
+  /// No description provided for @faqQuestion10.
+  String get faqQuestion10;
+
+  /// No description provided for @faqAnswer10.
+  String get faqAnswer10;
+
+  /// No description provided for @proLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PRO'**
+  String get proLabel;
+
+  /// No description provided for @freeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'FREE'**
+  String get freeLabel;
+
+  /// No description provided for @voicePlanProTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Real-Time\nTranslation'**
+  String get voicePlanProTitle;
+
+  /// No description provided for @voicePlanFreeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation Machine'**
+  String get voicePlanFreeTitle;
+
+  /// No description provided for @highPrecision.
+  ///
+  /// In en, this message translates to:
+  /// **'High Precision'**
+  String get highPrecision;
+
+  /// No description provided for @proScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro Scenario'**
+  String get proScenario;
+
+  /// No description provided for @automaticTranslation.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic Translation'**
+  String get automaticTranslation;
+
+  /// No description provided for @topLevelModel.
+  ///
+  /// In en, this message translates to:
+  /// **'Top-Level Model'**
+  String get topLevelModel;
+
+  /// No description provided for @basicSensitivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Basic Sensitivity'**
+  String get basicSensitivity;
+
+  /// No description provided for @simpleScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'Simple Scenario'**
+  String get simpleScenario;
+
+  /// No description provided for @touchAndTalk.
+  ///
+  /// In en, this message translates to:
+  /// **'Touch and Talk'**
+  String get touchAndTalk;
+
+  /// No description provided for @generalModel.
+  ///
+  /// In en, this message translates to:
+  /// **'General Model'**
+  String get generalModel;
+
+  /// No description provided for @startButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get startButton;
+
+  /// No description provided for @trial60s.
+  ///
+  /// In en, this message translates to:
+  /// **'60s trial'**
+  String get trial60s;
+
+  /// No description provided for @aiChatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Chat'**
+  String get aiChatTitle;
+
+  /// No description provided for @todayUppercase.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY'**
+  String get todayUppercase;
+
+  /// No description provided for @typing.
+  ///
+  /// In en, this message translates to:
+  /// **'Typing...'**
+  String get typing;
+
+  /// No description provided for @aiChatWelcomeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello! I'm Lingola AI. How can I help you today?'**
+  String get aiChatWelcomeMessage;
+
+  /// No description provided for @aiChatErrorMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry, something went wrong.\n{error}'**
+  String aiChatErrorMessage(Object error);
+
+  /// No description provided for @aiChatChipPromptSushi.
+  ///
+  /// In en, this message translates to:
+  /// **'Best sushi in Tokyo?'**
+  String get aiChatChipPromptSushi;
+
+  /// No description provided for @aiChatChipLabelSushi.
+  ///
+  /// In en, this message translates to:
+  /// **'🇯🇵 Best Sushi?'**
+  String get aiChatChipLabelSushi;
+
+  /// No description provided for @aiChatChipPromptHotel.
+  ///
+  /// In en, this message translates to:
+  /// **'Any hotel tips for Tokyo?'**
+  String get aiChatChipPromptHotel;
+
+  /// No description provided for @aiChatChipLabelHotel.
+  ///
+  /// In en, this message translates to:
+  /// **'🏨 Hotel Tips'**
+  String get aiChatChipLabelHotel;
+
+  /// No description provided for @aiChatChipPromptTransit.
+  ///
+  /// In en, this message translates to:
+  /// **'Can you explain Tokyo transit?'**
+  String get aiChatChipPromptTransit;
+
+  /// No description provided for @aiChatChipLabelTransit.
+  ///
+  /// In en, this message translates to:
+  /// **'🚇 Transit Guide'**
+  String get aiChatChipLabelTransit;
+
+  /// No description provided for @expertGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get expertGeneral;
+
+  /// No description provided for @expertAutoSelection.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-Selection'**
+  String get expertAutoSelection;
+
+  /// No description provided for @expertGourmet.
+  ///
+  /// In en, this message translates to:
+  /// **'Gourmet'**
+  String get expertGourmet;
+
+  /// No description provided for @expertShopping.
+  ///
+  /// In en, this message translates to:
+  /// **'Shopping'**
+  String get expertShopping;
+
+  /// No description provided for @expertBusiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Business'**
+  String get expertBusiness;
+
+  /// No description provided for @expertTravel.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel'**
+  String get expertTravel;
+
+  /// No description provided for @expertDating.
+  ///
+  /// In en, this message translates to:
+  /// **'Dating'**
+  String get expertDating;
+
+  /// No description provided for @expertGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Games'**
+  String get expertGames;
+
+  /// No description provided for @expertHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Health'**
+  String get expertHealth;
+
+  /// No description provided for @expertLaw.
+  ///
+  /// In en, this message translates to:
+  /// **'Law'**
+  String get expertLaw;
+
+  /// No description provided for @expertArt.
+  ///
+  /// In en, this message translates to:
+  /// **'Art'**
+  String get expertArt;
+
+  /// No description provided for @expertFinance.
+  ///
+  /// In en, this message translates to:
+  /// **'Finance'**
+  String get expertFinance;
+
+  /// No description provided for @expertTechnology.
+  ///
+  /// In en, this message translates to:
+  /// **'Technology'**
+  String get expertTechnology;
+
+  /// No description provided for @expertNews.
+  ///
+  /// In en, this message translates to:
+  /// **'News'**
+  String get expertNews;
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -1299,34 +1687,54 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'fr', 'hi', 'it', 'ja', 'ko', 'pt', 'ru', 'tr'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+        'de',
+        'en',
+        'es',
+        'fr',
+        'hi',
+        'it',
+        'ja',
+        'ko',
+        'pt',
+        'ru',
+        'tr'
+      ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'de': return AppLocalizationsDe();
-    case 'en': return AppLocalizationsEn();
-    case 'es': return AppLocalizationsEs();
-    case 'fr': return AppLocalizationsFr();
-    case 'hi': return AppLocalizationsHi();
-    case 'it': return AppLocalizationsIt();
-    case 'ja': return AppLocalizationsJa();
-    case 'ko': return AppLocalizationsKo();
-    case 'pt': return AppLocalizationsPt();
-    case 'ru': return AppLocalizationsRu();
-    case 'tr': return AppLocalizationsTr();
+    case 'de':
+      return AppLocalizationsDe();
+    case 'en':
+      return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
+    case 'fr':
+      return AppLocalizationsFr();
+    case 'hi':
+      return AppLocalizationsHi();
+    case 'it':
+      return AppLocalizationsIt();
+    case 'ja':
+      return AppLocalizationsJa();
+    case 'ko':
+      return AppLocalizationsKo();
+    case 'pt':
+      return AppLocalizationsPt();
+    case 'ru':
+      return AppLocalizationsRu();
+    case 'tr':
+      return AppLocalizationsTr();
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

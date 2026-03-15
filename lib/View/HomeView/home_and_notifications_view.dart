@@ -71,11 +71,20 @@ class _HomeAndNotificationsViewState extends State<HomeAndNotificationsView> {
   }
 
   void _handleQuickActionTap(QuickActionData data) {
-    final String title = data.title.toLowerCase();
+    switch (data.type) {
+      case QuickActionType.aiChat:
+        _openAiChat();
+        return;
 
-    if (title.contains('ai') || title.contains('chat')) {
-      _openAiChat();
-      return;
+      case QuickActionType.travel:
+      case QuickActionType.textCheck:
+      case QuickActionType.interview:
+      case QuickActionType.email:
+      case QuickActionType.business:
+      case QuickActionType.replyIdeas:
+      case QuickActionType.popular:
+        _openAiChat();
+        return;
     }
   }
 

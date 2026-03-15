@@ -29,7 +29,6 @@ class TextTranslationExampleTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Poppins Medium 12 / lineHeight 14
                 Text(
                   title,
                   style: TextStyle(
@@ -42,8 +41,6 @@ class TextTranslationExampleTile extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 8.h),
-
-                // Poppins Medium 10 / lineHeight 14
                 Text(
                   subtitle,
                   style: TextStyle(

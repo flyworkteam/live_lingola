@@ -7,6 +7,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lingola_app/Services/revenuecat_service.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../Core/Routes/app_routes.dart';
 import '../../Core/Theme/app_colors.dart';
@@ -88,7 +90,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
   static const String _icPrivacy = AppAssets.icPrivacy;
   static const String _icTerms = AppAssets.icTerms;
   static const String _icShareFriend = AppAssets.icShareFriend;
-  static const String _icRate = AppAssets.icRate;
+  // static const String _icRate = AppAssets.icRate;
   static const String _icFaq = AppAssets.icFaq;
   static const String _icSupport = AppAssets.icSupport;
   static const String _icFeedback = AppAssets.icFeedback;
@@ -97,16 +99,16 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
 
   static const double _iconSize = 23;
 
-  // PREMIUM DURUMUNU TUTMAK İÇİN STATE
   bool _isPremiumUser = false;
+  String _appVersion = '';
 
   @override
   void initState() {
     super.initState();
     _checkPremiumStatus();
+    _loadAppVersion();
   }
 
-  // EKRAN AÇILDIĞINDA REVENUECAT'TEN DURUMU KONTROL ET
   Future<void> _checkPremiumStatus() async {
     final isPro = await RevenueCatService.isProEntitlementActive();
     if (mounted) {
@@ -116,9 +118,20 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
     }
   }
 
-  // PAYWALL AÇMA METODU (YENİ)
+  Future<void> _loadAppVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    if (!mounted) return;
+
+    debugPrint('APP VERSION: ${info.version}');
+    debugPrint('APP BUILD: ${info.buildNumber}');
+    debugPrint('APP PACKAGE: ${info.packageName}');
+
+    setState(() {
+      _appVersion = 'version ${info.version} (${info.buildNumber})';
+    });
+  }
+
   Future<void> _handlePremiumTap() async {
-    // Eğer kullanıcı zaten Premium ise hiçbir şey yapma
     if (_isPremiumUser) return;
 
     final isProNow = await RevenueCatService.showPaywall();
@@ -156,6 +169,35 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
   void _openShareFriend() => _pushSlide(const ShareFriendView());
   void _openFaq() => _pushSlide(const FaqView());
   void _openLanguage() => _pushSlide(const SelectLanguageView());
+
+  Future<void> _openUrl(String url) async {
+    final uri = Uri.parse(url);
+
+    final success = await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    );
+
+    if (!success && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not open link'),
+        ),
+      );
+    }
+  }
+
+  Future<void> _openPrivacyPolicy() async {
+    await _openUrl(
+      'https://fly-work.com/livelingola/privacy-policy/',
+    );
+  }
+
+  Future<void> _openTermsOfService() async {
+    await _openUrl(
+      'https://fly-work.com/livelingola/terms/',
+    );
+  }
 
   String _displayName(Map<String, dynamic>? user) {
     final name = user?['name']?.toString().trim();
@@ -491,7 +533,6 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                           ),
                         ),
                         SizedBox(height: 5.h),
-                        // PREMIUM DURUMUNA GÖRE YAZIYI DEĞİŞTİR
                         Center(
                           child: InkWell(
                             onTap: _isPremiumUser ? null : _handlePremiumTap,
@@ -502,21 +543,16 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                 fontSize: 12.sp,
                                 fontWeight: FontWeight.w500,
                                 color: _isPremiumUser
-                                    ? const Color(
-                                        0xFFFFD700) // Premium ise altın sarısı
-                                    : const Color(
-                                        0x80000000), // Değilse siyahımtırak
+                                    ? const Color(0xFFFFD700)
+                                    : const Color(0x80000000),
                               ),
                             ),
                           ),
                         ),
                         SizedBox(height: 18.h),
-
-                        // KULLANICI PREMIUM DEĞİLSE REKLAM BANNERINI GÖSTER
                         if (!_isPremiumUser) ...[
                           InkWell(
-                            onTap:
-                                _handlePremiumTap, // TIKLANDIĞINDA PAYWALL AÇILACAK
+                            onTap: _handlePremiumTap,
                             borderRadius: BorderRadius.circular(18.r),
                             child: Container(
                               height: 92.h,
@@ -572,7 +608,6 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                           ),
                           SizedBox(height: 18.h),
                         ],
-
                         _sectionTitle(l10n.accountSettingsSection),
                         SizedBox(height: 8.h),
                         _whiteCard(
@@ -615,14 +650,14 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                 iconBg: const Color(0xFFE9FBF4),
                                 assetPath: _icPrivacy,
                                 title: l10n.privacyPolicy,
-                                onTap: () {},
+                                onTap: _openPrivacyPolicy,
                               ),
                               _divider(),
                               _assetTile(
                                 iconBg: const Color(0xFFEFF6FF),
                                 assetPath: _icTerms,
                                 title: l10n.termsOfService,
-                                onTap: () {},
+                                onTap: _openTermsOfService,
                               ),
                               _divider(),
                               _assetTile(
@@ -631,13 +666,17 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                 title: l10n.shareFriend,
                                 onTap: _openShareFriend,
                               ),
-                              _divider(),
-                              _assetTile(
-                                iconBg: const Color(0xFFFFF2E6),
-                                assetPath: _icRate,
-                                title: l10n.rateUs,
-                                onTap: () {},
-                              ),
+
+                              // Uygulama linki henüz olmadığı için geçici olarak kapatıldı.
+                              // Yayına çıktıktan sonra tekrar açılabilir.
+                              // _divider(),
+                              // _assetTile(
+                              //   iconBg: const Color(0xFFFFF2E6),
+                              //   assetPath: _icRate,
+                              //   title: l10n.rateUs,
+                              //   onTap: () {},
+                              // ),
+
                               _divider(),
                               _assetTile(
                                 iconBg: const Color(0xFFEFF2F9),
@@ -719,7 +758,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                           ),
                           child: Center(
                             child: Text(
-                              "version 2.1.0",
+                              _appVersion.isEmpty ? '' : _appVersion,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 11.sp,

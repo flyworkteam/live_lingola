@@ -13,7 +13,7 @@ class FaqView extends StatefulWidget {
 }
 
 class _FaqViewState extends State<FaqView> {
-  int _openIndex = 4;
+  int _openIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +25,11 @@ class _FaqViewState extends State<FaqView> {
       _FaqItem(t.faqQuestion3, t.faqAnswer3),
       _FaqItem(t.faqQuestion4, t.faqAnswer4),
       _FaqItem(t.faqQuestion5, t.faqAnswer5),
+      _FaqItem(t.faqQuestion6, t.faqAnswer6),
+      _FaqItem(t.faqQuestion7, t.faqAnswer7),
+      _FaqItem(t.faqQuestion8, t.faqAnswer8),
+      _FaqItem(t.faqQuestion9, t.faqAnswer9),
+      _FaqItem(t.faqQuestion10, t.faqAnswer10),
     ];
 
     return Scaffold(
@@ -72,13 +77,18 @@ class _FaqViewState extends State<FaqView> {
 class _FaqItem {
   final String q;
   final String a;
+
   const _FaqItem(this.q, this.a);
 }
 
 class _TopBar extends StatelessWidget {
   final String title;
   final VoidCallback onBack;
-  const _TopBar({required this.title, required this.onBack});
+
+  const _TopBar({
+    required this.title,
+    required this.onBack,
+  });
 
   @override
   Widget build(BuildContext context) {

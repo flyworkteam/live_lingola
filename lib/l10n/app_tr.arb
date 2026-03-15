@@ -165,7 +165,7 @@
   "onboardingFlow4OptionPrivacy": "Gizlilik Koruması",
   "onboardingFlow4OptionTeach": "Bana Dil Öğretsin",
   "onboardingFlow4OptionAll": "Hepsi",
-  "onboardingFlow3Title": "Daha önce yapay zeka\nçevirisi kullandınız mı?",
+  "onboardingFlow3Title": "Daha önce yapay zeka çevirisi kullandınız mı?",
   "onboardingFlow3Subtitle": "Lütfen tercihinizi belirtin.",
   "yes": "Evet",
   "no": "Hayır",
@@ -225,5 +225,177 @@
   "interview": "Mülakat",
   "business": "İş",
   "replyIdeas": "Yanıt Fikirleri",
-  "popular": "Popüler"
+  "popular": "Popüler",
+  "moreFeaturesTitle": "Daha Fazla Özellik",
+  "frequentlyUsedTitle": "Sık Kullanılanlar",
+  "frequentlyUsedDescription": "En sık kullanılan terimleri gözden geçirin.",
+  "historyTitle": "Geçmiş",
+  "favoriteTitle": "Favoriler",
+  "signInCancelled": "Giriş işlemi iptal edildi.",
+  "appleSignInFailed": "Apple ile giriş başarısız oldu.",
+  "facebookSignInFailed": "Facebook ile giriş başarısız oldu.",
+  "googleSignInFailed": "Google ile giriş başarısız oldu.",
+  "genericSignInFailed": "Giriş başarısız oldu: {error}",
+  "@genericSignInFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "userSyncFailed": "Kullanıcı bilgileri senkronize edilemedi.",
+  "loginTitle": "Live Lingola’ya Hoş Geldiniz",
+  "loginSubtitle": "Çeviriye başlamak için tercih ettiğiniz hesapla devam edin.",
+  "signingIn": "Giriş yapılıyor...",
+  "continueWithGoogle": "Google ile Devam Et",
+  "continueWithFacebook": "Facebook ile Devam Et",
+  "continueWithApple": "Apple ile Devam Et",
+  "continueAsGuest": "Misafir Olarak Devam Et",
+  "loginLegalPrefix": "Devam ederek ",
+  "termsOfServiceLinkText": "Hizmet Şartları",
+  "loginLegalMiddle": ", ",
+  "privacyPolicyLinkText": "Gizlilik Politikası",
+  "loginLegalAnd": " ve ",
+  "cookiesPolicyLinkText": "Çerez Politikası",
+
+"faqQuestion1": "Live Lingola hangi dilleri destekliyor?",
+"faqAnswer1": "Uygulamamız 100'den fazla dilde metin, ses ve görsel çeviriyi destekler.",
+
+"faqQuestion2": "Canlı çeviri nasıl çalışır?",
+"faqAnswer2": "Uygulama konuşmanızı dinler ve seçilen dile anında çevirir.",
+
+"faqQuestion3": "Uygulamayı çevrimdışı kullanabilir miyim?",
+"faqAnswer3": "Evet, dil paketlerini indirerek internet olmadan da çeviri yapabilirsiniz.",
+
+"faqQuestion4": "Görsel çeviri tüm metinleri tanıyabilir mi?",
+"faqAnswer4": "OCR teknolojimiz basılı ve çoğu el yazısını doğru şekilde tanır.",
+
+"faqQuestion5": "Live Lingola ücretsiz mi?",
+"faqAnswer5": "Temel özellikler ücretsizdir. Premium sürüm ek özellikler sunar.",
+
+"faqQuestion6": "Uygulama sesimi kaydediyor mu?",
+"faqAnswer6": "Ses veriniz yalnızca çeviri için geçici olarak işlenir ve saklanmaz.",
+
+"faqQuestion7": "Sorun yaşarsam ne yapmalıyım?",
+"faqAnswer7": "Ayarlar > Destek bölümünden veya support@fly-work.com adresinden bize ulaşabilirsiniz.",
+
+"faqQuestion8": "Belgeleri çevirebilir miyim?",
+"faqAnswer8": "Evet, PDF, Word ve TXT belgeleri formatını koruyarak çevirebilirsiniz.",
+
+"faqQuestion9": "Çeviriler ne kadar doğru?",
+"faqAnswer9": "Birden fazla gelişmiş AI çeviri motoru kullanarak yüksek doğruluk sağlıyoruz.",
+
+"faqQuestion10": "Diğer uygulamalardaki mesajları çevirebilir miyim?",
+"faqAnswer10": "Evet, erişilebilirlik izni ile mesajları anında çevirebilirsiniz.",
+
+  "proLabel": "PRO",
+  "freeLabel": "FREE",
+  "voicePlanProTitle": "Gerçek Zamanlı\nÇeviri",
+  "voicePlanFreeTitle": "Çeviri Makinesi",
+  "highPrecision": "Yüksek Hassasiyet",
+  "proScenario": "Pro Senaryo",
+  "automaticTranslation": "Otomatik Çeviri",
+  "topLevelModel": "Üst Düzey Model",
+  "basicSensitivity": "Temel Hassasiyet",
+  "simpleScenario": "Basit Senaryo",
+  "touchAndTalk": "Dokun ve Konuş",
+  "generalModel": "Genel Model",
+  "startButton": "Başlat",
+  "trial60s": "60 sn deneme",
+  
+  "skip": "Geç",
+  "onboardingFlow1Title": "Çeviriyi en çok\nhangi amaçla kullanıyorsun?",
+  "onboardingFlow1Subtitle": "Lütfen tercihini belirt.",
+  "onboardingFlow1OptionDaily": "Günlük İletişim",
+  "onboardingFlow1OptionBusiness": "İş Dünyası",
+  "onboardingFlow1OptionLearning": "Dil Öğrenme",
+  "onboardingFlow1OptionTravel": "Seyahat",
+  "onboardingFlow1OptionEntertainment": "Eğlence",
+  "onboardingFlow1OptionOther": "Diğer",
+  "next": "İleri",
+  "back": "Geri",
+  "onboardingFlow2Title": "Dil Seç",
+  "onboardingFlow2Subtitle": "Çevirmek istediğin dili seç.\nSeçimin tüm uygulamayı etkiler.",
+  "from": "Kaynak",
+  "to": "Hedef",
+  "next": "İleri",
+  "languageTurkish": "Türkçe",
+  "languageEnglish": "İngilizce",
+  "languageGerman": "Almanca",
+  "languageItalian": "İtalyanca",
+  "languageFrench": "Fransızca",
+  "languageJapanese": "Japonca",
+  "languageSpanish": "İspanyolca",
+  "languageRussian": "Rusça",
+  "languagePortuguese": "Portekizce",
+  "languageKorean": "Korece",
+  "languageHindi": "Hintçe",
+  
+  "back": "Geri",
+  "skip": "Geç",
+  "onboardingFlow3Title": "Daha önce yapay zekâ\ntabanlı çeviri kullandın mı?",
+  "onboardingFlow3Subtitle": "Lütfen tercihini belirt.",
+  "yes": "Evet",
+  "no": "Hayır",
+  "next": "İleri",
+  
+  "back": "Geri",
+  "skip": "Geç",
+  "onboardingFlow4Title": "Bir çeviri uygulamasında\nhangi özellikleri istersin?",
+  "onboardingFlow4Subtitle": "Lütfen tercihini belirt.",
+  "onboardingFlow4OptionAccurate": "Doğru Çeviri",
+  "onboardingFlow4OptionEasy": "Kullanımı Kolay",
+  "onboardingFlow4OptionPrivacy": "Gizlilik Koruması",
+  "onboardingFlow4OptionTeach": "Bana Dil Öğretsin",
+  "onboardingFlow4OptionAll": "Hepsi",
+  "next": "İleri",
+  
+  "onboardingFlow5Title": "Kişisel Hesabın\nOluşturuluyor",
+  "onboardingFlow5Subtitle": "Yapay zekâ asistanın deneyimini kişiselleştiriyor.\nBu işlem birkaç saniye sürebilir.",
+  "onboardingFlow5ProgressLabel": "Yapay zekâ deneyimini kişiselleştiriyor",
+  "onboardingFlow5StepProfile": "Profil oluşturuluyor",
+  "onboardingFlow5StepLanguage": "Dil ayarları yapılandırılıyor",
+  "onboardingFlow5StepAi": "Yapay zekâ modeli hazırlanıyor",
+  "preferencesSaveFailed": "Tercihler kaydedilemedi: {error}",
+  "@preferencesSaveFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "saving": "Kaydediliyor...",
+  "getStarted": "Başlayalım",
+  
+  "aiChatTitle": "AI Chat",
+  "todayUppercase": "BUGÜN",
+  "typing": "Yazıyor...",
+  "aiChatWelcomeMessage": "Merhaba! Ben Lingola AI. Bugün sana nasıl yardımcı olabilirim?",
+  "aiChatErrorMessage": "Üzgünüm, bir şeyler ters gitti.\n{error}",
+  "@aiChatErrorMessage": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "aiChatChipPromptSushi": "Tokyo'daki en iyi sushi nerede?",
+  "aiChatChipLabelSushi": "🇯🇵 En İyi Sushi?",
+  "aiChatChipPromptHotel": "Tokyo için otel önerin var mı?",
+  "aiChatChipLabelHotel": "🏨 Otel Önerileri",
+  "aiChatChipPromptTransit": "Tokyo ulaşımını açıklayabilir misin?",
+  "aiChatChipLabelTransit": "🚇 Ulaşım Rehberi",
+  "expertGeneral": "Genel",
+"expertAutoSelection": "Otomatik Seçim",
+"expertGourmet": "Gurme",
+"expertShopping": "Alışveriş",
+"expertBusiness": "İş",
+"expertTravel": "Seyahat",
+"expertDating": "Flört",
+"expertGames": "Oyunlar",
+"expertHealth": "Sağlık",
+"expertLaw": "Hukuk",
+"expertArt": "Sanat",
+"expertFinance": "Finans",
+"expertTechnology": "Teknoloji",
+"expertNews": "Haberler"
+
+
+
+
+
 }

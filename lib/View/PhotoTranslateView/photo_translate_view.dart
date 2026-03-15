@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 
 import '../../Core/Utils/assets.dart';
+import '../../Core/config/app_config.dart';
 import '../../Core/widgets/photo_translate/photo_scan_frame.dart';
 import '../../Core/widgets/photo_translate/photo_translate_lang_bar.dart';
 import '../../Core/widgets/photo_translate/photo_translate_top_bar.dart';
@@ -26,19 +27,17 @@ class PhotoTranslateView extends ConsumerStatefulWidget {
 }
 
 class _PhotoTranslateViewState extends ConsumerState<PhotoTranslateView> {
-static const String _baseUrl = "https://livelingolaapp.fly-work.com";
-
   final List<_LangItem> _langs = const [
-    _LangItem(name: "Turkish", flagAsset: "assets/images/flags/Turkish.png"),
-    _LangItem(name: "English", flagAsset: "assets/images/flags/English.png"),
-    _LangItem(name: "German", flagAsset: "assets/images/flags/German.png"),
-    _LangItem(name: "Italian", flagAsset: "assets/images/flags/Italian.png"),
-    _LangItem(name: "French", flagAsset: "assets/images/flags/French.png"),
-    _LangItem(name: "Spanish", flagAsset: "assets/images/flags/Spanish.png"),
+    _LangItem(code: "tr", flagAsset: "assets/images/flags/Turkish.png"),
+    _LangItem(code: "en", flagAsset: "assets/images/flags/English.png"),
+    _LangItem(code: "de", flagAsset: "assets/images/flags/German.png"),
+    _LangItem(code: "it", flagAsset: "assets/images/flags/Italian.png"),
+    _LangItem(code: "fr", flagAsset: "assets/images/flags/French.png"),
+    _LangItem(code: "es", flagAsset: "assets/images/flags/Spanish.png"),
   ];
 
-  String _sourceLang = "Turkish";
-  String _targetLang = "English";
+  String _sourceLangCode = "tr";
+  String _targetLangCode = "en";
 
   final GlobalKey _langBarKey = GlobalKey();
   OverlayEntry? _langOverlay;
@@ -51,10 +50,69 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
   bool _isProcessing = false;
 
   List<PhotoTranslatedBlock> _translatedBlocks = [];
+  ImageProvider? _originalImageProvider;
   ImageProvider? _translatedImageProvider;
 
-  _LangItem _find(String name) =>
-      _langs.firstWhere((e) => e.name == name, orElse: () => _langs.first);
+  _LangItem _find(String code) =>
+      _langs.firstWhere((e) => e.code == code, orElse: () => _langs.first);
+
+  String _localizedLanguageName(AppLocalizations l10n, String code) {
+    switch (code) {
+      case 'tr':
+        return l10n.languageTurkish;
+      case 'en':
+        return l10n.languageEnglish;
+      case 'de':
+        return l10n.languageGerman;
+      case 'it':
+        return l10n.languageItalian;
+      case 'fr':
+        return l10n.languageFrench;
+      case 'es':
+        return l10n.languageSpanish;
+      case 'ru':
+        return l10n.languageRussian;
+      case 'pt':
+        return l10n.languagePortuguese;
+      case 'ko':
+        return l10n.languageKorean;
+      case 'hi':
+        return l10n.languageHindi;
+      case 'ja':
+        return l10n.languageJapanese;
+      default:
+        return code;
+    }
+  }
+
+  String _backendLanguageName(String code) {
+    switch (code) {
+      case 'tr':
+        return 'Turkish';
+      case 'en':
+        return 'English';
+      case 'de':
+        return 'German';
+      case 'it':
+        return 'Italian';
+      case 'fr':
+        return 'French';
+      case 'es':
+        return 'Spanish';
+      case 'ru':
+        return 'Russian';
+      case 'pt':
+        return 'Portuguese';
+      case 'ko':
+        return 'Korean';
+      case 'hi':
+        return 'Hindi';
+      case 'ja':
+        return 'Japanese';
+      default:
+        return code;
+    }
+  }
 
   String? _currentFirebaseUid() {
     final user = ref.read(currentUserProvider);
@@ -72,9 +130,9 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
 
   void _swapLanguages() {
     setState(() {
-      final temp = _sourceLang;
-      _sourceLang = _targetLang;
-      _targetLang = temp;
+      final temp = _sourceLangCode;
+      _sourceLangCode = _targetLangCode;
+      _targetLangCode = temp;
     });
 
     if (_selectedImageFile != null && !_isProcessing) {
@@ -89,6 +147,8 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
   }
 
   void _toggleDropdown({required bool forSource}) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (_langOverlay != null && _overlayForSource == forSource) {
       _closeOverlay();
       return;
@@ -122,30 +182,31 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                       for (int i = 0; i < _langs.length; i++) ...[
                         _LangRow(
                           item: _langs[i],
+                          title: _localizedLanguageName(l10n, _langs[i].code),
                           active: forSource
-                              ? _langs[i].name == _sourceLang
-                              : _langs[i].name == _targetLang,
+                              ? _langs[i].code == _sourceLangCode
+                              : _langs[i].code == _targetLangCode,
                           onTap: () {
                             setState(() {
                               if (forSource) {
-                                _sourceLang = _langs[i].name;
-                                if (_sourceLang == _targetLang) {
-                                  _targetLang = _langs
+                                _sourceLangCode = _langs[i].code;
+                                if (_sourceLangCode == _targetLangCode) {
+                                  _targetLangCode = _langs
                                       .firstWhere(
-                                        (e) => e.name != _sourceLang,
+                                        (e) => e.code != _sourceLangCode,
                                         orElse: () => _langs.first,
                                       )
-                                      .name;
+                                      .code;
                                 }
                               } else {
-                                _targetLang = _langs[i].name;
-                                if (_sourceLang == _targetLang) {
-                                  _sourceLang = _langs
+                                _targetLangCode = _langs[i].code;
+                                if (_sourceLangCode == _targetLangCode) {
+                                  _sourceLangCode = _langs
                                       .firstWhere(
-                                        (e) => e.name != _targetLang,
+                                        (e) => e.code != _targetLangCode,
                                         orElse: () => _langs.first,
                                       )
-                                      .name;
+                                      .code;
                                 }
                               }
                             });
@@ -250,6 +311,20 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
     }
   }
 
+  ImageProvider? _buildImageProviderFromBase64(String? rawValue) {
+    final value = (rawValue ?? '').trim();
+    if (value.isEmpty) return null;
+
+    try {
+      final normalized = value.contains(',') ? value.split(',').last : value;
+      final bytes = base64Decode(normalized);
+      return MemoryImage(bytes);
+    } catch (e) {
+      debugPrint("IMAGE BASE64 PARSE ERROR: $e");
+      return null;
+    }
+  }
+
   ImageProvider? _buildTranslatedImageProvider(dynamic data) {
     if (data is! Map<String, dynamic>) return null;
 
@@ -290,6 +365,7 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
       _selectedImageFile = file;
       _isProcessing = true;
       _translatedBlocks = [];
+      _originalImageProvider = FileImage(file);
       _translatedImageProvider = null;
     });
 
@@ -305,13 +381,13 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
 
     debugPrint('PHOTO TRANSLATE FIREBASE UID: $firebaseUid');
     debugPrint('PHOTO TRANSLATE USER ID: $userId');
-    debugPrint('PHOTO TRANSLATE SOURCE: $_sourceLang');
-    debugPrint('PHOTO TRANSLATE TARGET: $_targetLang');
+    debugPrint('PHOTO TRANSLATE SOURCE: $_sourceLangCode');
+    debugPrint('PHOTO TRANSLATE TARGET: $_targetLangCode');
 
     try {
       final request = http.MultipartRequest(
         'POST',
-        Uri.parse("$_baseUrl/translate/photo"),
+        Uri.parse("${AppConfig.baseUrl}/translate/photo"),
       );
 
       if (firebaseUid != null) {
@@ -321,8 +397,8 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
         request.fields['user_id'] = userId.toString();
       }
 
-      request.fields['source_language'] = _sourceLang;
-      request.fields['target_language'] = _targetLang;
+      request.fields['source_language'] = _backendLanguageName(_sourceLangCode);
+      request.fields['target_language'] = _backendLanguageName(_targetLangCode);
       request.fields['provider'] = 'gemini';
       request.fields['render_translated_image'] = 'true';
 
@@ -351,6 +427,21 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
 
         final translatedImageProvider = _buildTranslatedImageProvider(data);
 
+        ImageProvider? originalImageProvider;
+        if (data is Map<String, dynamic>) {
+          originalImageProvider = _buildImageProviderFromBase64(
+            data['original_image_base64']?.toString(),
+          );
+
+          originalImageProvider ??= _buildImageProviderFromBase64(
+            data['data'] is Map<String, dynamic>
+                ? (data['data']
+                        as Map<String, dynamic>)['original_image_base64']
+                    ?.toString()
+                : null,
+          );
+        }
+
         if (!mounted) return;
         setState(() {
           _translatedBlocks = blocksJson
@@ -360,6 +451,8 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                 ),
               )
               .toList();
+
+          _originalImageProvider = originalImageProvider ?? FileImage(file);
           _translatedImageProvider = translatedImageProvider;
         });
       } else {
@@ -393,8 +486,8 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final bottomReserve = 62.h + 20.h + 18.h;
-    final src = _find(_sourceLang);
-    final trg = _find(_targetLang);
+    final src = _find(_sourceLangCode);
+    final trg = _find(_targetLangCode);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF3F6FB),
@@ -428,9 +521,9 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                     key: _langBarKey,
                     child: PhotoTranslateLangBar(
                       leftFlagAssetOrEmoji: src.flagAsset,
-                      leftText: _sourceLang,
+                      leftText: _localizedLanguageName(l10n, _sourceLangCode),
                       rightFlagAssetOrEmoji: trg.flagAsset,
-                      rightText: _targetLang,
+                      rightText: _localizedLanguageName(l10n, _targetLangCode),
                       onSwap: () {
                         _closeOverlay();
                         _swapLanguages();
@@ -457,9 +550,7 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                   child: Column(
                     children: [
                       PhotoScanFrame(
-                        originalImage: _selectedImageFile != null
-                            ? FileImage(_selectedImageFile!)
-                            : null,
+                        originalImage: _originalImageProvider,
                         translatedImage: _translatedImageProvider,
                         translatedBlocks: _translatedBlocks,
                         isProcessing: _isProcessing,
@@ -515,11 +606,11 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
 }
 
 class _LangItem {
-  final String name;
+  final String code;
   final String flagAsset;
 
   const _LangItem({
-    required this.name,
+    required this.code,
     required this.flagAsset,
   });
 }
@@ -562,11 +653,13 @@ class _DropdownCard extends StatelessWidget {
 
 class _LangRow extends StatelessWidget {
   final _LangItem item;
+  final String title;
   final bool active;
   final VoidCallback onTap;
 
   const _LangRow({
     required this.item,
+    required this.title,
     required this.active,
     required this.onTap,
   });
@@ -588,7 +681,7 @@ class _LangRow extends StatelessWidget {
             SizedBox(width: 10.w),
             Expanded(
               child: Text(
-                item.name,
+                title,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500,

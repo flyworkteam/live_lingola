@@ -7,7 +7,6 @@ import '../../Core/Routes/app_routes.dart';
 import '../../Core/Theme/app_text_styles.dart';
 import '../../Riverpod/Providers/current_user_provider.dart';
 import '../../Services/backend_auth_service.dart';
-import '../../Services/subscription_service.dart';
 
 class SplashView extends ConsumerStatefulWidget {
   const SplashView({super.key});
@@ -21,24 +20,6 @@ class _SplashViewState extends ConsumerState<SplashView> {
   void initState() {
     super.initState();
     _bootstrap();
-  }
-
-  bool _isOnboardingCompleted(Map<String, dynamic> user) {
-    final usagePurpose = user['usage_purpose']?.toString().trim() ?? '';
-    final fromLanguage = user['from_language']?.toString().trim() ?? '';
-    final toLanguage = user['to_language']?.toString().trim() ?? '';
-    final desiredFeature = user['desired_feature']?.toString().trim() ?? '';
-    final usedAiBefore = user['used_ai_before'];
-
-    final hasUsedAiBefore = usedAiBefore != null &&
-        usedAiBefore.toString().trim().isNotEmpty &&
-        usedAiBefore.toString().trim() != 'null';
-
-    return usagePurpose.isNotEmpty &&
-        fromLanguage.isNotEmpty &&
-        toLanguage.isNotEmpty &&
-        desiredFeature.isNotEmpty &&
-        hasUsedAiBefore;
   }
 
   Future<void> _bootstrap() async {
@@ -64,7 +45,16 @@ class _SplashViewState extends ConsumerState<SplashView> {
       final user = await BackendAuthService.syncMe();
       debugPrint('SPLASH SYNCED USER RAW: $user');
 
-      final userMap = Map<String, dynamic>.from(user! as Map);
+      if (user == null) {
+        debugPrint('SPLASH -> SYNC USER IS NULL -> GO LOGIN');
+        ref.read(currentUserProvider.notifier).state = null;
+
+        if (!mounted) return;
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
+        return;
+      }
+
+      final userMap = Map<String, dynamic>.from(user as Map);
 
       debugPrint('SPLASH USER ID: ${userMap['id']}');
       debugPrint('SPLASH USER FIREBASE UID: ${userMap['firebase_uid']}');
@@ -86,38 +76,10 @@ class _SplashViewState extends ConsumerState<SplashView> {
 
       if (!mounted) return;
 
-      final onboardingCompleted = _isOnboardingCompleted(userMap);
-      debugPrint('SPLASH -> ONBOARDING COMPLETED: $onboardingCompleted');
-
-      if (!onboardingCompleted) {
-        debugPrint('SPLASH -> GO ONBOARDING FLOW');
-        Navigator.pushReplacementNamed(
-          context,
-          AppRoutes.onboardingFlow,
-        );
-        return;
-      }
-
-      final userId = userMap['id'] as int;
-      final isPro = await SubscriptionService.isPro(userId);
-
-      debugPrint('SPLASH -> USER PRO STATUS: $isPro');
-
-      if (!mounted) return;
-
-      if (!isPro) {
-        debugPrint('SPLASH -> GO PAYWALL');
-        Navigator.pushReplacementNamed(
-          context,
-          AppRoutes.paywall,
-        );
-        return;
-      }
-
-      debugPrint('SPLASH -> GO HOME');
+      debugPrint('SPLASH -> GO PLANET ONBOARDING');
       Navigator.pushReplacementNamed(
         context,
-        AppRoutes.homeAndNotifications,
+        AppRoutes.onboarding,
       );
     } catch (e, st) {
       debugPrint('SPLASH SYNC ERROR: $e');

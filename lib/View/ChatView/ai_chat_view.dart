@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../Core/Utils/assets.dart';
 import '../../Core/widgets/chat/chat_bubble.dart';
@@ -25,21 +26,7 @@ class _AiChatViewState extends State<AiChatView> {
 
   final AiRepository _repository = AiRepository(GeminiService.instance);
 
-  final List<ChatMessage> _messages = const [
-    ChatMessage(
-      fromBot: true,
-      text: "Hello! I'm your AI Travel Assistant...",
-    ),
-    ChatMessage(
-      fromBot: false,
-      text: "I'm planning a trip to Tokyo...",
-    ),
-    ChatMessage(
-      fromBot: true,
-      text: "Tokyo is amazing!...",
-      actionText: "VIEW ON MAP",
-    ),
-  ];
+  final List<ChatMessage> _messages = const [];
 
   late final List<ChatMessage> _mutableMessages =
       List<ChatMessage>.from(_messages);
@@ -56,7 +43,23 @@ class _AiChatViewState extends State<AiChatView> {
     _chat = _repository.startChat();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_mutableMessages.isEmpty) {
+      final l10n = AppLocalizations.of(context)!;
+      _mutableMessages.add(
+        ChatMessage(
+          fromBot: true,
+          text: l10n.aiChatWelcomeMessage,
+        ),
+      );
+    }
+  }
+
   Future<void> _send() async {
+    final l10n = AppLocalizations.of(context)!;
     final text = _controller.text.trim();
     if (text.isEmpty || _isBotTyping) return;
 
@@ -89,16 +92,19 @@ class _AiChatViewState extends State<AiChatView> {
         );
         _isBotTyping = false;
       });
-    } catch (e) {
+    } catch (e, st) {
+      debugPrint('AI CHAT ERROR: $e');
+      debugPrint('AI CHAT STACK: $st');
+
       if (!mounted || currentToken != _replyToken) return;
 
       setState(() {
         _isBotTyping = false;
         _errorText = e.toString();
         _mutableMessages.add(
-          const ChatMessage(
+          ChatMessage(
             fromBot: true,
-            text: 'Sorry, something went wrong. Please try again.',
+            text: l10n.aiChatErrorMessage('$e'),
           ),
         );
       });
@@ -132,6 +138,7 @@ class _AiChatViewState extends State<AiChatView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final topPad = MediaQuery.of(context).padding.top;
     final bottomReserve = 62.h + 12.h;
     final itemCount = _mutableMessages.length + (_isBotTyping ? 1 : 0);
@@ -145,12 +152,12 @@ class _AiChatViewState extends State<AiChatView> {
             onBack: () => widget.onBackToHome != null
                 ? widget.onBackToHome!()
                 : Navigator.pop(context),
-            title: 'Ai Chat',
+            title: l10n.aiChatTitle,
             iconAsset: AppAssets.icAiChat,
           ),
           SizedBox(height: 6.h),
           Text(
-            "TODAY, 10:24 AM",
+            l10n.todayUppercase,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 11.sp,
@@ -166,10 +173,10 @@ class _AiChatViewState extends State<AiChatView> {
               itemCount: itemCount,
               itemBuilder: (context, i) {
                 if (_isBotTyping && i == itemCount - 1) {
-                  return const ChatBubble(
+                  return ChatBubble(
                     msg: ChatMessage(
                       fromBot: true,
-                      text: 'Typing...',
+                      text: l10n.typing,
                     ),
                     botIconAsset: AppAssets.icAiChat,
                   );
@@ -201,17 +208,16 @@ class _AiChatViewState extends State<AiChatView> {
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () => _sendChipMessage("Best sushi in Tokyo?"),
-                    child: const ChatChip(text: "🇯🇵 Best Sushi?"),
+                    onTap: () => _sendChipMessage(l10n.aiChatChipPromptSushi),
+                    child: ChatChip(text: l10n.aiChatChipLabelSushi),
                   ),
                   GestureDetector(
-                    onTap: () => _sendChipMessage("Any hotel tips for Tokyo?"),
-                    child: const ChatChip(text: "🏨 Hotel Tips"),
+                    onTap: () => _sendChipMessage(l10n.aiChatChipPromptHotel),
+                    child: ChatChip(text: l10n.aiChatChipLabelHotel),
                   ),
                   GestureDetector(
-                    onTap: () =>
-                        _sendChipMessage("Can you explain Tokyo transit?"),
-                    child: const ChatChip(text: "🚇 Transit Guide"),
+                    onTap: () => _sendChipMessage(l10n.aiChatChipPromptTransit),
+                    child: ChatChip(text: l10n.aiChatChipLabelTransit),
                   ),
                 ],
               ),

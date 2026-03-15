@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lingola_app/Core/Utils/assets.dart';
+import 'package:lingola_app/l10n/app_localizations.dart';
 
 import 'big_action_card.dart';
 
@@ -19,12 +20,13 @@ class MoreFeaturesFigma extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        /// ---------------- TITLE ----------------
         Text(
-          "More Features",
+          l10n.moreFeatures,
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 20.sp,
@@ -34,8 +36,6 @@ class MoreFeaturesFigma extends StatelessWidget {
           ),
         ),
         SizedBox(height: 12.h),
-
-        /// ---------------- FREQUENTLY USED ----------------
         InkWell(
           borderRadius: BorderRadius.circular(26.r),
           onTap: onFrequentlyTap,
@@ -72,7 +72,7 @@ class MoreFeaturesFigma extends StatelessWidget {
                           ],
                         ).createShader(bounds),
                         child: Text(
-                          "Frequently Used",
+                          l10n.frequentlyUsed,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -86,7 +86,7 @@ class MoreFeaturesFigma extends StatelessWidget {
                       ),
                       SizedBox(height: 6.h),
                       Text(
-                        "Review the most\nfrequently used terms.",
+                        l10n.reviewMostFrequentlyUsedTerms,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -114,15 +114,12 @@ class MoreFeaturesFigma extends StatelessWidget {
             ),
           ),
         ),
-
         SizedBox(height: 14.h),
-
-        /// ---------------- HISTORY + FAVORITE ----------------
         Row(
           children: [
             Expanded(
               child: BigActionCard(
-                title: "History",
+                title: l10n.history,
                 active: false,
                 iconAsset: AppAssets.icHistory,
                 onTap: onHistoryTap,
@@ -131,7 +128,7 @@ class MoreFeaturesFigma extends StatelessWidget {
             SizedBox(width: 14.w),
             Expanded(
               child: BigActionCard(
-                title: "Favorite",
+                title: l10n.favorite,
                 active: true,
                 iconAsset: AppAssets.icFavorite,
                 onTap: onFavoriteTap,

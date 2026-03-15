@@ -225,5 +225,182 @@
   "interview": "면접",
   "business": "비즈니스",
   "replyIdeas": "답변 아이디어",
-  "popular": "인기"
+  "popular": "인기",
+  "moreFeaturesTitle": "추가 기능",
+"frequentlyUsedTitle": "자주 사용하는 항목",
+"frequentlyUsedDescription": "가장 자주 사용하는 용어를 확인하세요.",
+"historyTitle": "기록",
+"favoriteTitle": "즐겨찾기",
+  "signInCancelled": "로그인이 취소되었습니다.",
+  "appleSignInFailed": "Apple 로그인에 실패했습니다.",
+  "facebookSignInFailed": "Facebook 로그인에 실패했습니다.",
+  "googleSignInFailed": "Google 로그인에 실패했습니다.",
+  "genericSignInFailed": "로그인에 실패했습니다: {error}",
+  "@genericSignInFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "userSyncFailed": "사용자 정보를 동기화하지 못했습니다.",
+  "loginTitle": "Live Lingola에 오신 것을 환영합니다",
+  "loginSubtitle": "번역을 시작하려면 원하는 계정으로 계속하세요.",
+  "signingIn": "로그인 중...",
+  "continueWithGoogle": "Google로 계속하기",
+  "continueWithFacebook": "Facebook으로 계속하기",
+  "continueWithApple": "Apple로 계속하기",
+  "continueAsGuest": "게스트로 계속하기",
+  "loginLegalPrefix": "계속하면 ",
+  "termsOfServiceLinkText": "서비스 약관",
+  "loginLegalMiddle": ", ",
+  "privacyPolicyLinkText": "개인정보 처리방침",
+  "loginLegalAnd": " 및 ",
+  "cookiesPolicyLinkText": "쿠키 정책",
+
+"faqQuestion1": "Live Lingola는 어떤 언어를 지원하나요?",
+"faqAnswer1": "100개 이상의 언어를 지원합니다.",
+
+"faqQuestion2": "실시간 번역은 어떻게 작동하나요?",
+"faqAnswer2": "음성을 실시간으로 번역합니다.",
+
+"faqQuestion3": "오프라인 사용이 가능한가요?",
+"faqAnswer3": "언어 팩을 다운로드하면 가능합니다.",
+
+"faqQuestion4": "이미지 번역은 모든 텍스트를 인식하나요?",
+"faqAnswer4": "OCR 기술을 사용합니다.",
+
+"faqQuestion5": "Live Lingola는 무료인가요?",
+"faqAnswer5": "기본 기능은 무료입니다.",
+
+"faqQuestion6": "음성이 저장되나요?",
+"faqAnswer6": "일시적으로 처리됩니다.",
+
+"faqQuestion7": "문제가 발생하면?",
+"faqAnswer7": "지원팀에 문의하세요.",
+
+"faqQuestion8": "문서 번역이 가능한가요?",
+"faqAnswer8": "PDF와 Word를 번역할 수 있습니다.",
+
+"faqQuestion9": "번역 정확도는 어떤가요?",
+"faqAnswer9": "여러 AI 엔진을 사용합니다.",
+
+"faqQuestion10": "다른 앱에서도 번역 가능한가요?",
+"faqAnswer10": "접근성 기능으로 가능합니다.",
+
+  "proLabel": "PRO",
+  "freeLabel": "FREE",
+  "voicePlanProTitle": "실시간\n번역",
+  "voicePlanFreeTitle": "번역 기계",
+  "highPrecision": "고정밀",
+  "proScenario": "프로 시나리오",
+  "automaticTranslation": "자동 번역",
+  "topLevelModel": "상위 모델",
+  "basicSensitivity": "기본 감도",
+  "simpleScenario": "간단한 시나리오",
+  "touchAndTalk": "터치하고 말하기",
+  "generalModel": "일반 모델",
+  "startButton": "시작",
+  "trial60s": "60초 체험",
+  
+  "skip": "건너뛰기",
+  "onboardingFlow1Title": "번역을 주로\n어떤 용도로 사용하시나요?",
+  "onboardingFlow1Subtitle": "선호하는 항목을 선택해 주세요.",
+  "onboardingFlow1OptionDaily": "일상 대화",
+  "onboardingFlow1OptionBusiness": "비즈니스",
+  "onboardingFlow1OptionLearning": "언어 학습",
+  "onboardingFlow1OptionTravel": "여행",
+  "onboardingFlow1OptionEntertainment": "엔터테인먼트",
+  "onboardingFlow1OptionOther": "기타",
+  "next": "다음",
+  
+  "back": "뒤로",
+  "onboardingFlow2Title": "언어 선택",
+  "onboardingFlow2Subtitle": "번역할 언어를 선택하세요.\n선택한 언어는 전체 앱에 영향을 줍니다.",
+  "from": "원본",
+  "to": "대상",
+  "next": "다음",
+  "languageTurkish": "터키어",
+  "languageEnglish": "영어",
+  "languageGerman": "독일어",
+  "languageItalian": "이탈리아어",
+  "languageFrench": "프랑스어",
+  "languageJapanese": "일본어",
+  "languageSpanish": "스페인어",
+  "languageRussian": "러시아어",
+  "languagePortuguese": "포르투갈어",
+  "languageKorean": "한국어",
+  "languageHindi": "힌디어",
+  
+  "back": "뒤로",
+  "skip": "건너뛰기",
+  "onboardingFlow3Title": "이전에 AI 번역을\n사용해 본 적이 있나요?",
+  "onboardingFlow3Subtitle": "선호하는 항목을 선택해 주세요.",
+  "yes": "예",
+  "no": "아니요",
+  "next": "다음",
+  
+  "back": "뒤로",
+  "skip": "건너뛰기",
+  "onboardingFlow4Title": "번역 앱에서\n어떤 기능을 원하시나요?",
+  "onboardingFlow4Subtitle": "선호하는 항목을 선택해 주세요.",
+  "onboardingFlow4OptionAccurate": "정확한 번역",
+  "onboardingFlow4OptionEasy": "쉬운 사용성",
+  "onboardingFlow4OptionPrivacy": "개인정보 보호",
+  "onboardingFlow4OptionTeach": "언어를 가르쳐 주세요",
+  "onboardingFlow4OptionAll": "전부",
+  "next": "다음",
+  
+  "onboardingFlow5Title": "개인 계정을\n생성하는 중입니다",
+  "onboardingFlow5Subtitle": "AI 도우미가 사용 경험을 개인화하고 있습니다.\n몇 초 정도 걸릴 수 있습니다.",
+  "onboardingFlow5ProgressLabel": "AI가 사용 경험을 개인화하고 있습니다",
+  "onboardingFlow5StepProfile": "프로필을 생성하는 중입니다",
+  "onboardingFlow5StepLanguage": "언어 설정을 구성하는 중입니다",
+  "onboardingFlow5StepAi": "AI 모델을 준비하는 중입니다",
+  "preferencesSaveFailed": "환경설정 저장 실패: {error}",
+  "@preferencesSaveFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "saving": "저장 중...",
+  "getStarted": "시작하기",
+  
+  "aiChatTitle": "AI 채팅",
+  "todayUppercase": "오늘",
+  "typing": "입력 중...",
+  "aiChatWelcomeMessage": "안녕하세요! 저는 Lingola AI입니다. 오늘 무엇을 도와드릴까요?",
+  "aiChatErrorMessage": "죄송합니다. 문제가 발생했습니다.\n{error}",
+  "@aiChatErrorMessage": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "aiChatChipPromptSushi": "도쿄에서 가장 맛있는 스시는 어디인가요?",
+  "aiChatChipLabelSushi": "🇯🇵 최고의 스시?",
+  "aiChatChipPromptHotel": "도쿄 호텔 팁이 있나요?",
+  "aiChatChipLabelHotel": "🏨 호텔 팁",
+  "aiChatChipPromptTransit": "도쿄 교통을 설명해 줄 수 있나요?",
+  "aiChatChipLabelTransit": "🚇 교통 가이드",
+  
+  "expertGeneral": "일반",
+  "expertAutoSelection": "자동 선택",
+  "expertGourmet": "미식",
+  "expertShopping": "쇼핑",
+  "expertBusiness": "비즈니스",
+  "expertTravel": "여행",
+  "expertDating": "데이트",
+  "expertGames": "게임",
+  "expertHealth": "건강",
+  "expertLaw": "법률",
+  "expertArt": "예술",
+  "expertFinance": "금융",
+  "expertTechnology": "기술",
+  "expertNews": "뉴스"
+
+
+
+
+
+
+
+
 }

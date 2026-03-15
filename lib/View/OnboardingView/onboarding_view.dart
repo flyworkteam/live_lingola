@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 
@@ -9,19 +10,20 @@ import '../../Core/Routes/app_routes.dart';
 import '../../Core/Theme/app_colors.dart';
 import '../../Core/Theme/app_text_styles.dart';
 import '../../Core/widgets/common/dashed_circle.dart';
+import '../../Riverpod/Providers/current_user_provider.dart';
+import '../../Services/backend_auth_service.dart';
 
-class OnboardingView extends StatefulWidget {
+class OnboardingView extends ConsumerStatefulWidget {
   const OnboardingView({super.key});
 
   @override
-  State<OnboardingView> createState() => _OnboardingViewState();
+  ConsumerState<OnboardingView> createState() => _OnboardingViewState();
 }
 
-class _OnboardingViewState extends State<OnboardingView> {
+class _OnboardingViewState extends ConsumerState<OnboardingView> {
   final PageController _controller = PageController();
 
   double _page = 0.0;
-
   Timer? _timer;
   int _currentIndex = 0;
 
@@ -32,16 +34,38 @@ class _OnboardingViewState extends State<OnboardingView> {
   Timer? _resumeTimer;
   static const Duration _resumeAfterUser = Duration(milliseconds: 1200);
 
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
 
     _controller.addListener(() {
       final p = _controller.page ?? 0.0;
-      if (p != _page) setState(() => _page = p);
+      if (p != _page) {
+        setState(() => _page = p);
+      }
     });
 
     _startAuto();
+  }
+
+  bool _isOnboardingCompleted(Map<String, dynamic> user) {
+    final usagePurpose = user['usage_purpose']?.toString().trim() ?? '';
+    final fromLanguage = user['from_language']?.toString().trim() ?? '';
+    final toLanguage = user['to_language']?.toString().trim() ?? '';
+    final desiredFeature = user['desired_feature']?.toString().trim() ?? '';
+    final usedAiBefore = user['used_ai_before'];
+
+    final hasUsedAiBefore = usedAiBefore != null &&
+        usedAiBefore.toString().trim().isNotEmpty &&
+        usedAiBefore.toString().trim() != 'null';
+
+    return usagePurpose.isNotEmpty &&
+        fromLanguage.isNotEmpty &&
+        toLanguage.isNotEmpty &&
+        desiredFeature.isNotEmpty &&
+        hasUsedAiBefore;
   }
 
   void _startAuto() {
@@ -77,16 +101,72 @@ class _OnboardingViewState extends State<OnboardingView> {
     );
   }
 
+  Future<void> _handleContinue() async {
+    if (_isLoading) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      Map<String, dynamic>? user = ref.read(currentUserProvider);
+
+      if (user == null) {
+        final synced = await BackendAuthService.syncMe();
+        if (synced != null) {
+          user = Map<String, dynamic>.from(synced as Map);
+        }
+      }
+
+      if (user == null) {
+        ref.read(currentUserProvider.notifier).state = null;
+
+        if (!mounted) return;
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
+        return;
+      }
+
+      ref.read(currentUserProvider.notifier).state = user;
+
+      final onboardingCompleted = _isOnboardingCompleted(user);
+
+      if (!mounted) return;
+
+      if (onboardingCompleted) {
+        debugPrint('PLANET ONBOARDING -> ONBOARDING COMPLETED -> GO PAYWALL');
+        Navigator.pushReplacementNamed(
+          context,
+          AppRoutes.paywall,
+        );
+        return;
+      }
+
+      debugPrint('PLANET ONBOARDING -> ONBOARDING NOT COMPLETED -> GO FLOW');
+      Navigator.pushReplacementNamed(
+        context,
+        AppRoutes.onboardingFlow,
+      );
+    } catch (e, st) {
+      debugPrint('PLANET ONBOARDING ERROR: $e');
+      debugPrintStack(stackTrace: st);
+
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, AppRoutes.login);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
   @override
   void dispose() {
     _resumeTimer?.cancel();
     _stopAuto();
     _controller.dispose();
     super.dispose();
-  }
-
-  void _goLogin() {
-    Navigator.pushReplacementNamed(context, AppRoutes.login);
   }
 
   @override
@@ -296,9 +376,9 @@ class _OnboardingViewState extends State<OnboardingView> {
                   ),
                   elevation: 0,
                 ),
-                onPressed: _goLogin,
+                onPressed: _isLoading ? null : _handleContinue,
                 child: Text(
-                  l10n.getStarted,
+                  _isLoading ? 'Loading...' : l10n.getStarted,
                   style: const TextStyle(
                     fontFamily: AppTextStyles.fontFamily,
                     fontWeight: FontWeight.w600,

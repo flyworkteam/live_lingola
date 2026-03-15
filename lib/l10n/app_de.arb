@@ -225,5 +225,182 @@
   "interview": "Interview",
   "business": "Geschäft",
   "replyIdeas": "Antwortideen",
-  "popular": "Beliebt"
+  "popular": "Beliebt",
+  "moreFeaturesTitle": "Weitere Funktionen",
+  "frequentlyUsedTitle": "Häufig verwendet",
+  "frequentlyUsedDescription": "Überprüfen Sie die am häufigsten verwendeten Begriffe.",
+  "historyTitle": "Verlauf",
+  "favoriteTitle": "Favoriten",
+  "signInCancelled": "Anmeldung wurde abgebrochen.",
+  "appleSignInFailed": "Apple-Anmeldung fehlgeschlagen.",
+  "facebookSignInFailed": "Facebook-Anmeldung fehlgeschlagen.",
+  "googleSignInFailed": "Google-Anmeldung fehlgeschlagen.",
+  "genericSignInFailed": "Anmeldung fehlgeschlagen: {error}",
+  "@genericSignInFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "userSyncFailed": "Benutzerinformationen konnten nicht synchronisiert werden.",
+  "loginTitle": "Willkommen bei Live Lingola",
+  "loginSubtitle": "Fahren Sie mit Ihrem bevorzugten Konto fort, um mit der Übersetzung zu beginnen.",
+  "signingIn": "Anmeldung läuft...",
+  "continueWithGoogle": "Mit Google fortfahren",
+  "continueWithFacebook": "Mit Facebook fortfahren",
+  "continueWithApple": "Mit Apple fortfahren",
+  "continueAsGuest": "Als Gast fortfahren",
+  "loginLegalPrefix": "Indem Sie fortfahren, stimmen Sie unseren ",
+  "termsOfServiceLinkText": "Nutzungsbedingungen",
+  "loginLegalMiddle": ", ",
+  "privacyPolicyLinkText": "Datenschutzbestimmungen",
+  "loginLegalAnd": " und ",
+  "cookiesPolicyLinkText": "Cookie-Richtlinien",
+
+"faqQuestion1": "Welche Sprachen unterstützt Live Lingola?",
+"faqAnswer1": "Unsere App unterstützt Text-, Sprach- und Bildübersetzung in über 100 Sprachen.",
+
+"faqQuestion2": "Wie funktioniert die Live-Übersetzung?",
+"faqAnswer2": "Die App erkennt Ihre Sprache und übersetzt sie sofort.",
+
+"faqQuestion3": "Kann ich die App offline verwenden?",
+"faqAnswer3": "Ja, Sie können Sprachpakete herunterladen und offline übersetzen.",
+
+"faqQuestion4": "Kann die Bildübersetzung jeden Text erkennen?",
+"faqAnswer4": "Unsere OCR-Technologie erkennt gedruckten und handgeschriebenen Text.",
+
+"faqQuestion5": "Ist Live Lingola kostenlos?",
+"faqAnswer5": "Die Basisfunktionen sind kostenlos, Premium bietet zusätzliche Funktionen.",
+
+"faqQuestion6": "Wird meine Stimme gespeichert?",
+"faqAnswer6": "Ihre Stimme wird nur temporär zur Übersetzung verarbeitet.",
+
+"faqQuestion7": "Was tun bei technischen Problemen?",
+"faqAnswer7": "Kontaktieren Sie uns über Einstellungen > Support.",
+
+"faqQuestion8": "Kann ich Dokumente übersetzen?",
+"faqAnswer8": "Ja, PDF-, Word- und TXT-Dokumente können übersetzt werden.",
+
+"faqQuestion9": "Wie genau sind die Übersetzungen?",
+"faqAnswer9": "Wir verwenden mehrere KI-Übersetzungsdienste.",
+
+"faqQuestion10": "Kann ich Nachrichten in anderen Apps übersetzen?",
+"faqAnswer10": "Ja, mit der Übersetzungsblase können Sie Nachrichten direkt übersetzen.",
+
+  "proLabel": "PRO",
+  "freeLabel": "FREE",
+  "voicePlanProTitle": "Echtzeit-\nÜbersetzung",
+  "voicePlanFreeTitle": "Übersetzungsmaschine",
+  "highPrecision": "Hohe Präzision",
+  "proScenario": "Pro-Szenario",
+  "automaticTranslation": "Automatische Übersetzung",
+  "topLevelModel": "Top-Modell",
+  "basicSensitivity": "Grundempfindlichkeit",
+  "simpleScenario": "Einfaches Szenario",
+  "touchAndTalk": "Tippen und Sprechen",
+  "generalModel": "Allgemeines Modell",
+  "startButton": "Starten",
+  "trial60s": "60 Sek. Test",
+  
+  "skip": "Überspringen",
+  "onboardingFlow1Title": "Wofür nutzt du\ndie Übersetzung am meisten?",
+  "onboardingFlow1Subtitle": "Bitte gib deine Präferenz an.",
+  "onboardingFlow1OptionDaily": "Tägliche Kommunikation",
+  "onboardingFlow1OptionBusiness": "Geschäftswelt",
+  "onboardingFlow1OptionLearning": "Sprachen lernen",
+  "onboardingFlow1OptionTravel": "Reisen",
+  "onboardingFlow1OptionEntertainment": "Unterhaltung",
+  "onboardingFlow1OptionOther": "Andere",
+  "next": "Weiter",
+  
+  "back": "Zurück",
+  "onboardingFlow2Title": "Sprache auswählen",
+  "onboardingFlow2Subtitle": "Wähle die Sprache aus, die du übersetzen möchtest.\nDeine Auswahl wirkt sich auf die gesamte App aus.",
+  "from": "Von",
+  "to": "Nach",
+  "next": "Weiter",
+  "languageTurkish": "Türkisch",
+  "languageEnglish": "Englisch",
+  "languageGerman": "Deutsch",
+  "languageItalian": "Italienisch",
+  "languageFrench": "Französisch",
+  "languageJapanese": "Japanisch",
+  "languageSpanish": "Spanisch",
+  "languageRussian": "Russisch",
+  "languagePortuguese": "Portugiesisch",
+  "languageKorean": "Koreanisch",
+  "languageHindi": "Hindi",
+  
+  "back": "Zurück",
+  "skip": "Überspringen",
+  "onboardingFlow3Title": "Hast du schon einmal\nKI-Übersetzung verwendet?",
+  "onboardingFlow3Subtitle": "Bitte gib deine Präferenz an.",
+  "yes": "Ja",
+  "no": "Nein",
+  "next": "Weiter",
+  
+  "back": "Zurück",
+  "skip": "Überspringen",
+  "onboardingFlow4Title": "Welche Funktionen hättest du gern\nin einer Übersetzungs-App?",
+  "onboardingFlow4Subtitle": "Bitte gib deine Präferenz an.",
+  "onboardingFlow4OptionAccurate": "Präzise Übersetzung",
+  "onboardingFlow4OptionEasy": "Einfach zu bedienen",
+  "onboardingFlow4OptionPrivacy": "Datenschutz",
+  "onboardingFlow4OptionTeach": "Bring mir eine Sprache bei",
+  "onboardingFlow4OptionAll": "Alles davon",
+  "next": "Weiter",
+  
+  "onboardingFlow5Title": "Dein persönliches Konto\nwird erstellt",
+  "onboardingFlow5Subtitle": "Dein KI-Assistent personalisiert dein Erlebnis.\nDas kann ein paar Sekunden dauern.",
+  "onboardingFlow5ProgressLabel": "KI personalisiert dein Erlebnis",
+  "onboardingFlow5StepProfile": "Profil wird erstellt",
+  "onboardingFlow5StepLanguage": "Spracheinstellungen werden konfiguriert",
+  "onboardingFlow5StepAi": "KI-Modell wird vorbereitet",
+  "preferencesSaveFailed": "Speichern der Einstellungen fehlgeschlagen: {error}",
+  "@preferencesSaveFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "saving": "Wird gespeichert...",
+  "getStarted": "Los geht's",
+  
+  "aiChatTitle": "AI-Chat",
+  "todayUppercase": "HEUTE",
+  "typing": "Schreibt...",
+  "aiChatWelcomeMessage": "Hallo! Ich bin Lingola AI. Wie kann ich dir heute helfen?",
+  "aiChatErrorMessage": "Entschuldigung, etwas ist schiefgelaufen.\n{error}",
+  "@aiChatErrorMessage": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "aiChatChipPromptSushi": "Wo gibt es das beste Sushi in Tokio?",
+  "aiChatChipLabelSushi": "🇯🇵 Bestes Sushi?",
+  "aiChatChipPromptHotel": "Hast du Hoteltipps für Tokio?",
+  "aiChatChipLabelHotel": "🏨 Hoteltipps",
+  "aiChatChipPromptTransit": "Kannst du Tokios Verkehrssystem erklären?",
+  "aiChatChipLabelTransit": "🚇 Verkehrsführer",
+  
+  "expertGeneral": "Allgemein",
+  "expertAutoSelection": "Automatische Auswahl",
+  "expertGourmet": "Gourmet",
+  "expertShopping": "Einkaufen",
+  "expertBusiness": "Geschäft",
+  "expertTravel": "Reisen",
+  "expertDating": "Dating",
+  "expertGames": "Spiele",
+  "expertHealth": "Gesundheit",
+  "expertLaw": "Recht",
+  "expertArt": "Kunst",
+  "expertFinance": "Finanzen",
+  "expertTechnology": "Technologie",
+  "expertNews": "Nachrichten"
+
+
+
+
+
+
+
+
 }

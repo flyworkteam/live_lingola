@@ -225,5 +225,184 @@
   "interview": "Собеседование",
   "business": "Бизнес",
   "replyIdeas": "Идеи для ответа",
-  "popular": "Популярное"
+  "popular": "Популярное",
+  "moreFeaturesTitle": "Больше Функций",
+"frequentlyUsedTitle": "Часто Используемые",
+"frequentlyUsedDescription": "Просмотрите наиболее часто используемые термины.",
+"historyTitle": "История",
+"favoriteTitle": "Избранное",
+  "signInCancelled": "Вход был отменён.",
+  "appleSignInFailed": "Не удалось войти через Apple.",
+  "facebookSignInFailed": "Не удалось войти через Facebook.",
+  "googleSignInFailed": "Не удалось войти через Google.",
+  "genericSignInFailed": "Ошибка входа: {error}",
+  "@genericSignInFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "userSyncFailed": "Не удалось синхронизировать данные пользователя.",
+  "loginTitle": "Добро пожаловать в Live Lingola",
+  "loginSubtitle": "Продолжите с предпочитаемой учётной записью, чтобы начать перевод.",
+  "signingIn": "Выполняется вход...",
+  "continueWithGoogle": "Продолжить с Google",
+  "continueWithFacebook": "Продолжить с Facebook",
+  "continueWithApple": "Продолжить с Apple",
+  "continueAsGuest": "Продолжить как гость",
+  "loginLegalPrefix": "Продолжая, вы соглашаетесь с нашими ",
+  "termsOfServiceLinkText": "Условиями использования",
+  "loginLegalMiddle": ", ",
+  "privacyPolicyLinkText": "Политикой конфиденциальности",
+  "loginLegalAnd": " и ",
+  "cookiesPolicyLinkText": "Политикой cookie",
+  
+"faqQuestion1": "Какие языки поддерживает Live Lingola?",
+"faqAnswer1": "Наше приложение поддерживает перевод текста, голоса и изображений более чем на 100 языках.",
+
+"faqQuestion2": "Как работает функция «Живой перевод»?",
+"faqAnswer2": "Приложение анализирует вашу речь в реальном времени и мгновенно переводит её на выбранный язык.",
+
+"faqQuestion3": "Можно ли использовать приложение без интернета?",
+"faqAnswer3": "Да. Вы можете заранее загрузить языковые пакеты и пользоваться переводом офлайн.",
+
+"faqQuestion4": "Может ли функция перевода изображений распознавать любой текст?",
+"faqAnswer4": "Наша технология OCR распознаёт печатный текст, а также большую часть рукописного текста.",
+
+"faqQuestion5": "Приложение Live Lingola бесплатное?",
+"faqAnswer5": "Базовые функции приложения бесплатны. Премиум-подписка открывает дополнительные возможности, такие как неограниченный перевод и режим без рекламы.",
+
+"faqQuestion6": "Записывает ли приложение мой голос во время перевода?",
+"faqAnswer6": "Ваша конфиденциальность важна для нас. Голосовые данные используются только временно для перевода и не сохраняются.",
+
+"faqQuestion7": "Что делать, если возникла техническая проблема?",
+"faqAnswer7": "Вы можете связаться с нами через раздел «Настройки > Поддержка» или отправить письмо на support@fly-work.com.",
+
+"faqQuestion8": "Можно ли переводить длинные документы, например PDF?",
+"faqAnswer8": "Да. Вы можете загружать PDF, Word или TXT файлы и получать перевод без потери форматирования.",
+
+"faqQuestion9": "Насколько точны переводы?",
+"faqAnswer9": "Мы используем несколько современных AI-движков перевода, включая DeepL, Google и OpenAI-технологии.",
+
+"faqQuestion10": "Можно ли переводить сообщения внутри других приложений?",
+"faqAnswer10": "Да. Если вы дадите разрешение на доступность, можно использовать плавающий переводчик для мгновенного перевода сообщений.",
+
+  "proLabel": "PRO",
+  "freeLabel": "FREE",
+  "voicePlanProTitle": "Перевод\nв реальном времени",
+  "voicePlanFreeTitle": "Переводчик",
+  "highPrecision": "Высокая точность",
+  "proScenario": "Pro-сценарий",
+  "automaticTranslation": "Автоматический перевод",
+  "topLevelModel": "Модель высокого уровня",
+  "basicSensitivity": "Базовая чувствительность",
+  "simpleScenario": "Простой сценарий",
+  "touchAndTalk": "Нажми и говори",
+  "generalModel": "Общая модель",
+  "startButton": "Начать",
+  "trial60s": "Пробный 60 с",
+  
+
+  "skip": "Пропустить",
+  "onboardingFlow1Title": "Для чего вы чаще всего\nиспользуете перевод?",
+  "onboardingFlow1Subtitle": "Пожалуйста, укажите ваш выбор.",
+  "onboardingFlow1OptionDaily": "Повседневное общение",
+  "onboardingFlow1OptionBusiness": "Деловая сфера",
+  "onboardingFlow1OptionLearning": "Изучение языков",
+  "onboardingFlow1OptionTravel": "Путешествия",
+  "onboardingFlow1OptionEntertainment": "Развлечения",
+  "onboardingFlow1OptionOther": "Другое",
+  "next": "Далее",
+  
+  "back": "Назад",
+  "onboardingFlow2Title": "Выберите язык",
+  "onboardingFlow2Subtitle": "Выберите язык, на который хотите переводить.\nВаш выбор повлияет на всё приложение.",
+  "from": "С",
+  "to": "На",
+  "next": "Далее",
+  "languageTurkish": "Турецкий",
+  "languageEnglish": "Английский",
+  "languageGerman": "Немецкий",
+  "languageItalian": "Итальянский",
+  "languageFrench": "Французский",
+  "languageJapanese": "Японский",
+  "languageSpanish": "Испанский",
+  "languageRussian": "Русский",
+  "languagePortuguese": "Португальский",
+  "languageKorean": "Корейский",
+  "languageHindi": "Хинди",
+  
+  "back": "Назад",
+  "skip": "Пропустить",
+  "onboardingFlow3Title": "Вы раньше пользовались\nAI-переводом?",
+  "onboardingFlow3Subtitle": "Пожалуйста, укажите ваш выбор.",
+  "yes": "Да",
+  "no": "Нет",
+  "next": "Далее",
+  
+  "back": "Назад",
+  "skip": "Пропустить",
+  "onboardingFlow4Title": "Какие функции вы хотели бы\nвидеть в приложении для перевода?",
+  "onboardingFlow4Subtitle": "Пожалуйста, укажите ваш выбор.",
+  "onboardingFlow4OptionAccurate": "Точный перевод",
+  "onboardingFlow4OptionEasy": "Простота использования",
+  "onboardingFlow4OptionPrivacy": "Защита конфиденциальности",
+  "onboardingFlow4OptionTeach": "Научи меня языку",
+  "onboardingFlow4OptionAll": "Все сразу",
+  "next": "Далее",
+  
+  "onboardingFlow5Title": "Ваш личный аккаунт\nсоздаётся",
+  "onboardingFlow5Subtitle": "Ваш AI-помощник персонализирует ваш опыт.\nЭто может занять несколько секунд.",
+  "onboardingFlow5ProgressLabel": "AI персонализирует ваш опыт",
+  "onboardingFlow5StepProfile": "Профиль создаётся",
+  "onboardingFlow5StepLanguage": "Настройки языка настраиваются",
+  "onboardingFlow5StepAi": "Модель ИИ подготавливается",
+  "preferencesSaveFailed": "Не удалось сохранить настройки: {error}",
+  "@preferencesSaveFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "saving": "Сохранение...",
+  "getStarted": "Начать",
+  
+  "aiChatTitle": "AI Чат",
+  "todayUppercase": "СЕГОДНЯ",
+  "typing": "Печатает...",
+  "aiChatWelcomeMessage": "Привет! Я Lingola AI. Чем я могу помочь вам сегодня?",
+  "aiChatErrorMessage": "Извините, что-то пошло не так.\n{error}",
+  "@aiChatErrorMessage": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "aiChatChipPromptSushi": "Где лучший суши в Токио?",
+  "aiChatChipLabelSushi": "🇯🇵 Лучший суши?",
+  "aiChatChipPromptHotel": "Есть советы по отелям в Токио?",
+  "aiChatChipLabelHotel": "🏨 Советы по отелям",
+  "aiChatChipPromptTransit": "Можешь объяснить транспорт Токио?",
+  "aiChatChipLabelTransit": "🚇 Гид по транспорту",
+  
+  "expertGeneral": "Общее",
+  "expertAutoSelection": "Автовыбор",
+  "expertGourmet": "Гурман",
+  "expertShopping": "Покупки",
+  "expertBusiness": "Бизнес",
+  "expertTravel": "Путешествия",
+  "expertDating": "Знакомства",
+  "expertGames": "Игры",
+  "expertHealth": "Здоровье",
+  "expertLaw": "Право",
+  "expertArt": "Искусство",
+  "expertFinance": "Финансы",
+  "expertTechnology": "Технологии",
+  "expertNews": "Новости"
+
+
+
+
+
+
+
+
+
 }

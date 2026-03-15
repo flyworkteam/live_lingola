@@ -52,12 +52,16 @@ class OnboardingFlowView3 extends ConsumerWidget {
                       foregroundColor: const Color(0xFF9AA4B2),
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                     ),
-                    child: Text(
+                    child: _AdaptiveText(
                       l10n.back,
+                      maxLines: 1,
+                      minFontSize: 11,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
+                        color: const Color(0xFF9AA4B2),
                       ),
                     ),
                   ),
@@ -75,8 +79,10 @@ class OnboardingFlowView3 extends ConsumerWidget {
                     behavior: HitTestBehavior.opaque,
                     onTap: onSkip,
                     child: Center(
-                      child: Text(
+                      child: _AdaptiveText(
                         l10n.skip,
+                        maxLines: 1,
+                        minFontSize: 9,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Poppins',
@@ -100,10 +106,11 @@ class OnboardingFlowView3 extends ConsumerWidget {
                     SizedBox(height: 103.h),
                     SizedBox(
                       width: 255.w,
-                      height: 60.h,
-                      child: Text(
+                      child: _AdaptiveText(
                         l10n.onboardingFlow3Title,
                         textAlign: TextAlign.center,
+                        maxLines: 2,
+                        minFontSize: 16,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
@@ -113,18 +120,19 @@ class OnboardingFlowView3 extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 2.h),
+                    SizedBox(height: 4.h),
                     SizedBox(
                       width: 275.w,
-                      height: 51.h,
-                      child: Text(
+                      child: _AdaptiveText(
                         l10n.onboardingFlow3Subtitle,
                         textAlign: TextAlign.center,
+                        maxLines: 3,
+                        minFontSize: 11,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w300,
                           fontSize: 15.sp,
-                          height: 1.0,
+                          height: 1.15,
                           color: const Color(0xFF000000),
                         ),
                       ),
@@ -165,8 +173,11 @@ class OnboardingFlowView3 extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(50.r),
                         ),
                       ),
-                      child: Text(
+                      child: _AdaptiveText(
                         l10n.next,
+                        maxLines: 1,
+                        minFontSize: 12,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
@@ -220,20 +231,19 @@ class _SimpleSelectButton extends StatelessWidget {
               border: Border.all(color: borderColor, width: borderWidth),
             ),
             child: Center(
-              child: SizedBox(
-                width: 164.w,
-                height: 24.h,
-                child: Center(
-                  child: Text(
-                    text,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 15.sp,
-                      height: 24 / 15,
-                      color: textColor,
-                    ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: _AdaptiveText(
+                  text,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  minFontSize: 11,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15.sp,
+                    height: 24 / 15,
+                    color: textColor,
                   ),
                 ),
               ),
@@ -242,5 +252,94 @@ class _SimpleSelectButton extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _AdaptiveText extends StatelessWidget {
+  final String text;
+  final TextStyle style;
+  final int maxLines;
+  final double minFontSize;
+  final TextAlign textAlign;
+
+  const _AdaptiveText(
+    this.text, {
+    required this.style,
+    required this.maxLines,
+    required this.minFontSize,
+    this.textAlign = TextAlign.start,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final fittedStyle = _findFittingStyle(
+          text: text,
+          baseStyle: style,
+          minFontSize: minFontSize.sp,
+          maxFontSize: (style.fontSize ?? 14),
+          maxWidth: constraints.maxWidth,
+          maxLines: maxLines,
+          textDirection: Directionality.of(context),
+          textScaler: MediaQuery.textScalerOf(context),
+        );
+
+        return Text(
+          text,
+          textAlign: textAlign,
+          maxLines: maxLines,
+          overflow: TextOverflow.ellipsis,
+          style: fittedStyle,
+        );
+      },
+    );
+  }
+
+  TextStyle _findFittingStyle({
+    required String text,
+    required TextStyle baseStyle,
+    required double minFontSize,
+    required double maxFontSize,
+    required double maxWidth,
+    required int maxLines,
+    required TextDirection textDirection,
+    required TextScaler textScaler,
+  }) {
+    double low = minFontSize;
+    double high = maxFontSize;
+    double best = minFontSize;
+
+    bool fits(double size) {
+      final painter = TextPainter(
+        text: TextSpan(
+          text: text,
+          style: baseStyle.copyWith(fontSize: size),
+        ),
+        textAlign: textAlign,
+        textDirection: textDirection,
+        textScaler: textScaler,
+        maxLines: maxLines,
+        ellipsis: '…',
+      )..layout(maxWidth: maxWidth);
+
+      return !painter.didExceedMaxLines;
+    }
+
+    if (fits(maxFontSize)) {
+      return baseStyle.copyWith(fontSize: maxFontSize);
+    }
+
+    for (int i = 0; i < 20; i++) {
+      final mid = (low + high) / 2;
+      if (fits(mid)) {
+        best = mid;
+        low = mid;
+      } else {
+        high = mid;
+      }
+    }
+
+    return baseStyle.copyWith(fontSize: best);
   }
 }

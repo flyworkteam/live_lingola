@@ -4,16 +4,6 @@ import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
-/// Default [FirebaseOptions] for use with your Firebase apps.
-///
-/// Example:
-/// ```dart
-/// import 'firebase_options.dart';
-/// // ...
-/// await Firebase.initializeApp(
-///   options: DefaultFirebaseOptions.currentPlatform,
-/// );
-/// ```
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
@@ -64,7 +54,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '479984027693',
     projectId: 'live-lingola',
     storageBucket: 'live-lingola.firebasestorage.app',
-    iosClientId: '479984027693-sk1rqp1qk2laktpj786otccm4ef6rtv7.apps.googleusercontent.com',
+    iosClientId:
+        '479984027693-sk1rqp1qk2laktpj786otccm4ef6rtv7.apps.googleusercontent.com',
     iosBundleId: 'com.flywork.livelingolaapp',
   );
 
@@ -74,7 +65,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '479984027693',
     projectId: 'live-lingola',
     storageBucket: 'live-lingola.firebasestorage.app',
-    iosClientId: '479984027693-l703ot47orm9unh8ssasbgqn7a739a3s.apps.googleusercontent.com',
+    iosClientId:
+        '479984027693-l703ot47orm9unh8ssasbgqn7a739a3s.apps.googleusercontent.com',
     iosBundleId: 'com.example.lingoraApp',
   );
 

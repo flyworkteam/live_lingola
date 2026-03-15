@@ -99,7 +99,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get goodEvening => 'Добрый вечер';
 
   @override
-  String get placeTextInsideFrame => 'Поместите текст, который хотите перевести, внутрь рамки.';
+  String get placeTextInsideFrame =>
+      'Поместите текст, который хотите перевести, внутрь рамки.';
 
   @override
   String get selectOrCapturePhoto => 'Выберите или сделайте фото';
@@ -135,7 +136,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get voiceTranslateTitle => 'Голосовой перевод';
 
   @override
-  String get voiceTranslateSubtitle => 'Перевод в реальном времени — быстрее,\nумнее с искусственным интеллектом';
+  String get voiceTranslateSubtitle =>
+      'Перевод в реальном времени — быстрее,\nумнее с искусственным интеллектом';
 
   @override
   String get tryNow => 'Попробовать сейчас!';
@@ -150,7 +152,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get tapToTranslateNow => 'Нажмите, чтобы перевести';
 
   @override
-  String get selectLanguageToSpeak => 'Пожалуйста, выберите язык, на котором хотите говорить';
+  String get selectLanguageToSpeak =>
+      'Пожалуйста, выберите язык, на котором хотите говорить';
 
   @override
   String get languageTurkish => 'Турецкий';
@@ -189,22 +192,27 @@ class AppLocalizationsRu extends AppLocalizations {
   String get savedToHistory => 'Сохранено в историю';
 
   @override
-  String get couldNotSaveTranslationFirst => 'Не удалось сначала сохранить перевод';
+  String get couldNotSaveTranslationFirst =>
+      'Не удалось сначала сохранить перевод';
 
   @override
   String get favoriteRouteNotReady => 'Раздел избранного еще не готов';
 
   @override
-  String get exampleTextTitle1 => 'Сегодня такая хорошая погода;\nя хочу пойти на прогулку.';
+  String get exampleTextTitle1 =>
+      'Сегодня такая хорошая погода;\nя хочу пойти на прогулку.';
 
   @override
-  String get exampleTextSubtitle1 => 'Bugün hava çok güzel; yürüyüşe çıkmak istiyorum.';
+  String get exampleTextSubtitle1 =>
+      'Bugün hava çok güzel; yürüyüşe çıkmak istiyorum.';
 
   @override
-  String get exampleTextTitle2 => 'Сегодня прекрасный день;\nдумаю, я прогуляюсь.';
+  String get exampleTextTitle2 =>
+      'Сегодня прекрасный день;\nдумаю, я прогуляюсь.';
 
   @override
-  String get exampleTextSubtitle2 => 'Harika bir gün; sanırım kısa bir yürüyüş yapacağım.';
+  String get exampleTextSubtitle2 =>
+      'Harika bir gün; sanırım kısa bir yürüyüş yapacağım.';
 
   @override
   String get profileTitle => 'Профиль';
@@ -234,13 +242,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get profileLogoutDialogTitle => 'Вы собираетесь выйти';
 
   @override
-  String get profileLogoutDialogSubtitle => 'До скорой встречи! Нам будет не хватать\nваших дыхательных упражнений.';
+  String get profileLogoutDialogSubtitle =>
+      'До скорой встречи! Нам будет не хватать\nваших дыхательных упражнений.';
 
   @override
   String get shareWithFriendTitle => 'Поделиться с другом';
 
   @override
-  String get shareWithFriendSubtitle => 'Пригласите друзей и наслаждайтесь\nпереводом вместе';
+  String get shareWithFriendSubtitle =>
+      'Пригласите друзей и наслаждайтесь\nпереводом вместе';
 
   @override
   String get linkLabel => 'ССЫЛКА';
@@ -282,10 +292,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get age => 'Возраст';
 
   @override
-  String get deleteAccountDialogTitle => 'Вы уверены, что хотите\nудалить свой аккаунт?';
+  String get deleteAccountDialogTitle =>
+      'Вы уверены, что хотите\nудалить свой аккаунт?';
 
   @override
-  String get deleteAccountDialogDescription => 'Это действие нельзя отменить, и вся\nваша история и данные будут\nудалены навсегда.';
+  String get deleteAccountDialogDescription =>
+      'Это действие нельзя отменить, и вся\nваша история и данные будут\nудалены навсегда.';
 
   @override
   String get languageGerman => 'Немецкий';
@@ -323,37 +335,43 @@ class AppLocalizationsRu extends AppLocalizations {
   String get faqQuestion1 => 'Как работает Live Lingola?';
 
   @override
-  String get faqAnswer1 => 'Live Lingola помогает быстро переводить текст, голос и другой контент с помощью инструментов на базе ИИ.';
+  String get faqAnswer1 =>
+      'Live Lingola помогает быстро переводить текст, голос и другой контент с помощью инструментов на базе ИИ.';
 
   @override
   String get faqQuestion2 => 'Безопасны ли мои данные?';
 
   @override
-  String get faqAnswer2 => 'Мы серьезно относимся к безопасности данных и стремимся защитить вашу личную информацию и историю переводов.';
+  String get faqAnswer2 =>
+      'Мы серьезно относимся к безопасности данных и стремимся защитить вашу личную информацию и историю переводов.';
 
   @override
   String get faqQuestion3 => 'Можно ли использовать приложение офлайн?';
 
   @override
-  String get faqAnswer3 => 'Некоторые функции могут требовать подключения к интернету. Офлайн-поддержка зависит от используемого сервиса перевода.';
+  String get faqAnswer3 =>
+      'Некоторые функции могут требовать подключения к интернету. Офлайн-поддержка зависит от используемого сервиса перевода.';
 
   @override
   String get faqQuestion4 => 'Как отменить подписку?';
 
   @override
-  String get faqAnswer4 => 'Вы можете управлять или отменить подписку в настройках вашей учетной записи магазина или в разделе подписки приложения.';
+  String get faqAnswer4 =>
+      'Вы можете управлять или отменить подписку в настройках вашей учетной записи магазина или в разделе подписки приложения.';
 
   @override
   String get faqQuestion5 => 'Доступен ли семейный доступ?';
 
   @override
-  String get faqAnswer5 => 'Наличие семейного доступа зависит от платформы подписки и политики магазина. Проверьте настройки учетной записи для поддерживаемых вариантов.';
+  String get faqAnswer5 =>
+      'Наличие семейного доступа зависит от платформы подписки и политики магазина. Проверьте настройки учетной записи для поддерживаемых вариантов.';
 
   @override
   String get photoTranslateTitle => 'Перевод фото';
 
   @override
-  String get photoTranslateInstruction => 'Поместите текст для перевода\nвнутрь рамки.';
+  String get photoTranslateInstruction =>
+      'Поместите текст для перевода\nвнутрь рамки.';
 
   @override
   String get photoTranslationFailed => 'Не удалось перевести фото';
@@ -380,10 +398,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get onboardingTitle2 => 'Опыт перевода\nв реальном времени';
 
   @override
-  String get onboardingBody1 => 'С Live Lingola, где бы вы ни находились, иностранные языки больше не являются барьером. Ощутите общение в его самой плавной форме.';
+  String get onboardingBody1 =>
+      'С Live Lingola, где бы вы ни находились, иностранные языки больше не являются барьером. Ощутите общение в его самой плавной форме.';
 
   @override
-  String get onboardingBody2 => 'Мгновенно переводите свой голос и окружающий текст на свой язык. Разговоры становятся естественными благодаря нашей технологии на базе ИИ.';
+  String get onboardingBody2 =>
+      'Мгновенно переводите свой голос и окружающий текст на свой язык. Разговоры становятся естественными благодаря нашей технологии на базе ИИ.';
 
   @override
   String get getStarted => 'Начать';
@@ -392,7 +412,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get onboardingFlow5Title => 'Ваш личный аккаунт\nсоздается';
 
   @override
-  String get onboardingFlow5Subtitle => 'Ваш ИИ-помощник персонализирует ваш опыт.\nЭто может занять несколько секунд.';
+  String get onboardingFlow5Subtitle =>
+      'Ваш ИИ-помощник персонализирует ваш опыт.\nЭто может занять несколько секунд.';
 
   @override
   String get onboardingFlow5ProgressLabel => 'ИИ персонализирует ваш опыт';
@@ -418,10 +439,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get skip => 'Пропустить';
 
   @override
-  String get onboardingFlow4Title => 'Какие функции вы хотели бы\nвидеть в приложении для перевода?';
+  String get onboardingFlow4Title =>
+      'Какие функции вы хотели бы\nвидеть в приложении для перевода?';
 
   @override
-  String get onboardingFlow4Subtitle => 'Пожалуйста, укажите ваше предпочтение.';
+  String get onboardingFlow4Subtitle =>
+      'Пожалуйста, укажите ваше предпочтение.';
 
   @override
   String get onboardingFlow4OptionAccurate => 'Точный перевод';
@@ -442,7 +465,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get onboardingFlow3Title => 'Вы уже использовали\nИИ-перевод раньше?';
 
   @override
-  String get onboardingFlow3Subtitle => 'Пожалуйста, укажите ваше предпочтение.';
+  String get onboardingFlow3Subtitle =>
+      'Пожалуйста, укажите ваше предпочтение.';
 
   @override
   String get yes => 'Да';
@@ -454,7 +478,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get onboardingFlow2Title => 'Выберите язык';
 
   @override
-  String get onboardingFlow2Subtitle => 'Выберите язык, на который хотите переводить.\nВаш выбор влияет на все приложение.';
+  String get onboardingFlow2Subtitle =>
+      'Выберите язык, на который хотите переводить.\nВаш выбор влияет на все приложение.';
 
   @override
   String get from => 'Из';
@@ -463,10 +488,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get to => 'В';
 
   @override
-  String get onboardingFlow1Title => 'Для чего вы чаще всего\nиспользуете перевод?';
+  String get onboardingFlow1Title =>
+      'Для чего вы чаще всего\nиспользуете перевод?';
 
   @override
-  String get onboardingFlow1Subtitle => 'Пожалуйста, укажите ваше предпочтение.';
+  String get onboardingFlow1Subtitle =>
+      'Пожалуйста, укажите ваше предпочтение.';
 
   @override
   String get onboardingFlow1OptionDaily => 'Ежедневное общение';
@@ -487,7 +514,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get onboardingFlow1OptionOther => 'Другое';
 
   @override
-  String get homeWelcomeTitle => 'Давайте начнем переводить\nна нужный вам язык';
+  String get homeWelcomeTitle =>
+      'Давайте начнем переводить\nна нужный вам язык';
 
   @override
   String get homeFeatureVoice => 'Мгновенный голосовой\nперевод';
@@ -541,10 +569,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get clearFavoriteTitle => 'Очистить избранное';
 
   @override
-  String get clearHistoryDescription => 'Вы уверены, что хотите\nочистить историю?';
+  String get clearHistoryDescription =>
+      'Вы уверены, что хотите\nочистить историю?';
 
   @override
-  String get clearFavoriteDescription => 'Вы уверены, что хотите\nочистить список избранного?';
+  String get clearFavoriteDescription =>
+      'Вы уверены, что хотите\nочистить список избранного?';
 
   @override
   String get clear => 'Очистить';
@@ -553,13 +583,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get frequentlyTermsTitle => 'Часто используемые термины';
 
   @override
-  String get couldNotLoadFrequentlyUsedTerms => 'Не удалось загрузить часто используемые термины';
+  String get couldNotLoadFrequentlyUsedTerms =>
+      'Не удалось загрузить часто используемые термины';
 
   @override
-  String get noFrequentlyUsedTermsFound => 'Часто используемые термины не найдены';
+  String get noFrequentlyUsedTermsFound =>
+      'Часто используемые термины не найдены';
 
   @override
-  String get microphonePermissionRequired => 'Требуется разрешение на использование микрофона.';
+  String get microphonePermissionRequired =>
+      'Требуется разрешение на использование микрофона.';
 
   @override
   String get user => 'Пользователь';
@@ -576,13 +609,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get frequentlyUsed => 'Часто используемые';
 
   @override
-  String get reviewMostFrequentlyUsedTerms => 'Просмотрите наиболее\nчасто используемые термины.';
+  String get reviewMostFrequentlyUsedTerms =>
+      'Просмотрите наиболее\nчасто используемые термины.';
 
   @override
   String get unlimitedLiveTranslation => 'Неограниченный живой перевод';
 
   @override
-  String get removeDailyLimits => 'Уберите дневные ограничения\nна голос и текст.';
+  String get removeDailyLimits =>
+      'Уберите дневные ограничения\nна голос и текст.';
 
   @override
   String get getPremium => 'Получить Premium';
@@ -607,4 +642,218 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get popular => 'Популярное';
+
+  @override
+  String get signInCancelled => 'Вход был отменён.';
+
+  @override
+  String get appleSignInFailed => 'Не удалось войти через Apple.';
+
+  @override
+  String get facebookSignInFailed => 'Не удалось войти через Facebook.';
+
+  @override
+  String get googleSignInFailed => 'Не удалось войти через Google.';
+
+  @override
+  String genericSignInFailed(Object error) {
+    return 'Ошибка входа: $error';
+  }
+
+  @override
+  String get userSyncFailed =>
+      'Не удалось синхронизировать данные пользователя.';
+
+  @override
+  String get loginTitle => 'Добро пожаловать в Live Lingola';
+
+  @override
+  String get loginSubtitle =>
+      'Продолжите с предпочитаемой учётной записью, чтобы начать перевод.';
+
+  @override
+  String get signingIn => 'Выполняется вход...';
+
+  @override
+  String get continueWithGoogle => 'Продолжить с Google';
+
+  @override
+  String get continueWithFacebook => 'Продолжить с Facebook';
+
+  @override
+  String get continueWithApple => 'Продолжить с Apple';
+
+  @override
+  String get continueAsGuest => 'Продолжить как гость';
+
+  @override
+  String get loginLegalPrefix => 'Продолжая, вы соглашаетесь с нашими ';
+
+  @override
+  String get termsOfServiceLinkText => 'Условиями использования';
+
+  @override
+  String get loginLegalMiddle => ', ';
+
+  @override
+  String get privacyPolicyLinkText => 'Политикой конфиденциальности';
+
+  @override
+  String get loginLegalAnd => ' и ';
+
+  @override
+  String get cookiesPolicyLinkText => 'Политикой cookie';
+
+  @override
+  String get faqQuestion6 => 'Какие языки поддерживает Live Lingola?';
+
+  @override
+  String get faqAnswer6 =>
+      'Приложение поддерживает перевод текста, голоса и изображений более чем на 100 языках.';
+
+  @override
+  String get faqQuestion7 => 'Записывает ли приложение мой голос?';
+
+  @override
+  String get faqAnswer7 =>
+      'Голосовые данные используются только временно для перевода и не сохраняются.';
+
+  @override
+  String get faqQuestion8 =>
+      'Можно ли переводить длинные документы, например PDF?';
+
+  @override
+  String get faqAnswer8 => 'Да. Вы можете загружать PDF, Word или TXT файлы.';
+
+  @override
+  String get faqQuestion9 => 'Насколько точны переводы?';
+
+  @override
+  String get faqAnswer9 => 'Мы используем DeepL, Google и технологии OpenAI.';
+
+  @override
+  String get faqQuestion10 =>
+      'Можно ли переводить сообщения в других приложениях?';
+
+  @override
+  String get faqAnswer10 =>
+      'Да. При включении разрешения доступности можно использовать плавающий переводчик.';
+  @override
+  String get proLabel => 'PRO';
+
+  @override
+  String get freeLabel => 'FREE';
+
+  @override
+  String get voicePlanProTitle => 'Перевод\nв реальном времени';
+
+  @override
+  String get voicePlanFreeTitle => 'Переводчик';
+
+  @override
+  String get highPrecision => 'Высокая точность';
+
+  @override
+  String get proScenario => 'Pro-сценарий';
+
+  @override
+  String get automaticTranslation => 'Автоматический перевод';
+
+  @override
+  String get topLevelModel => 'Модель высокого уровня';
+
+  @override
+  String get basicSensitivity => 'Базовая чувствительность';
+
+  @override
+  String get simpleScenario => 'Простой сценарий';
+
+  @override
+  String get touchAndTalk => 'Нажми и говори';
+
+  @override
+  String get generalModel => 'Общая модель';
+
+  @override
+  String get startButton => 'Начать';
+
+  @override
+  String get trial60s => 'Пробный 60 с';
+  @override
+  String get aiChatTitle => 'AI Чат';
+
+  @override
+  String get todayUppercase => 'СЕГОДНЯ';
+
+  @override
+  String get typing => 'Печатает...';
+
+  @override
+  String get aiChatWelcomeMessage =>
+      'Привет! Я Lingola AI. Чем я могу помочь вам сегодня?';
+
+  @override
+  String aiChatErrorMessage(Object error) {
+    return 'Извините, что-то пошло не так.\n$error';
+  }
+
+  @override
+  String get aiChatChipPromptSushi => 'Где лучший суши в Токио?';
+
+  @override
+  String get aiChatChipLabelSushi => '🇯🇵 Лучший суши?';
+
+  @override
+  String get aiChatChipPromptHotel => 'Есть советы по отелям в Токио?';
+
+  @override
+  String get aiChatChipLabelHotel => '🏨 Советы по отелям';
+
+  @override
+  String get aiChatChipPromptTransit => 'Можешь объяснить транспорт Токио?';
+
+  @override
+  String get aiChatChipLabelTransit => '🚇 Гид по транспорту';
+
+  @override
+  String get expertGeneral => 'Общее';
+
+  @override
+  String get expertAutoSelection => 'Автовыбор';
+
+  @override
+  String get expertGourmet => 'Гурман';
+
+  @override
+  String get expertShopping => 'Покупки';
+
+  @override
+  String get expertBusiness => 'Бизнес';
+
+  @override
+  String get expertTravel => 'Путешествия';
+
+  @override
+  String get expertDating => 'Знакомства';
+
+  @override
+  String get expertGames => 'Игры';
+
+  @override
+  String get expertHealth => 'Здоровье';
+
+  @override
+  String get expertLaw => 'Право';
+
+  @override
+  String get expertArt => 'Искусство';
+
+  @override
+  String get expertFinance => 'Финансы';
+
+  @override
+  String get expertTechnology => 'Технологии';
+
+  @override
+  String get expertNews => 'Новости';
 }

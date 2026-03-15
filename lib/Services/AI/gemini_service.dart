@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+
+import '../../Core/config/app_config.dart';
 
 class LingolaChatSession {
   final List<Map<String, dynamic>> history;
@@ -15,7 +18,6 @@ class GeminiService {
 
   static final GeminiService instance = GeminiService._();
 
-  static const String _baseUrl = 'https://livelingolaapp.fly-work.com';
   static const String _systemPrompt = '''
 You are Lingola AI, a helpful assistant inside a language learning and translation app.
 
@@ -52,34 +54,45 @@ Rules:
       userMessage,
     ];
 
-    final response = await http.post(
-      Uri.parse('$_baseUrl/chat/message'),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-        'history': requestHistory,
-      }),
-    );
+    final uri = Uri.parse('${AppConfig.baseUrl}/chat/message');
 
-    if (response.statusCode != 200) {
-      throw Exception(_extractErrorMessage(response.body));
+    try {
+      final response = await http
+          .post(
+            uri,
+            headers: const {
+              'Content-Type': 'application/json',
+            },
+            body: jsonEncode({
+              'history': requestHistory,
+            }),
+          )
+          .timeout(const Duration(seconds: 30));
+
+      if (response.statusCode != 200) {
+        throw Exception(_extractErrorMessage(response.body));
+      }
+
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      final reply = (data['reply'] ?? '').toString().trim();
+
+      if (reply.isEmpty) {
+        throw Exception('Empty response from chat service.');
+      }
+
+      chat.history.add(userMessage);
+      chat.history.add({
+        'role': 'model',
+        'text': reply,
+      });
+
+      return reply;
+    } on TimeoutException {
+      throw Exception('Chat request timed out.');
+    } catch (e) {
+      throw Exception('Chat failed: $e');
     }
-
-    final Map<String, dynamic> data = jsonDecode(response.body);
-    final text = (data['reply'] ?? '').toString().trim();
-
-    if (text.isEmpty) {
-      throw Exception('Empty response from chat service.');
-    }
-
-    chat.history.add(userMessage);
-    chat.history.add({
-      'role': 'model',
-      'text': text,
-    });
-
-    return text;
   }
 
   String _extractErrorMessage(String body) {

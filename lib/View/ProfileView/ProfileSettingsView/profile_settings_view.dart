@@ -1,16 +1,22 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 
+import '../../../Core/Routes/app_routes.dart';
 import '../../../Core/Utils/assets.dart';
 import '../../../Riverpod/Providers/current_user_provider.dart';
+import '../../../firebase_options.dart';
 
 class ProfileSettingsView extends ConsumerStatefulWidget {
   const ProfileSettingsView({super.key});
@@ -22,14 +28,16 @@ class ProfileSettingsView extends ConsumerStatefulWidget {
 
 class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
   static const double _iconPx = 24;
-static const String _baseUrl = "https://livelingolaapp.fly-work.com";
+  static const String _baseUrl = 'http://127.0.0.1:4000';
 
   final TextEditingController _nameCtrl = TextEditingController();
   final TextEditingController _mailCtrl = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
 
   int _age = 28;
   bool _isLoading = true;
   bool _isSaving = false;
+  bool _isUploadingPhoto = false;
   String? _photoUrl;
 
   String? get _firebaseUid => FirebaseAuth.instance.currentUser?.uid;
@@ -122,6 +130,92 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
     }
   }
 
+  Future<void> _pickAndUploadPhoto() async {
+    final firebaseUid = _firebaseUid;
+
+    if (firebaseUid == null || firebaseUid.isEmpty || _isUploadingPhoto) {
+      return;
+    }
+
+    try {
+      final XFile? picked = await _picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80,
+        maxWidth: 1200,
+      );
+
+      if (picked == null) return;
+
+      if (!mounted) return;
+      setState(() {
+        _isUploadingPhoto = true;
+      });
+
+      final file = File(picked.path);
+
+      final storage = FirebaseStorage.instanceFor(
+        app: Firebase.app(),
+        bucket: DefaultFirebaseOptions.currentPlatform.storageBucket,
+      );
+
+      debugPrint('UPLOAD FILE PATH: ${file.path}');
+      debugPrint('FIREBASE PROJECT ID: ${Firebase.app().options.projectId}');
+      debugPrint(
+          'STORAGE BUCKET FROM OPTIONS: ${DefaultFirebaseOptions.currentPlatform.storageBucket}');
+      debugPrint('STORAGE BUCKET FROM INSTANCE: ${storage.bucket}');
+
+      final fileName =
+          'profile_${firebaseUid}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+      final photoRef = storage
+          .ref()
+          .child('profile_photos')
+          .child(firebaseUid)
+          .child(fileName);
+
+      debugPrint('UPLOAD REF FULL PATH: ${photoRef.fullPath}');
+
+      final snapshot = await photoRef.putFile(
+        file,
+        SettableMetadata(contentType: 'image/jpeg'),
+      );
+
+      debugPrint('UPLOAD TASK STATE: ${snapshot.state}');
+      debugPrint('UPLOAD REF NAME: ${snapshot.ref.name}');
+      debugPrint('UPLOAD REF FULL PATH AFTER PUT: ${snapshot.ref.fullPath}');
+
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+
+      debugPrint('DOWNLOAD URL: $downloadUrl');
+
+      if (!mounted) return;
+
+      setState(() {
+        _photoUrl = downloadUrl;
+      });
+
+      final oldUser = ref.read(currentUserProvider) ?? <String, dynamic>{};
+      _setCurrentUser({
+        ...oldUser,
+        "photo_url": downloadUrl,
+      });
+
+      await _saveProfile();
+    } catch (e, st) {
+      debugPrint("PROFILE PHOTO UPLOAD ERROR: $e");
+      debugPrintStack(stackTrace: st);
+
+      if (!mounted) return;
+      _toast("Fotoğraf yüklenemedi");
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isUploadingPhoto = false;
+        });
+      }
+    }
+  }
+
   Future<void> _saveProfile() async {
     final l10n = AppLocalizations.of(context)!;
     final firebaseUid = _firebaseUid;
@@ -183,11 +277,11 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
       if (!mounted) return;
       _toast(l10n.saveFailed);
     } finally {
-      // ignore: control_flow_in_finally
-      if (!mounted) return;
-      setState(() {
-        _isSaving = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isSaving = false;
+        });
+      }
     }
   }
 
@@ -214,7 +308,11 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
 
         if (!mounted) return;
         _toast(l10n.accountDeleted);
-        Navigator.of(context).pop();
+
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          AppRoutes.login,
+          (route) => false,
+        );
       } else {
         _toast(l10n.deleteFailed);
       }
@@ -561,8 +659,9 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                                               right: 2.w,
                                               bottom: 2.w,
                                               child: InkWell(
-                                                onTap: () =>
-                                                    _toast(l10n.changePhoto),
+                                                onTap: _isUploadingPhoto
+                                                    ? null
+                                                    : _pickAndUploadPhoto,
                                                 borderRadius:
                                                     BorderRadius.circular(999),
                                                 child: Container(
@@ -578,16 +677,28 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                                                     ),
                                                   ),
                                                   child: Center(
-                                                    child: SvgPicture.asset(
-                                                      AppAssets.icEditCamera,
-                                                      colorFilter:
-                                                          const ColorFilter
-                                                              .mode(
-                                                        Colors.white,
-                                                        BlendMode.srcIn,
-                                                      ),
-                                                      width: 14.sp,
-                                                    ),
+                                                    child: _isUploadingPhoto
+                                                        ? SizedBox(
+                                                            width: 12.w,
+                                                            height: 12.w,
+                                                            child:
+                                                                const CircularProgressIndicator(
+                                                              strokeWidth: 2,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          )
+                                                        : SvgPicture.asset(
+                                                            AppAssets
+                                                                .icEditCamera,
+                                                            colorFilter:
+                                                                const ColorFilter
+                                                                    .mode(
+                                                              Colors.white,
+                                                              BlendMode.srcIn,
+                                                            ),
+                                                            width: 14.sp,
+                                                          ),
                                                   ),
                                                 ),
                                               ),
@@ -596,7 +707,9 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                                         ),
                                         SizedBox(height: 8.h),
                                         Text(
-                                          l10n.changePhoto,
+                                          _isUploadingPhoto
+                                              ? 'Uploading...'
+                                              : l10n.changePhoto,
                                           style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontSize: 11.5.sp,
@@ -649,7 +762,9 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                                     height: 54.h,
                                     child: ElevatedButton(
                                       onPressed:
-                                          _isSaving ? null : _saveProfile,
+                                          (_isSaving || _isUploadingPhoto)
+                                              ? null
+                                              : _saveProfile,
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor:
                                             const Color(0xFF1677FF),
@@ -674,7 +789,7 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                                           ),
                                           SizedBox(width: 8.w),
                                           Text(
-                                            l10n.save,
+                                            _isSaving ? 'Saving...' : l10n.save,
                                             style: _saveTextStyle,
                                           ),
                                         ],

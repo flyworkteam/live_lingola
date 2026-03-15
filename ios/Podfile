@@ -1,5 +1,6 @@
 platform :ios, '15.5'
 $iOSVersion = '15.5'
+$FirebaseSDKVersion = '11.8.1'
 
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 

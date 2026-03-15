@@ -225,5 +225,182 @@
   "interview": "Entretien",
   "business": "Business",
   "replyIdeas": "Idées de réponse",
-  "popular": "Populaire"
+  "popular": "Populaire",
+  "moreFeaturesTitle": "Plus de Fonctionnalités",
+"frequentlyUsedTitle": "Fréquemment Utilisés",
+"frequentlyUsedDescription": "Consultez les termes les plus fréquemment utilisés.",
+"historyTitle": "Historique",
+"favoriteTitle": "Favoris",
+  "signInCancelled": "La connexion a été annulée.",
+  "appleSignInFailed": "La connexion avec Apple a échoué.",
+  "facebookSignInFailed": "La connexion avec Facebook a échoué.",
+  "googleSignInFailed": "La connexion avec Google a échoué.",
+  "genericSignInFailed": "Échec de la connexion : {error}",
+  "@genericSignInFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "userSyncFailed": "Échec de la synchronisation des informations utilisateur.",
+  "loginTitle": "Bienvenue sur Live Lingola",
+  "loginSubtitle": "Continuez avec votre compte préféré pour commencer à traduire.",
+  "signingIn": "Connexion en cours...",
+  "continueWithGoogle": "Continuer avec Google",
+  "continueWithFacebook": "Continuer avec Facebook",
+  "continueWithApple": "Continuer avec Apple",
+  "continueAsGuest": "Continuer en tant qu’invité",
+  "loginLegalPrefix": "En continuant, vous acceptez nos ",
+  "termsOfServiceLinkText": "Conditions d’utilisation",
+  "loginLegalMiddle": ", ",
+  "privacyPolicyLinkText": "Politique de confidentialité",
+  "loginLegalAnd": " et ",
+  "cookiesPolicyLinkText": "Politique relative aux cookies",
+
+"faqQuestion1": "Quelles langues Live Lingola prend-il en charge ?",
+"faqAnswer1": "L'application prend en charge plus de 100 langues.",
+
+"faqQuestion2": "Comment fonctionne la traduction en direct ?",
+"faqAnswer2": "L'application écoute votre voix et la traduit instantanément.",
+
+"faqQuestion3": "Puis-je utiliser l'application hors ligne ?",
+"faqAnswer3": "Oui, vous pouvez télécharger des packs de langue.",
+
+"faqQuestion4": "La traduction d'image reconnaît-elle tout le texte ?",
+"faqAnswer4": "Notre technologie OCR reconnaît le texte imprimé.",
+
+"faqQuestion5": "Live Lingola est-il gratuit ?",
+"faqAnswer5": "Les fonctions de base sont gratuites.",
+
+"faqQuestion6": "L'application enregistre-t-elle ma voix ?",
+"faqAnswer6": "Les données vocales ne sont pas stockées.",
+
+"faqQuestion7": "Que faire en cas de problème ?",
+"faqAnswer7": "Contactez le support depuis Paramètres.",
+
+"faqQuestion8": "Puis-je traduire des documents ?",
+"faqAnswer8": "Oui, PDF, Word et TXT sont pris en charge.",
+
+"faqQuestion9": "Les traductions sont-elles précises ?",
+"faqAnswer9": "Nous utilisons plusieurs moteurs IA.",
+
+"faqQuestion10": "Puis-je traduire dans d'autres applications ?",
+"faqAnswer10": "Oui, grâce à la bulle de traduction.",
+
+  "proLabel": "PRO",
+  "freeLabel": "FREE",
+  "voicePlanProTitle": "Traduction\nen temps réel",
+  "voicePlanFreeTitle": "Machine de traduction",
+  "highPrecision": "Haute précision",
+  "proScenario": "Scénario Pro",
+  "automaticTranslation": "Traduction automatique",
+  "topLevelModel": "Modèle haut de gamme",
+  "basicSensitivity": "Sensibilité de base",
+  "simpleScenario": "Scénario simple",
+  "touchAndTalk": "Touchez et parlez",
+  "generalModel": "Modèle général",
+  "startButton": "Démarrer",
+  "trial60s": "Essai de 60 s",
+  
+  "skip": "Passer",
+  "onboardingFlow1Title": "À quoi utilisez-vous\nle plus la traduction ?",
+  "onboardingFlow1Subtitle": "Veuillez indiquer votre préférence.",
+  "onboardingFlow1OptionDaily": "Communication quotidienne",
+  "onboardingFlow1OptionBusiness": "Monde des affaires",
+  "onboardingFlow1OptionLearning": "Apprentissage des langues",
+  "onboardingFlow1OptionTravel": "Voyage",
+  "onboardingFlow1OptionEntertainment": "Divertissement",
+  "onboardingFlow1OptionOther": "Autre",
+  "next": "Suivant",
+  
+  "back": "Retour",
+  "onboardingFlow2Title": "Choisir la langue",
+  "onboardingFlow2Subtitle": "Sélectionnez la langue que vous souhaitez traduire.\nVotre choix affecte toute l'application.",
+  "from": "De",
+  "to": "Vers",
+  "next": "Suivant",
+  "languageTurkish": "Turc",
+  "languageEnglish": "Anglais",
+  "languageGerman": "Allemand",
+  "languageItalian": "Italien",
+  "languageFrench": "Français",
+  "languageJapanese": "Japonais",
+  "languageSpanish": "Espagnol",
+  "languageRussian": "Russe",
+  "languagePortuguese": "Portugais",
+  "languageKorean": "Coréen",
+  "languageHindi": "Hindi",
+  
+  "back": "Retour",
+  "skip": "Passer",
+  "onboardingFlow3Title": "Avez-vous déjà utilisé\nla traduction par IA ?",
+  "onboardingFlow3Subtitle": "Veuillez indiquer votre préférence.",
+  "yes": "Oui",
+  "no": "Non",
+  "next": "Suivant",
+  
+  "back": "Retour",
+  "skip": "Passer",
+  "onboardingFlow4Title": "Quelles fonctionnalités aimeriez-vous\navoir dans une application de traduction ?",
+  "onboardingFlow4Subtitle": "Veuillez indiquer votre préférence.",
+  "onboardingFlow4OptionAccurate": "Traduction précise",
+  "onboardingFlow4OptionEasy": "Facile à utiliser",
+  "onboardingFlow4OptionPrivacy": "Protection de la vie privée",
+  "onboardingFlow4OptionTeach": "Apprends-moi une langue",
+  "onboardingFlow4OptionAll": "Toutes",
+  "next": "Suivant",
+  
+  "onboardingFlow5Title": "Votre compte personnel\nest en cours de création",
+  "onboardingFlow5Subtitle": "Votre assistant IA personnalise votre expérience.\nCela peut prendre quelques secondes.",
+  "onboardingFlow5ProgressLabel": "L’IA personnalise votre expérience",
+  "onboardingFlow5StepProfile": "Le profil est en cours de création",
+  "onboardingFlow5StepLanguage": "Les paramètres de langue sont en cours de configuration",
+  "onboardingFlow5StepAi": "Le modèle IA est en cours de préparation",
+  "preferencesSaveFailed": "Échec de l’enregistrement des préférences : {error}",
+  "@preferencesSaveFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "saving": "Enregistrement...",
+  "getStarted": "Commencer",
+  
+  "aiChatTitle": "Chat IA",
+  "todayUppercase": "AUJOURD’HUI",
+  "typing": "Écriture...",
+  "aiChatWelcomeMessage": "Bonjour ! Je suis Lingola AI. Comment puis-je vous aider aujourd’hui ?",
+  "aiChatErrorMessage": "Désolé, quelque chose s’est mal passé.\n{error}",
+  "@aiChatErrorMessage": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "aiChatChipPromptSushi": "Quel est le meilleur sushi à Tokyo ?",
+  "aiChatChipLabelSushi": "🇯🇵 Meilleur sushi ?",
+  "aiChatChipPromptHotel": "Des conseils d’hôtel pour Tokyo ?",
+  "aiChatChipLabelHotel": "🏨 Conseils hôtel",
+  "aiChatChipPromptTransit": "Pouvez-vous expliquer les transports à Tokyo ?",
+  "aiChatChipLabelTransit": "🚇 Guide transport",
+  
+  "expertGeneral": "Général",
+  "expertAutoSelection": "Sélection automatique",
+  "expertGourmet": "Gourmet",
+  "expertShopping": "Shopping",
+  "expertBusiness": "Affaires",
+  "expertTravel": "Voyage",
+  "expertDating": "Rencontres",
+  "expertGames": "Jeux",
+  "expertHealth": "Santé",
+  "expertLaw": "Droit",
+  "expertArt": "Art",
+  "expertFinance": "Finance",
+  "expertTechnology": "Technologie",
+  "expertNews": "Actualités"
+
+
+
+
+
+
+
+
 }

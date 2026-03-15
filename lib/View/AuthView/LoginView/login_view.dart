@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:lingola_app/l10n/app_localizations.dart';
 
 import '../../../Core/Routes/app_routes.dart';
 import '../../../Core/Theme/app_colors.dart';
@@ -68,6 +69,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
   }
 
   String _readableError(Object e, {required String provider}) {
+    final l10n = AppLocalizations.of(context)!;
     final message = e.toString().toLowerCase();
 
     if (message.contains('cancelled') ||
@@ -75,22 +77,22 @@ class _LoginViewState extends ConsumerState<LoginView> {
         message.contains('aborted_by_user') ||
         message.contains('sign_in_canceled') ||
         message.contains('user cancelled')) {
-      return '$provider sign-in cancelled.';
+      return l10n.signInCancelled;
     }
 
     if (provider == 'Apple') {
-      return 'Apple sign-in failed. Please check Apple setup in Firebase, Xcode capabilities and Apple Developer account.';
+      return l10n.appleSignInFailed;
     }
 
     if (provider == 'Facebook') {
-      return 'Facebook sign-in failed. Please check Meta app status and Firebase Facebook settings.';
+      return l10n.facebookSignInFailed;
     }
 
     if (provider == 'Google') {
-      return 'Google sign-in failed. Please check Firebase and Google sign-in configuration.';
+      return l10n.googleSignInFailed;
     }
 
-    return '$provider sign-in failed.';
+    return l10n.genericSignInFailed(provider);
   }
 
   bool _isOnboardingCompleted(Map<String, dynamic> user) {
@@ -112,6 +114,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
   }
 
   Future<void> _handlePostLogin() async {
+    final l10n = AppLocalizations.of(context)!;
+
     try {
       debugPrint('AUTH SUCCESS -> SYNC USER');
 
@@ -141,7 +145,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
       debugPrintStack(stackTrace: st);
 
       if (!mounted) return;
-      _snack('User sync failed.');
+      _snack(l10n.userSyncFailed);
     }
   }
 
@@ -183,6 +187,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     ref.listen(authControllerProvider, (previous, next) {
       final oldError = previous?.errorMessage;
       final newError = next.errorMessage;
@@ -247,15 +253,15 @@ class _LoginViewState extends ConsumerState<LoginView> {
               ),
             ),
           ),
-          const Positioned(
+          Positioned(
             top: 207,
             left: 37,
             child: SizedBox(
               width: 220,
               height: 90,
               child: Text(
-                "Let’s Get\nStarted",
-                style: TextStyle(
+                l10n.loginTitle,
+                style: const TextStyle(
                   fontFamily: AppTextStyles.fontFamily,
                   fontSize: 36,
                   fontWeight: FontWeight.w700,
@@ -272,7 +278,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
               width: 281,
               height: 114,
               child: Text(
-                'Experience seamless communication with our AI-powered translation engine.',
+                l10n.loginSubtitle,
                 style: TextStyle(
                   fontFamily: AppTextStyles.fontFamily,
                   fontSize: 16,
@@ -287,8 +293,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
             top: 389,
             left: 37,
             child: _LoginButtonAligned(
-              label:
-                  authState.isLoading ? "Signing in..." : "Continue with Gmail",
+              label: authState.isLoading
+                  ? l10n.signingIn
+                  : l10n.continueWithGoogle,
               provider: _AuthProvider.google,
               onTap: authState.isLoading ? null : _signInWithGoogle,
               iconSize: const Size(18, 18.64),
@@ -299,8 +306,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
             left: 37,
             child: _LoginButtonAligned(
               label: authState.isLoading
-                  ? "Signing in..."
-                  : "Continue with Facebook",
+                  ? l10n.signingIn
+                  : l10n.continueWithFacebook,
               provider: _AuthProvider.facebook,
               onTap: authState.isLoading ? null : _signInWithFacebook,
               iconSize: const Size(12, 21.81),
@@ -311,7 +318,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
             left: 37,
             child: _LoginButtonAligned(
               label:
-                  authState.isLoading ? "Signing in..." : "Continue with Apple",
+                  authState.isLoading ? l10n.signingIn : l10n.continueWithApple,
               provider: _AuthProvider.apple,
               onTap: authState.isLoading ? null : _signInWithApple,
               iconSize: const Size(18, 22),
@@ -334,9 +341,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
                       ShaderMask(
                         shaderCallback: (b) =>
                             _guestTextGradient.createShader(b),
-                        child: const Text(
-                          'Continue as Guest',
-                          style: TextStyle(
+                        child: Text(
+                          l10n.continueAsGuest,
+                          style: const TextStyle(
                             fontFamily: AppTextStyles.fontFamily,
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
@@ -376,11 +383,11 @@ class _LoginViewState extends ConsumerState<LoginView> {
                       fontWeight: FontWeight.w400,
                     ),
                     children: [
-                      const TextSpan(
-                        text: 'By signing up for swipe, you agree to our ',
+                      TextSpan(
+                        text: l10n.loginLegalPrefix,
                       ),
                       TextSpan(
-                        text: 'Terms of Service.',
+                        text: l10n.termsOfServiceLinkText,
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
                           decoration: TextDecoration.underline,
@@ -389,11 +396,11 @@ class _LoginViewState extends ConsumerState<LoginView> {
                           ..onTap = () => _openUrl(_termsUrl),
                       ),
                       const TextSpan(text: '\n'),
-                      const TextSpan(
-                        text: 'Learn how we process your data in our ',
+                      TextSpan(
+                        text: l10n.loginLegalMiddle,
                       ),
                       TextSpan(
-                        text: 'Privacy Policy',
+                        text: l10n.privacyPolicyLinkText,
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
                           decoration: TextDecoration.underline,
@@ -401,9 +408,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => _openUrl(_privacyUrl),
                       ),
-                      const TextSpan(text: ' and\n'),
+                      TextSpan(text: l10n.loginLegalAnd),
                       TextSpan(
-                        text: 'Cookies Policy',
+                        text: l10n.cookiesPolicyLinkText,
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
                           decoration: TextDecoration.underline,

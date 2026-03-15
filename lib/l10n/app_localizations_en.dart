@@ -99,7 +99,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get goodEvening => 'Good Evening';
 
   @override
-  String get placeTextInsideFrame => 'Place the text you want to translate inside the frame.';
+  String get placeTextInsideFrame =>
+      'Place the text you want to translate inside the frame.';
 
   @override
   String get selectOrCapturePhoto => 'Select or capture a photo';
@@ -135,7 +136,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get voiceTranslateTitle => 'Voice Translate';
 
   @override
-  String get voiceTranslateSubtitle => 'Real-Time Translation - Faster,\nSmarter Artificial Intelligence';
+  String get voiceTranslateSubtitle =>
+      'Real-Time Translation - Faster,\nSmarter Artificial Intelligence';
 
   @override
   String get tryNow => 'Try Now!';
@@ -150,7 +152,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tapToTranslateNow => 'Tap to translate now';
 
   @override
-  String get selectLanguageToSpeak => 'Please select the language you wish to speak in';
+  String get selectLanguageToSpeak =>
+      'Please select the language you wish to speak in';
 
   @override
   String get languageTurkish => 'Turkish';
@@ -195,16 +198,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get favoriteRouteNotReady => 'Favorite route is not ready yet';
 
   @override
-  String get exampleTextTitle1 => 'The weather is so nice today;\nI want to go for a walk.';
+  String get exampleTextTitle1 =>
+      'The weather is so nice today;\nI want to go for a walk.';
 
   @override
-  String get exampleTextSubtitle1 => 'Bugün hava çok güzel; yürüyüşe çıkmak istiyorum.';
+  String get exampleTextSubtitle1 =>
+      'Bugün hava çok güzel; yürüyüşe çıkmak istiyorum.';
 
   @override
-  String get exampleTextTitle2 => 'It’s a beautiful day; I think I’ll take a stroll.';
+  String get exampleTextTitle2 =>
+      'It’s a beautiful day; I think I’ll take a stroll.';
 
   @override
-  String get exampleTextSubtitle2 => 'Harika bir gün; sanırım kısa bir yürüyüş yapacağım.';
+  String get exampleTextSubtitle2 =>
+      'Harika bir gün; sanırım kısa bir yürüyüş yapacağım.';
 
   @override
   String get profileTitle => 'Profile';
@@ -234,13 +241,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileLogoutDialogTitle => 'You are about to log out';
 
   @override
-  String get profileLogoutDialogSubtitle => 'See you again soon! We\'ll miss your\nbreathing exercises.';
+  String get profileLogoutDialogSubtitle =>
+      'See you again soon! We\'ll miss your\nbreathing exercises.';
 
   @override
   String get shareWithFriendTitle => 'Share with Friend';
 
   @override
-  String get shareWithFriendSubtitle => 'Invite your friends and enjoy\ntranslate together';
+  String get shareWithFriendSubtitle =>
+      'Invite your friends and enjoy\ntranslate together';
 
   @override
   String get linkLabel => 'LINK';
@@ -282,10 +291,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get age => 'Age';
 
   @override
-  String get deleteAccountDialogTitle => 'Are you sure you want to\ndelete your account?';
+  String get deleteAccountDialogTitle =>
+      'Are you sure you want to\ndelete your account?';
 
   @override
-  String get deleteAccountDialogDescription => 'This action cannot be undone, and all\nyour history and data will be\npermanently deleted.';
+  String get deleteAccountDialogDescription =>
+      'This action cannot be undone, and all\nyour history and data will be\npermanently deleted.';
 
   @override
   String get languageGerman => 'German';
@@ -323,37 +334,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String get faqQuestion1 => 'How does Live Lingola work?';
 
   @override
-  String get faqAnswer1 => 'Live Lingola helps you translate text, voice, and other content quickly with AI-powered tools.';
+  String get faqAnswer1 =>
+      'Live Lingola helps you translate text, voice, and other content quickly with AI-powered tools.';
 
   @override
   String get faqQuestion2 => 'Is my data secure?';
 
   @override
-  String get faqAnswer2 => 'We take data security seriously and aim to protect your personal information and translation history.';
+  String get faqAnswer2 =>
+      'We take data security seriously and aim to protect your personal information and translation history.';
 
   @override
   String get faqQuestion3 => 'Can I use it offline?';
 
   @override
-  String get faqAnswer3 => 'Some features may require an internet connection. Offline support depends on the translation service being used.';
+  String get faqAnswer3 =>
+      'Some features may require an internet connection. Offline support depends on the translation service being used.';
 
   @override
   String get faqQuestion4 => 'How can I cancel my subscription?';
 
   @override
-  String get faqAnswer4 => 'You can manage or cancel your subscription from your store account settings or the subscription section of the app.';
+  String get faqAnswer4 =>
+      'You can manage or cancel your subscription from your store account settings or the subscription section of the app.';
 
   @override
   String get faqQuestion5 => 'Is family sharing available?';
 
   @override
-  String get faqAnswer5 => 'Family sharing availability depends on your subscription platform and store policies. Please check your account settings for supported options.';
+  String get faqAnswer5 =>
+      'Family sharing availability depends on your subscription platform and store policies. Please check your account settings for supported options.';
 
   @override
   String get photoTranslateTitle => 'Photo Translate';
 
   @override
-  String get photoTranslateInstruction => 'Place the text you want to translate\ninside the frame.';
+  String get photoTranslateInstruction =>
+      'Place the text you want to translate\ninside the frame.';
 
   @override
   String get photoTranslationFailed => 'Photo translation failed';
@@ -380,10 +397,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingTitle2 => 'Live Translation\nExperience';
 
   @override
-  String get onboardingBody1 => 'With Live Lingola, no matter where you are in the world, foreign languages are no longer a barrier. Experience communication at its most fluid.';
+  String get onboardingBody1 =>
+      'With Live Lingola, no matter where you are in the world, foreign languages are no longer a barrier. Experience communication at its most fluid.';
 
   @override
-  String get onboardingBody2 => 'Instantly translate your voice and surrounding text into your own language. Conversations are now seamless with our AI-powered technology.';
+  String get onboardingBody2 =>
+      'Instantly translate your voice and surrounding text into your own language. Conversations are now seamless with our AI-powered technology.';
 
   @override
   String get getStarted => 'Get Started';
@@ -392,7 +411,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingFlow5Title => 'Your Personal Account\nIs Being Created';
 
   @override
-  String get onboardingFlow5Subtitle => 'Your AI assistant is personalizing your experience.\nThis may take a few seconds.';
+  String get onboardingFlow5Subtitle =>
+      'Your AI assistant is personalizing your experience.\nThis may take a few seconds.';
 
   @override
   String get onboardingFlow5ProgressLabel => 'AI personalizing your experience';
@@ -401,7 +421,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingFlow5StepProfile => 'Profile is being created';
 
   @override
-  String get onboardingFlow5StepLanguage => 'Language settings are being configured';
+  String get onboardingFlow5StepLanguage =>
+      'Language settings are being configured';
 
   @override
   String get onboardingFlow5StepAi => 'AI model is being prepared';
@@ -418,7 +439,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get skip => 'Skip';
 
   @override
-  String get onboardingFlow4Title => 'What features would you like\nin a translation app?';
+  String get onboardingFlow4Title =>
+      'What features would you like\nin a translation app?';
 
   @override
   String get onboardingFlow4Subtitle => 'Please indicate your preference.';
@@ -454,7 +476,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingFlow2Title => 'Select Language';
 
   @override
-  String get onboardingFlow2Subtitle => 'Select the language you want to translate.\nYour selection affects the entire application.';
+  String get onboardingFlow2Subtitle =>
+      'Select the language you want to translate.\nYour selection affects the entire application.';
 
   @override
   String get from => 'From';
@@ -463,7 +486,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get to => 'To';
 
   @override
-  String get onboardingFlow1Title => 'What do you use the\ntranslation for most?';
+  String get onboardingFlow1Title =>
+      'What do you use the\ntranslation for most?';
 
   @override
   String get onboardingFlow1Subtitle => 'Please indicate your preference.';
@@ -487,7 +511,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingFlow1OptionOther => 'Other';
 
   @override
-  String get homeWelcomeTitle => 'Let’s start translating into\nyour desired language';
+  String get homeWelcomeTitle =>
+      'Let’s start translating into\nyour desired language';
 
   @override
   String get homeFeatureVoice => 'Instant Voice\nTranslation';
@@ -541,10 +566,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clearFavoriteTitle => 'Clear Favorite';
 
   @override
-  String get clearHistoryDescription => 'Are you sure you want to\nclear your history?';
+  String get clearHistoryDescription =>
+      'Are you sure you want to\nclear your history?';
 
   @override
-  String get clearFavoriteDescription => 'Are you sure you want to\nclear your favorite list?';
+  String get clearFavoriteDescription =>
+      'Are you sure you want to\nclear your favorite list?';
 
   @override
   String get clear => 'Clear';
@@ -553,13 +580,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get frequentlyTermsTitle => 'Frequently Terms';
 
   @override
-  String get couldNotLoadFrequentlyUsedTerms => 'Could not load frequently used terms';
+  String get couldNotLoadFrequentlyUsedTerms =>
+      'Could not load frequently used terms';
 
   @override
   String get noFrequentlyUsedTermsFound => 'No frequently used terms found';
 
   @override
-  String get microphonePermissionRequired => 'Microphone permission is required.';
+  String get microphonePermissionRequired =>
+      'Microphone permission is required.';
 
   @override
   String get user => 'User';
@@ -576,7 +605,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get frequentlyUsed => 'Frequently Used';
 
   @override
-  String get reviewMostFrequentlyUsedTerms => 'Review the most\nfrequently used terms.';
+  String get reviewMostFrequentlyUsedTerms =>
+      'Review the most\nfrequently used terms.';
 
   @override
   String get unlimitedLiveTranslation => 'Unlimited Live Translation';
@@ -607,4 +637,218 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get popular => 'Popular';
+
+  @override
+  String get signInCancelled => 'Sign in was cancelled.';
+
+  @override
+  String get appleSignInFailed => 'Apple sign in failed.';
+
+  @override
+  String get facebookSignInFailed => 'Facebook sign in failed.';
+
+  @override
+  String get googleSignInFailed => 'Google sign in failed.';
+
+  @override
+  String genericSignInFailed(Object error) {
+    return 'Sign in failed: $error';
+  }
+
+  @override
+  String get userSyncFailed => 'Failed to sync user information.';
+
+  @override
+  String get loginTitle => 'Welcome to Live Lingola';
+
+  @override
+  String get loginSubtitle =>
+      'Continue with your preferred account to start translating.';
+
+  @override
+  String get signingIn => 'Signing in...';
+
+  @override
+  String get continueWithGoogle => 'Continue with Google';
+
+  @override
+  String get continueWithFacebook => 'Continue with Facebook';
+
+  @override
+  String get continueWithApple => 'Continue with Apple';
+
+  @override
+  String get continueAsGuest => 'Continue as Guest';
+
+  @override
+  String get loginLegalPrefix => 'By continuing, you agree to our ';
+
+  @override
+  String get termsOfServiceLinkText => 'Terms of Service';
+
+  @override
+  String get loginLegalMiddle => ', ';
+
+  @override
+  String get privacyPolicyLinkText => 'Privacy Policy';
+
+  @override
+  String get loginLegalAnd => ' and ';
+
+  @override
+  String get cookiesPolicyLinkText => 'Cookies Policy';
+
+  @override
+  String get faqQuestion6 => 'Which languages does Live Lingola support?';
+
+  @override
+  String get faqAnswer6 =>
+      'Our app supports text, voice, and image translation in more than 100 languages.';
+
+  @override
+  String get faqQuestion7 => 'Does the app record my voice during translation?';
+
+  @override
+  String get faqAnswer7 =>
+      'Your privacy is important to us. Voice data is used only temporarily to process translations and is not stored.';
+
+  @override
+  String get faqQuestion8 => 'Can I translate long documents like PDF files?';
+
+  @override
+  String get faqAnswer8 =>
+      'Yes. You can upload PDF, Word, or TXT files and receive translations while preserving formatting.';
+
+  @override
+  String get faqQuestion9 => 'How accurate are the translations?';
+
+  @override
+  String get faqAnswer9 =>
+      'We use multiple advanced AI translation engines such as DeepL, Google, and OpenAI-based technologies.';
+
+  @override
+  String get faqQuestion10 => 'Can I translate messages inside other apps?';
+
+  @override
+  String get faqAnswer10 =>
+      'Yes. If you enable accessibility permissions, you can use the floating translator to instantly translate messages in other apps.';
+
+  @override
+  String get proLabel => 'PRO';
+
+  @override
+  String get freeLabel => 'FREE';
+
+  @override
+  String get voicePlanProTitle => 'Real-Time\nTranslation';
+
+  @override
+  String get voicePlanFreeTitle => 'Translation Machine';
+
+  @override
+  String get highPrecision => 'High Precision';
+
+  @override
+  String get proScenario => 'Pro Scenario';
+
+  @override
+  String get automaticTranslation => 'Automatic Translation';
+
+  @override
+  String get topLevelModel => 'Top-Level Model';
+
+  @override
+  String get basicSensitivity => 'Basic Sensitivity';
+
+  @override
+  String get simpleScenario => 'Simple Scenario';
+
+  @override
+  String get touchAndTalk => 'Touch and Talk';
+
+  @override
+  String get generalModel => 'General Model';
+
+  @override
+  String get startButton => 'Start';
+
+  @override
+  String get trial60s => '60s trial';
+  @override
+  String get aiChatTitle => 'AI Chat';
+
+  @override
+  String get todayUppercase => 'TODAY';
+
+  @override
+  String get typing => 'Typing...';
+
+  @override
+  String get aiChatWelcomeMessage =>
+      'Hello! I\'m Lingola AI. How can I help you today?';
+
+  @override
+  String aiChatErrorMessage(Object error) {
+    return 'Sorry, something went wrong.\n$error';
+  }
+
+  @override
+  String get aiChatChipPromptSushi => 'Best sushi in Tokyo?';
+
+  @override
+  String get aiChatChipLabelSushi => '🇯🇵 Best Sushi?';
+
+  @override
+  String get aiChatChipPromptHotel => 'Any hotel tips for Tokyo?';
+
+  @override
+  String get aiChatChipLabelHotel => '🏨 Hotel Tips';
+
+  @override
+  String get aiChatChipPromptTransit => 'Can you explain Tokyo transit?';
+
+  @override
+  String get aiChatChipLabelTransit => '🚇 Transit Guide';
+
+  @override
+  String get expertGeneral => 'General';
+
+  @override
+  String get expertAutoSelection => 'Auto-Selection';
+
+  @override
+  String get expertGourmet => 'Gourmet';
+
+  @override
+  String get expertShopping => 'Shopping';
+
+  @override
+  String get expertBusiness => 'Business';
+
+  @override
+  String get expertTravel => 'Travel';
+
+  @override
+  String get expertDating => 'Dating';
+
+  @override
+  String get expertGames => 'Games';
+
+  @override
+  String get expertHealth => 'Health';
+
+  @override
+  String get expertLaw => 'Law';
+
+  @override
+  String get expertArt => 'Art';
+
+  @override
+  String get expertFinance => 'Finance';
+
+  @override
+  String get expertTechnology => 'Technology';
+
+  @override
+  String get expertNews => 'News';
 }

@@ -225,5 +225,177 @@
   "interview": "Interview",
   "business": "Business",
   "replyIdeas": "Reply Ideas",
-  "popular": "Popular"
+  "popular": "Popular",
+  "moreFeaturesTitle": "More Features",
+  "frequentlyUsedTitle": "Frequently Used",
+  "frequentlyUsedDescription": "Review the most frequently used terms.",
+  "historyTitle": "History",
+  "favoriteTitle": "Favorite",
+  "signInCancelled": "Sign in was cancelled.",
+  "appleSignInFailed": "Apple sign in failed.",
+  "facebookSignInFailed": "Facebook sign in failed.",
+  "googleSignInFailed": "Google sign in failed.",
+  "genericSignInFailed": "Sign in failed: {error}",
+  "@genericSignInFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "userSyncFailed": "Failed to sync user information.",
+  "loginTitle": "Welcome to Live Lingola",
+  "loginSubtitle": "Continue with your preferred account to start translating.",
+  "signingIn": "Signing in...",
+  "continueWithGoogle": "Continue with Google",
+  "continueWithFacebook": "Continue with Facebook",
+  "continueWithApple": "Continue with Apple",
+  "continueAsGuest": "Continue as Guest",
+  "loginLegalPrefix": "By continuing, you agree to our ",
+  "termsOfServiceLinkText": "Terms of Service",
+  "loginLegalMiddle": ", ",
+  "privacyPolicyLinkText": "Privacy Policy",
+  "loginLegalAnd": " and ",
+  "cookiesPolicyLinkText": "Cookies Policy",
+  "faqQuestion1": "Which languages does Live Lingola support?",
+
+"faqAnswer1": "Our app currently supports text, voice, and image translation in more than 100 languages. In addition to widely used languages such as English, German, and French, we also support many regional dialects.",
+
+"faqQuestion2": "How does the \"Live Translation\" feature work?",
+"faqAnswer2": "In voice translation mode, the app analyzes your speech in real time and translates it into the target language within seconds, then reads it aloud. This allows two people speaking different languages to communicate fluently.",
+
+"faqQuestion3": "Can I use the app without internet (offline)?",
+"faqAnswer3": "Yes! By downloading frequently used language packs in advance, you can benefit from offline mode during flights or trips abroad where you do not have an internet connection.",
+
+"faqQuestion4": "Can the image translation feature recognize every text?",
+"faqAnswer4": "Our advanced OCR (Optical Character Recognition) technology can recognize and translate menus, signs, books, and even much of handwritten text with high accuracy.",
+
+"faqQuestion5": "Is the app paid?",
+"faqAnswer5": "The basic features of Live Lingola are free. However, we also offer a Premium subscription option that includes benefits such as unlimited translation, offline mode, and an ad-free experience.",
+
+"faqQuestion6": "Does the app record my voice during voice translation?",
+"faqAnswer6": "Your privacy is important to us. Your voice data is processed only temporarily for translation and is not stored on our servers or shared with third parties without your consent.",
+
+"faqQuestion7": "What should I do if I experience a technical issue?",
+"faqAnswer7": "You can contact us through the \"Settings > Support\" section in the app or send an email to support@fly-work.com for assistance from our team.",
+
+"faqQuestion8": "Can I translate long documents like PDFs with Live Lingola?",
+"faqAnswer8": "Yes, you can upload PDF, Word, or TXT files using our document translation feature and receive the translated version without losing the original formatting.",
+
+"faqQuestion9": "How accurate are the translations?",
+"faqAnswer9": "We combine some of the world's most advanced AI engines, including DeepL, Google, and OpenAI-based systems. This allows us to provide not only word-for-word translations but also context-aware and natural results.",
+
+"faqQuestion10": "Can I translate inside other apps such as WhatsApp or Instagram?",
+"faqAnswer10": "Yes, if you grant accessibility permissions, you can use our floating bubble feature to translate incoming messages instantly without leaving other apps.",
+  "proLabel": "PRO",
+  "freeLabel": "FREE",
+  "voicePlanProTitle": "Real-Time\nTranslation",
+  "voicePlanFreeTitle": "Translation Machine",
+  "highPrecision": "High Precision",
+  "proScenario": "Pro Scenario",
+  "automaticTranslation": "Automatic Translation",
+  "topLevelModel": "Top-Level Model",
+  "basicSensitivity": "Basic Sensitivity",
+  "simpleScenario": "Simple Scenario",
+  "touchAndTalk": "Touch and Talk",
+  "generalModel": "General Model",
+  "startButton": "Start",
+  "trial60s": "60s trial",
+  
+  "skip": "Skip",
+  "onboardingFlow1Title": "What do you use the\ntranslation for most?",
+  "onboardingFlow1Subtitle": "Please indicate your preference.",
+  "onboardingFlow1OptionDaily": "Daily Communication",
+  "onboardingFlow1OptionBusiness": "Business World",
+  "onboardingFlow1OptionLearning": "Language Learning",
+  "onboardingFlow1OptionTravel": "Travel",
+  "onboardingFlow1OptionEntertainment": "Entertainment",
+  "onboardingFlow1OptionOther": "Other",
+  "next": "Next",
+
+
+  "back": "Back",
+  "onboardingFlow2Title": "Select Language",
+  "onboardingFlow2Subtitle": "Select the language you want to translate.\nYour selection affects the entire application.",
+  "from": "From",
+  "to": "To",
+  "next": "Next",
+  "languageTurkish": "Turkish",
+  "languageEnglish": "English",
+  "languageGerman": "German",
+  "languageItalian": "Italian",
+  "languageFrench": "French",
+  "languageJapanese": "Japanese",
+  "languageSpanish": "Spanish",
+  "languageRussian": "Russian",
+  "languagePortuguese": "Portuguese",
+  "languageKorean": "Korean",
+  "languageHindi": "Hindi",
+  
+  "back": "Back",
+  "skip": "Skip",
+  "onboardingFlow3Title": "Have you used AI\ntranslation before?",
+  "onboardingFlow3Subtitle": "Please indicate your preference.",
+  "yes": "Yes",
+  "no": "No",
+  "next": "Next",
+  
+  "back": "Back",
+  "skip": "Skip",
+  "onboardingFlow4Title": "What features would you like\nin a translation app?",
+  "onboardingFlow4Subtitle": "Please indicate your preference.",
+  "onboardingFlow4OptionAccurate": "Accurate Translation",
+  "onboardingFlow4OptionEasy": "Easy To Use",
+  "onboardingFlow4OptionPrivacy": "Privacy Protection",
+  "onboardingFlow4OptionTeach": "Teach Me A Language",
+  "onboardingFlow4OptionAll": "All Of Them",
+  "next": "Next",
+  
+  "onboardingFlow5Title": "Your Personal Account\nIs Being Created",
+  "onboardingFlow5Subtitle": "Your AI assistant is personalizing your experience.\nThis may take a few seconds.",
+  "onboardingFlow5ProgressLabel": "AI personalizing your experience",
+  "onboardingFlow5StepProfile": "Profile is being created",
+  "onboardingFlow5StepLanguage": "Language settings are being configured",
+  "onboardingFlow5StepAi": "AI model is being prepared",
+  "preferencesSaveFailed": "Preferences save failed: {error}",
+  "@preferencesSaveFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "saving": "Saving...",
+  "getStarted": "Get Started",
+
+  "aiChatTitle": "AI Chat",
+  "todayUppercase": "TODAY",
+  "typing": "Typing...",
+  "aiChatWelcomeMessage": "Hello! I'm Lingola AI. How can I help you today?",
+  "aiChatErrorMessage": "Sorry, something went wrong.\n{error}",
+  "@aiChatErrorMessage": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "aiChatChipPromptSushi": "Best sushi in Tokyo?",
+  "aiChatChipLabelSushi": "🇯🇵 Best Sushi?",
+  "aiChatChipPromptHotel": "Any hotel tips for Tokyo?",
+  "aiChatChipLabelHotel": "🏨 Hotel Tips",
+  "aiChatChipPromptTransit": "Can you explain Tokyo transit?",
+  "aiChatChipLabelTransit": "🚇 Transit Guide",
+  "expertGeneral": "General",
+"expertAutoSelection": "Auto-Selection",
+"expertGourmet": "Gourmet",
+"expertShopping": "Shopping",
+"expertBusiness": "Business",
+"expertTravel": "Travel",
+"expertDating": "Dating",
+"expertGames": "Games",
+"expertHealth": "Health",
+"expertLaw": "Law",
+"expertArt": "Art",
+"expertFinance": "Finance",
+"expertTechnology": "Technology",
+"expertNews": "News"
+
+
+
+
 }

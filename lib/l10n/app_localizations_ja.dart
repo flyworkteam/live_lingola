@@ -198,13 +198,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get exampleTextTitle1 => '今日はとても天気がいいので、\n散歩に行きたいです。';
 
   @override
-  String get exampleTextSubtitle1 => 'Bugün hava çok güzel; yürüyüşe çıkmak istiyorum.';
+  String get exampleTextSubtitle1 =>
+      'Bugün hava çok güzel; yürüyüşe çıkmak istiyorum.';
 
   @override
   String get exampleTextTitle2 => '今日はとてもいい日なので、\n少し散歩しようと思います。';
 
   @override
-  String get exampleTextSubtitle2 => 'Harika bir gün; sanırım kısa bir yürüyüş yapacağım.';
+  String get exampleTextSubtitle2 =>
+      'Harika bir gün; sanırım kısa bir yürüyüş yapacağım.';
 
   @override
   String get profileTitle => 'プロフィール';
@@ -234,7 +236,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get profileLogoutDialogTitle => 'ログアウトしようとしています';
 
   @override
-  String get profileLogoutDialogSubtitle => 'またすぐにお会いしましょう！\nあなたの呼吸エクササイズが恋しくなります。';
+  String get profileLogoutDialogSubtitle =>
+      'またすぐにお会いしましょう！\nあなたの呼吸エクササイズが恋しくなります。';
 
   @override
   String get shareWithFriendTitle => '友達と共有';
@@ -285,7 +288,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get deleteAccountDialogTitle => '本当にアカウントを\n削除しますか？';
 
   @override
-  String get deleteAccountDialogDescription => 'この操作は元に戻せず、すべての\n履歴とデータが完全に\n削除されます。';
+  String get deleteAccountDialogDescription =>
+      'この操作は元に戻せず、すべての\n履歴とデータが完全に\n削除されます。';
 
   @override
   String get languageGerman => 'ドイツ語';
@@ -323,7 +327,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get faqQuestion1 => 'Live Lingolaはどのように機能しますか？';
 
   @override
-  String get faqAnswer1 => 'Live Lingolaは、AI搭載ツールでテキスト、音声、その他のコンテンツをすばやく翻訳するのに役立ちます。';
+  String get faqAnswer1 =>
+      'Live Lingolaは、AI搭載ツールでテキスト、音声、その他のコンテンツをすばやく翻訳するのに役立ちます。';
 
   @override
   String get faqQuestion2 => '私のデータは安全ですか？';
@@ -335,19 +340,22 @@ class AppLocalizationsJa extends AppLocalizations {
   String get faqQuestion3 => 'オフラインで使えますか？';
 
   @override
-  String get faqAnswer3 => '一部の機能ではインターネット接続が必要な場合があります。オフライン対応は使用する翻訳サービスによって異なります。';
+  String get faqAnswer3 =>
+      '一部の機能ではインターネット接続が必要な場合があります。オフライン対応は使用する翻訳サービスによって異なります。';
 
   @override
   String get faqQuestion4 => 'サブスクリプションを解約するには？';
 
   @override
-  String get faqAnswer4 => 'ストアアカウント設定またはアプリ内のサブスクリプションセクションから、サブスクリプションを管理または解約できます。';
+  String get faqAnswer4 =>
+      'ストアアカウント設定またはアプリ内のサブスクリプションセクションから、サブスクリプションを管理または解約できます。';
 
   @override
   String get faqQuestion5 => 'ファミリー共有は利用できますか？';
 
   @override
-  String get faqAnswer5 => 'ファミリー共有の利用可否は、サブスクリプションプラットフォームとストアポリシーによって異なります。対応オプションについてはアカウント設定をご確認ください。';
+  String get faqAnswer5 =>
+      'ファミリー共有の利用可否は、サブスクリプションプラットフォームとストアポリシーによって異なります。対応オプションについてはアカウント設定をご確認ください。';
 
   @override
   String get photoTranslateTitle => '写真翻訳';
@@ -380,10 +388,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get onboardingTitle2 => 'ライブ翻訳\n体験';
 
   @override
-  String get onboardingBody1 => 'Live Lingolaなら、世界のどこにいても外国語はもう障害ではありません。最もスムーズなコミュニケーションを体験してください。';
+  String get onboardingBody1 =>
+      'Live Lingolaなら、世界のどこにいても外国語はもう障害ではありません。最もスムーズなコミュニケーションを体験してください。';
 
   @override
-  String get onboardingBody2 => 'あなたの声や周囲のテキストを、あなたの言語に瞬時に翻訳します。AI技術により会話がより自然になります。';
+  String get onboardingBody2 =>
+      'あなたの声や周囲のテキストを、あなたの言語に瞬時に翻訳します。AI技術により会話がより自然になります。';
 
   @override
   String get getStarted => '始める';
@@ -392,7 +402,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get onboardingFlow5Title => 'あなた専用のアカウントを\n作成しています';
 
   @override
-  String get onboardingFlow5Subtitle => 'AIアシスタントがあなたの体験をパーソナライズしています。\n数秒かかる場合があります。';
+  String get onboardingFlow5Subtitle =>
+      'AIアシスタントがあなたの体験をパーソナライズしています。\n数秒かかる場合があります。';
 
   @override
   String get onboardingFlow5ProgressLabel => 'AIがあなたの体験をパーソナライズしています';
@@ -454,7 +465,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get onboardingFlow2Title => '言語を選択';
 
   @override
-  String get onboardingFlow2Subtitle => '翻訳したい言語を選択してください。\nあなたの選択はアプリ全体に反映されます。';
+  String get onboardingFlow2Subtitle =>
+      '翻訳したい言語を選択してください。\nあなたの選択はアプリ全体に反映されます。';
 
   @override
   String get from => '元';
@@ -607,4 +619,210 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get popular => '人気';
+
+  @override
+  String get signInCancelled => 'サインインはキャンセルされました。';
+
+  @override
+  String get appleSignInFailed => 'Appleでのサインインに失敗しました。';
+
+  @override
+  String get facebookSignInFailed => 'Facebookでのサインインに失敗しました。';
+
+  @override
+  String get googleSignInFailed => 'Googleでのサインインに失敗しました。';
+
+  @override
+  String genericSignInFailed(Object error) {
+    return 'サインインに失敗しました: $error';
+  }
+
+  @override
+  String get userSyncFailed => 'ユーザー情報の同期に失敗しました。';
+
+  @override
+  String get loginTitle => 'Live Lingolaへようこそ';
+
+  @override
+  String get loginSubtitle => '翻訳を開始するには、お好みのアカウントで続行してください。';
+
+  @override
+  String get signingIn => 'サインイン中...';
+
+  @override
+  String get continueWithGoogle => 'Googleで続行';
+
+  @override
+  String get continueWithFacebook => 'Facebookで続行';
+
+  @override
+  String get continueWithApple => 'Appleで続行';
+
+  @override
+  String get continueAsGuest => 'ゲストとして続行';
+
+  @override
+  String get loginLegalPrefix => '続行することで、';
+
+  @override
+  String get termsOfServiceLinkText => '利用規約';
+
+  @override
+  String get loginLegalMiddle => '、';
+
+  @override
+  String get privacyPolicyLinkText => 'プライバシーポリシー';
+
+  @override
+  String get loginLegalAnd => 'および';
+
+  @override
+  String get cookiesPolicyLinkText => 'クッキーポリシー';
+
+  @override
+  String get faqQuestion6 => 'Live Lingola はどの言語に対応していますか？';
+
+  @override
+  String get faqAnswer6 => '100以上の言語でテキスト・音声・画像翻訳をサポートしています。';
+
+  @override
+  String get faqQuestion7 => '翻訳中に音声は保存されますか？';
+
+  @override
+  String get faqAnswer7 => '音声データは翻訳処理のために一時的に使用されるだけです。';
+
+  @override
+  String get faqQuestion8 => 'PDFなどの長い文書を翻訳できますか？';
+
+  @override
+  String get faqAnswer8 => 'はい。PDF、Word、TXT ファイルをアップロードできます。';
+
+  @override
+  String get faqQuestion9 => '翻訳の精度はどれくらいですか？';
+
+  @override
+  String get faqAnswer9 => 'DeepL、Google、OpenAI などのAI翻訳エンジンを使用しています。';
+
+  @override
+  String get faqQuestion10 => '他のアプリのメッセージを翻訳できますか？';
+
+  @override
+  String get faqAnswer10 => 'はい。アクセシビリティ権限を許可すると利用できます。';
+  @override
+  String get proLabel => 'PRO';
+
+  @override
+  String get freeLabel => 'FREE';
+
+  @override
+  String get voicePlanProTitle => 'リアルタイム\n翻訳';
+
+  @override
+  String get voicePlanFreeTitle => '翻訳マシン';
+
+  @override
+  String get highPrecision => '高精度';
+
+  @override
+  String get proScenario => 'プロ向けシナリオ';
+
+  @override
+  String get automaticTranslation => '自動翻訳';
+
+  @override
+  String get topLevelModel => '上位モデル';
+
+  @override
+  String get basicSensitivity => '基本感度';
+
+  @override
+  String get simpleScenario => 'シンプルなシナリオ';
+
+  @override
+  String get touchAndTalk => 'タップして話す';
+
+  @override
+  String get generalModel => '一般モデル';
+
+  @override
+  String get startButton => '開始';
+
+  @override
+  String get trial60s => '60秒トライアル';
+  @override
+  String get aiChatTitle => 'AIチャット';
+
+  @override
+  String get todayUppercase => '今日';
+
+  @override
+  String get typing => '入力中...';
+
+  @override
+  String get aiChatWelcomeMessage => 'こんにちは！私はLingola AIです。今日はどのようにお手伝いできますか？';
+
+  @override
+  String aiChatErrorMessage(Object error) {
+    return '申し訳ありません。問題が発生しました。\n$error';
+  }
+
+  @override
+  String get aiChatChipPromptSushi => '東京で一番おいしい寿司はどこですか？';
+
+  @override
+  String get aiChatChipLabelSushi => '🇯🇵 最高の寿司？';
+
+  @override
+  String get aiChatChipPromptHotel => '東京のホテルのコツはありますか？';
+
+  @override
+  String get aiChatChipLabelHotel => '🏨 ホテルのコツ';
+
+  @override
+  String get aiChatChipPromptTransit => '東京の交通について説明してもらえますか？';
+
+  @override
+  String get aiChatChipLabelTransit => '🚇 交通ガイド';
+
+  @override
+  String get expertGeneral => '一般';
+
+  @override
+  String get expertAutoSelection => '自動選択';
+
+  @override
+  String get expertGourmet => 'グルメ';
+
+  @override
+  String get expertShopping => 'ショッピング';
+
+  @override
+  String get expertBusiness => 'ビジネス';
+
+  @override
+  String get expertTravel => '旅行';
+
+  @override
+  String get expertDating => 'デート';
+
+  @override
+  String get expertGames => 'ゲーム';
+
+  @override
+  String get expertHealth => '健康';
+
+  @override
+  String get expertLaw => '法律';
+
+  @override
+  String get expertArt => 'アート';
+
+  @override
+  String get expertFinance => '金融';
+
+  @override
+  String get expertTechnology => 'テクノロジー';
+
+  @override
+  String get expertNews => 'ニュース';
 }

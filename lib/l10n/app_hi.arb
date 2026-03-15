@@ -225,5 +225,183 @@
   "interview": "इंटरव्यू",
   "business": "बिज़नेस",
   "replyIdeas": "जवाब के विचार",
-  "popular": "लोकप्रिय"
+  "popular": "लोकप्रिय",
+  "moreFeaturesTitle": "और सुविधाएँ",
+"frequentlyUsedTitle": "अक्सर उपयोग किए जाने वाले",
+"frequentlyUsedDescription": "सबसे अधिक उपयोग किए जाने वाले शब्दों की समीक्षा करें।",
+"historyTitle": "इतिहास",
+"favoriteTitle": "पसंदीदा",
+  "signInCancelled": "साइन इन रद्द कर दिया गया।",
+  "appleSignInFailed": "Apple से साइन इन विफल रहा।",
+  "facebookSignInFailed": "Facebook से साइन इन विफल रहा।",
+  "googleSignInFailed": "Google से साइन इन विफल रहा।",
+  "genericSignInFailed": "साइन इन विफल रहा: {error}",
+  "@genericSignInFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "userSyncFailed": "उपयोगकर्ता जानकारी सिंक नहीं की जा सकी।",
+  "loginTitle": "Live Lingola में आपका स्वागत है",
+  "loginSubtitle": "अनुवाद शुरू करने के लिए अपने पसंदीदा खाते से जारी रखें।",
+  "signingIn": "साइन इन हो रहा है...",
+  "continueWithGoogle": "Google के साथ जारी रखें",
+  "continueWithFacebook": "Facebook के साथ जारी रखें",
+  "continueWithApple": "Apple के साथ जारी रखें",
+  "continueAsGuest": "अतिथि के रूप में जारी रखें",
+  "loginLegalPrefix": "जारी रखकर, आप हमारी ",
+  "termsOfServiceLinkText": "सेवा की शर्तों",
+  "loginLegalMiddle": ", ",
+  "privacyPolicyLinkText": "गोपनीयता नीति",
+  "loginLegalAnd": " और ",
+  "cookiesPolicyLinkText": "कुकी नीति",
+  
+"faqQuestion1": "Live Lingola किन भाषाओं को सपोर्ट करता है?",
+"faqAnswer1": "यह 100 से अधिक भाषाओं को सपोर्ट करता है।",
+
+"faqQuestion2": "लाइव अनुवाद कैसे काम करता है?",
+"faqAnswer2": "यह आपकी आवाज़ को तुरंत अनुवाद करता है।",
+
+"faqQuestion3": "क्या इसे ऑफलाइन उपयोग कर सकते हैं?",
+"faqAnswer3": "हाँ, भाषा पैक डाउनलोड करके।",
+
+"faqQuestion4": "क्या इमेज अनुवाद सभी टेक्स्ट पहचान सकता है?",
+"faqAnswer4": "OCR तकनीक का उपयोग करता है।",
+
+"faqQuestion5": "क्या Live Lingola मुफ्त है?",
+"faqAnswer5": "बेसिक फीचर्स मुफ्त हैं।",
+
+"faqQuestion6": "क्या ऐप मेरी आवाज़ रिकॉर्ड करता है?",
+"faqAnswer6": "आवाज़ केवल अस्थायी रूप से प्रोसेस होती है।",
+
+"faqQuestion7": "समस्या होने पर क्या करें?",
+"faqAnswer7": "सपोर्ट से संपर्क करें।",
+
+"faqQuestion8": "क्या मैं डॉक्यूमेंट अनुवाद कर सकता हूँ?",
+"faqAnswer8": "हाँ, PDF और Word।",
+
+"faqQuestion9": "अनुवाद कितना सटीक है?",
+"faqAnswer9": "हम कई AI इंजन का उपयोग करते हैं।",
+
+"faqQuestion10": "क्या अन्य ऐप्स में अनुवाद कर सकते हैं?",
+"faqAnswer10": "हाँ, एक्सेसिबिलिटी अनुमति के साथ।",
+
+  "proLabel": "PRO",
+  "freeLabel": "FREE",
+  "voicePlanProTitle": "रियल-टाइम\nअनुवाद",
+  "voicePlanFreeTitle": "अनुवाद मशीन",
+  "highPrecision": "उच्च सटीकता",
+  "proScenario": "प्रो परिदृश्य",
+  "automaticTranslation": "स्वचालित अनुवाद",
+  "topLevelModel": "उच्च स्तरीय मॉडल",
+  "basicSensitivity": "मूल संवेदनशीलता",
+  "simpleScenario": "सरल परिदृश्य",
+  "touchAndTalk": "छूएँ और बोलें",
+  "generalModel": "सामान्य मॉडल",
+  "startButton": "शुरू करें",
+  "trial60s": "60 सेकंड ट्रायल",
+  
+  "skip": "छोड़ें",
+  "onboardingFlow1Title": "आप अनुवाद का\nसबसे ज़्यादा उपयोग किस लिए करते हैं?",
+  "onboardingFlow1Subtitle": "कृपया अपनी पसंद बताएं।",
+  "onboardingFlow1OptionDaily": "दैनिक संचार",
+  "onboardingFlow1OptionBusiness": "व्यावसायिक दुनिया",
+  "onboardingFlow1OptionLearning": "भाषा सीखना",
+  "onboardingFlow1OptionTravel": "यात्रा",
+  "onboardingFlow1OptionEntertainment": "मनोरंजन",
+  "onboardingFlow1OptionOther": "अन्य",
+  "next": "आगे",
+  
+  "back": "वापस",
+  "onboardingFlow2Title": "भाषा चुनें",
+  "onboardingFlow2Subtitle": "जिस भाषा में आप अनुवाद करना चाहते हैं उसे चुनें।\nआपका चयन पूरे ऐप को प्रभावित करेगा।",
+  "from": "से",
+  "to": "में",
+  "next": "आगे",
+  "languageTurkish": "तुर्की",
+  "languageEnglish": "अंग्रेज़ी",
+  "languageGerman": "जर्मन",
+  "languageItalian": "इतालवी",
+  "languageFrench": "फ़्रेंच",
+  "languageJapanese": "जापानी",
+  "languageSpanish": "स्पेनिश",
+  "languageRussian": "रूसी",
+  "languagePortuguese": "पुर्तगाली",
+  "languageKorean": "कोरियाई",
+  "languageHindi": "हिंदी",
+  
+  "back": "वापस",
+  "skip": "छोड़ें",
+  "onboardingFlow3Title": "क्या आपने पहले कभी\nAI अनुवाद का उपयोग किया है?",
+  "onboardingFlow3Subtitle": "कृपया अपनी पसंद बताएं।",
+  "yes": "हाँ",
+  "no": "नहीं",
+  "next": "आगे",
+  
+  "back": "वापस",
+  "skip": "छोड़ें",
+  "onboardingFlow4Title": "आप एक अनुवाद ऐप में\nकौन-सी सुविधाएँ चाहते हैं?",
+  "onboardingFlow4Subtitle": "कृपया अपनी पसंद बताएं।",
+  "onboardingFlow4OptionAccurate": "सटीक अनुवाद",
+  "onboardingFlow4OptionEasy": "उपयोग में आसान",
+  "onboardingFlow4OptionPrivacy": "गोपनीयता सुरक्षा",
+  "onboardingFlow4OptionTeach": "मुझे एक भाषा सिखाएँ",
+  "onboardingFlow4OptionAll": "ये सब",
+  "next": "आगे",
+  
+  "onboardingFlow5Title": "आपका व्यक्तिगत खाता\nबनाया जा रहा है",
+  "onboardingFlow5Subtitle": "आपका AI सहायक आपके अनुभव को व्यक्तिगत बना रहा है।\nइसमें कुछ सेकंड लग सकते हैं।",
+  "onboardingFlow5ProgressLabel": "AI आपके अनुभव को व्यक्तिगत बना रहा है",
+  "onboardingFlow5StepProfile": "प्रोफ़ाइल बनाई जा रही है",
+  "onboardingFlow5StepLanguage": "भाषा सेटिंग्स कॉन्फ़िगर की जा रही हैं",
+  "onboardingFlow5StepAi": "AI मॉडल तैयार किया जा रहा है",
+  "preferencesSaveFailed": "पसंदें सहेजी नहीं जा सकीं: {error}",
+  "@preferencesSaveFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "saving": "सहेजा जा रहा है...",
+  "getStarted": "शुरू करें",
+  
+  "aiChatTitle": "AI चैट",
+  "todayUppercase": "आज",
+  "typing": "टाइप कर रहा है...",
+  "aiChatWelcomeMessage": "नमस्ते! मैं Lingola AI हूँ। आज मैं आपकी कैसे मदद कर सकता हूँ?",
+  "aiChatErrorMessage": "माफ़ कीजिए, कुछ गड़बड़ हो गई।\n{error}",
+  "@aiChatErrorMessage": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "aiChatChipPromptSushi": "टोक्यो में सबसे अच्छा सुशी कहाँ मिलता है?",
+  "aiChatChipLabelSushi": "🇯🇵 सबसे अच्छा सुशी?",
+  "aiChatChipPromptHotel": "टोक्यो के लिए कोई होटल सुझाव?",
+  "aiChatChipLabelHotel": "🏨 होटल सुझाव",
+  "aiChatChipPromptTransit": "क्या आप टोक्यो ट्रांज़िट समझा सकते हैं?",
+  "aiChatChipLabelTransit": "🚇 ट्रांज़िट गाइड",
+  
+  "expertGeneral": "सामान्य",
+  "expertAutoSelection": "स्वचालित चयन",
+  "expertGourmet": "गौरमे",
+  "expertShopping": "खरीदारी",
+  "expertBusiness": "व्यवसाय",
+  "expertTravel": "यात्रा",
+  "expertDating": "डेटिंग",
+  "expertGames": "गेम्स",
+  "expertHealth": "स्वास्थ्य",
+  "expertLaw": "कानून",
+  "expertArt": "कला",
+  "expertFinance": "वित्त",
+  "expertTechnology": "प्रौद्योगिकी",
+  "expertNews": "समाचार"
+
+
+
+
+
+
+
+
+
 }

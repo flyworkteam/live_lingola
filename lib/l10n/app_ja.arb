@@ -225,5 +225,183 @@
   "interview": "面接",
   "business": "ビジネス",
   "replyIdeas": "返信アイデア",
-  "popular": "人気"
+  "popular": "人気",
+  "moreFeaturesTitle": "その他の機能",
+"frequentlyUsedTitle": "よく使う項目",
+"frequentlyUsedDescription": "最もよく使われる用語を確認しましょう。",
+"historyTitle": "履歴",
+"favoriteTitle": "お気に入り",
+  "signInCancelled": "サインインはキャンセルされました。",
+  "appleSignInFailed": "Appleでのサインインに失敗しました。",
+  "facebookSignInFailed": "Facebookでのサインインに失敗しました。",
+  "googleSignInFailed": "Googleでのサインインに失敗しました。",
+  "genericSignInFailed": "サインインに失敗しました: {error}",
+  "@genericSignInFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "userSyncFailed": "ユーザー情報の同期に失敗しました。",
+  "loginTitle": "Live Lingolaへようこそ",
+  "loginSubtitle": "翻訳を開始するには、お好みのアカウントで続行してください。",
+  "signingIn": "サインイン中...",
+  "continueWithGoogle": "Googleで続行",
+  "continueWithFacebook": "Facebookで続行",
+  "continueWithApple": "Appleで続行",
+  "continueAsGuest": "ゲストとして続行",
+  "loginLegalPrefix": "続行することで、",
+  "termsOfServiceLinkText": "利用規約",
+  "loginLegalMiddle": "、",
+  "privacyPolicyLinkText": "プライバシーポリシー",
+  "loginLegalAnd": "および",
+  "cookiesPolicyLinkText": "クッキーポリシー",
+  
+"faqQuestion1": "Live Lingola はどの言語をサポートしていますか？",
+"faqAnswer1": "100以上の言語をサポートしています。",
+
+"faqQuestion2": "ライブ翻訳はどのように動作しますか？",
+"faqAnswer2": "音声をリアルタイムで翻訳します。",
+
+"faqQuestion3": "オフラインで使えますか？",
+"faqAnswer3": "はい、言語パックをダウンロードできます。",
+
+"faqQuestion4": "画像翻訳はすべての文字を認識できますか？",
+"faqAnswer4": "OCR技術により高精度で認識します。",
+
+"faqQuestion5": "Live Lingola は無料ですか？",
+"faqAnswer5": "基本機能は無料です。",
+
+"faqQuestion6": "音声は保存されますか？",
+"faqAnswer6": "音声は一時的に処理されます。",
+
+"faqQuestion7": "問題が発生した場合は？",
+"faqAnswer7": "サポートにお問い合わせください。",
+
+"faqQuestion8": "ドキュメント翻訳できますか？",
+"faqAnswer8": "PDFやWordを翻訳できます。",
+
+"faqQuestion9": "翻訳の精度は？",
+"faqAnswer9": "複数AIを使用しています。",
+
+"faqQuestion10": "他のアプリで翻訳できますか？",
+"faqAnswer10": "アクセシビリティで可能です。",
+
+  "proLabel": "PRO",
+  "freeLabel": "FREE",
+  "voicePlanProTitle": "リアルタイム\n翻訳",
+  "voicePlanFreeTitle": "翻訳マシン",
+  "highPrecision": "高精度",
+  "proScenario": "プロ向けシナリオ",
+  "automaticTranslation": "自動翻訳",
+  "topLevelModel": "上位モデル",
+  "basicSensitivity": "基本感度",
+  "simpleScenario": "シンプルなシナリオ",
+  "touchAndTalk": "タップして話す",
+  "generalModel": "一般モデル",
+  "startButton": "開始",
+  "trial60s": "60秒トライアル",
+  
+  "skip": "スキップ",
+  "onboardingFlow1Title": "翻訳を最もよく使う目的は\n何ですか？",
+  "onboardingFlow1Subtitle": "ご希望を選択してください。",
+  "onboardingFlow1OptionDaily": "日常会話",
+  "onboardingFlow1OptionBusiness": "ビジネス",
+  "onboardingFlow1OptionLearning": "語学学習",
+  "onboardingFlow1OptionTravel": "旅行",
+  "onboardingFlow1OptionEntertainment": "エンターテインメント",
+  "onboardingFlow1OptionOther": "その他",
+  "next": "次へ",
+  
+  "back": "戻る",
+  "onboardingFlow2Title": "言語を選択",
+  "onboardingFlow2Subtitle": "翻訳したい言語を選択してください。\nこの選択はアプリ全体に適用されます。",
+  "from": "元の言語",
+  "to": "翻訳先",
+  "next": "次へ",
+  "languageTurkish": "トルコ語",
+  "languageEnglish": "英語",
+  "languageGerman": "ドイツ語",
+  "languageItalian": "イタリア語",
+  "languageFrench": "フランス語",
+  "languageJapanese": "日本語",
+  "languageSpanish": "スペイン語",
+  "languageRussian": "ロシア語",
+  "languagePortuguese": "ポルトガル語",
+  "languageKorean": "韓国語",
+  "languageHindi": "ヒンディー語",
+  
+  "back": "戻る",
+  "skip": "スキップ",
+  "onboardingFlow3Title": "AI翻訳を以前に\n使ったことがありますか？",
+  "onboardingFlow3Subtitle": "ご希望を選択してください。",
+  "yes": "はい",
+  "no": "いいえ",
+  "next": "次へ",
+  
+  "back": "戻る",
+  "skip": "スキップ",
+  "onboardingFlow4Title": "翻訳アプリに\nどんな機能が欲しいですか？",
+  "onboardingFlow4Subtitle": "ご希望を選択してください。",
+  "onboardingFlow4OptionAccurate": "正確な翻訳",
+  "onboardingFlow4OptionEasy": "使いやすさ",
+  "onboardingFlow4OptionPrivacy": "プライバシー保護",
+  "onboardingFlow4OptionTeach": "語学を教えてほしい",
+  "onboardingFlow4OptionAll": "全部",
+  "next": "次へ",
+  
+  "onboardingFlow5Title": "あなた専用のアカウントを\n作成しています",
+  "onboardingFlow5Subtitle": "AIアシスタントがあなたの体験を最適化しています。\n数秒かかる場合があります。",
+  "onboardingFlow5ProgressLabel": "AIがあなたの体験を最適化しています",
+  "onboardingFlow5StepProfile": "プロフィールを作成しています",
+  "onboardingFlow5StepLanguage": "言語設定を構成しています",
+  "onboardingFlow5StepAi": "AIモデルを準備しています",
+  "preferencesSaveFailed": "設定を保存できませんでした: {error}",
+  "@preferencesSaveFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "saving": "保存中...",
+  "getStarted": "始める",
+  
+  "aiChatTitle": "AIチャット",
+  "todayUppercase": "今日",
+  "typing": "入力中...",
+  "aiChatWelcomeMessage": "こんにちは！私はLingola AIです。今日はどのようにお手伝いできますか？",
+  "aiChatErrorMessage": "申し訳ありません。問題が発生しました。\n{error}",
+  "@aiChatErrorMessage": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "aiChatChipPromptSushi": "東京で一番おいしい寿司はどこですか？",
+  "aiChatChipLabelSushi": "🇯🇵 最高の寿司？",
+  "aiChatChipPromptHotel": "東京のホテルのコツはありますか？",
+  "aiChatChipLabelHotel": "🏨 ホテルのコツ",
+  "aiChatChipPromptTransit": "東京の交通について説明してもらえますか？",
+  "aiChatChipLabelTransit": "🚇 交通ガイド",
+  
+  "expertGeneral": "一般",
+  "expertAutoSelection": "自動選択",
+  "expertGourmet": "グルメ",
+  "expertShopping": "ショッピング",
+  "expertBusiness": "ビジネス",
+  "expertTravel": "旅行",
+  "expertDating": "デート",
+  "expertGames": "ゲーム",
+  "expertHealth": "健康",
+  "expertLaw": "法律",
+  "expertArt": "アート",
+  "expertFinance": "金融",
+  "expertTechnology": "テクノロジー",
+  "expertNews": "ニュース"
+
+
+
+
+
+
+
+
+
 }

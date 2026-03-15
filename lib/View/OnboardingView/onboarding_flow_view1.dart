@@ -25,7 +25,7 @@ class OnboardingFlowView1 extends ConsumerWidget {
 
     const skipRight = 29.0;
     const blockTop = 130.0;
-    const blockHeight = 516.0;
+    const blockHeight = 530.0;
 
     final bottomCtaSpace = (51 + 18 + 12).h;
 
@@ -99,13 +99,14 @@ class OnboardingFlowView1 extends ConsumerWidget {
                       children: [
                         Positioned(
                           top: (130 - blockTop).h,
-                          left: 70.w,
+                          left: 69.w,
                           child: SizedBox(
                             width: 255.w,
-                            height: 60.h,
                             child: Text(
                               l10n.onboardingFlow1Title,
                               textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w600,
@@ -117,19 +118,20 @@ class OnboardingFlowView1 extends ConsumerWidget {
                           ),
                         ),
                         Positioned(
-                          top: (193 - blockTop).h,
-                          left: 60.w,
+                          top: (196 - blockTop).h,
+                          left: 59.w,
                           child: SizedBox(
                             width: 275.w,
-                            height: 23.h,
                             child: Text(
                               l10n.onboardingFlow1Subtitle,
                               textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w300,
                                 fontSize: 15.sp,
-                                height: 1.0,
+                                height: 1.2,
                                 color: const Color(0xFF000000),
                               ),
                             ),
@@ -142,31 +144,31 @@ class OnboardingFlowView1 extends ConsumerWidget {
                           iconAsset: 'assets/images/onboarding1/messages.svg',
                         ),
                         choice(
-                          figmaTop: 331,
+                          figmaTop: 333,
                           text: l10n.onboardingFlow1OptionBusiness,
                           v: TranslationUsage.business,
                           iconAsset: 'assets/images/onboarding1/business.svg',
                         ),
                         choice(
-                          figmaTop: 397,
+                          figmaTop: 401,
                           text: l10n.onboardingFlow1OptionLearning,
                           v: TranslationUsage.learning,
                           iconAsset: 'assets/images/onboarding1/translate.svg',
                         ),
                         choice(
-                          figmaTop: 463,
+                          figmaTop: 469,
                           text: l10n.onboardingFlow1OptionTravel,
                           v: TranslationUsage.travel,
                           iconAsset: 'assets/images/onboarding1/travel.svg',
                         ),
                         choice(
-                          figmaTop: 529,
+                          figmaTop: 537,
                           text: l10n.onboardingFlow1OptionEntertainment,
                           v: TranslationUsage.entertainment,
                           iconAsset: 'assets/images/onboarding1/game.svg',
                         ),
                         choice(
-                          figmaTop: 595,
+                          figmaTop: 605,
                           text: l10n.onboardingFlow1OptionOther,
                           v: TranslationUsage.other,
                           iconAsset: 'assets/images/onboarding1/other.svg',
@@ -241,7 +243,7 @@ class _UsageChoiceButton extends StatelessWidget {
 
     return SizedBox(
       width: 321.w,
-      height: 51.h,
+      height: 56.h,
       child: Material(
         color: Colors.white,
         borderRadius: BorderRadius.circular(50.r),
@@ -253,39 +255,36 @@ class _UsageChoiceButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(50.r),
               border: Border.all(color: borderColor, width: borderWidth),
             ),
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SvgPicture.asset(
-                    iconAsset,
-                    width: 18.sp,
-                    height: 18.sp,
-                    fit: BoxFit.contain,
-                    colorFilter: ColorFilter.mode(
-                      contentColor,
-                      BlendMode.srcIn,
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Row(
+              children: [
+                SvgPicture.asset(
+                  iconAsset,
+                  width: 18.sp,
+                  height: 18.sp,
+                  fit: BoxFit.contain,
+                  colorFilter: ColorFilter.mode(
+                    contentColor,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                SizedBox(width: 10.w),
+                Expanded(
+                  child: Text(
+                    text,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15.sp,
+                      height: 1.2,
+                      color: contentColor,
                     ),
                   ),
-                  SizedBox(width: 10.w),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 230.w),
-                    child: Text(
-                      text,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: false,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 15.sp,
-                        height: 24 / 15,
-                        color: contentColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

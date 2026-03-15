@@ -18,6 +18,16 @@ import 'package:lingola_app/Core/widgets/text_translation/lang_row.dart';
 import 'package:lingola_app/Core/widgets/text_translation/models.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 
+class _TextExampleItem {
+  final String title;
+  final String subtitle;
+
+  const _TextExampleItem({
+    required this.title,
+    required this.subtitle,
+  });
+}
+
 class TextTranslationView extends StatefulWidget {
   final VoidCallback? onBackToHome;
 
@@ -29,15 +39,15 @@ class TextTranslationView extends StatefulWidget {
 
 class _TextTranslationViewState extends State<TextTranslationView> {
   static const int _charLimit = 2000;
-static const String _baseUrl = "https://livelingolaapp.fly-work.com";
+  static const String _baseUrl = 'http://127.0.0.1:4000';
 
   final TextEditingController _sourceCtrl = TextEditingController(
     text: "Bugün hava çok güzel, biraz\nyürüyüş yapmak istiyorum.",
   );
 
-  String _sourceLang = "Turkish";
-  String _targetLang = "English";
-  String _expert = "General";
+  String _sourceLangCode = "tr";
+  String _targetLangCode = "en";
+  String _expertKey = "general";
   String _translatedText = "";
 
   bool _isTranslating = false;
@@ -50,32 +60,39 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
   Timer? _debounce;
   Timer? _saveAnimTimer;
 
+  List<_TextExampleItem> _examples = const [];
+
   String? get _firebaseUid => FirebaseAuth.instance.currentUser?.uid;
 
   final List<String> _experts = const [
-    "General",
-    "Auto-Selection",
-    "Gourmet",
-    "Shopping",
-    "Business",
-    "Travel",
-    "Dating",
-    "Games",
-    "Health",
-    "Law",
-    "Art",
-    "Finance",
-    "Technology",
-    "News",
+    "general",
+    "autoSelection",
+    "gourmet",
+    "shopping",
+    "business",
+    "travel",
+    "dating",
+    "games",
+    "health",
+    "law",
+    "art",
+    "finance",
+    "technology",
+    "news",
   ];
 
   final List<LangItem> _langs = const [
-    LangItem(name: "Turkish", flagAsset: "assets/images/flags/Turkish.png"),
-    LangItem(name: "English", flagAsset: "assets/images/flags/English.png"),
-    LangItem(name: "German", flagAsset: "assets/images/flags/German.png"),
-    LangItem(name: "Italian", flagAsset: "assets/images/flags/Italian.png"),
-    LangItem(name: "French", flagAsset: "assets/images/flags/French.png"),
-    LangItem(name: "Spanish", flagAsset: "assets/images/flags/Spanish.png"),
+    LangItem(name: "tr", flagAsset: "assets/images/flags/Turkish.png"),
+    LangItem(name: "en", flagAsset: "assets/images/flags/English.png"),
+    LangItem(name: "de", flagAsset: "assets/images/flags/German.png"),
+    LangItem(name: "it", flagAsset: "assets/images/flags/Italian.png"),
+    LangItem(name: "fr", flagAsset: "assets/images/flags/French.png"),
+    LangItem(name: "es", flagAsset: "assets/images/flags/Spanish.png"),
+    LangItem(name: "ru", flagAsset: "assets/images/flags/Russian.png"),
+    LangItem(name: "pt", flagAsset: "assets/images/flags/Portuguese.png"),
+    LangItem(name: "ko", flagAsset: "assets/images/flags/Korean.png"),
+    LangItem(name: "hi", flagAsset: "assets/images/flags/Hindi.png"),
+    LangItem(name: "ja", flagAsset: "assets/images/flags/Japanese.png"),
   ];
 
   final LayerLink _langBarLink = LayerLink();
@@ -91,9 +108,12 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
     super.initState();
     _sourceCtrl.addListener(_handleSourceChanged);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
-      _runBackendTranslate(saveToHistory: false);
+
+      _setRandomFallbackExamples();
+      await _runBackendTranslate(saveToHistory: false);
+      unawaited(_loadDynamicExamples());
     });
   }
 
@@ -124,10 +144,270 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
   int get _sourceLength => _sourceCtrl.text.length;
 
   String get _sourceFlagAsset =>
-      _langs.firstWhere((e) => e.name == _sourceLang).flagAsset;
+      _langs.firstWhere((e) => e.name == _sourceLangCode).flagAsset;
 
   String get _targetFlagAsset =>
-      _langs.firstWhere((e) => e.name == _targetLang).flagAsset;
+      _langs.firstWhere((e) => e.name == _targetLangCode).flagAsset;
+
+  String _localizedLanguageName(AppLocalizations l10n, String code) {
+    switch (code) {
+      case 'tr':
+        return l10n.languageTurkish;
+      case 'en':
+        return l10n.languageEnglish;
+      case 'de':
+        return l10n.languageGerman;
+      case 'it':
+        return l10n.languageItalian;
+      case 'fr':
+        return l10n.languageFrench;
+      case 'ja':
+        return l10n.languageJapanese;
+      case 'es':
+        return l10n.languageSpanish;
+      case 'ru':
+        return l10n.languageRussian;
+      case 'pt':
+        return l10n.languagePortuguese;
+      case 'ko':
+        return l10n.languageKorean;
+      case 'hi':
+        return l10n.languageHindi;
+      default:
+        return code;
+    }
+  }
+
+  String _backendLanguageName(String code) {
+    switch (code) {
+      case 'tr':
+        return 'Turkish';
+      case 'en':
+        return 'English';
+      case 'de':
+        return 'German';
+      case 'it':
+        return 'Italian';
+      case 'fr':
+        return 'French';
+      case 'ja':
+        return 'Japanese';
+      case 'es':
+        return 'Spanish';
+      case 'ru':
+        return 'Russian';
+      case 'pt':
+        return 'Portuguese';
+      case 'ko':
+        return 'Korean';
+      case 'hi':
+        return 'Hindi';
+      default:
+        return code;
+    }
+  }
+
+  String _localizedExpertName(AppLocalizations l10n, String key) {
+    switch (key) {
+      case 'general':
+        return l10n.expertGeneral;
+      case 'autoSelection':
+        return l10n.expertAutoSelection;
+      case 'gourmet':
+        return l10n.expertGourmet;
+      case 'shopping':
+        return l10n.expertShopping;
+      case 'business':
+        return l10n.expertBusiness;
+      case 'travel':
+        return l10n.expertTravel;
+      case 'dating':
+        return l10n.expertDating;
+      case 'games':
+        return l10n.expertGames;
+      case 'health':
+        return l10n.expertHealth;
+      case 'law':
+        return l10n.expertLaw;
+      case 'art':
+        return l10n.expertArt;
+      case 'finance':
+        return l10n.expertFinance;
+      case 'technology':
+        return l10n.expertTechnology;
+      case 'news':
+        return l10n.expertNews;
+      default:
+        return key;
+    }
+  }
+
+  String _backendExpertName(String key) {
+    switch (key) {
+      case 'general':
+        return 'General';
+      case 'autoSelection':
+        return 'Auto-Selection';
+      case 'gourmet':
+        return 'Gourmet';
+      case 'shopping':
+        return 'Shopping';
+      case 'business':
+        return 'Business';
+      case 'travel':
+        return 'Travel';
+      case 'dating':
+        return 'Dating';
+      case 'games':
+        return 'Games';
+      case 'health':
+        return 'Health';
+      case 'law':
+        return 'Law';
+      case 'art':
+        return 'Art';
+      case 'finance':
+        return 'Finance';
+      case 'technology':
+        return 'Technology';
+      case 'news':
+        return 'News';
+      default:
+        return key;
+    }
+  }
+
+  List<_TextExampleItem> _fallbackExamples(AppLocalizations l10n) {
+    final isTurkishSource = _sourceLangCode == 'tr';
+
+    return [
+      _TextExampleItem(
+        title: l10n.exampleTextTitle1,
+        subtitle: l10n.exampleTextSubtitle1,
+      ),
+      _TextExampleItem(
+        title: l10n.exampleTextTitle2,
+        subtitle: l10n.exampleTextSubtitle2,
+      ),
+      _TextExampleItem(
+        title: isTurkishSource
+            ? "En yakın metro istasyonu nerede?"
+            : "Where is the nearest metro station?",
+        subtitle: isTurkishSource
+            ? "Where is the nearest metro station?"
+            : "En yakın metro istasyonu nerede?",
+      ),
+      _TextExampleItem(
+        title: isTurkishSource
+            ? "Bunu daha resmi şekilde yazar mısın?"
+            : "Can you rewrite this more formally?",
+        subtitle: isTurkishSource
+            ? "Can you rewrite this more formally?"
+            : "Bunu daha resmi şekilde yazar mısın?",
+      ),
+      _TextExampleItem(
+        title: isTurkishSource
+            ? "İki kişilik masa ayırtmak istiyorum."
+            : "I would like to reserve a table for two.",
+        subtitle: isTurkishSource
+            ? "I would like to reserve a table for two."
+            : "İki kişilik masa ayırtmak istiyorum.",
+      ),
+      _TextExampleItem(
+        title: isTurkishSource
+            ? "Bu ürünün fiyatı ne kadar?"
+            : "How much does this product cost?",
+        subtitle: isTurkishSource
+            ? "How much does this product cost?"
+            : "Bu ürünün fiyatı ne kadar?",
+      ),
+    ];
+  }
+
+  void _setRandomFallbackExamples() {
+    final l10n = AppLocalizations.of(context)!;
+    final pool = List<_TextExampleItem>.from(_fallbackExamples(l10n));
+    pool.shuffle();
+
+    setState(() {
+      _examples = pool.take(2).toList();
+    });
+  }
+
+  Future<void> _loadDynamicExamples() async {
+    try {
+      final response = await http.post(
+        Uri.parse("$_baseUrl/chat/text-examples"),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({
+          "source_language": _backendLanguageName(_sourceLangCode),
+          "target_language": _backendLanguageName(_targetLangCode),
+          "expert": _backendExpertName(_expertKey),
+          "count": 2,
+        }),
+      );
+
+      final dynamic data =
+          response.body.isNotEmpty ? jsonDecode(response.body) : {};
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final rawList = data is Map<String, dynamic> ? data["examples"] : null;
+
+        if (rawList is List) {
+          final items = rawList
+              .map((e) {
+                if (e is! Map<String, dynamic>) return null;
+
+                final title = (e["title"] ?? "").toString().trim();
+                final subtitle = (e["subtitle"] ?? "").toString().trim();
+
+                if (title.isEmpty || subtitle.isEmpty) return null;
+
+                return _TextExampleItem(
+                  title: title,
+                  subtitle: subtitle,
+                );
+              })
+              .whereType<_TextExampleItem>()
+              .toList();
+
+          if (!mounted) return;
+
+          if (items.isNotEmpty) {
+            setState(() {
+              _examples = items.take(2).toList();
+            });
+          } else {
+            _setRandomFallbackExamples();
+          }
+        } else {
+          _setRandomFallbackExamples();
+        }
+      } else {
+        _setRandomFallbackExamples();
+      }
+    } catch (e) {
+      debugPrint("TEXT EXAMPLES ERROR: $e");
+      if (!mounted) return;
+      _setRandomFallbackExamples();
+    }
+  }
+
+  Future<void> _applyExample(String text) async {
+    setState(() {
+      _sourceCtrl.text = text;
+      _sourceCtrl.selection = TextSelection.fromPosition(
+        TextPosition(offset: _sourceCtrl.text.length),
+      );
+      _isFavorite = false;
+      _lastSavedTranslationId = null;
+      _hasUnsavedResult = false;
+    });
+
+    await _runBackendTranslate(saveToHistory: false);
+  }
 
   void _triggerSaveIconAnimation() {
     _saveAnimTimer?.cancel();
@@ -157,15 +437,17 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
     _removeExpertOverlay();
 
     setState(() {
-      final t = _sourceLang;
-      _sourceLang = _targetLang;
-      _targetLang = t;
+      final temp = _sourceLangCode;
+      _sourceLangCode = _targetLangCode;
+      _targetLangCode = temp;
       _isFavorite = false;
       _lastSavedTranslationId = null;
       _hasUnsavedResult = false;
     });
 
+    _setRandomFallbackExamples();
     _runBackendTranslate(saveToHistory: false);
+    unawaited(_loadDynamicExamples());
   }
 
   Future<void> _pasteFromClipboard() async {
@@ -245,9 +527,9 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
         body: jsonEncode({
           "firebase_uid": _firebaseUid,
           "source_text": source,
-          "source_language": _sourceLang,
-          "target_language": _targetLang,
-          "expert": _expert,
+          "source_language": _backendLanguageName(_sourceLangCode),
+          "target_language": _backendLanguageName(_targetLangCode),
+          "expert": _backendExpertName(_expertKey),
           "translation_type": "text",
           "save_to_history": saveToHistory,
         }),
@@ -422,6 +704,8 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
   }
 
   void _toggleLangDropdown({required bool forSource}) {
+    final l10n = AppLocalizations.of(context)!;
+
     _removeExpertOverlay();
 
     if (_langOverlay != null) {
@@ -451,23 +735,29 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                       children: [
                         for (int i = 0; i < _langs.length; i++) ...[
                           TextTranslationLangRow(
-                            item: _langs[i],
+                            item: LangItem(
+                              name:
+                                  _localizedLanguageName(l10n, _langs[i].name),
+                              flagAsset: _langs[i].flagAsset,
+                            ),
                             active: forSource
-                                ? _langs[i].name == _sourceLang
-                                : _langs[i].name == _targetLang,
+                                ? _langs[i].name == _sourceLangCode
+                                : _langs[i].name == _targetLangCode,
                             onTap: () {
                               setState(() {
                                 if (forSource) {
-                                  _sourceLang = _langs[i].name;
+                                  _sourceLangCode = _langs[i].name;
                                 } else {
-                                  _targetLang = _langs[i].name;
+                                  _targetLangCode = _langs[i].name;
                                 }
                                 _isFavorite = false;
                                 _lastSavedTranslationId = null;
                                 _hasUnsavedResult = false;
                               });
                               _removeLangOverlay();
+                              _setRandomFallbackExamples();
                               _runBackendTranslate(saveToHistory: false);
+                              unawaited(_loadDynamicExamples());
                             },
                           ),
                           if (i != _langs.length - 1)
@@ -494,6 +784,8 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
   }
 
   void _toggleExpertDropdown() {
+    final l10n = AppLocalizations.of(context)!;
+
     _removeLangOverlay();
 
     if (_expertOverlay != null) {
@@ -517,7 +809,7 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                 child: Material(
                   color: Colors.transparent,
                   child: DropdownCard(
-                    width: 160.w,
+                    width: 180.w,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -525,13 +817,15 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                           InkWell(
                             onTap: () {
                               setState(() {
-                                _expert = _experts[i];
+                                _expertKey = _experts[i];
                                 _isFavorite = false;
                                 _lastSavedTranslationId = null;
                                 _hasUnsavedResult = false;
                               });
                               _removeExpertOverlay();
+                              _setRandomFallbackExamples();
                               _runBackendTranslate(saveToHistory: false);
+                              unawaited(_loadDynamicExamples());
                             },
                             child: Container(
                               width: double.infinity,
@@ -540,14 +834,14 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                                 vertical: 12.h,
                               ),
                               child: Text(
-                                _experts[i],
+                                _localizedExpertName(l10n, _experts[i]),
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w500,
                                   height: 26 / 12,
-                                  color: _experts[i] == _expert
+                                  color: _experts[i] == _expertKey
                                       ? const Color(0xFF0A70FF)
                                       : const Color(0xFF0F172A),
                                 ),
@@ -739,8 +1033,10 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                               targetLink: _targetLangLink,
                               sourceFlagAsset: _sourceFlagAsset,
                               targetFlagAsset: _targetFlagAsset,
-                              leftText: _sourceLang,
-                              rightText: _targetLang,
+                              leftText:
+                                  _localizedLanguageName(l10n, _sourceLangCode),
+                              rightText:
+                                  _localizedLanguageName(l10n, _targetLangCode),
                               onLeftTap: () =>
                                   _toggleLangDropdown(forSource: true),
                               onRightTap: () =>
@@ -983,7 +1279,10 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                                       child: Row(
                                         children: [
                                           Text(
-                                            _expert,
+                                            _localizedExpertName(
+                                              l10n,
+                                              _expertKey,
+                                            ),
                                             style: TextStyle(
                                               fontFamily: 'Poppins',
                                               fontSize: 13.sp,
@@ -1021,17 +1320,24 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                                   ),
                                 ),
                                 SizedBox(height: 10.h),
-                                TextTranslationExampleTile(
-                                  title: l10n.exampleTextTitle1,
-                                  subtitle: l10n.exampleTextSubtitle1,
-                                  onMore: _showSaveMenu,
-                                ),
-                                SizedBox(height: 10.h),
-                                TextTranslationExampleTile(
-                                  title: l10n.exampleTextTitle2,
-                                  subtitle: l10n.exampleTextSubtitle2,
-                                  onMore: _showSaveMenu,
-                                ),
+                                for (int i = 0; i < _examples.length; i++) ...[
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () =>
+                                        _applyExample(_examples[i].title),
+                                    child: TextTranslationExampleTile(
+                                      title: _examples[i].title,
+                                      subtitle: _examples[i].subtitle,
+                                      onMore: _showSaveMenu,
+                                    ),
+                                  ),
+                                  if (i != _examples.length - 1)
+                                    Divider(
+                                      height: 18.h,
+                                      thickness: 1,
+                                      color: const Color(0xFFD9E1EF),
+                                    ),
+                                ],
                               ],
                             ),
                           ),

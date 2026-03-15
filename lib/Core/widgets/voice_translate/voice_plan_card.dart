@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lingola_app/l10n/app_localizations.dart';
 import 'package:lingola_app/Core/Utils/assets.dart';
 
 class VoicePlanCard extends StatelessWidget {
@@ -24,28 +25,30 @@ class VoicePlanCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     final bg = isPro ? const Color(0xFFEAF2FF) : Colors.white;
     final borderColor = isPro ? const Color(0xFF1677FF) : Colors.transparent;
 
     final pillBg = isPro ? const Color(0xFFFFE8C7) : const Color(0xFFDDEBFF);
     final pillTextColor =
         isPro ? const Color(0xFFFF8A00) : const Color(0xFF1677FF);
-    final pillLabel = isPro ? "PRO" : "FREE";
+    final pillLabel = isPro ? l10n.proLabel : l10n.freeLabel;
 
-    final title = isPro ? "Real-Time\nTranslation" : "Translation Machine";
+    final title = isPro ? l10n.voicePlanProTitle : l10n.voicePlanFreeTitle;
 
     final features = isPro
-        ? const [
-            "High Precision",
-            "Pro Scenario",
-            "Automatic Translation",
-            "Top-Level Model"
+        ? [
+            l10n.highPrecision,
+            l10n.proScenario,
+            l10n.automaticTranslation,
+            l10n.topLevelModel,
           ]
-        : const [
-            "Basic Sensitivity",
-            "Simple Scenario",
-            "Touch and Talk",
-            "General Model"
+        : [
+            l10n.basicSensitivity,
+            l10n.simpleScenario,
+            l10n.touchAndTalk,
+            l10n.generalModel,
           ];
 
     return Stack(
@@ -106,20 +109,22 @@ class VoicePlanCard extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10.h),
-              ...features.map((f) => Padding(
-                    padding: EdgeInsets.only(bottom: 4.h),
-                    child: Text(
-                      f,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 10.sp,
-                        fontWeight: FontWeight.w500,
-                        color: isPro
-                            ? const Color(0xFF1677FF)
-                            : const Color(0xFF64748B),
-                      ),
+              ...features.map(
+                (f) => Padding(
+                  padding: EdgeInsets.only(bottom: 4.h),
+                  child: Text(
+                    f,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 10.sp,
+                      fontWeight: FontWeight.w500,
+                      color: isPro
+                          ? const Color(0xFF1677FF)
+                          : const Color(0xFF64748B),
                     ),
-                  )),
+                  ),
+                ),
+              ),
               const Spacer(),
               Center(
                 child: SizedBox(
@@ -137,7 +142,7 @@ class VoicePlanCard extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      "Başlat",
+                      l10n.startButton,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 11.sp,
@@ -193,7 +198,7 @@ class VoicePlanCard extends StatelessWidget {
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  "60s trial",
+                  l10n.trial60s,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Poppins',

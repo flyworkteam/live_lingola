@@ -225,5 +225,152 @@
   "interview": "Entrevista",
   "business": "Negocios",
   "replyIdeas": "Ideas de respuesta",
-  "popular": "Popular"
+  "popular": "Popular",
+  "moreFeaturesTitle": "Más Funciones",
+  "frequentlyUsedTitle": "Usados con Frecuencia",
+  "frequentlyUsedDescription": "Revisa los términos usados con más frecuencia.",
+  "historyTitle": "Historial",
+  "favoriteTitle": "Favoritos",
+  "signInCancelled": "Se canceló el inicio de sesión.",
+  "appleSignInFailed": "Error al iniciar sesión con Apple.",
+  "facebookSignInFailed": "Error al iniciar sesión con Facebook.",
+  "googleSignInFailed": "Error al iniciar sesión con Google.",
+  "genericSignInFailed": "Error al iniciar sesión: {error}",
+  "@genericSignInFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "userSyncFailed": "No se pudo sincronizar la información del usuario.",
+  "loginTitle": "Bienvenido a Live Lingola",
+  "loginSubtitle": "Continúa con tu cuenta preferida para empezar a traducir.",
+  "signingIn": "Iniciando sesión...",
+  "continueWithGoogle": "Continuar con Google",
+  "continueWithFacebook": "Continuar con Facebook",
+  "continueWithApple": "Continuar con Apple",
+  "continueAsGuest": "Continuar como invitado",
+  "loginLegalPrefix": "Al continuar, aceptas nuestros ",
+  "termsOfServiceLinkText": "Términos del Servicio",
+  "loginLegalMiddle": ", ",
+  "privacyPolicyLinkText": "Política de Privacidad",
+  "loginLegalAnd": " y ",
+  "cookiesPolicyLinkText": "Política de Cookies",
+  
+  "proLabel": "PRO",
+  "freeLabel": "FREE",
+  "voicePlanProTitle": "Traducción\nen tiempo real",
+  "voicePlanFreeTitle": "Máquina de traducción",
+  "highPrecision": "Alta precisión",
+  "proScenario": "Escenario Pro",
+  "automaticTranslation": "Traducción automática",
+  "topLevelModel": "Modelo de alto nivel",
+  "basicSensitivity": "Sensibilidad básica",
+  "simpleScenario": "Escenario simple",
+  "touchAndTalk": "Toca y habla",
+  "generalModel": "Modelo general",
+  "startButton": "Iniciar",
+  "trial60s": "Prueba de 60 s",
+  
+  "skip": "Saltar",
+  "onboardingFlow1Title": "¿Para qué usas más\nla traducción?",
+  "onboardingFlow1Subtitle": "Indica tu preferencia.",
+  "onboardingFlow1OptionDaily": "Comunicación diaria",
+  "onboardingFlow1OptionBusiness": "Mundo de los negocios",
+  "onboardingFlow1OptionLearning": "Aprendizaje de idiomas",
+  "onboardingFlow1OptionTravel": "Viajes",
+  "onboardingFlow1OptionEntertainment": "Entretenimiento",
+  "onboardingFlow1OptionOther": "Otro",
+  "next": "Siguiente",
+  
+  "back": "Atrás",
+  "onboardingFlow2Title": "Seleccionar idioma",
+  "onboardingFlow2Subtitle": "Selecciona el idioma que deseas traducir.\nTu selección afecta a toda la aplicación.",
+  "from": "Desde",
+  "to": "A",
+  "next": "Siguiente",
+  "languageTurkish": "Turco",
+  "languageEnglish": "Inglés",
+  "languageGerman": "Alemán",
+  "languageItalian": "Italiano",
+  "languageFrench": "Francés",
+  "languageJapanese": "Japonés",
+  "languageSpanish": "Español",
+  "languageRussian": "Ruso",
+  "languagePortuguese": "Portugués",
+  "languageKorean": "Coreano",
+  "languageHindi": "Hindi",
+  
+  "back": "Atrás",
+  "skip": "Saltar",
+  "onboardingFlow3Title": "¿Has usado antes\ntraducción con IA?",
+  "onboardingFlow3Subtitle": "Indica tu preferencia.",
+  "yes": "Sí",
+  "no": "No",
+  "next": "Siguiente",
+  
+  "back": "Atrás",
+  "skip": "Saltar",
+  "onboardingFlow4Title": "¿Qué funciones te gustaría\nen una app de traducción?",
+  "onboardingFlow4Subtitle": "Indica tu preferencia.",
+  "onboardingFlow4OptionAccurate": "Traducción precisa",
+  "onboardingFlow4OptionEasy": "Fácil de usar",
+  "onboardingFlow4OptionPrivacy": "Protección de privacidad",
+  "onboardingFlow4OptionTeach": "Enséñame un idioma",
+  "onboardingFlow4OptionAll": "Todas",
+  "next": "Siguiente",
+  
+  "onboardingFlow5Title": "Se está creando\ntu cuenta personal",
+  "onboardingFlow5Subtitle": "Tu asistente de IA está personalizando tu experiencia.\nEsto puede tardar unos segundos.",
+  "onboardingFlow5ProgressLabel": "La IA está personalizando tu experiencia",
+  "onboardingFlow5StepProfile": "Se está creando el perfil",
+  "onboardingFlow5StepLanguage": "Se están configurando los ajustes de idioma",
+  "onboardingFlow5StepAi": "Se está preparando el modelo de IA",
+  "preferencesSaveFailed": "No se pudieron guardar las preferencias: {error}",
+  "@preferencesSaveFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "saving": "Guardando...",
+  "getStarted": "Comenzar",
+  
+  "aiChatTitle": "Chat AI",
+  "todayUppercase": "HOY",
+  "typing": "Escribiendo...",
+  "aiChatWelcomeMessage": "¡Hola! Soy Lingola AI. ¿Cómo puedo ayudarte hoy?",
+  "aiChatErrorMessage": "Lo siento, algo salió mal.\n{error}",
+  "@aiChatErrorMessage": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "aiChatChipPromptSushi": "¿Cuál es el mejor sushi en Tokio?",
+  "aiChatChipLabelSushi": "🇯🇵 ¿Mejor sushi?",
+  "aiChatChipPromptHotel": "¿Algún consejo de hoteles para Tokio?",
+  "aiChatChipLabelHotel": "🏨 Consejos de hotel",
+  "aiChatChipPromptTransit": "¿Puedes explicarme el transporte en Tokio?",
+  "aiChatChipLabelTransit": "🚇 Guía de transporte",
+  
+  "expertGeneral": "General",
+  "expertAutoSelection": "Selección automática",
+  "expertGourmet": "Gourmet",
+  "expertShopping": "Compras",
+  "expertBusiness": "Negocios",
+  "expertTravel": "Viajes",
+  "expertDating": "Citas",
+  "expertGames": "Juegos",
+  "expertHealth": "Salud",
+  "expertLaw": "Derecho",
+  "expertArt": "Arte",
+  "expertFinance": "Finanzas",
+  "expertTechnology": "Tecnología",
+  "expertNews": "Noticias"
+
+
+
+
+
+
+
+
 }

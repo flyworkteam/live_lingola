@@ -101,12 +101,11 @@ class OnboardingFlowView4 extends ConsumerWidget {
                     SizedBox(height: 103.h),
                     SizedBox(
                       width: 354.w,
-                      height: 60.h,
                       child: Text(
                         l10n.onboardingFlow4Title,
                         textAlign: TextAlign.center,
                         maxLines: 2,
-                        overflow: TextOverflow.visible,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
@@ -116,18 +115,19 @@ class OnboardingFlowView4 extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 2.h),
+                    SizedBox(height: 4.h),
                     SizedBox(
                       width: 275.w,
-                      height: 51.h,
                       child: Text(
                         l10n.onboardingFlow4Subtitle,
                         textAlign: TextAlign.center,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w300,
                           fontSize: 15.sp,
-                          height: 1.0,
+                          height: 1.15,
                           color: const Color(0xFF000000),
                         ),
                       ),
@@ -241,20 +241,19 @@ class _SimpleSelectButton extends StatelessWidget {
               border: Border.all(color: borderColor, width: borderWidth),
             ),
             child: Center(
-              child: SizedBox(
-                width: 164.w,
-                height: 24.h,
-                child: Center(
-                  child: Text(
-                    text,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 15.sp,
-                      height: 24 / 15,
-                      color: textColor,
-                    ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15.sp,
+                    height: 24 / 15,
+                    color: textColor,
                   ),
                 ),
               ),

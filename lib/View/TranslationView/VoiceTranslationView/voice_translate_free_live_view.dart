@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:lingola_app/Core/Utils/assets.dart';
+import 'package:lingola_app/Core/config/app_config.dart';
 import 'package:lingola_app/Core/widgets/navigation/bottom_nav_item_tile.dart';
 import 'package:lingola_app/Riverpod/Providers/current_user_provider.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
@@ -34,8 +35,6 @@ class VoiceTranslateFreeLiveView extends ConsumerStatefulWidget {
 class _VoiceTranslateFreeLiveViewState
     extends ConsumerState<VoiceTranslateFreeLiveView>
     with SingleTickerProviderStateMixin {
-static const String _baseUrl = "https://livelingolaapp.fly-work.com";
-
   _FreeStage _stage = _FreeStage.idle;
 
   late final AnimationController _waveCtrl;
@@ -43,9 +42,10 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
 
   bool _speechReady = false;
   bool _isSaving = false;
+  bool _isTranslating = false;
 
-  late String _leftLanguage;
-  late String _rightLanguage;
+  late String _leftLangCode;
+  late String _rightLangCode;
   bool _isLeftSource = true;
 
   String _recognizedText = "";
@@ -53,14 +53,14 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
 
   Timer? _translateDebounce;
   int _translateRequestVersion = 0;
-  String _lastTranslatedSource = "";
+  String _lastSubmittedSource = "";
 
   @override
   void initState() {
     super.initState();
 
-    _leftLanguage = widget.sourceLanguage;
-    _rightLanguage = widget.targetLanguage;
+    _leftLangCode = _normalizeLanguageCode(widget.sourceLanguage);
+    _rightLangCode = _normalizeLanguageCode(widget.targetLanguage);
     _isLeftSource = true;
 
     _waveCtrl = AnimationController(
@@ -74,6 +74,24 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
   }
 
   @override
+  void didUpdateWidget(covariant VoiceTranslateFreeLiveView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.sourceLanguage != widget.sourceLanguage ||
+        oldWidget.targetLanguage != widget.targetLanguage) {
+      setState(() {
+        _leftLangCode = _normalizeLanguageCode(widget.sourceLanguage);
+        _rightLangCode = _normalizeLanguageCode(widget.targetLanguage);
+        _isLeftSource = true;
+        _stage = _FreeStage.idle;
+        _recognizedText = "";
+        _translatedText = "";
+        _lastSubmittedSource = "";
+      });
+    }
+  }
+
+  @override
   void dispose() {
     _translateDebounce?.cancel();
     _waveCtrl.dispose();
@@ -83,26 +101,163 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
 
   bool get _isListening => _stage == _FreeStage.listening;
 
-  String get _sourceLanguage => _isLeftSource ? _leftLanguage : _rightLanguage;
+  String get _sourceLangCode => _isLeftSource ? _leftLangCode : _rightLangCode;
+  String get _targetLangCode => _isLeftSource ? _rightLangCode : _leftLangCode;
 
-  String get _targetLanguage => _isLeftSource ? _rightLanguage : _leftLanguage;
+  String _normalizeLanguageCode(String value) {
+    final v = value.trim().toLowerCase();
 
-  String _speechLocaleIdForLanguage(String language) {
-    switch (language) {
-      case 'Turkish':
-        return 'tr_TR';
-      case 'English':
-        return 'en_US';
-      case 'German':
-        return 'de_DE';
-      case 'French':
-        return 'fr_FR';
-      case 'Spanish':
-        return 'es_ES';
-      case 'Italian':
-        return 'it_IT';
+    switch (v) {
+      case 'tr':
+      case 'turkish':
+      case 'türkçe':
+      case 'turkce':
+        return 'tr';
+
+      case 'en':
+      case 'english':
+      case 'ingilizce':
+        return 'en';
+
+      case 'de':
+      case 'german':
+      case 'almanca':
+      case 'deutsch':
+        return 'de';
+
+      case 'fr':
+      case 'french':
+      case 'fransızca':
+      case 'fransizca':
+        return 'fr';
+
+      case 'es':
+      case 'spanish':
+      case 'ispanyolca':
+      case 'español':
+      case 'espanol':
+        return 'es';
+
+      case 'it':
+      case 'italian':
+      case 'italyanca':
+      case 'italiano':
+        return 'it';
+
+      case 'ru':
+      case 'russian':
+      case 'rusça':
+      case 'rusca':
+        return 'ru';
+
+      case 'pt':
+      case 'portuguese':
+      case 'portekizce':
+        return 'pt';
+
+      case 'ko':
+      case 'korean':
+      case 'korece':
+        return 'ko';
+
+      case 'hi':
+      case 'hindi':
+        return 'hi';
+
+      case 'ja':
+      case 'japanese':
+      case 'japonca':
+        return 'ja';
+
       default:
+        return 'en';
+    }
+  }
+
+  String _localizedLanguageName(AppLocalizations l10n, String code) {
+    switch (code) {
+      case 'tr':
+        return l10n.languageTurkish;
+      case 'en':
+        return l10n.languageEnglish;
+      case 'de':
+        return l10n.languageGerman;
+      case 'it':
+        return l10n.languageItalian;
+      case 'fr':
+        return l10n.languageFrench;
+      case 'ja':
+        return l10n.languageJapanese;
+      case 'es':
+        return l10n.languageSpanish;
+      case 'ru':
+        return l10n.languageRussian;
+      case 'pt':
+        return l10n.languagePortuguese;
+      case 'ko':
+        return l10n.languageKorean;
+      case 'hi':
+        return l10n.languageHindi;
+      default:
+        return code;
+    }
+  }
+
+  String _backendLanguageName(String code) {
+    switch (code) {
+      case 'tr':
+        return 'Turkish';
+      case 'en':
+        return 'English';
+      case 'de':
+        return 'German';
+      case 'it':
+        return 'Italian';
+      case 'fr':
+        return 'French';
+      case 'ja':
+        return 'Japanese';
+      case 'es':
+        return 'Spanish';
+      case 'ru':
+        return 'Russian';
+      case 'pt':
+        return 'Portuguese';
+      case 'ko':
+        return 'Korean';
+      case 'hi':
+        return 'Hindi';
+      default:
+        return code;
+    }
+  }
+
+  String _speechLocaleIdForLanguageCode(String code) {
+    switch (code) {
+      case 'tr':
         return 'tr_TR';
+      case 'en':
+        return 'en_US';
+      case 'de':
+        return 'de_DE';
+      case 'fr':
+        return 'fr_FR';
+      case 'es':
+        return 'es_ES';
+      case 'it':
+        return 'it_IT';
+      case 'ru':
+        return 'ru_RU';
+      case 'pt':
+        return 'pt_PT';
+      case 'ko':
+        return 'ko_KR';
+      case 'hi':
+        return 'hi_IN';
+      case 'ja':
+        return 'ja_JP';
+      default:
+        return 'en_US';
     }
   }
 
@@ -196,13 +351,13 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
       _stage = _FreeStage.listening;
       _recognizedText = "";
       _translatedText = "";
-      _lastTranslatedSource = "";
+      _lastSubmittedSource = "";
     });
 
     try {
       await _speech.listen(
         onResult: _onSpeechResult,
-        localeId: _speechLocaleIdForLanguage(_sourceLanguage),
+        localeId: _speechLocaleIdForLanguageCode(_sourceLangCode),
         listenFor: const Duration(seconds: 30),
         pauseFor: const Duration(seconds: 3),
         listenOptions: SpeechListenOptions(
@@ -230,20 +385,10 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
       _recognizedText = recognized;
     });
 
-    _queueTranslate(saveToHistory: false);
-
     if (result.finalResult) {
       _translateDebounce?.cancel();
       _translateCurrentText(saveToHistory: true);
     }
-  }
-
-  void _queueTranslate({required bool saveToHistory}) {
-    _translateDebounce?.cancel();
-    _translateDebounce = Timer(
-      const Duration(milliseconds: 450),
-      () => _translateCurrentText(saveToHistory: saveToHistory),
-    );
   }
 
   Future<void> _translateCurrentText({required bool saveToHistory}) async {
@@ -253,23 +398,28 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
 
     if (sourceText.isEmpty) return;
     if (firebaseUid == null && userId == null) return;
-    if (!saveToHistory && sourceText == _lastTranslatedSource) return;
+    if (_isTranslating) return;
+    if (_lastSubmittedSource == sourceText) return;
 
     final requestVersion = ++_translateRequestVersion;
+    _lastSubmittedSource = sourceText;
+    _isTranslating = true;
 
     try {
       final payload = {
         if (userId != null) "user_id": userId,
         if (firebaseUid != null) "firebase_uid": firebaseUid,
         "source_text": sourceText,
-        "source_language": _sourceLanguage,
-        "target_language": _targetLanguage,
+        "source_language": _backendLanguageName(_sourceLangCode),
+        "target_language": _backendLanguageName(_targetLangCode),
         "expert": "General",
         "translation_type": "voice",
         "save_to_history": saveToHistory,
       };
 
-      debugPrint('VOICE FREE TRANSLATE URL: $_baseUrl/translate/text');
+      debugPrint(
+        'VOICE FREE TRANSLATE URL: ${AppConfig.baseUrl}/translate/text',
+      );
       debugPrint('VOICE FREE TRANSLATE PAYLOAD: ${jsonEncode(payload)}');
 
       if (saveToHistory && mounted) {
@@ -277,7 +427,7 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
       }
 
       final response = await http.post(
-        Uri.parse("$_baseUrl/translate/text"),
+        Uri.parse("${AppConfig.baseUrl}/translate/text"),
         headers: {
           "Content-Type": "application/json",
         },
@@ -296,18 +446,27 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
 
         setState(() {
           _translatedText = translated;
-          _lastTranslatedSource = sourceText;
           _stage = _FreeStage.result;
         });
       } else {
+        final errorMessage = _extractErrorMessage(data);
+        debugPrint('VOICE FREE TRANSLATE SERVER ERROR: $errorMessage');
+
         setState(() {
           _translatedText = "";
           _stage = _FreeStage.result;
         });
+
+        if (mounted && errorMessage.isNotEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errorMessage)),
+          );
+        }
       }
     } catch (e) {
       debugPrint('VOICE FREE TRANSLATE ERROR: $e');
     } finally {
+      _isTranslating = false;
       if (mounted) {
         setState(() => _isSaving = false);
       }
@@ -354,6 +513,21 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
     return sourceFallback;
   }
 
+  String _extractErrorMessage(dynamic data) {
+    if (data is Map<String, dynamic>) {
+      final error = data["error"];
+      if (error is String && error.trim().isNotEmpty) {
+        return error.trim();
+      }
+
+      if (data["message"] is String &&
+          (data["message"] as String).trim().isNotEmpty) {
+        return (data["message"] as String).trim();
+      }
+    }
+    return "Translation failed";
+  }
+
   void _selectLeftLanguage() {
     if (_isListening) return;
 
@@ -362,7 +536,7 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
       _stage = _FreeStage.idle;
       _recognizedText = "";
       _translatedText = "";
-      _lastTranslatedSource = "";
+      _lastSubmittedSource = "";
     });
   }
 
@@ -374,7 +548,7 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
       _stage = _FreeStage.idle;
       _recognizedText = "";
       _translatedText = "";
-      _lastTranslatedSource = "";
+      _lastSubmittedSource = "";
     });
   }
 
@@ -596,8 +770,10 @@ static const String _baseUrl = "https://livelingolaapp.fly-work.com";
                         height: 74.h,
                         isListening: _isListening,
                         isLeftSource: _isLeftSource,
-                        leftLanguage: _leftLanguage,
-                        rightLanguage: _rightLanguage,
+                        leftLanguage:
+                            _localizedLanguageName(l10n, _leftLangCode),
+                        rightLanguage:
+                            _localizedLanguageName(l10n, _rightLangCode),
                         onSelectLeft: _selectLeftLanguage,
                         onSelectRight: _selectRightLanguage,
                         onMicTap: _toggleMic,

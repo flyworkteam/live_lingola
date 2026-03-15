@@ -43,7 +43,7 @@ class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
     super.didChangeDependencies();
 
     final locale = ref.read(appLocaleProvider);
-    final currentCode = locale.languageCode.toLowerCase();
+    final currentCode = locale?.languageCode.toLowerCase();
 
     final index = _langs.indexWhere(
       (e) => e.locale.languageCode.toLowerCase() == currentCode,

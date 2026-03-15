@@ -99,10 +99,11 @@ class OnboardingFlowView2 extends ConsumerWidget {
                     SizedBox(
                       key: const ValueKey('onboarding_title'),
                       width: 255.w,
-                      height: 30.h,
                       child: Text(
                         l10n.onboardingFlow2Title,
                         textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 24.sp,
@@ -112,18 +113,19 @@ class OnboardingFlowView2 extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 2.h),
+                    SizedBox(height: 6.h),
                     SizedBox(
                       width: 341.w,
-                      height: 46.h,
                       child: Text(
                         l10n.onboardingFlow2Subtitle,
                         textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w300,
                           fontSize: 15.sp,
-                          height: 1.1,
+                          height: 1.2,
                           color: const Color(0xFF000000),
                         ),
                       ),
@@ -251,15 +253,21 @@ class _FromToSegmentFigma extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50.r),
                   ),
                   child: Center(
-                    child: Text(
-                      fromText,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 15.sp,
-                        height: 1.0,
-                        color: const Color(0xFF000000),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          fromText,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15.sp,
+                            height: 1.0,
+                            color: const Color(0xFF000000),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -277,15 +285,21 @@ class _FromToSegmentFigma extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50.r),
                   ),
                   child: Center(
-                    child: Text(
-                      toText,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 15.sp,
-                        height: 1.0,
-                        color: const Color(0xFF000000),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          toText,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15.sp,
+                            height: 1.0,
+                            color: const Color(0xFF000000),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -347,6 +361,9 @@ class _LanguagePill extends StatelessWidget {
                 Expanded(
                   child: Text(
                     name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 15.sp,

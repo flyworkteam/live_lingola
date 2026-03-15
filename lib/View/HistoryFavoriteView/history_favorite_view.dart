@@ -7,7 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:lingola_app/l10n/app_localizations.dart';
 
-
 import '../../Core/Utils/assets.dart';
 import '../../Core/widgets/navigation/bottom_nav_item_tile.dart';
 import '../../Riverpod/Providers/current_user_provider.dart';
@@ -23,7 +22,7 @@ class HistoryFavoriteView extends ConsumerStatefulWidget {
 }
 
 class _HistoryFavoriteViewState extends ConsumerState<HistoryFavoriteView> {
-  static const String _baseUrl = "https://livelingolaapp.fly-work.com";
+  static const String _baseUrl = 'http://127.0.0.1:4000';
 
   late int _tab;
   String _query = '';

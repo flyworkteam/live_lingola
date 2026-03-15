@@ -225,5 +225,181 @@
   "interview": "Colloquio",
   "business": "Business",
   "replyIdeas": "Idee di risposta",
-  "popular": "Popolare"
+  "popular": "Popolare",
+  "moreFeaturesTitle": "Altre Funzionalità",
+"frequentlyUsedTitle": "Usati Frequentemente",
+"frequentlyUsedDescription": "Rivedi i termini utilizzati più frequentemente.",
+"historyTitle": "Cronologia",
+"favoriteTitle": "Preferiti",
+"signInCancelled": "Accesso annullato.",
+"appleSignInFailed": "Accesso con Apple non riuscito.",
+"facebookSignInFailed": "Accesso con Facebook non riuscito.",
+"googleSignInFailed": "Accesso con Google non riuscito.",
+"genericSignInFailed": "Accesso non riuscito: {error}",
+"@genericSignInFailed": {
+  "placeholders": {
+    "error": {}
+  }
+},
+"userSyncFailed": "Impossibile sincronizzare le informazioni utente.",
+"loginTitle": "Benvenuto su Live Lingola",
+"loginSubtitle": "Continua con il tuo account preferito per iniziare a tradurre.",
+"signingIn": "Accesso in corso...",
+"continueWithGoogle": "Continua con Google",
+"continueWithFacebook": "Continua con Facebook",
+"continueWithApple": "Continua con Apple",
+"continueAsGuest": "Continua come ospite",
+"loginLegalPrefix": "Continuando accetti i nostri ",
+"termsOfServiceLinkText": "Termini di servizio",
+"loginLegalMiddle": ", ",
+"privacyPolicyLinkText": "Informativa sulla privacy",
+"loginLegalAnd": " e ",
+"cookiesPolicyLinkText": "Informativa sui cookie",
+"faqQuestion1": "Quali lingue supporta Live Lingola?",
+"faqAnswer1": "L'app supporta oltre 100 lingue.",
+
+"faqQuestion2": "Come funziona la traduzione live?",
+"faqAnswer2": "L'app ascolta la tua voce e traduce immediatamente.",
+
+"faqQuestion3": "Posso usarla offline?",
+"faqAnswer3": "Sì, scaricando i pacchetti lingua.",
+
+"faqQuestion4": "La traduzione delle immagini riconosce tutto?",
+"faqAnswer4": "La tecnologia OCR riconosce il testo.",
+
+"faqQuestion5": "Live Lingola è gratuito?",
+"faqAnswer5": "Le funzioni base sono gratuite.",
+
+"faqQuestion6": "L'app registra la mia voce?",
+"faqAnswer6": "I dati vocali non vengono salvati.",
+
+"faqQuestion7": "Cosa fare se ho un problema?",
+"faqAnswer7": "Contatta il supporto dalle impostazioni.",
+
+"faqQuestion8": "Posso tradurre documenti?",
+"faqAnswer8": "Sì, PDF, Word e TXT.",
+
+"faqQuestion9": "Quanto sono accurate le traduzioni?",
+"faqAnswer9": "Usiamo diversi motori AI.",
+
+"faqQuestion10": "Posso tradurre messaggi in altre app?",
+"faqAnswer10": "Sì, con la funzione bubble.",
+
+  "proLabel": "PRO",
+  "freeLabel": "FREE",
+  "voicePlanProTitle": "Traduzione\nin tempo reale",
+  "voicePlanFreeTitle": "Macchina di traduzione",
+  "highPrecision": "Alta precisione",
+  "proScenario": "Scenario Pro",
+  "automaticTranslation": "Traduzione automatica",
+  "topLevelModel": "Modello di alto livello",
+  "basicSensitivity": "Sensibilità di base",
+  "simpleScenario": "Scenario semplice",
+  "touchAndTalk": "Tocca e parla",
+  "generalModel": "Modello generale",
+  "startButton": "Avvia",
+  "trial60s": "Prova di 60 s",
+  
+  "skip": "Salta",
+  "onboardingFlow1Title": "Per cosa usi più spesso\nla traduzione?",
+  "onboardingFlow1Subtitle": "Indica la tua preferenza.",
+  "onboardingFlow1OptionDaily": "Comunicazione quotidiana",
+  "onboardingFlow1OptionBusiness": "Mondo degli affari",
+  "onboardingFlow1OptionLearning": "Apprendimento delle lingue",
+  "onboardingFlow1OptionTravel": "Viaggi",
+  "onboardingFlow1OptionEntertainment": "Intrattenimento",
+  "onboardingFlow1OptionOther": "Altro",
+  "next": "Avanti",
+  
+  "back": "Indietro",
+  "onboardingFlow2Title": "Seleziona lingua",
+  "onboardingFlow2Subtitle": "Seleziona la lingua che vuoi tradurre.\nLa tua scelta influisce su tutta l'applicazione.",
+  "from": "Da",
+  "to": "A",
+  "next": "Avanti",
+  "languageTurkish": "Turco",
+  "languageEnglish": "Inglese",
+  "languageGerman": "Tedesco",
+  "languageItalian": "Italiano",
+  "languageFrench": "Francese",
+  "languageJapanese": "Giapponese",
+  "languageSpanish": "Spagnolo",
+  "languageRussian": "Russo",
+  "languagePortuguese": "Portoghese",
+  "languageKorean": "Coreano",
+  "languageHindi": "Hindi",
+  
+  "back": "Indietro",
+  "skip": "Salta",
+  "onboardingFlow3Title": "Hai già usato\nla traduzione AI?",
+  "onboardingFlow3Subtitle": "Indica la tua preferenza.",
+  "yes": "Sì",
+  "no": "No",
+  "next": "Avanti",
+  
+  "back": "Indietro",
+  "skip": "Salta",
+  "onboardingFlow4Title": "Quali funzionalità vorresti\nin un'app di traduzione?",
+  "onboardingFlow4Subtitle": "Indica la tua preferenza.",
+  "onboardingFlow4OptionAccurate": "Traduzione accurata",
+  "onboardingFlow4OptionEasy": "Facile da usare",
+  "onboardingFlow4OptionPrivacy": "Protezione della privacy",
+  "onboardingFlow4OptionTeach": "Insegnami una lingua",
+  "onboardingFlow4OptionAll": "Tutte",
+  "next": "Avanti",
+  
+  "onboardingFlow5Title": "Il tuo account personale\nè in fase di creazione",
+  "onboardingFlow5Subtitle": "Il tuo assistente AI sta personalizzando la tua esperienza.\nPotrebbero volerci alcuni secondi.",
+  "onboardingFlow5ProgressLabel": "L'AI sta personalizzando la tua esperienza",
+  "onboardingFlow5StepProfile": "Il profilo è in fase di creazione",
+  "onboardingFlow5StepLanguage": "Le impostazioni della lingua sono in fase di configurazione",
+  "onboardingFlow5StepAi": "Il modello AI è in fase di preparazione",
+  "preferencesSaveFailed": "Salvataggio delle preferenze non riuscito: {error}",
+  "@preferencesSaveFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "saving": "Salvataggio...",
+  "getStarted": "Inizia",
+  
+  "aiChatTitle": "Chat AI",
+  "todayUppercase": "OGGI",
+  "typing": "Sta scrivendo...",
+  "aiChatWelcomeMessage": "Ciao! Sono Lingola AI. Come posso aiutarti oggi?",
+  "aiChatErrorMessage": "Mi dispiace, qualcosa è andato storto.\n{error}",
+  "@aiChatErrorMessage": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "aiChatChipPromptSushi": "Qual è il miglior sushi a Tokyo?",
+  "aiChatChipLabelSushi": "🇯🇵 Miglior sushi?",
+  "aiChatChipPromptHotel": "Hai consigli sugli hotel a Tokyo?",
+  "aiChatChipLabelHotel": "🏨 Consigli hotel",
+  "aiChatChipPromptTransit": "Puoi spiegarmi i trasporti di Tokyo?",
+  "aiChatChipLabelTransit": "🚇 Guida trasporti",
+  
+  "expertGeneral": "Generale",
+  "expertAutoSelection": "Selezione automatica",
+  "expertGourmet": "Gourmet",
+  "expertShopping": "Shopping",
+  "expertBusiness": "Affari",
+  "expertTravel": "Viaggi",
+  "expertDating": "Incontri",
+  "expertGames": "Giochi",
+  "expertHealth": "Salute",
+  "expertLaw": "Legge",
+  "expertArt": "Arte",
+  "expertFinance": "Finanza",
+  "expertTechnology": "Tecnologia",
+  "expertNews": "Notizie"
+
+
+
+
+
+
+
+
 }
