@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lingola_app/l10n/app_localizations.dart';
 
 import '../../Core/Utils/assets.dart';
 import '../../Core/widgets/chat/chat_bubble.dart';
@@ -47,8 +47,10 @@ class _AiChatViewState extends State<AiChatView> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) return;
+
     if (_mutableMessages.isEmpty) {
-      final l10n = AppLocalizations.of(context)!;
       _mutableMessages.add(
         ChatMessage(
           fromBot: true,
@@ -59,7 +61,9 @@ class _AiChatViewState extends State<AiChatView> {
   }
 
   Future<void> _send() async {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) return;
+
     final text = _controller.text.trim();
     if (text.isEmpty || _isBotTyping) return;
 
@@ -76,25 +80,29 @@ class _AiChatViewState extends State<AiChatView> {
     final currentToken = _replyToken;
 
     try {
-      final reply = await _repository.sendMessage(
+      final dynamic rawReply = await _repository.sendMessage(
         chat: _chat,
         text: text,
       );
 
       if (!mounted || currentToken != _replyToken) return;
 
+      final String safeReply = (rawReply?.toString() ?? '').trim();
+
       setState(() {
         _mutableMessages.add(
           ChatMessage(
             fromBot: true,
-            text: reply,
+            text: safeReply.isEmpty
+                ? l10n.aiChatErrorMessage('Empty response')
+                : safeReply,
           ),
         );
         _isBotTyping = false;
       });
     } catch (e, st) {
       debugPrint('AI CHAT ERROR: $e');
-      debugPrint('AI CHAT STACK: $st');
+      debugPrintStack(stackTrace: st);
 
       if (!mounted || currentToken != _replyToken) return;
 
@@ -129,6 +137,18 @@ class _AiChatViewState extends State<AiChatView> {
     _send();
   }
 
+  void _handleBack() {
+    final backCallback = widget.onBackToHome;
+    if (backCallback != null) {
+      backCallback();
+      return;
+    }
+
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -138,7 +158,13 @@ class _AiChatViewState extends State<AiChatView> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
+    if (l10n == null) {
+      return const Scaffold(
+        body: SizedBox.shrink(),
+      );
+    }
+
     final topPad = MediaQuery.of(context).padding.top;
     final bottomReserve = 62.h + 12.h;
     final itemCount = _mutableMessages.length + (_isBotTyping ? 1 : 0);
@@ -149,9 +175,7 @@ class _AiChatViewState extends State<AiChatView> {
         children: [
           SizedBox(height: topPad + 10.h),
           ChatTopBar(
-            onBack: () => widget.onBackToHome != null
-                ? widget.onBackToHome!()
-                : Navigator.pop(context),
+            onBack: _handleBack,
             title: l10n.aiChatTitle,
             iconAsset: AppAssets.icAiChat,
           ),
@@ -193,7 +217,7 @@ class _AiChatViewState extends State<AiChatView> {
             Padding(
               padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 10.h),
               child: Text(
-                _errorText!,
+                _errorText ?? '',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 11.sp,

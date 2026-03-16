@@ -241,14 +241,20 @@ class _LoginViewState extends ConsumerState<LoginView> {
             child: SizedBox(
               width: 140,
               height: 36,
-              child: Text(
-                "Live Lingola",
-                style: TextStyle(
-                  fontFamily: AppTextStyles.fontFamily,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  height: 2,
-                  color: Colors.white,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: _AdaptiveText(
+                  "Live Lingola",
+                  maxLines: 1,
+                  minFontSize: 14,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: AppTextStyles.fontFamily,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    height: 2,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -259,14 +265,20 @@ class _LoginViewState extends ConsumerState<LoginView> {
             child: SizedBox(
               width: 220,
               height: 90,
-              child: Text(
-                l10n.loginTitle,
-                style: const TextStyle(
-                  fontFamily: AppTextStyles.fontFamily,
-                  fontSize: 36,
-                  fontWeight: FontWeight.w700,
-                  height: 1.05,
-                  color: Colors.white,
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: _AdaptiveText(
+                  l10n.loginTitle,
+                  maxLines: 2,
+                  minFontSize: 24,
+                  textAlign: TextAlign.left,
+                  style: const TextStyle(
+                    fontFamily: AppTextStyles.fontFamily,
+                    fontSize: 36,
+                    fontWeight: FontWeight.w700,
+                    height: 1.05,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -277,14 +289,20 @@ class _LoginViewState extends ConsumerState<LoginView> {
             child: SizedBox(
               width: 281,
               height: 114,
-              child: Text(
-                l10n.loginSubtitle,
-                style: TextStyle(
-                  fontFamily: AppTextStyles.fontFamily,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  height: 1.0,
-                  color: Colors.black.withValues(alpha: 0.85),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: _AdaptiveText(
+                  l10n.loginSubtitle,
+                  maxLines: 5,
+                  minFontSize: 12,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontFamily: AppTextStyles.fontFamily,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    height: 1.0,
+                    color: Colors.black.withValues(alpha: 0.85),
+                  ),
                 ),
               ),
             ),
@@ -341,14 +359,40 @@ class _LoginViewState extends ConsumerState<LoginView> {
                       ShaderMask(
                         shaderCallback: (b) =>
                             _guestTextGradient.createShader(b),
-                        child: Text(
-                          l10n.continueAsGuest,
-                          style: const TextStyle(
-                            fontFamily: AppTextStyles.fontFamily,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            height: 1.0,
-                            color: Colors.white,
+                        child: const SizedBox(
+                          height: 20,
+                          child: _AdaptiveText(
+                            '',
+                            maxLines: 1,
+                            minFontSize: 11,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: AppTextStyles.fontFamily,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              height: 1.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      ShaderMask(
+                        shaderCallback: (b) =>
+                            _guestTextGradient.createShader(b),
+                        child: SizedBox(
+                          height: 20,
+                          child: _AdaptiveText(
+                            l10n.continueAsGuest,
+                            maxLines: 1,
+                            minFontSize: 11,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontFamily: AppTextStyles.fontFamily,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              height: 1.0,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -372,55 +416,55 @@ class _LoginViewState extends ConsumerState<LoginView> {
               width: 295,
               height: 60,
               child: Center(
-                child: RichText(
+                child: _AdaptiveRichText(
+                  maxLines: 4,
+                  minFontSize: 8,
                   textAlign: TextAlign.center,
-                  text: TextSpan(
-                    style: const TextStyle(
-                      fontFamily: AppTextStyles.fontFamily,
-                      fontSize: 10,
-                      height: 1.5,
-                      color: Colors.black87,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: l10n.loginLegalPrefix,
-                      ),
-                      TextSpan(
-                        text: l10n.termsOfServiceLinkText,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          decoration: TextDecoration.underline,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => _openUrl(_termsUrl),
-                      ),
-                      const TextSpan(text: '\n'),
-                      TextSpan(
-                        text: l10n.loginLegalMiddle,
-                      ),
-                      TextSpan(
-                        text: l10n.privacyPolicyLinkText,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          decoration: TextDecoration.underline,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => _openUrl(_privacyUrl),
-                      ),
-                      TextSpan(text: l10n.loginLegalAnd),
-                      TextSpan(
-                        text: l10n.cookiesPolicyLinkText,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          decoration: TextDecoration.underline,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => _openUrl(_cookiesUrl),
-                      ),
-                      const TextSpan(text: '.'),
-                    ],
+                  style: const TextStyle(
+                    fontFamily: AppTextStyles.fontFamily,
+                    fontSize: 10,
+                    height: 1.5,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w400,
                   ),
+                  children: [
+                    TextSpan(
+                      text: l10n.loginLegalPrefix,
+                    ),
+                    TextSpan(
+                      text: l10n.termsOfServiceLinkText,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => _openUrl(_termsUrl),
+                    ),
+                    const TextSpan(text: '\n'),
+                    TextSpan(
+                      text: l10n.loginLegalMiddle,
+                    ),
+                    TextSpan(
+                      text: l10n.privacyPolicyLinkText,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => _openUrl(_privacyUrl),
+                    ),
+                    TextSpan(text: l10n.loginLegalAnd),
+                    TextSpan(
+                      text: l10n.cookiesPolicyLinkText,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => _openUrl(_cookiesUrl),
+                    ),
+                    const TextSpan(text: '.'),
+                  ],
                 ),
               ),
             ),
@@ -526,13 +570,14 @@ class _LoginButtonAligned extends StatelessWidget {
                     const SizedBox(width: gap),
                     SizedBox(
                       width: textW,
+                      height: buttonH,
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(
+                        child: _AdaptiveText(
                           label,
                           maxLines: 1,
-                          softWrap: false,
-                          overflow: TextOverflow.clip,
+                          minFontSize: 9,
+                          textAlign: TextAlign.left,
                           style: const TextStyle(
                             fontFamily: AppTextStyles.fontFamily,
                             fontSize: 12,
@@ -553,4 +598,233 @@ class _LoginButtonAligned extends StatelessWidget {
       ),
     );
   }
+}
+
+class _AdaptiveText extends StatelessWidget {
+  final String text;
+  final TextStyle style;
+  final int maxLines;
+  final double minFontSize;
+  final TextAlign textAlign;
+
+  const _AdaptiveText(
+    this.text, {
+    required this.style,
+    required this.maxLines,
+    required this.minFontSize,
+    this.textAlign = TextAlign.left,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final fittedStyle = _bestFitStyle(
+          context: context,
+          text: text,
+          baseStyle: style,
+          maxLines: maxLines,
+          minFontSize: minFontSize,
+          maxWidth: constraints.maxWidth,
+          maxHeight: constraints.maxHeight,
+          textAlign: textAlign,
+        );
+
+        return Text(
+          text,
+          maxLines: maxLines,
+          overflow: TextOverflow.clip,
+          softWrap: true,
+          textAlign: textAlign,
+          style: fittedStyle,
+        );
+      },
+    );
+  }
+}
+
+class _AdaptiveRichText extends StatelessWidget {
+  final List<InlineSpan> children;
+  final TextStyle style;
+  final int maxLines;
+  final double minFontSize;
+  final TextAlign textAlign;
+
+  const _AdaptiveRichText({
+    required this.children,
+    required this.style,
+    required this.maxLines,
+    required this.minFontSize,
+    this.textAlign = TextAlign.left,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final fittedStyle = _bestFitStyleForSpans(
+          context: context,
+          children: children,
+          baseStyle: style,
+          maxLines: maxLines,
+          minFontSize: minFontSize,
+          maxWidth: constraints.maxWidth,
+          maxHeight: constraints.maxHeight,
+          textAlign: textAlign,
+        );
+
+        List<InlineSpan> scaledChildren(List<InlineSpan> spans) {
+          return spans.map((span) {
+            if (span is TextSpan) {
+              final childStyle = span.style == null
+                  ? fittedStyle
+                  : fittedStyle.merge(span.style);
+              return TextSpan(
+                text: span.text,
+                style: childStyle,
+                recognizer: span.recognizer,
+                mouseCursor: span.mouseCursor,
+                onEnter: span.onEnter,
+                onExit: span.onExit,
+                locale: span.locale,
+                semanticsLabel: span.semanticsLabel,
+                spellOut: span.spellOut,
+                children: span.children == null
+                    ? null
+                    : scaledChildren(span.children!),
+              );
+            }
+            return span;
+          }).toList();
+        }
+
+        return RichText(
+          textAlign: textAlign,
+          maxLines: maxLines,
+          overflow: TextOverflow.clip,
+          text: TextSpan(
+            style: fittedStyle,
+            children: scaledChildren(children),
+          ),
+        );
+      },
+    );
+  }
+}
+
+TextStyle _bestFitStyle({
+  required BuildContext context,
+  required String text,
+  required TextStyle baseStyle,
+  required int maxLines,
+  required double minFontSize,
+  required double maxWidth,
+  required double maxHeight,
+  required TextAlign textAlign,
+}) {
+  final baseSize = baseStyle.fontSize ?? 14;
+  double low = minFontSize;
+  double high = baseSize;
+  double best = minFontSize;
+
+  bool fits(double size) {
+    final painter = TextPainter(
+      text: TextSpan(
+        text: text,
+        style: baseStyle.copyWith(fontSize: size),
+      ),
+      textDirection: Directionality.of(context),
+      textAlign: textAlign,
+      maxLines: maxLines,
+    )..layout(maxWidth: maxWidth);
+
+    return !painter.didExceedMaxLines && painter.height <= maxHeight;
+  }
+
+  if (fits(high)) {
+    return baseStyle;
+  }
+
+  for (int i = 0; i < 18; i++) {
+    final mid = (low + high) / 2;
+    if (fits(mid)) {
+      best = mid;
+      low = mid;
+    } else {
+      high = mid;
+    }
+  }
+
+  return baseStyle.copyWith(fontSize: best);
+}
+
+TextStyle _bestFitStyleForSpans({
+  required BuildContext context,
+  required List<InlineSpan> children,
+  required TextStyle baseStyle,
+  required int maxLines,
+  required double minFontSize,
+  required double maxWidth,
+  required double maxHeight,
+  required TextAlign textAlign,
+}) {
+  final baseSize = baseStyle.fontSize ?? 14;
+  double low = minFontSize;
+  double high = baseSize;
+  double best = minFontSize;
+
+  List<InlineSpan> scaledChildren(double size, List<InlineSpan> spans) {
+    return spans.map((span) {
+      if (span is TextSpan) {
+        final merged =
+            (span.style == null ? baseStyle : baseStyle.merge(span.style))
+                .copyWith(fontSize: size);
+        return TextSpan(
+          text: span.text,
+          style: merged,
+          recognizer: span.recognizer,
+          mouseCursor: span.mouseCursor,
+          onEnter: span.onEnter,
+          onExit: span.onExit,
+          locale: span.locale,
+          semanticsLabel: span.semanticsLabel,
+          spellOut: span.spellOut,
+          children: span.children == null
+              ? null
+              : scaledChildren(size, span.children!),
+        );
+      }
+      return span;
+    }).toList();
+  }
+
+  bool fits(double size) {
+    final painter = TextPainter(
+      text: TextSpan(
+        style: baseStyle.copyWith(fontSize: size),
+        children: scaledChildren(size, children),
+      ),
+      textDirection: Directionality.of(context),
+      textAlign: textAlign,
+      maxLines: maxLines,
+    )..layout(maxWidth: maxWidth);
+
+    return !painter.didExceedMaxLines && painter.height <= maxHeight;
+  }
+
+  if (fits(high)) {
+    return baseStyle;
+  }
+
+  for (int i = 0; i < 18; i++) {
+    final mid = (low + high) / 2;
+    if (fits(mid)) {
+      best = mid;
+      low = mid;
+    } else {
+      high = mid;
+    }
+  }
+
+  return baseStyle.copyWith(fontSize: best);
 }

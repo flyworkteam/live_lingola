@@ -17,6 +17,8 @@ class ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bubbleRadius = 16.r;
+    final messageText = msg.text.trim().isEmpty ? '...' : msg.text;
+    final actionText = msg.actionText;
 
     if (!msg.fromBot) {
       return Align(
@@ -35,7 +37,7 @@ class ChatBubble extends StatelessWidget {
             ),
           ),
           child: Text(
-            msg.text,
+            messageText,
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 12.sp,
@@ -64,6 +66,13 @@ class ChatBubble extends StatelessWidget {
             child: SvgPicture.asset(
               botIconAsset,
               fit: BoxFit.contain,
+              placeholderBuilder: (_) => const Center(
+                child: Icon(
+                  Icons.smart_toy_outlined,
+                  size: 18,
+                  color: Color(0xFF0A70FF),
+                ),
+              ),
             ),
           ),
           SizedBox(width: 10.w),
@@ -85,7 +94,7 @@ class ChatBubble extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    msg.text,
+                    messageText,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 12.sp,
@@ -94,13 +103,13 @@ class ChatBubble extends StatelessWidget {
                       color: const Color(0xFF0F172A),
                     ),
                   ),
-                  if (msg.actionText != null) ...[
+                  if (actionText != null && actionText.trim().isNotEmpty) ...[
                     SizedBox(height: 10.h),
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          msg.actionText!,
+                          actionText,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 11.sp,

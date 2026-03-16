@@ -73,23 +73,30 @@ class _AiChatViewState extends State<AiChatView> {
     final currentToken = _replyToken;
 
     try {
-      final reply = await _repository.sendMessage(
+      final dynamic rawReply = await _repository.sendMessage(
         chat: _chat,
         text: text,
       );
 
       if (!mounted || currentToken != _replyToken) return;
 
+      final String safeReply = rawReply?.toString().trim() ?? '';
+
       setState(() {
         _mutableMessages.add(
           ChatMessage(
             fromBot: true,
-            text: reply,
+            text: safeReply.isNotEmpty
+                ? safeReply
+                : 'Sorry, I could not generate a response.',
           ),
         );
         _isBotTyping = false;
       });
-    } catch (e) {
+    } catch (e, st) {
+      debugPrint('AI CHAT ERROR: $e');
+      debugPrintStack(stackTrace: st);
+
       if (!mounted || currentToken != _replyToken) return;
 
       setState(() {
@@ -123,6 +130,18 @@ class _AiChatViewState extends State<AiChatView> {
     _send();
   }
 
+  void _handleBack() {
+    final onBack = widget.onBackToHome;
+    if (onBack != null) {
+      onBack();
+      return;
+    }
+
+    if (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -142,9 +161,7 @@ class _AiChatViewState extends State<AiChatView> {
         children: [
           SizedBox(height: topPad + 10.h),
           ChatTopBar(
-            onBack: () => widget.onBackToHome != null
-                ? widget.onBackToHome!()
-                : Navigator.pop(context),
+            onBack: _handleBack,
             title: 'Ai Chat',
             iconAsset: AppAssets.icAiChat,
           ),
@@ -186,7 +203,7 @@ class _AiChatViewState extends State<AiChatView> {
             Padding(
               padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 10.h),
               child: Text(
-                _errorText!,
+                _errorText ?? '',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 11.sp,
