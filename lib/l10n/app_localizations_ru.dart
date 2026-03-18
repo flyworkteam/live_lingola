@@ -856,4 +856,47 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get expertNews => 'Новости';
+
+  @override
+  String get translated => 'Переведено';
+
+  @override
+  String get original => 'Оригинал';
+  @override
+  String get yesterday => 'Вчера';
+
+  @override
+  String get noNotifications => 'Нет уведомлений';
+  @override
+  String get notificationNewTranslationReadyTitle => 'Новый перевод готов';
+
+  @override
+  String get notificationNewTranslationReadyBody =>
+      'Ваш аудиофайл перевода успешно преобразован в текст и переведен.';
+
+  @override
+  String get notificationTime10MinAgo => '10 мин назад';
+
+  @override
+  String get notificationSpecialOfferTitle => 'Специальное предложение для вас';
+
+  @override
+  String get notificationSpecialOfferBody =>
+      'Перейдите на Premium и получите неограниченный перевод фото со скидкой 50%.';
+
+  @override
+  String get notificationTime2hAgo => '2 ч назад';
+
+  @override
+  String get notificationSeeOpportunity => 'ПОСМОТРЕТЬ ПРЕДЛОЖЕНИЕ';
+
+  @override
+  String get notificationAiChatTitle => 'Чат с ИИ';
+
+  @override
+  String get notificationAiChatBody =>
+      'Получайте мгновенные ответы на свои вопросы с помощью ИИ-чата.';
+
+  @override
+  String get notificationTimeJustNow => 'Только что';
 }

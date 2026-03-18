@@ -822,4 +822,46 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get expertNews => '뉴스';
+
+  @override
+  String get translated => '번역됨';
+
+  @override
+  String get original => '원본';
+  @override
+  String get yesterday => '昨日';
+
+  @override
+  String get noNotifications => '通知はありません';
+  @override
+  String get notificationNewTranslationReadyTitle => '새 번역이 준비되었습니다';
+
+  @override
+  String get notificationNewTranslationReadyBody =>
+      '음성 번역 파일이 텍스트로 변환되고 번역되었습니다.';
+
+  @override
+  String get notificationTime10MinAgo => '10분 전';
+
+  @override
+  String get notificationSpecialOfferTitle => '특별한 제안이 기다립니다';
+
+  @override
+  String get notificationSpecialOfferBody =>
+      'Premium으로 업그레이드하고 사진 번역을 무제한으로 50% 할인받으세요.';
+
+  @override
+  String get notificationTime2hAgo => '2시간 전';
+
+  @override
+  String get notificationSeeOpportunity => '혜택 보기';
+
+  @override
+  String get notificationAiChatTitle => 'AI 채팅';
+
+  @override
+  String get notificationAiChatBody => 'AI 채팅으로 궁금한 질문에 즉시 답을 얻으세요.';
+
+  @override
+  String get notificationTimeJustNow => '방금 전';
 }

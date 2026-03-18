@@ -825,4 +825,45 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get expertNews => 'ニュース';
+
+  @override
+  String get translated => '翻訳済み';
+
+  @override
+  String get original => '元の画像';
+  @override
+  String get yesterday => '昨日';
+
+  @override
+  String get noNotifications => '通知はありません';
+  @override
+  String get notificationNewTranslationReadyTitle => '新しい翻訳が準備できました';
+
+  @override
+  String get notificationNewTranslationReadyBody =>
+      '音声翻訳ファイルがテキストに変換され、翻訳されました。';
+
+  @override
+  String get notificationTime10MinAgo => '10分前';
+
+  @override
+  String get notificationSpecialOfferTitle => '特別オファーがあります';
+
+  @override
+  String get notificationSpecialOfferBody => 'Premiumにアップグレードして写真翻訳を無制限で50％オフ。';
+
+  @override
+  String get notificationTime2hAgo => '2時間前';
+
+  @override
+  String get notificationSeeOpportunity => 'オファーを見る';
+
+  @override
+  String get notificationAiChatTitle => 'AIとチャット';
+
+  @override
+  String get notificationAiChatBody => 'AIチャットで質問への回答をすぐに取得できます。';
+
+  @override
+  String get notificationTimeJustNow => 'たった今';
 }

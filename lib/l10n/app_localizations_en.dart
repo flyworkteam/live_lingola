@@ -851,4 +851,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get expertNews => 'News';
+  @override
+  String get translated => 'Translated';
+
+  @override
+  String get original => 'Original';
+  @override
+  String get yesterday => 'Yesterday';
+
+  @override
+  String get noNotifications => 'No notifications';
+  @override
+  String get notificationNewTranslationReadyTitle => 'New Translation Ready';
+
+  @override
+  String get notificationNewTranslationReadyBody =>
+      'Your audio translation file has been successfully converted to text and translated.';
+
+  @override
+  String get notificationTime10MinAgo => '10 min. ago';
+
+  @override
+  String get notificationSpecialOfferTitle => 'A Special Offer Awaits You';
+
+  @override
+  String get notificationSpecialOfferBody =>
+      'Upgrade to Premium for unlimited photo translations at 50% off.';
+
+  @override
+  String get notificationTime2hAgo => '2h ago';
+
+  @override
+  String get notificationSeeOpportunity => 'SEE THE OPPORTUNITY';
+
+  @override
+  String get notificationAiChatTitle => 'Chat with AI';
+
+  @override
+  String get notificationAiChatBody =>
+      'Get instant answers to the questions on your mind with AI chat.';
+
+  @override
+  String get notificationTimeJustNow => 'Just now';
 }

@@ -858,4 +858,47 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get expertNews => 'Noticias';
+
+  @override
+  String get translated => 'Traducido';
+
+  @override
+  String get original => 'Original';
+  @override
+  String get yesterday => 'Ayer';
+
+  @override
+  String get noNotifications => 'No hay notificaciones';
+  @override
+  String get notificationNewTranslationReadyTitle => 'Nueva traducción lista';
+
+  @override
+  String get notificationNewTranslationReadyBody =>
+      'Tu archivo de traducción de audio se convirtió correctamente en texto y fue traducido.';
+
+  @override
+  String get notificationTime10MinAgo => 'hace 10 min';
+
+  @override
+  String get notificationSpecialOfferTitle => 'Una oferta especial te espera';
+
+  @override
+  String get notificationSpecialOfferBody =>
+      'Actualiza a Premium para obtener traducciones de fotos ilimitadas con un 50 % de descuento.';
+
+  @override
+  String get notificationTime2hAgo => 'hace 2 h';
+
+  @override
+  String get notificationSeeOpportunity => 'VER LA OFERTA';
+
+  @override
+  String get notificationAiChatTitle => 'Chatea con IA';
+
+  @override
+  String get notificationAiChatBody =>
+      'Obtén respuestas instantáneas a tus preguntas con el chat de IA.';
+
+  @override
+  String get notificationTimeJustNow => 'Ahora mismo';
 }

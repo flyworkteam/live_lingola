@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 import 'package:lingola_app/Core/Utils/assets.dart';
 import 'package:lingola_app/Core/config/app_config.dart';
 import 'package:lingola_app/Core/widgets/navigation/bottom_nav_item_tile.dart';
@@ -33,16 +33,15 @@ class VoiceTranslateFreeLiveView extends ConsumerStatefulWidget {
 }
 
 class _VoiceTranslateFreeLiveViewState
-    extends ConsumerState<VoiceTranslateFreeLiveView>
-    with SingleTickerProviderStateMixin {
+    extends ConsumerState<VoiceTranslateFreeLiveView> {
   _FreeStage _stage = _FreeStage.idle;
 
-  late final AnimationController _waveCtrl;
   final SpeechToText _speech = SpeechToText();
 
   bool _speechReady = false;
   bool _isSaving = false;
   bool _isTranslating = false;
+  bool _translateOnManualStop = false;
 
   late String _leftLangCode;
   late String _rightLangCode;
@@ -51,7 +50,6 @@ class _VoiceTranslateFreeLiveViewState
   String _recognizedText = "";
   String _translatedText = "";
 
-  Timer? _translateDebounce;
   int _translateRequestVersion = 0;
   String _lastSubmittedSource = "";
 
@@ -62,11 +60,6 @@ class _VoiceTranslateFreeLiveViewState
     _leftLangCode = _normalizeLanguageCode(widget.sourceLanguage);
     _rightLangCode = _normalizeLanguageCode(widget.targetLanguage);
     _isLeftSource = true;
-
-    _waveCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1400),
-    )..repeat();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initSpeech();
@@ -87,14 +80,13 @@ class _VoiceTranslateFreeLiveViewState
         _recognizedText = "";
         _translatedText = "";
         _lastSubmittedSource = "";
+        _translateOnManualStop = false;
       });
     }
   }
 
   @override
   void dispose() {
-    _translateDebounce?.cancel();
-    _waveCtrl.dispose();
     _speech.cancel();
     super.dispose();
   }
@@ -283,9 +275,8 @@ class _VoiceTranslateFreeLiveViewState
           debugPrint('VOICE FREE SPEECH ERROR: $error');
           if (!mounted) return;
           setState(() {
-            _stage = _recognizedText.trim().isNotEmpty
-                ? _FreeStage.result
-                : _FreeStage.idle;
+            _stage = _FreeStage.idle;
+            _translateOnManualStop = false;
           });
         },
         debugLogging: false,
@@ -312,15 +303,18 @@ class _VoiceTranslateFreeLiveViewState
     if (!mounted) return;
 
     if (status == 'done' || status == 'notListening') {
+      final shouldTranslate = _translateOnManualStop;
       final hasSource = _recognizedText.trim().isNotEmpty;
 
       setState(() {
-        _stage = hasSource ? _FreeStage.result : _FreeStage.idle;
+        _stage = _FreeStage.idle;
       });
 
-      if (hasSource) {
-        _translateDebounce?.cancel();
+      if (shouldTranslate && hasSource) {
+        _translateOnManualStop = false;
         _translateCurrentText(saveToHistory: true);
+      } else {
+        _translateOnManualStop = false;
       }
     }
   }
@@ -343,6 +337,11 @@ class _VoiceTranslateFreeLiveViewState
     }
 
     if (_isListening) {
+      setState(() {
+        _stage = _FreeStage.idle;
+        _translateOnManualStop = true;
+      });
+
       await _speech.stop();
       return;
     }
@@ -352,6 +351,7 @@ class _VoiceTranslateFreeLiveViewState
       _recognizedText = "";
       _translatedText = "";
       _lastSubmittedSource = "";
+      _translateOnManualStop = false;
     });
 
     try {
@@ -369,9 +369,8 @@ class _VoiceTranslateFreeLiveViewState
       debugPrint('VOICE FREE LISTEN ERROR: $e');
       if (!mounted) return;
       setState(() {
-        _stage = _recognizedText.trim().isNotEmpty
-            ? _FreeStage.result
-            : _FreeStage.idle;
+        _stage = _FreeStage.idle;
+        _translateOnManualStop = false;
       });
     }
   }
@@ -384,11 +383,6 @@ class _VoiceTranslateFreeLiveViewState
     setState(() {
       _recognizedText = recognized;
     });
-
-    if (result.finalResult) {
-      _translateDebounce?.cancel();
-      _translateCurrentText(saveToHistory: true);
-    }
   }
 
   Future<void> _translateCurrentText({required bool saveToHistory}) async {
@@ -537,6 +531,7 @@ class _VoiceTranslateFreeLiveViewState
       _recognizedText = "";
       _translatedText = "";
       _lastSubmittedSource = "";
+      _translateOnManualStop = false;
     });
   }
 
@@ -549,6 +544,7 @@ class _VoiceTranslateFreeLiveViewState
       _recognizedText = "";
       _translatedText = "";
       _lastSubmittedSource = "";
+      _translateOnManualStop = false;
     });
   }
 
@@ -586,8 +582,8 @@ class _VoiceTranslateFreeLiveViewState
                           child: Center(
                             child: SvgPicture.asset(
                               AppAssets.icBack,
-                              width: 18.sp,
-                              height: 18.sp,
+                              width: 24.sp,
+                              height: 24.sp,
                               colorFilter: const ColorFilter.mode(
                                 Color(0xFF0F172A),
                                 BlendMode.srcIn,
@@ -654,24 +650,36 @@ class _VoiceTranslateFreeLiveViewState
               ),
               SizedBox(height: 18.h),
               SizedBox(
-                height: 140.h,
-                child: _isListening
-                    ? AnimatedBuilder(
-                        animation: _waveCtrl,
-                        builder: (_, __) => CustomPaint(
-                          size: Size(double.infinity, 140.h),
-                          painter: _TopStrandsWavePainter(
-                            t: _waveCtrl.value,
-                            strands: 12,
+                height: 112.h,
+                width: double.infinity,
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        height: 2.h,
+                        color: const Color(0xFF0A70FF),
+                      ),
+                    ),
+                    if (_isListening)
+                      Positioned(
+                        left: -10.w,
+                        right: -10.w,
+                        bottom: 0,
+                        child: SizedBox(
+                          height: 30.h,
+                          child: Lottie.asset(
+                            'assets/animations/wave-wave.json',
+                            repeat: true,
+                            fit: BoxFit.fill,
                           ),
                         ),
-                      )
-                    : const SizedBox.shrink(),
-              ),
-              Container(
-                height: 2.h,
-                width: double.infinity,
-                color: const Color(0xFF0A70FF),
+                      ),
+                  ],
+                ),
               ),
               Expanded(
                 child: Padding(
@@ -816,60 +824,6 @@ class _VoiceTranslateFreeLiveViewState
       ),
     );
   }
-}
-
-class _TopStrandsWavePainter extends CustomPainter {
-  final double t;
-  final int strands;
-
-  _TopStrandsWavePainter({required this.t, this.strands = 12});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final w = size.width;
-    final h = size.height;
-
-    final baseY = h - 2.0;
-
-    const double freq = 2 * math.pi;
-    final phase = t * 2 * math.pi;
-
-    final envelope = 0.55 + 0.45 * ((math.sin(phase * 0.9) + 1) / 2);
-
-    for (int i = 0; i < strands; i++) {
-      final mid = (strands - 1) / 2;
-      final dist = (i - mid).abs();
-      final alpha = 0.08 + (1.0 - dist / (mid + 0.0001)) * 0.22;
-
-      final paint = Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.0
-        ..strokeCap = StrokeCap.round
-        ..color = const Color(0xFF0A70FF).withValues(alpha: alpha);
-
-      final path = Path();
-      path.moveTo(0, baseY);
-
-      final localPhase = phase + i * 0.22;
-
-      for (double x = 0; x <= w; x += 2) {
-        final nx = x / w;
-
-        final ampBase = 18.0 * (1.0 - (dist / (mid + 0.0001)) * 0.35);
-        final amp = ampBase * envelope;
-
-        final y = baseY - (math.sin(nx * freq + localPhase) * amp).abs();
-
-        path.lineTo(x, y);
-      }
-
-      canvas.drawPath(path, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_TopStrandsWavePainter oldDelegate) =>
-      oldDelegate.t != t || oldDelegate.strands != strands;
 }
 
 class _UnifiedLangBar extends StatelessWidget {

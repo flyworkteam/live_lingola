@@ -394,9 +394,27 @@
   "expertArt": "Kunst",
   "expertFinance": "Finanzen",
   "expertTechnology": "Technologie",
-  "expertNews": "Nachrichten"
+  "expertNews": "Nachrichten",
+  
+  "photoScanTranslated": "Übersetzt",
+  "photoScanOriginal": "Original",
+  "photoScanSelectOrCapture": "Wähle ein Foto aus oder nimm eines auf",
+  "photoScanProcessing": "Wird verarbeitet...",
 
-
+  "notifications": "Benachrichtigungen",
+  "today": "Heute",
+  "yesterday": "Gestern",
+  "noNotifications": "Keine Benachrichtigungen",
+  
+  "notificationNewTranslationReadyTitle": "Neue Übersetzung bereit",
+  "notificationNewTranslationReadyBody": "Ihre Audio-Übersetzungsdatei wurde erfolgreich in Text umgewandelt und übersetzt.",
+  "notificationTime10MinAgo": "vor 10 Min.",
+  "notificationSpecialOfferTitle": "Ein besonderes Angebot wartet auf Sie",
+  "notificationSpecialOfferBody": "Wechseln Sie zu Premium und erhalten Sie unbegrenzte Fotoübersetzungen mit 50 % Rabatt.",
+  "notificationTime2hAgo": "vor 2 Std.",
+  "notificationSeeOpportunity": "ANGEBOT ANSEHEN",
+  "notificationAiChatTitle": "Mit KI chatten",
+  "notificationAiChatBody": "Erhalten Sie mit dem KI-Chat sofort Antworten auf Ihre Fragen."
 
 
 

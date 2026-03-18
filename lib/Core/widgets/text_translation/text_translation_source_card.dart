@@ -13,6 +13,7 @@ class TextTranslationSourceCard extends StatelessWidget {
   final VoidCallback onSave;
   final ValueChanged<String> onChanged;
   final bool isSaveAnimating;
+  final bool isBusy;
 
   const TextTranslationSourceCard({
     super.key,
@@ -23,6 +24,7 @@ class TextTranslationSourceCard extends StatelessWidget {
     required this.onSave,
     required this.onChanged,
     required this.isSaveAnimating,
+    this.isBusy = false,
   });
 
   @override
@@ -48,36 +50,39 @@ class TextTranslationSourceCard extends StatelessWidget {
               const Spacer(),
               InkWell(
                 borderRadius: BorderRadius.circular(999.r),
-                onTap: onPaste,
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE7F0FF),
-                    borderRadius: BorderRadius.circular(999.r),
-                  ),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        AppAssets.icPaste,
-                        width: 14.sp,
-                        height: 14.sp,
-                        colorFilter: const ColorFilter.mode(
-                          Color(0xFF0A70FF),
-                          BlendMode.srcIn,
+                onTap: isBusy ? null : onPaste,
+                child: Opacity(
+                  opacity: isBusy ? 0.6 : 1,
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE7F0FF),
+                      borderRadius: BorderRadius.circular(999.r),
+                    ),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          AppAssets.icPaste,
+                          width: 14.sp,
+                          height: 14.sp,
+                          colorFilter: const ColorFilter.mode(
+                            Color(0xFF0A70FF),
+                            BlendMode.srcIn,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 6.w),
-                      Text(
-                        l10n.paste,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF0A70FF),
+                        SizedBox(width: 6.w),
+                        Text(
+                          l10n.paste,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF0A70FF),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -106,19 +111,22 @@ class TextTranslationSourceCard extends StatelessWidget {
             children: [
               InkWell(
                 borderRadius: BorderRadius.circular(999.r),
-                onTap: onSave,
+                onTap: isBusy ? null : onSave,
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 220),
                   curve: Curves.easeOut,
-                  child: SvgPicture.asset(
-                    AppAssets.icDocument,
-                    width: 18.sp,
-                    height: 18.sp,
-                    colorFilter: ColorFilter.mode(
-                      isSaveAnimating
-                          ? const Color(0xFF0A70FF)
-                          : const Color(0xFF94A3B8),
-                      BlendMode.srcIn,
+                  child: Opacity(
+                    opacity: isBusy ? 0.6 : 1,
+                    child: SvgPicture.asset(
+                      AppAssets.icDocument,
+                      width: 18.sp,
+                      height: 18.sp,
+                      colorFilter: ColorFilter.mode(
+                        isSaveAnimating
+                            ? const Color(0xFF0A70FF)
+                            : const Color(0xFF94A3B8),
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 ),

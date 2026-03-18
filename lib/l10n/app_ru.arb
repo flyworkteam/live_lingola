@@ -395,7 +395,24 @@
   "expertArt": "Искусство",
   "expertFinance": "Финансы",
   "expertTechnology": "Технологии",
-  "expertNews": "Новости"
+  "expertNews": "Новости",
+  
+  "photoScanTranslated": "Переведено",
+  "photoScanOriginal": "Оригинал",
+  "photoScanSelectOrCapture": "Выберите или сделайте фото",
+  "photoScanProcessing": "Обработка...",
+  
+  "notificationNewTranslationReadyTitle": "Новый перевод готов",
+  "notificationNewTranslationReadyBody": "Ваш аудиофайл перевода был успешно преобразован в текст и переведен.",
+  "notificationTime10MinAgo": "10 мин назад",
+  "notificationSpecialOfferTitle": "Вас ждет специальное предложение",
+  "notificationSpecialOfferBody": "Перейдите на Premium и получите неограниченный фотоперевод со скидкой 50%.",
+  "notificationTime2hAgo": "2 ч назад",
+  "notificationSeeOpportunity": "ПОСМОТРЕТЬ ПРЕДЛОЖЕНИЕ",
+  "notificationAiChatTitle": "Чат с ИИ",
+  "notificationAiChatBody": "Получайте мгновенные ответы на интересующие вас вопросы с помощью ИИ-чата."
+
+
 
 
 

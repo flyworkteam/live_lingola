@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final appLocaleProvider =
     StateNotifierProvider<AppLocaleNotifier, Locale?>((ref) {
-  return AppLocaleNotifier();
+  return AppLocaleNotifier()..loadInitialLocale();
 });
 
 class AppLocaleNotifier extends StateNotifier<Locale?> {
@@ -27,6 +27,8 @@ class AppLocaleNotifier extends StateNotifier<Locale?> {
     'pt',
   ];
 
+  static const String _globalStorageKey = 'app_locale_code';
+
   String _storageKeyForUser(String userId) => 'app_locale_code_$userId';
 
   Locale _deviceLocaleOrFallback() {
@@ -40,54 +42,84 @@ class AppLocaleNotifier extends StateNotifier<Locale?> {
     return const Locale('en');
   }
 
+  bool _isSupportedCode(String? code) {
+    if (code == null || code.trim().isEmpty) return false;
+    return _supportedLanguageCodes.contains(code.toLowerCase());
+  }
+
+  Future<void> loadInitialLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final globalCode = prefs.getString(_globalStorageKey);
+
+    if (_isSupportedCode(globalCode)) {
+      state = Locale(globalCode!.toLowerCase());
+      return;
+    }
+
+    final fallback = _deviceLocaleOrFallback();
+    state = fallback;
+    await prefs.setString(_globalStorageKey, fallback.languageCode);
+  }
+
   Future<void> loadForUser(String userId) async {
     _currentUserId = userId;
 
     final prefs = await SharedPreferences.getInstance();
-    final code = prefs.getString(_storageKeyForUser(userId));
 
-    if (code == null || code.trim().isEmpty) {
-      final firstLocale = _deviceLocaleOrFallback();
-      state = firstLocale;
-      await prefs.setString(
-        _storageKeyForUser(userId),
-        firstLocale.languageCode,
-      );
+    final userCode = prefs.getString(_storageKeyForUser(userId));
+    if (_isSupportedCode(userCode)) {
+      final locale = Locale(userCode!.toLowerCase());
+      state = locale;
+      await prefs.setString(_globalStorageKey, locale.languageCode);
       return;
     }
 
-    state = Locale(code);
+    final globalCode = prefs.getString(_globalStorageKey);
+    if (_isSupportedCode(globalCode)) {
+      final locale = Locale(globalCode!.toLowerCase());
+      state = locale;
+      await prefs.setString(_storageKeyForUser(userId), locale.languageCode);
+      return;
+    }
+
+    final fallback = _deviceLocaleOrFallback();
+    state = fallback;
+    await prefs.setString(_globalStorageKey, fallback.languageCode);
+    await prefs.setString(_storageKeyForUser(userId), fallback.languageCode);
   }
 
   Future<void> setLocale(Locale locale) async {
     state = locale;
 
-    final userId = _currentUserId;
-    if (userId == null) return;
-
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_storageKeyForUser(userId), locale.languageCode);
+
+    await prefs.setString(_globalStorageKey, locale.languageCode);
+
+    final userId = _currentUserId;
+    if (userId != null && userId.isNotEmpty) {
+      await prefs.setString(_storageKeyForUser(userId), locale.languageCode);
+    }
   }
 
   Future<void> clearLocale() async {
-    final userId = _currentUserId;
-
-    if (userId == null) {
-      state = null;
-      return;
-    }
-
-    final systemLocale = _deviceLocaleOrFallback();
-    state = systemLocale;
-
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-        _storageKeyForUser(userId), systemLocale.languageCode);
+    final systemLocale = _deviceLocaleOrFallback();
+
+    state = systemLocale;
+    await prefs.setString(_globalStorageKey, systemLocale.languageCode);
+
+    final userId = _currentUserId;
+    if (userId != null && userId.isNotEmpty) {
+      await prefs.setString(
+        _storageKeyForUser(userId),
+        systemLocale.languageCode,
+      );
+    }
   }
 
   void clearOnLogout() {
     _currentUserId = null;
-    state = null;
   }
 
   Future<void> setByLanguageName(String language) async {

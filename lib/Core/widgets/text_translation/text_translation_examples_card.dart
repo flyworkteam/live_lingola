@@ -37,14 +37,11 @@ class TextTranslationExamplesCard extends StatelessWidget {
           ),
           SizedBox(height: 10.h),
           for (int i = 0; i < examples.length; i++) ...[
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
+            TextTranslationExampleTile(
+              title: examples[i].title,
+              subtitle: examples[i].subtitle,
               onTap: () => onExampleTap(examples[i].title),
-              child: TextTranslationExampleTile(
-                title: examples[i].title,
-                subtitle: examples[i].subtitle,
-                onMore: onMore,
-              ),
+              onMore: onMore,
             ),
             if (i != examples.length - 1)
               Divider(

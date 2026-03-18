@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,12 +7,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
 
+import 'package:lingola_app/Core/Utils/assets.dart';
+import 'package:lingola_app/Core/config/app_config.dart';
 import 'package:lingola_app/Core/widgets/voice_translate/voice_lang_bar.dart';
 import 'package:lingola_app/Core/widgets/voice_translate/voice_text_card.dart';
 import 'package:lingola_app/Core/widgets/voice_translate/voice_top_bar.dart';
-import 'package:lingola_app/Core/Utils/assets.dart';
-import 'package:lingola_app/Core/config/app_config.dart';
 import 'package:lingola_app/Riverpod/Providers/current_user_provider.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -38,9 +38,7 @@ class VoiceTranslateProLiveView extends ConsumerStatefulWidget {
 }
 
 class _VoiceTranslateProLiveViewState
-    extends ConsumerState<VoiceTranslateProLiveView>
-    with TickerProviderStateMixin {
-  late final AnimationController _waveCtrl;
+    extends ConsumerState<VoiceTranslateProLiveView> {
   final SpeechToText _speech = SpeechToText();
   final FlutterTts _flutterTts = FlutterTts();
 
@@ -50,12 +48,13 @@ class _VoiceTranslateProLiveViewState
   bool _isFavorite = false;
   bool _isCopyActive = false;
   bool _isSpeaking = false;
-  bool _isTranslating = false;
-  bool _shouldAutoSpeakAfterTranslate = false;
+  bool _isFinalizing = false;
 
   int? _lastSavedTranslationId;
+
   Timer? _copyTimer;
   Timer? _translateDebounce;
+  Timer? _silenceTimer;
 
   late String _sourceLangCode;
   late String _targetLangCode;
@@ -63,7 +62,9 @@ class _VoiceTranslateProLiveViewState
   String _liveSourceText = '';
   String _liveTranslatedText = '';
 
-  int _translateRequestVersion = 0;
+  int _liveTranslateRequestId = 0;
+  int _finalTranslateRequestId = 0;
+
   String _lastTranslatedSource = '';
   String _lastSubmittedSource = '';
 
@@ -73,11 +74,6 @@ class _VoiceTranslateProLiveViewState
 
     _sourceLangCode = _normalizeLanguageCode(widget.sourceLanguage);
     _targetLangCode = _normalizeLanguageCode(widget.targetLanguage);
-
-    _waveCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 20000),
-    )..repeat();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _initSpeech();
@@ -101,7 +97,10 @@ class _VoiceTranslateProLiveViewState
         _lastSubmittedSource = '';
         _lastSavedTranslationId = null;
         _isFavorite = false;
-        _shouldAutoSpeakAfterTranslate = false;
+        _isSpeaking = false;
+        _isSaving = false;
+        _isListening = false;
+        _isFinalizing = false;
       });
     }
   }
@@ -110,7 +109,7 @@ class _VoiceTranslateProLiveViewState
   void dispose() {
     _copyTimer?.cancel();
     _translateDebounce?.cancel();
-    _waveCtrl.dispose();
+    _silenceTimer?.cancel();
     _speech.cancel();
     _flutterTts.stop();
     super.dispose();
@@ -134,62 +133,51 @@ class _VoiceTranslateProLiveViewState
       case 'türkçe':
       case 'turkce':
         return 'tr';
-
       case 'en':
       case 'english':
       case 'ingilizce':
         return 'en';
-
       case 'de':
       case 'german':
       case 'almanca':
       case 'deutsch':
         return 'de';
-
       case 'fr':
       case 'french':
       case 'fransızca':
       case 'fransizca':
         return 'fr';
-
       case 'es':
       case 'spanish':
       case 'ispanyolca':
       case 'español':
       case 'espanol':
         return 'es';
-
       case 'it':
       case 'italian':
       case 'italyanca':
       case 'italiano':
         return 'it';
-
       case 'ru':
       case 'russian':
       case 'rusça':
       case 'rusca':
         return 'ru';
-
       case 'pt':
       case 'portuguese':
       case 'portekizce':
         return 'pt';
-
       case 'ko':
       case 'korean':
       case 'korece':
         return 'ko';
-
       case 'hi':
       case 'hindi':
         return 'hi';
-
       case 'ja':
       case 'japanese':
       case 'japonca':
         return 'ja';
-
       default:
         return 'en';
     }
@@ -410,22 +398,15 @@ class _VoiceTranslateProLiveViewState
   }
 
   void _onSpeechStatus(String status) {
-    debugPrint('VOICE SPEECH STATUS: $status');
+    debugPrint('VOICE PRO SPEECH STATUS: $status');
 
     if (!mounted) return;
 
     if (status == 'done' || status == 'notListening') {
-      final wasListening = _isListening;
-      final hasText = _liveSourceText.trim().isNotEmpty;
-
-      setState(() {
-        _isListening = false;
-      });
-
-      if (wasListening && hasText) {
-        _translateDebounce?.cancel();
-        _shouldAutoSpeakAfterTranslate = true;
-        _translateCurrentText(saveToHistory: true);
+      if (_isListening) {
+        setState(() {
+          _isListening = false;
+        });
       }
     }
   }
@@ -438,23 +419,17 @@ class _VoiceTranslateProLiveViewState
   }
 
   Widget _buildTranslatingLabel() {
-    return AnimatedBuilder(
-      animation: _waveCtrl,
-      builder: (context, child) {
-        final t = AppLocalizations.of(context)!;
-        final dots = ((_waveCtrl.value * 100) % 4).toInt();
-        final dotText = "." * dots;
-        return Text(
-          "${t.translating}$dotText",
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 10.sp,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.2,
-            color: const Color(0xFF0A70FF),
-          ),
-        );
-      },
+    final t = AppLocalizations.of(context)!;
+
+    return Text(
+      t.translating,
+      style: TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 10.sp,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0.2,
+        color: const Color(0xFF0A70FF),
+      ),
     );
   }
 
@@ -528,15 +503,28 @@ class _VoiceTranslateProLiveViewState
     if (!_speechReady) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(t.microphonePermissionRequired),
-        ),
+        SnackBar(content: Text(t.microphonePermissionRequired)),
       );
       return;
     }
 
     if (_isListening) {
-      await _speech.stop();
+      _translateDebounce?.cancel();
+      _silenceTimer?.cancel();
+
+      setState(() {
+        _isListening = false;
+      });
+
+      try {
+        await _speech.stop();
+      } catch (e) {
+        debugPrint('VOICE PRO STOP ERROR: $e');
+      }
+
+      if (_liveSourceText.trim().isNotEmpty) {
+        await _finalizeTranslationAndSpeak();
+      }
       return;
     }
 
@@ -545,27 +533,28 @@ class _VoiceTranslateProLiveViewState
       _isSaving = false;
       _isFavorite = false;
       _isCopyActive = false;
+      _isSpeaking = false;
       _lastSavedTranslationId = null;
       _liveSourceText = '';
       _liveTranslatedText = '';
       _lastTranslatedSource = '';
       _lastSubmittedSource = '';
-      _shouldAutoSpeakAfterTranslate = false;
+      _isFinalizing = false;
     });
 
     try {
       await _speech.listen(
         onResult: _onSpeechResult,
         localeId: _speechLocaleIdForLanguageCode(_sourceLangCode),
-        listenFor: const Duration(seconds: 30),
-        pauseFor: const Duration(seconds: 3),
+        listenFor: const Duration(minutes: 5),
+        pauseFor: const Duration(seconds: 10),
         listenOptions: SpeechListenOptions(
           partialResults: true,
           listenMode: ListenMode.dictation,
         ),
       );
     } catch (e) {
-      debugPrint('VOICE LISTEN ERROR: $e');
+      debugPrint('VOICE PRO LISTEN ERROR: $e');
       if (!mounted) return;
       setState(() {
         _isListening = false;
@@ -582,40 +571,120 @@ class _VoiceTranslateProLiveViewState
       _liveSourceText = recognized;
     });
 
-    _queueTranslate(saveToHistory: false);
+    _queueLiveTranslate();
+
+    _silenceTimer?.cancel();
+    _silenceTimer = Timer(const Duration(milliseconds: 1500), () {
+      if (!_isListening) return;
+      _finalizeTranslationAndSpeak();
+    });
 
     if (result.finalResult) {
       _translateDebounce?.cancel();
-      _shouldAutoSpeakAfterTranslate = true;
-      _translateCurrentText(saveToHistory: true);
+      _silenceTimer?.cancel();
+      _finalizeTranslationAndSpeak();
     }
   }
 
-  void _queueTranslate({required bool saveToHistory}) {
+  void _queueLiveTranslate() {
     _translateDebounce?.cancel();
     _translateDebounce = Timer(
-      const Duration(milliseconds: 500),
-      () => _translateCurrentText(saveToHistory: saveToHistory),
+      const Duration(milliseconds: 450),
+      _translateLiveText,
     );
   }
 
-  Future<void> _translateCurrentText({required bool saveToHistory}) async {
+  Future<void> _translateLiveText() async {
     final firebaseUid = _currentFirebaseUid();
     final sourceText = _liveSourceText.trim();
 
     if (firebaseUid == null || sourceText.isEmpty) return;
-    if (_isTranslating) return;
-    if (!saveToHistory && sourceText == _lastTranslatedSource) return;
-    if (saveToHistory && sourceText == _lastSubmittedSource) return;
+    if (sourceText == _lastTranslatedSource) return;
+    if (_isFinalizing) return;
 
-    final requestVersion = ++_translateRequestVersion;
-    _isTranslating = true;
+    final requestId = ++_liveTranslateRequestId;
 
-    if (saveToHistory) {
-      _lastSubmittedSource = sourceText;
+    if (mounted) {
+      setState(() {});
     }
 
-    if (saveToHistory && mounted) {
+    try {
+      final response = await http.post(
+        Uri.parse("${AppConfig.baseUrl}/translate/text"),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonEncode({
+          "firebase_uid": firebaseUid,
+          "source_text": sourceText,
+          "source_language": _backendLanguageName(_sourceLangCode),
+          "target_language": _backendLanguageName(_targetLangCode),
+          "expert": "Pro",
+          "translation_type": "voice",
+          "save_to_history": false,
+        }),
+      );
+
+      final data = response.body.isNotEmpty ? jsonDecode(response.body) : {};
+
+      if (!mounted) return;
+      if (requestId != _liveTranslateRequestId) return;
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final translatedText = _extractTranslatedText(data, sourceText);
+
+        setState(() {
+          _liveTranslatedText = translatedText;
+          _lastTranslatedSource = sourceText;
+        });
+      } else {
+        debugPrint('VOICE PRO LIVE TRANSLATE STATUS: ${response.statusCode}');
+        debugPrint('VOICE PRO LIVE TRANSLATE BODY: ${response.body}');
+      }
+    } catch (e) {
+      debugPrint('VOICE PRO LIVE TRANSLATE ERROR: $e');
+    } finally {
+      if (mounted && requestId == _liveTranslateRequestId) {
+        setState(() {});
+      }
+    }
+  }
+
+  Future<void> _finalizeTranslationAndSpeak() async {
+    final firebaseUid = _currentFirebaseUid();
+    final sourceText = _liveSourceText.trim();
+
+    if (firebaseUid == null || sourceText.isEmpty) return;
+    if (_isFinalizing) return;
+
+    _translateDebounce?.cancel();
+    _silenceTimer?.cancel();
+
+    if (_isListening) {
+      try {
+        await _speech.stop();
+      } catch (e) {
+        debugPrint('VOICE PRO STOP BEFORE FINALIZE ERROR: $e');
+      }
+
+      if (mounted) {
+        setState(() {
+          _isListening = false;
+        });
+      }
+    }
+
+    if (sourceText == _lastSubmittedSource &&
+        _liveTranslatedText.trim().isNotEmpty) {
+      await _speakTranslatedText();
+      return;
+    }
+
+    _isFinalizing = true;
+    final requestId = ++_finalTranslateRequestId;
+    _lastSubmittedSource = sourceText;
+
+    if (mounted) {
       setState(() {
         _isSaving = true;
       });
@@ -634,13 +703,14 @@ class _VoiceTranslateProLiveViewState
           "target_language": _backendLanguageName(_targetLangCode),
           "expert": "Pro",
           "translation_type": "voice",
-          "save_to_history": saveToHistory,
+          "save_to_history": true,
         }),
       );
 
       final data = response.body.isNotEmpty ? jsonDecode(response.body) : {};
 
-      if (!mounted || requestVersion != _translateRequestVersion) return;
+      if (!mounted) return;
+      if (requestId != _finalTranslateRequestId) return;
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final translatedText = _extractTranslatedText(data, sourceText);
@@ -650,30 +720,33 @@ class _VoiceTranslateProLiveViewState
           _liveTranslatedText = translatedText;
           _lastTranslatedSource = sourceText;
           _isSaving = false;
-          if (saveToHistory && savedId != null) {
+          if (savedId != null) {
             _lastSavedTranslationId = savedId;
           }
         });
 
-        if (saveToHistory && _shouldAutoSpeakAfterTranslate) {
-          _shouldAutoSpeakAfterTranslate = false;
-          await _speakTranslatedText();
-        }
+        await _speakTranslatedText();
       } else {
-        debugPrint('VOICE TRANSLATE STATUS: ${response.statusCode}');
-        debugPrint('VOICE TRANSLATE BODY: ${response.body}');
+        debugPrint('VOICE PRO FINAL TRANSLATE STATUS: ${response.statusCode}');
+        debugPrint('VOICE PRO FINAL TRANSLATE BODY: ${response.body}');
+        if (mounted) {
+          setState(() {
+            _isSaving = false;
+          });
+        }
+      }
+    } catch (e) {
+      debugPrint('VOICE PRO FINAL TRANSLATE ERROR: $e');
+      if (mounted) {
         setState(() {
           _isSaving = false;
         });
       }
-    } catch (e) {
-      debugPrint('VOICE TRANSLATE ERROR: $e');
-      if (!mounted) return;
-      setState(() {
-        _isSaving = false;
-      });
     } finally {
-      _isTranslating = false;
+      _isFinalizing = false;
+      if (mounted) {
+        setState(() {});
+      }
     }
   }
 
@@ -711,18 +784,22 @@ class _VoiceTranslateProLiveViewState
     try {
       if (_isListening) {
         await _speech.stop();
+        if (mounted) {
+          setState(() {
+            _isListening = false;
+          });
+        }
       }
 
       if (_isSpeaking) {
         await _flutterTts.stop();
-        return;
       }
 
       await _flutterTts.stop();
       await _flutterTts.setLanguage(_ttsLocaleForLanguageCode(_targetLangCode));
       await _flutterTts.speak(text);
     } catch (e) {
-      debugPrint('VOICE TTS SPEAK ERROR: $e');
+      debugPrint('VOICE PRO TTS SPEAK ERROR: $e');
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Voice playback failed')),
@@ -736,7 +813,7 @@ class _VoiceTranslateProLiveViewState
     if (_lastSavedTranslationId == null) {
       if (_liveSourceText.trim().isNotEmpty &&
           _liveTranslatedText.trim().isNotEmpty) {
-        await _translateCurrentText(saveToHistory: true);
+        await _finalizeTranslationAndSpeak();
       }
     }
 
@@ -810,7 +887,9 @@ class _VoiceTranslateProLiveViewState
       _lastSavedTranslationId = null;
       _isFavorite = false;
       _isSpeaking = false;
-      _shouldAutoSpeakAfterTranslate = false;
+      _isSaving = false;
+      _isListening = false;
+      _isFinalizing = false;
     });
   }
 
@@ -853,34 +932,19 @@ class _VoiceTranslateProLiveViewState
             ),
           ),
           Positioned(
-            left: (-130).w,
-            top: (600).h,
+            left: -150.w,
+            top: 450.h,
             child: IgnorePointer(
-              child: Transform.rotate(
-                angle: 43.37 * math.pi / 180,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    if (_isListening)
-                      CustomPaint(
-                        size: Size(611.6457.w, 643.0121.h),
-                        painter: VoiceWavePainter(
-                          animation: _waveCtrl,
-                          color: const Color(0xFF0B84FF),
-                          layerCount: 6,
-                        ),
-                      ),
-                    CustomPaint(
-                      size: Size(611.6457.w, 643.0121.h),
-                      painter: _OvalStrokePainter(
-                        color: const Color(0xFF0B84FF),
-                        strokeWidth: 2.5,
-                        isListening: _isListening,
-                        animation: _waveCtrl,
-                      ),
-                    ),
-                  ],
-                ),
+              child: SizedBox(
+                width: 680.w,
+                height: 680.h,
+                child: _isListening
+                    ? Lottie.asset(
+                        'assets/animations/Light-blue-orbit.json',
+                        repeat: true,
+                        fit: BoxFit.contain,
+                      )
+                    : const SizedBox.shrink(),
               ),
             ),
           ),
@@ -902,7 +966,7 @@ class _VoiceTranslateProLiveViewState
                     leftText: _localizedLanguageName(t, _sourceLangCode),
                     rightFlagAsset: _flagAssetForLanguageCode(_targetLangCode),
                     rightText: _localizedLanguageName(t, _targetLangCode),
-                    onSwap: () => _swapLanguages(),
+                    onSwap: _swapLanguages,
                     onLeftTap: _selectSourceLanguage,
                     onRightTap: _selectTargetLanguage,
                   ),
@@ -937,9 +1001,8 @@ class _VoiceTranslateProLiveViewState
                               translatedText: _liveTranslatedText,
                               isFavorite: _isFavorite,
                               isCopyActive: _isCopyActive,
-                              onCopyTap: () => _copyTranslatedText(
-                                _liveTranslatedText,
-                              ),
+                              onCopyTap: () =>
+                                  _copyTranslatedText(_liveTranslatedText),
                               onFavoriteTap: _toggleFavorite,
                               onSpeakTap: _speakTranslatedText,
                             ),
@@ -1158,106 +1221,4 @@ class _VoiceMicButton extends StatelessWidget {
       ),
     );
   }
-}
-
-class VoiceWavePainter extends CustomPainter {
-  final Animation<double> animation;
-  final Color color;
-  final int layerCount;
-
-  VoiceWavePainter({
-    required this.animation,
-    required this.color,
-    this.layerCount = 4,
-  }) : super(repaint: animation);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    for (int i = 0; i < layerCount; i++) {
-      final double progress = (animation.value + (i / layerCount)) % 1.0;
-      final double opacity = (1.0 - progress).clamp(0.0, 1.0);
-      final paint = Paint()
-        ..color = color.withValues(alpha: opacity * 0.25)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.5 + (1 - progress) * 2;
-      final Path path = Path();
-      final double waveCount = 7.0 + i;
-      final double waveAmplitude = 15.w * (1 - progress);
-      final double baseRadiusX = (size.width / 2) + (progress * 100.w);
-      final double baseRadiusY = (size.height / 2) + (progress * 100.w);
-      for (double angle = 0; angle <= 360; angle += 2) {
-        final double radian = angle * math.pi / 180;
-        final double displacement = math.sin(
-              (radian * waveCount) + (animation.value * 2 * math.pi) + i,
-            ) *
-            waveAmplitude;
-        final double x =
-            center.dx + (baseRadiusX + displacement) * math.cos(radian);
-        final double y =
-            center.dy + (baseRadiusY + displacement) * math.sin(radian);
-        if (angle == 0) {
-          path.moveTo(x, y);
-        } else {
-          path.lineTo(x, y);
-        }
-      }
-      path.close();
-      canvas.drawPath(path, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant VoiceWavePainter oldDelegate) => true;
-}
-
-class _OvalStrokePainter extends CustomPainter {
-  final Color color;
-  final double strokeWidth;
-  final bool isListening;
-  final Animation<double>? animation;
-
-  _OvalStrokePainter({
-    required this.color,
-    required this.strokeWidth,
-    this.isListening = false,
-    this.animation,
-  }) : super(repaint: animation);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..isAntiAlias = true;
-    if (!isListening || animation == null) {
-      canvas.drawOval(Rect.fromLTWH(0, 0, size.width, size.height), paint);
-    } else {
-      final center = Offset(size.width / 2, size.height / 2);
-      final Path path = Path();
-      const double waveCount = 10.0;
-      final double waveAmplitude = 6.w;
-      for (double angle = 0; angle <= 360; angle += 1) {
-        final double radian = angle * math.pi / 180;
-        final double displacement =
-            math.sin((radian * waveCount) + (animation!.value * 2 * math.pi)) *
-                waveAmplitude;
-        final double x =
-            center.dx + (size.width / 2 + displacement) * math.cos(radian);
-        final double y =
-            center.dy + (size.height / 2 + displacement) * math.sin(radian);
-        if (angle == 0) {
-          path.moveTo(x, y);
-        } else {
-          path.lineTo(x, y);
-        }
-      }
-      path.close();
-      canvas.drawPath(path, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _OvalStrokePainter oldDelegate) => true;
 }

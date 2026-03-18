@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+
   flutter_localizations:
     sdk: flutter
   shared_preferences: ^2.2.3
@@ -37,6 +38,8 @@ dependencies:
   intl: ^0.19.0
   firebase_storage: ^12.4.5
   package_info_plus: ^8.0.2
+  flutter_gen: ^5.13.0+1
+  
 
 dependency_overrides:
   win32: 5.8.0
@@ -61,7 +64,6 @@ flutter:
     - assets/images/
     - assets/images/icons/features/
     - assets/images/icons/actions/
-    - assets/images/icons/notifications/
     - assets/images/icons/nav/
     - assets/images/onboarding1/
     - assets/images/flags/
@@ -72,6 +74,8 @@ flutter:
     - assets/images/PhotoTranslate/
     - assets/images/demo/
     - assets/animations/
+    - assets/animations/Light-blue-orbit.json
+    - assets/animations/wave-wave.json
 
   fonts:
     - family: Poppins

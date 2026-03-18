@@ -61,7 +61,7 @@ class _LingoraAppState extends ConsumerState<LingoraApp> {
 
   @override
   Widget build(BuildContext context) {
-    final locale = ref.watch(appLocaleProvider);
+    final locale = ref.watch(appLocaleProvider) ?? const Locale('en');
 
     return ScreenUtilInit(
       designSize: const Size(393, 852),

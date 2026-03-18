@@ -394,9 +394,17 @@
   "expertArt": "アート",
   "expertFinance": "金融",
   "expertTechnology": "テクノロジー",
-  "expertNews": "ニュース"
+  "expertNews": "ニュース",
+  
+  "photoScanTranslated": "翻訳済み",
+  "photoScanOriginal": "元の画像",
+  "photoScanSelectOrCapture": "写真を選択または撮影してください",
+  "photoScanProcessing": "処理中...",
 
-
+  "notifications": "通知",
+  "today": "今日",
+  "yesterday": "昨日",
+  "noNotifications": "通知はありません"
 
 
 

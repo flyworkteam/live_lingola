@@ -855,4 +855,47 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get expertNews => 'समाचार';
+
+  @override
+  String get translated => 'अनुवादित';
+
+  @override
+  String get original => 'मूल';
+  @override
+  String get yesterday => 'कल';
+
+  @override
+  String get noNotifications => 'कोई सूचना नहीं';
+  @override
+  String get notificationNewTranslationReadyTitle => 'नया अनुवाद तैयार है';
+
+  @override
+  String get notificationNewTranslationReadyBody =>
+      'आपकी ऑडियो अनुवाद फ़ाइल सफलतापूर्वक टेक्स्ट में बदली गई और अनुवादित की गई है।';
+
+  @override
+  String get notificationTime10MinAgo => '10 मिनट पहले';
+
+  @override
+  String get notificationSpecialOfferTitle => 'आपके लिए एक खास ऑफर है';
+
+  @override
+  String get notificationSpecialOfferBody =>
+      'अनलिमिटेड फोटो ट्रांसलेशन के लिए 50% छूट पर Premium में अपग्रेड करें।';
+
+  @override
+  String get notificationTime2hAgo => '2 घंटे पहले';
+
+  @override
+  String get notificationSeeOpportunity => 'ऑफर देखें';
+
+  @override
+  String get notificationAiChatTitle => 'AI चैट से बात करें';
+
+  @override
+  String get notificationAiChatBody =>
+      'AI चैट के साथ अपने सवालों के तुरंत जवाब पाएं।';
+
+  @override
+  String get notificationTimeJustNow => 'अभी अभी';
 }

@@ -84,9 +84,11 @@ class _LoginViewState extends ConsumerState<LoginView> {
       return l10n.appleSignInFailed;
     }
 
+    /* FACEBOOK ERROR HANDLING DISABLED
     if (provider == 'Facebook') {
       return l10n.facebookSignInFailed;
     }
+    */
 
     if (provider == 'Google') {
       return l10n.googleSignInFailed;
@@ -173,6 +175,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
     }
   }
 
+  /* FACEBOOK SIGN IN FUNCTION DISABLED
   Future<void> _signInWithFacebook() async {
     try {
       debugPrint('FACEBOOK SIGN IN STARTED');
@@ -184,6 +187,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
       _snack(_readableError(e, provider: 'Facebook'));
     }
   }
+  */
 
   @override
   Widget build(BuildContext context) {
@@ -319,6 +323,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
               iconSize: const Size(18, 18.64),
             ),
           ),
+          /* FACEBOOK BUTTON POSITIONED DISABLED
           Positioned(
             top: 453,
             left: 37,
@@ -331,6 +336,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
               iconSize: const Size(12, 21.81),
             ),
           ),
+          */
           Positioned(
             top: 517,
             left: 37,
@@ -475,15 +481,15 @@ class _LoginViewState extends ConsumerState<LoginView> {
   }
 }
 
-enum _AuthProvider { google, facebook, apple }
+enum _AuthProvider { google, /* facebook, */ apple }
 
 extension _AuthProviderAssets on _AuthProvider {
   String get assetPath {
     switch (this) {
       case _AuthProvider.google:
         return 'assets/images/auth/google.svg';
-      case _AuthProvider.facebook:
-        return 'assets/images/auth/facebook.svg';
+      /* case _AuthProvider.facebook:
+        return 'assets/images/auth/facebook.svg'; */
       case _AuthProvider.apple:
         return 'assets/images/auth/apple.svg';
     }
@@ -493,8 +499,8 @@ extension _AuthProviderAssets on _AuthProvider {
     switch (this) {
       case _AuthProvider.google:
         return 'Google';
-      case _AuthProvider.facebook:
-        return 'Facebook';
+      /* case _AuthProvider.facebook:
+        return 'Facebook'; */
       case _AuthProvider.apple:
         return 'Apple';
     }

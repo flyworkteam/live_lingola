@@ -394,7 +394,30 @@
   "expertArt": "कला",
   "expertFinance": "वित्त",
   "expertTechnology": "प्रौद्योगिकी",
-  "expertNews": "समाचार"
+  "expertNews": "समाचार",
+  
+  "photoScanTranslated": "अनुवादित",
+  "photoScanOriginal": "मूल",
+  "photoScanSelectOrCapture": "फ़ोटो चुनें या खींचें",
+  "photoScanProcessing": "प्रोसेस हो रहा है...",
+  
+  "notifications": "सूचनाएं",
+  "today": "आज",
+  "yesterday": "कल",
+  "noNotifications": "कोई सूचना नहीं",
+  
+  "notificationNewTranslationReadyTitle": "नई अनुवाद तैयार है",
+  "notificationNewTranslationReadyBody": "आपकी ऑडियो अनुवाद फ़ाइल सफलतापूर्वक टेक्स्ट में बदली गई और अनुवादित की गई है।",
+  "notificationTime10MinAgo": "10 मिनट पहले",
+  "notificationSpecialOfferTitle": "आपके लिए एक खास ऑफर है",
+  "notificationSpecialOfferBody": "अनलिमिटेड फोटो ट्रांसलेशन के लिए 50% छूट पर Premium में अपग्रेड करें।",
+  "notificationTime2hAgo": "2 घंटे पहले",
+  "notificationSeeOpportunity": "ऑफर देखें",
+  "notificationAiChatTitle": "AI चैट से बात करें",
+  "notificationAiChatBody": "AI चैट के साथ अपने सवालों के तुरंत जवाब पाएं।"
+
+
+
 
 
 

@@ -394,7 +394,19 @@
   "expertArt": "예술",
   "expertFinance": "금융",
   "expertTechnology": "기술",
-  "expertNews": "뉴스"
+  "expertNews": "뉴스",
+  
+  "photoScanTranslated": "번역됨",
+  "photoScanOriginal": "원본",
+  "photoScanSelectOrCapture": "사진을 선택하거나 촬영하세요",
+  "photoScanProcessing": "처리 중...",
+  
+  "notifications": "알림",
+  "today": "오늘",
+  "yesterday": "어제",
+  "noNotifications": "알림이 없습니다"
+
+
 
 
 

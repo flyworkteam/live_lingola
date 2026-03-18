@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,7 +15,8 @@ class SelectLanguageView extends ConsumerStatefulWidget {
 }
 
 class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
-  late int _selected;
+  int _selected = 1;
+  bool _didInitSelection = false;
 
   final List<_Lang> _langs = const [
     _Lang("Turkish", "assets/images/flags/Turkish.png", "🇹🇷"),
@@ -33,14 +33,11 @@ class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-    _selected = 1;
-  }
-
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    if (_didInitSelection) return;
+    _didInitSelection = true;
 
     final locale = ref.read(appLocaleProvider);
     final currentCode = locale?.languageCode.toLowerCase();
@@ -57,7 +54,10 @@ class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
   void _toast(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(msg, style: const TextStyle(fontFamily: 'Poppins')),
+        content: Text(
+          msg,
+          style: const TextStyle(fontFamily: 'Poppins'),
+        ),
         behavior: SnackBarBehavior.floating,
         duration: const Duration(milliseconds: 900),
       ),
@@ -96,6 +96,15 @@ class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
   Future<void> _applyLanguage() async {
     final t = AppLocalizations.of(context)!;
     final selectedLang = _langs[_selected];
+    final currentLocale = ref.read(appLocaleProvider);
+    final currentCode = currentLocale?.languageCode.toLowerCase();
+    final nextCode = selectedLang.locale.languageCode.toLowerCase();
+
+    if (currentCode == nextCode) {
+      if (!mounted) return;
+      Navigator.of(context).pop();
+      return;
+    }
 
     await ref.read(appLocaleProvider.notifier).setLocale(selectedLang.locale);
 
@@ -106,6 +115,7 @@ class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
         _localizedLanguageTitle(t, selectedLang.title),
       ),
     );
+
     Navigator.of(context).pop();
   }
 
@@ -130,7 +140,7 @@ class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
                   SizedBox(height: 18.h),
                   Expanded(
                     child: ListView.separated(
-                      padding: EdgeInsets.only(bottom: (54.h + 16.h)),
+                      padding: EdgeInsets.only(bottom: 54.h + 16.h),
                       physics: const BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics(),
                       ),
@@ -145,7 +155,11 @@ class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
                           flagAsset: l.asset,
                           fallbackEmoji: l.emoji,
                           selected: selected,
-                          onTap: () => setState(() => _selected = i),
+                          onTap: () {
+                            setState(() {
+                              _selected = i;
+                            });
+                          },
                         );
                       },
                     ),
@@ -308,7 +322,10 @@ class _LangPill extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(28.r),
-          border: Border.all(color: borderColor, width: selected ? 2 : 1),
+          border: Border.all(
+            color: borderColor,
+            width: selected ? 2 : 1,
+          ),
         ),
         child: Row(
           children: [

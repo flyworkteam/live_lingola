@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lingola_app/l10n/app_localizations.dart';
 
 class PhotoTranslatedBlock {
   final double x;
@@ -55,6 +56,8 @@ class _PhotoScanFrameState extends State<PhotoScanFrame> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     final double frameWidth = 254.w;
     final double frameHeight = 340.h;
     final double innerWidth = frameWidth - 24.w;
@@ -125,7 +128,7 @@ class _PhotoScanFrameState extends State<PhotoScanFrame> {
                     borderRadius: BorderRadius.circular(999.r),
                   ),
                   child: Text(
-                    "Translated",
+                    l10n.translated,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11.sp,
@@ -146,7 +149,7 @@ class _PhotoScanFrameState extends State<PhotoScanFrame> {
                     borderRadius: BorderRadius.circular(999.r),
                   ),
                   child: Text(
-                    "Original",
+                    l10n.original,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11.sp,
@@ -175,7 +178,7 @@ class _PhotoScanFrameState extends State<PhotoScanFrame> {
                 color: const Color(0xFFF6F8FC),
                 alignment: Alignment.center,
                 child: Text(
-                  "Select or capture a photo",
+                  l10n.selectOrCapturePhoto,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13.sp,
@@ -210,7 +213,7 @@ class _PhotoScanFrameState extends State<PhotoScanFrame> {
                           ),
                           SizedBox(width: 10.w),
                           Text(
-                            "Processing...",
+                            l10n.processing,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontSize: 12.sp,

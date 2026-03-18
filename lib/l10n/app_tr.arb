@@ -392,7 +392,30 @@
 "expertArt": "Sanat",
 "expertFinance": "Finans",
 "expertTechnology": "Teknoloji",
-"expertNews": "Haberler"
+"expertNews": "Haberler",
+
+  "photoScanTranslated": "Çevrilmiş",
+  "photoScanOriginal": "Orijinal",
+  "photoScanSelectOrCapture": "Bir fotoğraf seçin veya çekin",
+  "photoScanProcessing": "İşleniyor...",
+  
+  "notifications": "Bildirimler",
+  "today": "Bugün",
+  "yesterday": "Dün",
+  "noNotifications": "Bildirim bulunmuyor",
+  
+  "notificationNewTranslationReadyTitle": "Yeni Çeviri Hazır",
+  "notificationNewTranslationReadyBody": "Sesli çeviri dosyanız başarıyla metne dönüştürüldü ve çevrildi.",
+  "notificationTime10MinAgo": "10 dk. önce",
+  "notificationSpecialOfferTitle": "Sizi Özel Bir Teklif Bekliyor",
+  "notificationSpecialOfferBody": "Sınırsız fotoğraf çevirisi için Premium'a %50 indirimle yükseltin.",
+  "notificationTime2hAgo": "2 sa. önce",
+  "notificationSeeOpportunity": "FIRSATI GÖR",
+  "notificationAiChatTitle": "AI Chat ile Sohbet Et",
+  "notificationAiChatBody": "AI chat ile aklınızdaki sorulara anında yanıt bulun."
+
+
+
 
 
 

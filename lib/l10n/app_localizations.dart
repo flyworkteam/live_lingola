@@ -1675,6 +1675,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'News'**
   String get expertNews;
+
+  /// No description provided for @translated.
+  ///
+  /// In en, this message translates to:
+  /// **'Translated'**
+  String get translated;
+
+  /// No description provided for @original.
+  ///
+  /// In en, this message translates to:
+  /// **'Original'**
+  String get original;
+
+  /// No description provided for @yesterday.
+  String get yesterday;
+
+  /// No description provided for @noNotifications.
+  String get noNotifications;
+
+  /// No description provided for @notificationNewTranslationReadyTitle.
+  String get notificationNewTranslationReadyTitle;
+
+  /// No description provided for @notificationNewTranslationReadyBody.
+  String get notificationNewTranslationReadyBody;
+
+  /// No description provided for @notificationTime10MinAgo.
+  String get notificationTime10MinAgo;
+
+  /// No description provided for @notificationSpecialOfferTitle.
+  String get notificationSpecialOfferTitle;
+
+  /// No description provided for @notificationSpecialOfferBody.
+  String get notificationSpecialOfferBody;
+
+  /// No description provided for @notificationTime2hAgo.
+  String get notificationTime2hAgo;
+
+  /// No description provided for @notificationSeeOpportunity.
+  String get notificationSeeOpportunity;
+
+  /// No description provided for @notificationAiChatTitle.
+  String get notificationAiChatTitle;
+
+  /// No description provided for @notificationAiChatBody.
+  String get notificationAiChatBody;
+
+  /// No description provided for @notificationTimeJustNow.
+  String get notificationTimeJustNow;
 }
 
 class _AppLocalizationsDelegate

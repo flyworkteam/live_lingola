@@ -364,10 +364,27 @@
   "expertArt": "Arte",
   "expertFinance": "Finanzas",
   "expertTechnology": "Tecnología",
-  "expertNews": "Noticias"
+  "expertNews": "Noticias",
+  
+  "photoScanTranslated": "Traducido",
+  "photoScanOriginal": "Original",
+  "photoScanSelectOrCapture": "Selecciona o toma una foto",
+  "photoScanProcessing": "Procesando...",
 
-
-
+  "notifications": "Notificaciones",
+  "today": "Hoy",
+  "yesterday": "Ayer",
+  "noNotifications": "No hay notificaciones",
+  
+  "notificationNewTranslationReadyTitle": "Nueva traducción lista",
+  "notificationNewTranslationReadyBody": "Tu archivo de traducción de audio se ha convertido correctamente en texto y ha sido traducido.",
+  "notificationTime10MinAgo": "hace 10 min",
+  "notificationSpecialOfferTitle": "Te espera una oferta especial",
+  "notificationSpecialOfferBody": "Pásate a Premium para obtener traducciones de fotos ilimitadas con un 50 % de descuento.",
+  "notificationTime2hAgo": "hace 2 h",
+  "notificationSeeOpportunity": "VER LA OFERTA",
+  "notificationAiChatTitle": "Chatea con IA",
+  "notificationAiChatBody": "Obtén respuestas instantáneas a tus preguntas con el chat de IA."
 
 
 

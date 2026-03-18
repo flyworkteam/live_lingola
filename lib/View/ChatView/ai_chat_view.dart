@@ -57,6 +57,10 @@ class _AiChatViewState extends State<AiChatView> {
           text: l10n.aiChatWelcomeMessage,
         ),
       );
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToBottom();
+      });
     }
   }
 
@@ -124,11 +128,12 @@ class _AiChatViewState extends State<AiChatView> {
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_scroll.hasClients) return;
-      _scroll.animateTo(
-        _scroll.position.maxScrollExtent + 300,
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOut,
-      );
+
+      final target = _scroll.position.maxScrollExtent;
+
+      if ((_scroll.offset - target).abs() < 2) return;
+
+      _scroll.jumpTo(target);
     });
   }
 
@@ -166,10 +171,12 @@ class _AiChatViewState extends State<AiChatView> {
     }
 
     final topPad = MediaQuery.of(context).padding.top;
-    final bottomReserve = 62.h + 12.h;
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final safeBottom = MediaQuery.of(context).padding.bottom;
     final itemCount = _mutableMessages.length + (_isBotTyping ? 1 : 0);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: const Color(0xFFF3F6FB),
       body: Column(
         children: [
@@ -225,6 +232,7 @@ class _AiChatViewState extends State<AiChatView> {
                 ),
               ),
             ),
+          SizedBox(height: 2.h),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: SingleChildScrollView(
@@ -247,12 +255,18 @@ class _AiChatViewState extends State<AiChatView> {
               ),
             ),
           ),
-          SizedBox(height: 15.h),
-          ChatInputBar(
-            controller: _controller,
-            onSend: _send,
+          SizedBox(height: 6.h),
+          AnimatedPadding(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOut,
+            padding: EdgeInsets.only(
+              bottom: bottomInset > 0 ? 8.h : (safeBottom + 12.h),
+            ),
+            child: ChatInputBar(
+              controller: _controller,
+              onSend: _send,
+            ),
           ),
-          SizedBox(height: 60.h + bottomReserve),
         ],
       ),
     );

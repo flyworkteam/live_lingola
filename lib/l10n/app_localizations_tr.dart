@@ -851,4 +851,47 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get expertNews => 'Haberler';
+  @override
+  String get translated => 'Çevrilmiş';
+
+  @override
+  String get original => 'Orijinal';
+
+  @override
+  String get yesterday => 'Dün';
+
+  @override
+  String get noNotifications => 'Bildirim yok';
+  @override
+  String get notificationNewTranslationReadyTitle => 'Yeni Çeviri Hazır';
+
+  @override
+  String get notificationNewTranslationReadyBody =>
+      'Sesli çeviri dosyanız başarıyla metne dönüştürüldü ve çevrildi.';
+
+  @override
+  String get notificationTime10MinAgo => '10 dk önce';
+
+  @override
+  String get notificationSpecialOfferTitle => 'Sizi Özel Bir Teklif Bekliyor';
+
+  @override
+  String get notificationSpecialOfferBody =>
+      'Sınırsız fotoğraf çevirisi için Premium\'a %50 indirimle yükseltin.';
+
+  @override
+  String get notificationTime2hAgo => '2 saat önce';
+
+  @override
+  String get notificationSeeOpportunity => 'FIRSATI GÖR';
+
+  @override
+  String get notificationAiChatTitle => 'AI Chat ile Sohbet Et';
+
+  @override
+  String get notificationAiChatBody =>
+      'AI chat ile aklınızdaki sorulara anında yanıt bulun.';
+
+  @override
+  String get notificationTimeJustNow => 'Az önce';
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -39,9 +40,7 @@ class _TextTranslationViewState extends State<TextTranslationView> {
   static const int _charLimit = 2000;
   static const String _baseUrl = 'http://127.0.0.1:4000';
 
-  final TextEditingController _sourceCtrl = TextEditingController(
-    text: "Bugün hava çok güzel, biraz\nyürüyüş yapmak istiyorum.",
-  );
+  final TextEditingController _sourceCtrl = TextEditingController();
 
   String _sourceLangCode = "tr";
   String _targetLangCode = "en";
@@ -69,6 +68,13 @@ class _TextTranslationViewState extends State<TextTranslationView> {
   OverlayEntry? _langOverlay;
   OverlayEntry? _expertOverlay;
 
+  int _translateRequestId = 0;
+  String? _lastStartedSignature;
+  String? _lastCompletedSignature;
+
+  int _examplesRequestId = 0;
+  int _examplesRefreshSeed = 0;
+
   String? get _firebaseUid => FirebaseAuth.instance.currentUser?.uid;
 
   int get _sourceLength => _sourceCtrl.text.length;
@@ -79,6 +85,10 @@ class _TextTranslationViewState extends State<TextTranslationView> {
   String get _targetFlagAsset =>
       textTranslateLangs.firstWhere((e) => e.name == _targetLangCode).flagAsset;
 
+  void _log(String message) {
+    debugPrint('TEXT_TRANSLATION_VIEW => $message');
+  }
+
   @override
   void initState() {
     super.initState();
@@ -87,9 +97,18 @@ class _TextTranslationViewState extends State<TextTranslationView> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
-      _setRandomFallbackExamples();
-      await _runBackendTranslate(saveToHistory: false);
-      unawaited(_loadDynamicExamples());
+      _log('INIT START');
+      _log(
+        'INIT LANGS source=$_sourceLangCode(${backendLanguageName(_sourceLangCode)}) '
+        'target=$_targetLangCode(${backendLanguageName(_targetLangCode)}) '
+        'expert=$_expertKey(${backendExpertName(_expertKey)})',
+      );
+
+      await _refreshExamples();
+      await _runBackendTranslate(
+        saveToHistory: false,
+        force: true,
+      );
     });
   }
 
@@ -167,29 +186,93 @@ class _TextTranslationViewState extends State<TextTranslationView> {
     return true;
   }
 
+  String _buildTranslationSignature({
+    required String source,
+    required bool saveToHistory,
+  }) {
+    return [
+      source.trim(),
+      _sourceLangCode,
+      _targetLangCode,
+      _expertKey,
+      saveToHistory ? 'save' : 'nosave',
+    ].join('|');
+  }
+
   void _setRandomFallbackExamples() {
     final l10n = AppLocalizations.of(context)!;
+
+    _log(
+      'USING FALLBACK EXAMPLES | '
+      'source=$_sourceLangCode(${backendLanguageName(_sourceLangCode)}) '
+      'target=$_targetLangCode(${backendLanguageName(_targetLangCode)}) '
+      'expert=$_expertKey(${backendExpertName(_expertKey)})',
+    );
+
     final pool = List<TextExampleItem>.from(
-      fallbackExamples(l10n: l10n, sourceLangCode: _sourceLangCode),
-    )..shuffle();
+      fallbackExamples(
+        l10n: l10n,
+        sourceLangCode: _sourceLangCode,
+      ),
+    );
+
+    if (pool.isEmpty) {
+      if (mounted) {
+        setState(() {
+          _examples = const [];
+        });
+      }
+      return;
+    }
+
+    final random = Random(
+      DateTime.now().microsecondsSinceEpoch + _examplesRefreshSeed,
+    );
+
+    pool.shuffle(random);
+
+    if (pool.length > 2 && pool[0].title == pool[1].title) {
+      pool.shuffle(Random(random.nextInt(1 << 31)));
+    }
 
     setState(() {
       _examples = pool.take(2).toList();
     });
+
+    _log('FALLBACK EXAMPLES SET => ${_examples.map((e) => e.title).toList()}');
   }
 
   Future<void> _loadDynamicExamples() async {
+    final int requestId = ++_examplesRequestId;
+
+    final requestBody = {
+      "source_language": backendLanguageName(_sourceLangCode),
+      "target_language": backendLanguageName(_targetLangCode),
+      "expert": backendExpertName(_expertKey),
+      "count": 2,
+    };
+
+    _log('EXAMPLES REQUEST START | requestId=$requestId');
+    _log('EXAMPLES REQUEST BODY => ${jsonEncode(requestBody)}');
+    _log(
+      'EXAMPLES REQUEST RAW CODES => sourceCode=$_sourceLangCode '
+      'targetCode=$_targetLangCode expertKey=$_expertKey',
+    );
+
     try {
       final response = await http.post(
-        Uri.parse("$_baseUrl/chat/text-examples"),
+        Uri.parse("$_baseUrl/translate/text-examples"),
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "source_language": backendLanguageName(_sourceLangCode),
-          "target_language": backendLanguageName(_targetLangCode),
-          "expert": backendExpertName(_expertKey),
-          "count": 2,
-        }),
+        body: jsonEncode(requestBody),
       );
+
+      if (!mounted || requestId != _examplesRequestId) {
+        _log('EXAMPLES REQUEST DROPPED | requestId=$requestId');
+        return;
+      }
+
+      _log('EXAMPLES STATUS => ${response.statusCode}');
+      _log('EXAMPLES BODY => ${response.body}');
 
       final dynamic data =
           response.body.isNotEmpty ? jsonDecode(response.body) : {};
@@ -207,34 +290,72 @@ class _TextTranslationViewState extends State<TextTranslationView> {
 
                 if (title.isEmpty || subtitle.isEmpty) return null;
 
-                return TextExampleItem(title: title, subtitle: subtitle);
+                return TextExampleItem(
+                  title: title,
+                  subtitle: subtitle,
+                );
               })
               .whereType<TextExampleItem>()
               .toList();
 
-          if (!mounted) return;
+          if (!mounted || requestId != _examplesRequestId) {
+            _log('EXAMPLES PARSED BUT DROPPED | requestId=$requestId');
+            return;
+          }
+
+          _log('EXAMPLES PARSED COUNT => ${items.length}');
+          _log(
+            'EXAMPLES PARSED TITLES => ${items.map((e) => e.title).toList()}',
+          );
+          _log(
+            'EXAMPLES PARSED SUBTITLES => ${items.map((e) => e.subtitle).toList()}',
+          );
 
           if (items.isNotEmpty) {
+            final randomized = List<TextExampleItem>.from(items);
+            randomized.shuffle(
+              Random(DateTime.now().microsecondsSinceEpoch + requestId),
+            );
+
             setState(() {
-              _examples = items.take(2).toList();
+              _examples = randomized.take(2).toList();
             });
+
+            _log(
+              'EXAMPLES UI SET => ${_examples.map((e) => "${e.title} => ${e.subtitle}").toList()}',
+            );
           } else {
+            _log('EXAMPLES EMPTY AFTER PARSE, FALLBACK');
             _setRandomFallbackExamples();
           }
         } else {
+          _log('EXAMPLES RESPONSE has no valid list, FALLBACK');
           _setRandomFallbackExamples();
         }
       } else {
+        _log('EXAMPLES NON-200, FALLBACK');
         _setRandomFallbackExamples();
       }
     } catch (e) {
       debugPrint("TEXT EXAMPLES ERROR: $e");
-      if (!mounted) return;
+      _log('EXAMPLES EXCEPTION => $e');
+      if (!mounted || requestId != _examplesRequestId) return;
       _setRandomFallbackExamples();
     }
   }
 
+  Future<void> _refreshExamples() async {
+    _examplesRefreshSeed++;
+    _log('REFRESH EXAMPLES START | seed=$_examplesRefreshSeed');
+    _setRandomFallbackExamples();
+    await _loadDynamicExamples();
+  }
+
   Future<void> _applyExample(String text) async {
+    _log('APPLY EXAMPLE => $text');
+
+    _debounce?.cancel();
+
     setState(() {
       _sourceCtrl.text = text;
       _sourceCtrl.selection = TextSelection.fromPosition(
@@ -245,7 +366,10 @@ class _TextTranslationViewState extends State<TextTranslationView> {
       _hasUnsavedResult = false;
     });
 
-    await _runBackendTranslate(saveToHistory: false);
+    await _runBackendTranslate(
+      saveToHistory: false,
+      force: true,
+    );
   }
 
   void _triggerSaveIconAnimation() {
@@ -266,12 +390,19 @@ class _TextTranslationViewState extends State<TextTranslationView> {
 
   void _scheduleTranslate() {
     _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 650), () {
+    _debounce = Timer(const Duration(seconds: 2), () {
+      _log('DEBOUNCE TRANSLATE TRIGGERED (2s)');
       _runBackendTranslate(saveToHistory: false);
     });
   }
 
   void _swapLang() {
+    _log(
+      'SWAP BEFORE => source=$_sourceLangCode(${backendLanguageName(_sourceLangCode)}) '
+      'target=$_targetLangCode(${backendLanguageName(_targetLangCode)})',
+    );
+
+    _debounce?.cancel();
     _removeLangOverlay();
     _removeExpertOverlay();
 
@@ -284,9 +415,18 @@ class _TextTranslationViewState extends State<TextTranslationView> {
       _hasUnsavedResult = false;
     });
 
-    _setRandomFallbackExamples();
-    _runBackendTranslate(saveToHistory: false);
-    unawaited(_loadDynamicExamples());
+    _log(
+      'SWAP AFTER => source=$_sourceLangCode(${backendLanguageName(_sourceLangCode)}) '
+      'target=$_targetLangCode(${backendLanguageName(_targetLangCode)})',
+    );
+
+    unawaited(_refreshExamples());
+    unawaited(
+      _runBackendTranslate(
+        saveToHistory: false,
+        force: true,
+      ),
+    );
   }
 
   Future<void> _pasteFromClipboard() async {
@@ -298,6 +438,8 @@ class _TextTranslationViewState extends State<TextTranslationView> {
     final trimmed =
         text.length > _charLimit ? text.substring(0, _charLimit) : text;
 
+    _debounce?.cancel();
+
     setState(() {
       _sourceCtrl.text = trimmed;
       _sourceCtrl.selection = TextSelection.fromPosition(
@@ -308,7 +450,12 @@ class _TextTranslationViewState extends State<TextTranslationView> {
       _hasUnsavedResult = false;
     });
 
-    await _runBackendTranslate(saveToHistory: false);
+    _log('PASTE => $trimmed');
+
+    await _runBackendTranslate(
+      saveToHistory: false,
+      force: true,
+    );
   }
 
   Future<void> _copyTranslatedText() async {
@@ -324,9 +471,20 @@ class _TextTranslationViewState extends State<TextTranslationView> {
     );
   }
 
-  Future<void> _runBackendTranslate({required bool saveToHistory}) async {
+  Future<void> _runBackendTranslate({
+    required bool saveToHistory,
+    bool force = false,
+  }) async {
     final l10n = AppLocalizations.of(context)!;
     final source = _sourceCtrl.text.trim();
+
+    _log(
+      'TRANSLATE REQUEST START | '
+      'sourceLang=$_sourceLangCode(${backendLanguageName(_sourceLangCode)}) '
+      'targetLang=$_targetLangCode(${backendLanguageName(_targetLangCode)}) '
+      'expert=$_expertKey(${backendExpertName(_expertKey)}) '
+      'saveToHistory=$saveToHistory force=$force text="$source"',
+    );
 
     if ((_firebaseUid ?? "").isEmpty) {
       if (!mounted) return;
@@ -336,10 +494,12 @@ class _TextTranslationViewState extends State<TextTranslationView> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l10n.noLoggedInUser)),
       );
+      _log('TRANSLATE STOPPED => firebase uid yok');
       return;
     }
 
     if (source.isEmpty) {
+      if (!mounted) return;
       setState(() {
         _translatedText = "";
         _isTranslating = false;
@@ -347,27 +507,63 @@ class _TextTranslationViewState extends State<TextTranslationView> {
         _lastSavedTranslationId = null;
         _isFavorite = false;
       });
+      _log('TRANSLATE STOPPED => source empty');
       return;
     }
 
+    final signature = _buildTranslationSignature(
+      source: source,
+      saveToHistory: saveToHistory,
+    );
+
+    if (!force) {
+      if (_isTranslating && _lastStartedSignature == signature) {
+        _log('TRANSLATE SKIPPED => same request already running');
+        return;
+      }
+
+      if (!saveToHistory &&
+          _lastCompletedSignature == signature &&
+          _translatedText.trim().isNotEmpty) {
+        _log('TRANSLATE SKIPPED => same request already completed');
+        return;
+      }
+    }
+
+    final int requestId = ++_translateRequestId;
+    _lastStartedSignature = signature;
+
+    if (!mounted) return;
     setState(() {
       _isTranslating = true;
     });
 
     try {
+      final requestBody = {
+        "firebase_uid": _firebaseUid,
+        "source_text": source,
+        "source_language": backendLanguageName(_sourceLangCode),
+        "target_language": backendLanguageName(_targetLangCode),
+        "expert": backendExpertName(_expertKey),
+        "translation_type": "text",
+        "save_to_history": saveToHistory,
+      };
+
+      _log('TRANSLATE REQUEST BODY => ${jsonEncode(requestBody)}');
+
       final response = await http.post(
         Uri.parse("$_baseUrl/translate/text"),
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "firebase_uid": _firebaseUid,
-          "source_text": source,
-          "source_language": backendLanguageName(_sourceLangCode),
-          "target_language": backendLanguageName(_targetLangCode),
-          "expert": backendExpertName(_expertKey),
-          "translation_type": "text",
-          "save_to_history": saveToHistory,
-        }),
+        body: jsonEncode(requestBody),
       );
+
+      if (!mounted || requestId != _translateRequestId) {
+        _log('TRANSLATE RESPONSE DROPPED | requestId=$requestId');
+        return;
+      }
+
+      _log('TRANSLATE STATUS => ${response.statusCode}');
+      _log('TRANSLATE BODY => ${response.body}');
 
       final dynamic data =
           response.body.isNotEmpty ? jsonDecode(response.body) : {};
@@ -375,8 +571,6 @@ class _TextTranslationViewState extends State<TextTranslationView> {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final translated = _extractTranslatedText(data, source);
         final savedId = _extractTranslationId(data);
-
-        if (!mounted) return;
 
         setState(() {
           _translatedText = translated;
@@ -389,12 +583,25 @@ class _TextTranslationViewState extends State<TextTranslationView> {
             _hasUnsavedResult = false;
           }
         });
+
+        _lastCompletedSignature = signature;
+        _log('TRANSLATE SUCCESS => $_translatedText');
       } else {
-        _applyBackendFailure(source);
+        _log('TRANSLATE FAILED NON-200');
+        _applyBackendFailure(
+          source,
+          requestId: requestId,
+          signature: signature,
+        );
       }
     } catch (e) {
       debugPrint("TEXT TRANSLATE ERROR: $e");
-      _applyBackendFailure(source);
+      _log('TRANSLATE EXCEPTION => $e');
+      _applyBackendFailure(
+        source,
+        requestId: requestId,
+        signature: signature,
+      );
     }
   }
 
@@ -449,20 +656,30 @@ class _TextTranslationViewState extends State<TextTranslationView> {
     return null;
   }
 
-  void _applyBackendFailure(String source) {
-    if (!mounted) return;
+  void _applyBackendFailure(
+    String source, {
+    required int requestId,
+    required String signature,
+  }) {
+    if (!mounted || requestId != _translateRequestId) return;
 
     setState(() {
       _translatedText = source;
       _isTranslating = false;
       _hasUnsavedResult = true;
     });
+
+    _lastCompletedSignature = signature;
+    _log('TRANSLATE FALLBACK TO SOURCE => $source');
   }
 
   Future<void> _saveCurrentTranslation() async {
     final l10n = AppLocalizations.of(context)!;
 
-    await _runBackendTranslate(saveToHistory: true);
+    await _runBackendTranslate(
+      saveToHistory: true,
+      force: true,
+    );
     _triggerSaveIconAnimation();
 
     if (!mounted) return;
@@ -477,7 +694,10 @@ class _TextTranslationViewState extends State<TextTranslationView> {
     if (_translatedText.trim().isEmpty) return;
 
     if (_lastSavedTranslationId == null || _hasUnsavedResult) {
-      await _runBackendTranslate(saveToHistory: true);
+      await _runBackendTranslate(
+        saveToHistory: true,
+        force: true,
+      );
     }
 
     if (_lastSavedTranslationId == null) {
@@ -588,10 +808,23 @@ class _TextTranslationViewState extends State<TextTranslationView> {
                                 _lastSavedTranslationId = null;
                                 _hasUnsavedResult = false;
                               });
+
+                              _log(
+                                'LANG CHANGED => '
+                                'source=$_sourceLangCode(${backendLanguageName(_sourceLangCode)}) '
+                                'target=$_targetLangCode(${backendLanguageName(_targetLangCode)})',
+                              );
+
+                              _debounce?.cancel();
                               _removeLangOverlay();
-                              _setRandomFallbackExamples();
-                              _runBackendTranslate(saveToHistory: false);
-                              unawaited(_loadDynamicExamples());
+
+                              unawaited(_refreshExamples());
+                              unawaited(
+                                _runBackendTranslate(
+                                  saveToHistory: false,
+                                  force: true,
+                                ),
+                              );
                             },
                           ),
                           if (i != textTranslateLangs.length - 1)
@@ -658,10 +891,15 @@ class _TextTranslationViewState extends State<TextTranslationView> {
                                 _lastSavedTranslationId = null;
                                 _hasUnsavedResult = false;
                               });
+
+                              _log(
+                                'EXPERT CHANGED => $_expertKey(${backendExpertName(_expertKey)})',
+                              );
+
+                              _debounce?.cancel();
                               _removeExpertOverlay();
-                              _setRandomFallbackExamples();
-                              _runBackendTranslate(saveToHistory: false);
-                              unawaited(_loadDynamicExamples());
+
+                              unawaited(_refreshExamples());
                             },
                             child: Container(
                               width: double.infinity,
@@ -895,6 +1133,7 @@ class _TextTranslationViewState extends State<TextTranslationView> {
                             onSave: _saveCurrentTranslation,
                             onChanged: (_) => _scheduleTranslate(),
                             isSaveAnimating: _isSaveAnimating,
+                            isBusy: _isTranslating,
                           ),
                           SizedBox(height: 14.h),
                           TextTranslationResultCard(

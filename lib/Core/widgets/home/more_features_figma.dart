@@ -41,8 +41,8 @@ class MoreFeaturesFigma extends StatelessWidget {
           onTap: onFrequentlyTap,
           child: Container(
             width: double.infinity,
-            height: 110.h,
-            padding: EdgeInsets.fromLTRB(18.w, 14.h, 14.w, 14.h),
+            constraints: BoxConstraints(minHeight: 132.h),
+            padding: EdgeInsets.fromLTRB(18.w, 16.h, 14.w, 16.h),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(26.r),
@@ -58,47 +58,51 @@ class MoreFeaturesFigma extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ShaderMask(
-                        shaderCallback: (bounds) => const LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Color(0xFF03B7FF),
-                            Color(0xFF0A70FF),
-                          ],
-                        ).createShader(bounds),
-                        child: Text(
-                          l10n.frequentlyUsed,
-                          maxLines: 1,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 6.w),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ShaderMask(
+                          shaderCallback: (bounds) => const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Color(0xFF03B7FF),
+                              Color(0xFF0A70FF),
+                            ],
+                          ).createShader(bounds),
+                          child: Text(
+                            l10n.frequentlyUsed,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: -0.6,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 8.h),
+                        Text(
+                          l10n.reviewMostFrequentlyUsedTerms,
+                          maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontFamily: 'Poppins',
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.6,
-                            color: Colors.white,
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.w400,
+                            height: 1.08,
+                            letterSpacing: -0.9,
+                            color: const Color(0xFF0B1220),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 6.h),
-                      Text(
-                        l10n.reviewMostFrequentlyUsedTerms,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w400,
-                          height: 1.05,
-                          letterSpacing: -0.9,
-                          color: const Color(0xFF0B1220),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(width: 10.w),

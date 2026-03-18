@@ -11,6 +11,7 @@ class TextTranslationExampleTile extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.onMore,
+    required void Function() onTap,
   });
 
   @override

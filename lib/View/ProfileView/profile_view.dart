@@ -93,7 +93,6 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
   // static const String _icRate = AppAssets.icRate;
   static const String _icFaq = AppAssets.icFaq;
   static const String _icSupport = AppAssets.icSupport;
-  static const String _icFeedback = AppAssets.icFeedback;
   static const String _icLogout = AppAssets.icLogout;
   static const String _icPro = AppAssets.icPro;
 
@@ -196,6 +195,12 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
   Future<void> _openTermsOfService() async {
     await _openUrl(
       'https://fly-work.com/livelingola/terms/',
+    );
+  }
+
+  Future<void> _openSupport() async {
+    await _openUrl(
+      'https://fly-work.com/contact-us/',
     );
   }
 
@@ -689,15 +694,18 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                 iconBg: const Color(0xFFEFF6FF),
                                 assetPath: _icSupport,
                                 title: l10n.support,
-                                onTap: () {},
+                                onTap: _openSupport,
                               ),
-                              _divider(),
-                              _assetTile(
-                                iconBg: const Color(0xFFFFF7ED),
-                                assetPath: _icFeedback,
-                                title: l10n.feedback,
-                                onTap: () {},
-                              ),
+
+                              // Geri bildirim sayfası yayın sonrası kullanılacak.
+                              // Şimdilik geçici olarak kapatıldı.
+                              // _divider(),
+                              // _assetTile(
+                              //   iconBg: const Color(0xFFFFF7ED),
+                              //   assetPath: _icFeedback,
+                              //   title: l10n.feedback,
+                              //   onTap: () {},
+                              // ),
                             ],
                           ),
                         ),

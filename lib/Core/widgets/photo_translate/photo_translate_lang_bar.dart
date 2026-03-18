@@ -6,12 +6,9 @@ import '../../Utils/assets.dart';
 class PhotoTranslateLangBar extends StatelessWidget {
   final String leftFlagAssetOrEmoji;
   final String leftText;
-
   final String rightFlagAssetOrEmoji;
   final String rightText;
-
   final VoidCallback onSwap;
-
   final VoidCallback? onLeftTap;
   final VoidCallback? onRightTap;
 
@@ -52,9 +49,10 @@ class PhotoTranslateLangBar extends StatelessWidget {
                 children: [
                   _Flag(leftFlagAssetOrEmoji),
                   SizedBox(width: 10.w),
-                  Flexible(
+                  Expanded(
                     child: Text(
                       leftText,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -68,6 +66,7 @@ class PhotoTranslateLangBar extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(width: 8.w),
           InkWell(
             onTap: onSwap,
             borderRadius: BorderRadius.circular(999.r),
@@ -91,6 +90,7 @@ class PhotoTranslateLangBar extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(width: 8.w),
           Expanded(
             child: InkWell(
               onTap: onRightTap,
@@ -98,11 +98,11 @@ class PhotoTranslateLangBar extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  _Flag(rightFlagAssetOrEmoji),
-                  SizedBox(width: 10.w),
-                  Flexible(
+                  Expanded(
                     child: Text(
                       rightText,
+                      maxLines: 1,
+                      textAlign: TextAlign.right,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontFamily: 'Poppins',
@@ -112,6 +112,8 @@ class PhotoTranslateLangBar extends StatelessWidget {
                       ),
                     ),
                   ),
+                  SizedBox(width: 10.w),
+                  _Flag(rightFlagAssetOrEmoji),
                 ],
               ),
             ),
@@ -124,6 +126,7 @@ class PhotoTranslateLangBar extends StatelessWidget {
 
 class _Flag extends StatelessWidget {
   final String assetOrEmoji;
+
   const _Flag(this.assetOrEmoji);
 
   @override
@@ -136,11 +139,23 @@ class _Flag extends StatelessWidget {
           width: 26.w,
           height: 18.h,
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => SizedBox(width: 26.w, height: 18.h),
+          errorBuilder: (_, __, ___) => SizedBox(
+            width: 26.w,
+            height: 18.h,
+          ),
         ),
       );
     }
 
-    return Text(assetOrEmoji, style: TextStyle(fontSize: 18.sp));
+    return SizedBox(
+      width: 26.w,
+      height: 18.h,
+      child: Center(
+        child: Text(
+          assetOrEmoji,
+          style: TextStyle(fontSize: 18.sp),
+        ),
+      ),
+    );
   }
 }

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../HomeView/home_and_notifications_view.dart';
+import 'package:lingola_app/l10n/app_localizations.dart';
 
+import '../HomeView/home_and_notifications_view.dart';
 import '../../Core/Theme/app_colors.dart';
 import '../../Core/Utils/assets.dart';
 import '../../Core/widgets/notification/notification_card.dart';
@@ -43,6 +44,7 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final items = ref.watch(notificationsInboxProvider);
 
     final topPad = MediaQuery.of(context).padding.top;
@@ -79,7 +81,7 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> {
                     ),
                     const Spacer(),
                     Text(
-                      "Notifications",
+                      l10n.notifications,
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 20.sp,
@@ -114,13 +116,13 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> {
                     padding: EdgeInsets.only(bottom: 20.h),
                     children: [
                       if (today.isNotEmpty) ...[
-                        _buildSectionLabel("Today", true),
+                        _buildSectionLabel(l10n.today, true),
                         SizedBox(height: 10.h),
                         ...today.map((e) => _buildRow(e)),
                       ],
                       if (yesterday.isNotEmpty) ...[
                         SizedBox(height: 10.h),
-                        _buildSectionLabel("Yesterday", false),
+                        _buildSectionLabel(l10n.yesterday, false),
                         SizedBox(height: 10.h),
                         ...yesterday.map((e) => _buildRow(e)),
                       ],
@@ -129,7 +131,7 @@ class _NotificationsViewState extends ConsumerState<NotificationsView> {
                           padding: EdgeInsets.only(top: 100.h),
                           child: Center(
                             child: Text(
-                              "No notifications",
+                              l10n.noNotifications,
                               style: TextStyle(
                                 color: Colors.white.withValues(alpha: 0.7),
                                 fontSize: 16.sp,
