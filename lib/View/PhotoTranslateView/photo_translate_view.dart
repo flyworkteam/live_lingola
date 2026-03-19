@@ -33,12 +33,7 @@ class _PhotoTranslateViewState extends ConsumerState<PhotoTranslateView> {
     _LangItem(code: "de", flagAsset: "assets/images/flags/German.png"),
     _LangItem(code: "it", flagAsset: "assets/images/flags/Italian.png"),
     _LangItem(code: "fr", flagAsset: "assets/images/flags/French.png"),
-    _LangItem(code: "ja", flagAsset: "assets/images/flags/Japanese.png"),
     _LangItem(code: "es", flagAsset: "assets/images/flags/Spanish.png"),
-    _LangItem(code: "ru", flagAsset: "assets/images/flags/Russian.png"),
-    _LangItem(code: "ko", flagAsset: "assets/images/flags/Korean.png"),
-    _LangItem(code: "hi", flagAsset: "assets/images/flags/Hindi.png"),
-    _LangItem(code: "pt", flagAsset: "assets/images/flags/Portuguese.png"),
   ];
 
   String _sourceLangCode = "tr";

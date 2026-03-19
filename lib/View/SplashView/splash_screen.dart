@@ -76,10 +76,10 @@ class _SplashViewState extends ConsumerState<SplashView> {
 
       if (!mounted) return;
 
-      debugPrint('SPLASH -> GO PLANET ONBOARDING');
+      debugPrint('SPLASH -> GO HOME');
       Navigator.pushReplacementNamed(
         context,
-        AppRoutes.onboarding,
+        AppRoutes.homeAndNotifications,
       );
     } catch (e, st) {
       debugPrint('SPLASH SYNC ERROR: $e');

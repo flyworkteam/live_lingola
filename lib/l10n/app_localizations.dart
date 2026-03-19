@@ -1723,6 +1723,8 @@ abstract class AppLocalizations {
 
   /// No description provided for @notificationTimeJustNow.
   String get notificationTimeJustNow;
+
+  get photoTranslation => null;
 }
 
 class _AppLocalizationsDelegate

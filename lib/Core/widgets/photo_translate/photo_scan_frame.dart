@@ -57,7 +57,6 @@ class _PhotoScanFrameState extends State<PhotoScanFrame> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
     final double frameWidth = 254.w;
     final double frameHeight = 340.h;
     final double innerWidth = frameWidth - 24.w;
