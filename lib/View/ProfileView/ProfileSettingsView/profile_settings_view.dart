@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -16,6 +18,7 @@ import 'package:lingola_app/l10n/app_localizations.dart';
 import '../../../Core/Routes/app_routes.dart';
 import '../../../Core/Utils/assets.dart';
 import '../../../Riverpod/Providers/current_user_provider.dart';
+import '../../../Riverpod/Providers/language_provider.dart';
 import '../../../firebase_options.dart';
 
 class ProfileSettingsView extends ConsumerStatefulWidget {
@@ -285,11 +288,78 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
     }
   }
 
+  Future<void> _clearAllLocalAppData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final firebaseUid = _firebaseUid;
+
+    try {
+      await prefs.remove('selected_translation_source_language_code');
+      await prefs.remove('selected_language_code');
+      await prefs.remove('app_locale_code');
+      await prefs.remove('is_guest_mode');
+
+      if (firebaseUid != null && firebaseUid.isNotEmpty) {
+        await prefs.remove('app_locale_code_$firebaseUid');
+      }
+
+      // Guest / onboarding / geçici kullanım için muhtemel kayıtlar
+      await prefs.remove('guest_selected_language');
+      await prefs.remove('guest_selected_level');
+      await prefs.remove('guest_selected_translation_source_language_code');
+      await prefs.remove('guest_app_locale_code');
+
+      // İleride benzer local kayıtlar eklersen buraya ekleyebilirsin.
+      debugPrint("ALL LOCAL APP DATA CLEARED");
+    } catch (e) {
+      debugPrint("LOCAL APP DATA CLEAR ERROR: $e");
+    }
+  }
+
+  Future<void> _goToLoginAndClearSession() async {
+    try {
+      ref.read(currentUserProvider.notifier).state = null;
+    } catch (e) {
+      debugPrint("CURRENT USER CLEAR ERROR: $e");
+    }
+
+    try {
+      await ref
+          .read(translationSourceLanguageProvider.notifier)
+          .resetSourceLanguage();
+    } catch (e) {
+      debugPrint("RESET SOURCE LANGUAGE ERROR: $e");
+    }
+
+    try {
+      await _clearAllLocalAppData();
+    } catch (e) {
+      debugPrint("CLEAR ALL LOCAL APP DATA ERROR: $e");
+    }
+
+    try {
+      await FirebaseAuth.instance.signOut();
+    } catch (e) {
+      debugPrint("SIGN OUT ERROR: $e");
+    }
+
+    if (!mounted) return;
+
+    Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+      AppRoutes.login,
+      (route) => false,
+    );
+  }
+
   Future<void> _deleteAccount() async {
     final l10n = AppLocalizations.of(context)!;
     final firebaseUid = _firebaseUid;
+    final currentFirebaseUser = FirebaseAuth.instance.currentUser;
 
-    if (firebaseUid == null || firebaseUid.isEmpty) return;
+    if (firebaseUid == null ||
+        firebaseUid.isEmpty ||
+        currentFirebaseUser == null) {
+      return;
+    }
 
     try {
       final response = await http.delete(
@@ -303,16 +373,35 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
       if (!mounted) return;
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        ref.read(currentUserProvider.notifier).state = null;
-        await FirebaseAuth.instance.signOut();
+        try {
+          await currentFirebaseUser.delete();
+        } on FirebaseAuthException catch (e) {
+          debugPrint(
+            "FIREBASE ACCOUNT DELETE ERROR: ${e.code} - ${e.message}",
+          );
+
+          if (!mounted) return;
+
+          if (e.code == 'requires-recent-login') {
+            _toast('Bu işlem için tekrar giriş yapmanız gerekiyor.');
+          } else {
+            _toast(l10n.deleteFailed);
+          }
+
+          await _goToLoginAndClearSession();
+          return;
+        } catch (e) {
+          debugPrint("FIREBASE ACCOUNT DELETE UNKNOWN ERROR: $e");
+
+          if (!mounted) return;
+          await _goToLoginAndClearSession();
+          return;
+        }
 
         if (!mounted) return;
         _toast(l10n.accountDeleted);
 
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          AppRoutes.login,
-          (route) => false,
-        );
+        await _goToLoginAndClearSession();
       } else {
         _toast(l10n.deleteFailed);
       }

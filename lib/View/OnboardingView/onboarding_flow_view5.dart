@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:lingola_app/Riverpod/Providers/onboarding_preferences_provider.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
@@ -47,7 +48,20 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
     });
 
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final isGuest = prefs.getBool('is_guest_mode') ?? false;
+
       final onboardingState = ref.read(onboardingControllerProvider);
+
+      if (isGuest) {
+        debugPrint(
+          'ONBOARDING FLOW 5 -> GUEST MODE ACTIVE -> SKIP BACKEND SAVE',
+        );
+
+        if (!mounted) return;
+        widget.onFinish();
+        return;
+      }
 
       await ref
           .read(onboardingRepositoryProvider)

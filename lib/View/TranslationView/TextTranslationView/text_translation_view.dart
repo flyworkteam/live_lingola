@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
@@ -21,10 +22,11 @@ import 'package:lingola_app/Core/widgets/text_translation/text_translation_model
 import 'package:lingola_app/Core/widgets/text_translation/text_translation_result_card.dart';
 import 'package:lingola_app/Core/widgets/text_translation/text_translation_source_card.dart';
 import 'package:lingola_app/Core/widgets/text_translation/text_translation_utils.dart';
+import 'package:lingola_app/Riverpod/Providers/language_provider.dart';
 import 'package:lingola_app/Services/Translation/text_to_speech_service.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 
-class TextTranslationView extends StatefulWidget {
+class TextTranslationView extends ConsumerStatefulWidget {
   final VoidCallback? onBackToHome;
 
   const TextTranslationView({
@@ -33,16 +35,17 @@ class TextTranslationView extends StatefulWidget {
   });
 
   @override
-  State<TextTranslationView> createState() => _TextTranslationViewState();
+  ConsumerState<TextTranslationView> createState() =>
+      _TextTranslationViewState();
 }
 
-class _TextTranslationViewState extends State<TextTranslationView> {
+class _TextTranslationViewState extends ConsumerState<TextTranslationView> {
   static const int _charLimit = 2000;
   static const String _baseUrl = 'http://127.0.0.1:4000';
 
   final TextEditingController _sourceCtrl = TextEditingController();
 
-  String _sourceLangCode = "tr";
+  late String _sourceLangCode;
   String _targetLangCode = "en";
   String _expertKey = "general";
   String _translatedText = "";
@@ -92,6 +95,7 @@ class _TextTranslationViewState extends State<TextTranslationView> {
   @override
   void initState() {
     super.initState();
+    _sourceLangCode = ref.read(translationSourceLanguageProvider);
     _initTts();
     _sourceCtrl.addListener(_handleSourceChanged);
 
@@ -414,6 +418,10 @@ class _TextTranslationViewState extends State<TextTranslationView> {
       _lastSavedTranslationId = null;
       _hasUnsavedResult = false;
     });
+
+    ref
+        .read(translationSourceLanguageProvider.notifier)
+        .setSourceLanguage(_sourceLangCode);
 
     _log(
       'SWAP AFTER => source=$_sourceLangCode(${backendLanguageName(_sourceLangCode)}) '
@@ -801,6 +809,12 @@ class _TextTranslationViewState extends State<TextTranslationView> {
                               setState(() {
                                 if (forSource) {
                                   _sourceLangCode = textTranslateLangs[i].name;
+                                  ref
+                                      .read(
+                                        translationSourceLanguageProvider
+                                            .notifier,
+                                      )
+                                      .setSourceLanguage(_sourceLangCode);
                                 } else {
                                   _targetLangCode = textTranslateLangs[i].name;
                                 }

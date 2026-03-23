@@ -1,40 +1,43 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final languageProvider =
-    StateNotifierProvider<LanguageNotifier, Locale?>((ref) {
-  return LanguageNotifier();
+final translationSourceLanguageProvider =
+    StateNotifierProvider<TranslationSourceLanguageNotifier, String>((ref) {
+  return TranslationSourceLanguageNotifier();
 });
 
-class LanguageNotifier extends StateNotifier<Locale?> {
-  LanguageNotifier() : super(null) {
-    loadLanguage();
+class TranslationSourceLanguageNotifier extends StateNotifier<String> {
+  TranslationSourceLanguageNotifier() : super('en') {
+    loadSourceLanguage();
   }
 
-  static const String _languageCodeKey = 'selected_language_code';
+  static const String _sourceLanguageCodeKey =
+      'selected_translation_source_language_code';
 
-  Future<void> loadLanguage() async {
+  Future<void> loadSourceLanguage() async {
     final prefs = await SharedPreferences.getInstance();
-    final code = prefs.getString(_languageCodeKey);
+    final code = prefs.getString(_sourceLanguageCodeKey);
 
     if (code == null || code.isEmpty) {
-      state = null; // sistem dili
+      state = 'en';
       return;
     }
 
-    state = Locale(code);
+    state = code.toLowerCase();
   }
 
-  Future<void> setLanguage(String code) async {
+  Future<void> setSourceLanguage(String code) async {
+    final normalized = code.trim().toLowerCase();
+    if (normalized.isEmpty) return;
+
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_languageCodeKey, code);
-    state = Locale(code);
+    await prefs.setString(_sourceLanguageCodeKey, normalized);
+    state = normalized;
   }
 
-  Future<void> useSystemLanguage() async {
+  Future<void> resetSourceLanguage() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_languageCodeKey);
-    state = null; // tekrar sistem dili
+    await prefs.remove(_sourceLanguageCodeKey);
+    state = 'en';
   }
 }

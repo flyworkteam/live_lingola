@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lingola_app/Core/Utils/assets.dart';
 
 class ChatInputBar extends StatelessWidget {
   final TextEditingController controller;
@@ -13,22 +15,22 @@ class ChatInputBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 8.w),
       child: Row(
         children: [
           Expanded(
             child: Container(
-              height: 44.h,
-              padding: EdgeInsets.symmetric(horizontal: 14.w),
+              height: 45.h,
+              padding: EdgeInsets.symmetric(horizontal: 18.w),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(16.r),
+                borderRadius: BorderRadius.circular(50.r),
                 boxShadow: const [
                   BoxShadow(
-                    color: Color(0x1A0B2B6B),
-                    blurRadius: 10,
-                    offset: Offset(0, 6),
+                    offset: Offset(0, 4),
+                    blurRadius: 4,
+                    color: Color(0xFFDEE5F7),
                   ),
                 ],
               ),
@@ -44,6 +46,7 @@ class ChatInputBar extends StatelessWidget {
                     color: const Color(0xFF0F172A),
                   ),
                   decoration: InputDecoration(
+                    isCollapsed: true,
                     border: InputBorder.none,
                     hintText: "Type a message...",
                     hintStyle: TextStyle(
@@ -69,10 +72,16 @@ class ChatInputBar extends StatelessWidget {
                 color: Color(0xFF0A70FF),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                Icons.send_rounded,
-                size: 20.sp,
-                color: Colors.white,
+              child: Center(
+                child: SvgPicture.asset(
+                  AppAssets.icSend,
+                  width: 20.sp,
+                  height: 20.sp,
+                  colorFilter: const ColorFilter.mode(
+                    Colors.white,
+                    BlendMode.srcIn,
+                  ),
+                ),
               ),
             ),
           ),

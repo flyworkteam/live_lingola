@@ -47,14 +47,11 @@ class VoiceLangBar extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4.r),
-                  child: Image.asset(
-                    leftFlagAsset,
-                    width: 26.w,
-                    height: 18.h,
-                    fit: BoxFit.cover,
-                  ),
+                Image.asset(
+                  leftFlagAsset,
+                  width: 26.w,
+                  height: 18.h,
+                  fit: BoxFit.cover,
                 ),
                 SizedBox(width: 10.w),
                 Text(
@@ -110,14 +107,11 @@ class VoiceLangBar extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 10.w),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4.r),
-                  child: Image.asset(
-                    rightFlagAsset,
-                    width: 26.w,
-                    height: 18.h,
-                    fit: BoxFit.cover,
-                  ),
+                Image.asset(
+                  rightFlagAsset,
+                  width: 26.w,
+                  height: 18.h,
+                  fit: BoxFit.cover,
                 ),
               ],
             ),

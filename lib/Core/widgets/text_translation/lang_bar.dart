@@ -113,15 +113,6 @@ class TextTranslationLangBar extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Image.asset(
-                      targetFlagAsset,
-                      width: 26.w,
-                      height: 18.h,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) =>
-                          SizedBox(width: 26.w, height: 18.h),
-                    ),
-                    SizedBox(width: 10.w),
                     Text(
                       rightText,
                       style: TextStyle(
@@ -130,6 +121,15 @@ class TextTranslationLangBar extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         color: const Color(0xFF0F172A),
                       ),
+                    ),
+                    SizedBox(width: 10.w),
+                    Image.asset(
+                      targetFlagAsset,
+                      width: 26.w,
+                      height: 18.h,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) =>
+                          SizedBox(width: 26.w, height: 18.h),
                     ),
                   ],
                 ),

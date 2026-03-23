@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../Utils/assets.dart';
 
-class PhotoTranslateLangBar extends StatelessWidget {
+import '../../Utils/assets.dart';
+import '../../../Riverpod/Providers/language_provider.dart';
+
+class PhotoTranslateLangBar extends ConsumerWidget {
   final String leftFlagAssetOrEmoji;
   final String leftText;
   final String rightFlagAssetOrEmoji;
@@ -23,8 +26,76 @@ class PhotoTranslateLangBar extends StatelessWidget {
     this.onRightTap,
   });
 
+  String _mapLanguageCodeToText(String code) {
+    switch (code.toLowerCase()) {
+      case 'tr':
+        return 'Turkish';
+      case 'en':
+        return 'English';
+      case 'de':
+        return 'German';
+      case 'it':
+        return 'Italian';
+      case 'fr':
+        return 'French';
+      case 'ja':
+        return 'Japanese';
+      case 'es':
+        return 'Spanish';
+      case 'ru':
+        return 'Russian';
+      case 'pt':
+        return 'Portuguese';
+      case 'ko':
+        return 'Korean';
+      case 'hi':
+        return 'Hindi';
+      default:
+        return code.toUpperCase();
+    }
+  }
+
+  String _mapLanguageCodeToFlag(String code) {
+    switch (code.toLowerCase()) {
+      case 'tr':
+        return 'assets/images/flags/Turkish.png';
+      case 'en':
+        return 'assets/images/flags/English.png';
+      case 'de':
+        return 'assets/images/flags/German.png';
+      case 'it':
+        return 'assets/images/flags/Italian.png';
+      case 'fr':
+        return 'assets/images/flags/French.png';
+      case 'ja':
+        return 'assets/images/flags/Japanese.png';
+      case 'es':
+        return 'assets/images/flags/Spanish.png';
+      case 'ru':
+        return 'assets/images/flags/Russian.png';
+      case 'pt':
+        return 'assets/images/flags/Portuguese.png';
+      case 'ko':
+        return 'assets/images/flags/Korean.png';
+      case 'hi':
+        return 'assets/images/flags/Hindi.png';
+      default:
+        return leftFlagAssetOrEmoji;
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sourceLangCode = ref.watch(translationSourceLanguageProvider);
+
+    final displayLeftText = (sourceLangCode.trim().isNotEmpty)
+        ? _mapLanguageCodeToText(sourceLangCode)
+        : leftText;
+
+    final displayLeftFlag = (sourceLangCode.trim().isNotEmpty)
+        ? _mapLanguageCodeToFlag(sourceLangCode)
+        : leftFlagAssetOrEmoji;
+
     return Container(
       height: 58.h,
       decoration: BoxDecoration(
@@ -47,11 +118,11 @@ class PhotoTranslateLangBar extends StatelessWidget {
               borderRadius: BorderRadius.circular(14.r),
               child: Row(
                 children: [
-                  _Flag(leftFlagAssetOrEmoji),
+                  _Flag(displayLeftFlag),
                   SizedBox(width: 10.w),
                   Expanded(
                     child: Text(
-                      leftText,
+                      displayLeftText,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -132,17 +203,14 @@ class _Flag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (assetOrEmoji.contains('/') && assetOrEmoji.endsWith('.png')) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(4.r),
-        child: Image.asset(
-          assetOrEmoji,
+      return Image.asset(
+        assetOrEmoji,
+        width: 26.w,
+        height: 18.h,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => SizedBox(
           width: 26.w,
           height: 18.h,
-          fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => SizedBox(
-            width: 26.w,
-            height: 18.h,
-          ),
         ),
       );
     }

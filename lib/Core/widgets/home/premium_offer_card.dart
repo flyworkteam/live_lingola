@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:lingola_app/Core/Utils/assets.dart';
-import 'package:lingola_app/View/PaywallView/paywall_view.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 
 class PremiumOfferCard extends StatelessWidget {
@@ -17,15 +16,7 @@ class PremiumOfferCard extends StatelessWidget {
   void _handleTap(BuildContext context) {
     if (onTap != null) {
       onTap!();
-      return;
     }
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const PaywallView(),
-      ),
-    );
   }
 
   @override

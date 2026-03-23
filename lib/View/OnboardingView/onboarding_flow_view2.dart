@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:lingola_app/Riverpod/Providers/onboarding_preferences_provider.dart';
+import 'package:lingola_app/Riverpod/Providers/language_provider.dart';
+import 'package:lingola_app/Riverpod/Providers/app_locale_provider.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 
 class OnboardingFlowView2 extends ConsumerWidget {
@@ -53,8 +55,17 @@ class OnboardingFlowView2 extends ConsumerWidget {
     final bottomPad = 18.h;
     final bottomCtaSpace = (51 + bottomPad + 12).h;
 
-    void handleNext() {
+    Future<void> handleNext() async {
       if (!s.canGoNext) return;
+
+      ref
+          .read(translationSourceLanguageProvider.notifier)
+          .setSourceLanguage(s.fromLangCode);
+
+      await ref
+          .read(appLocaleProvider.notifier)
+          .setLocale(Locale(s.fromLangCode));
+
       onNext();
     }
 
@@ -155,9 +166,18 @@ class OnboardingFlowView2 extends ConsumerWidget {
                             flagAsset: lang.flagAsset,
                             name: _localizedLanguageName(l10n, lang.code),
                             selected: selected,
-                            onTap: () {
+                            onTap: () async {
                               if (s.isSelectingFrom) {
                                 c.setFromLang(lang.code);
+                                ref
+                                    .read(
+                                      translationSourceLanguageProvider
+                                          .notifier,
+                                    )
+                                    .setSourceLanguage(lang.code);
+                                await ref
+                                    .read(appLocaleProvider.notifier)
+                                    .setLocale(Locale(lang.code));
                               } else {
                                 c.setToLang(lang.code);
                               }

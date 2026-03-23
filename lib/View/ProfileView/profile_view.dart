@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +9,7 @@ import 'package:lingola_app/Services/revenuecat_service.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../Core/Routes/app_routes.dart';
@@ -15,6 +17,7 @@ import '../../Core/Theme/app_colors.dart';
 import '../../Core/Utils/assets.dart';
 import '../../Riverpod/Controllers/NotificationController/notification_settings_controller.dart';
 import '../../Riverpod/Providers/current_user_provider.dart';
+import '../../Riverpod/Providers/language_provider.dart';
 import '../ProfileView/FaqView/faq_view.dart';
 import '../ProfileView/LanguageSelectView/select_language_view.dart';
 import '../ProfileView/ProfileSettingsView/profile_settings_view.dart';
@@ -90,7 +93,6 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
   static const String _icPrivacy = AppAssets.icPrivacy;
   static const String _icTerms = AppAssets.icTerms;
   static const String _icShareFriend = AppAssets.icShareFriend;
-  // static const String _icRate = AppAssets.icRate;
   static const String _icFaq = AppAssets.icFaq;
   static const String _icSupport = AppAssets.icSupport;
   static const String _icLogout = AppAssets.icLogout;
@@ -261,6 +263,22 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
     );
   }
 
+  Future<void> _clearGuestAndSessionData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove('selected_translation_source_language_code');
+    await prefs.remove('selected_language_code');
+    await prefs.remove('app_locale_code');
+    await prefs.remove('is_guest_mode');
+    await prefs.remove('guest_session_active');
+    await prefs.remove('guest_user_id');
+    await prefs.remove('onboarding_completed');
+    await prefs.remove('guest_selected_language');
+    await prefs.remove('guest_selected_level');
+    await prefs.remove('guest_selected_translation_source_language_code');
+    await prefs.remove('guest_app_locale_code');
+  }
+
   Future<void> _showLogoutDialog() async {
     final l10n = AppLocalizations.of(context)!;
 
@@ -422,6 +440,11 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
     );
 
     if (confirmed == true) {
+      final prefs = await SharedPreferences.getInstance();
+      final isGuestMode = prefs.getBool('is_guest_mode') ?? false;
+      final guestSessionActive = prefs.getBool('guest_session_active') ?? false;
+      final isGuest = isGuestMode || guestSessionActive;
+
       try {
         await OneSignal.logout();
         debugPrint('ONESIGNAL LOGOUT OK');
@@ -429,9 +452,37 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
         debugPrint('ONESIGNAL LOGOUT ERROR: $e');
       }
 
-      if (!mounted) return;
+      try {
+        await ref
+            .read(translationSourceLanguageProvider.notifier)
+            .resetSourceLanguage();
+      } catch (e) {
+        debugPrint('SOURCE LANGUAGE RESET ERROR: $e');
+      }
 
       ref.read(currentUserProvider.notifier).state = null;
+
+      if (isGuest) {
+        await _clearGuestAndSessionData();
+
+        if (!mounted) return;
+
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          AppRoutes.login,
+          (route) => false,
+        );
+        return;
+      }
+
+      try {
+        await FirebaseAuth.instance.signOut();
+      } catch (e) {
+        debugPrint('FIREBASE SIGNOUT ERROR: $e');
+      }
+
+      await _clearGuestAndSessionData();
+
+      if (!mounted) return;
 
       Navigator.of(context).pushNamedAndRemoveUntil(
         AppRoutes.login,
@@ -671,17 +722,6 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                 title: l10n.shareFriend,
                                 onTap: _openShareFriend,
                               ),
-
-                              // Uygulama linki henüz olmadığı için geçici olarak kapatıldı.
-                              // Yayına çıktıktan sonra tekrar açılabilir.
-                              // _divider(),
-                              // _assetTile(
-                              //   iconBg: const Color(0xFFFFF2E6),
-                              //   assetPath: _icRate,
-                              //   title: l10n.rateUs,
-                              //   onTap: () {},
-                              // ),
-
                               _divider(),
                               _assetTile(
                                 iconBg: const Color(0xFFEFF2F9),
@@ -696,16 +736,6 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                                 title: l10n.support,
                                 onTap: _openSupport,
                               ),
-
-                              // Geri bildirim sayfası yayın sonrası kullanılacak.
-                              // Şimdilik geçici olarak kapatıldı.
-                              // _divider(),
-                              // _assetTile(
-                              //   iconBg: const Color(0xFFFFF7ED),
-                              //   assetPath: _icFeedback,
-                              //   title: l10n.feedback,
-                              //   onTap: () {},
-                              // ),
                             ],
                           ),
                         ),

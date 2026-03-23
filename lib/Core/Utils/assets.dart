@@ -22,6 +22,7 @@ class AppAssets {
   static const String icDegisim = 'assets/images/icons/nav/degisim.svg';
   static const String icSearch = 'assets/images/icons/nav/search.svg';
   static const String icClean = 'assets/images/icons/nav/clean.svg';
+  static const String icSend = 'assets/images/icons/nav/send.svg';
 
   // More Features
   static const String icHistory =

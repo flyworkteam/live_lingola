@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lingola_app/Core/Utils/assets.dart';
 import 'package:lingola_app/Core/widgets/voice_translate/voice_lang_bar.dart';
 import 'package:lingola_app/Core/widgets/voice_translate/voice_plan_card.dart';
 import 'package:lingola_app/Core/widgets/voice_translate/voice_top_bar.dart';
+import 'package:lingola_app/Riverpod/Providers/language_provider.dart';
 import 'package:lingola_app/View/TranslationView/VoiceTranslationView/voice_translate_free_live_view.dart';
 import 'package:lingola_app/View/TranslationView/VoiceTranslationView/voice_translate_pro_live_view.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 
-class VoiceTranslateView extends StatefulWidget {
+class VoiceTranslateView extends ConsumerStatefulWidget {
   final VoidCallback? onBackToHome;
   const VoiceTranslateView({super.key, this.onBackToHome});
 
   @override
-  State<VoiceTranslateView> createState() => _VoiceTranslateViewState();
+  ConsumerState<VoiceTranslateView> createState() => _VoiceTranslateViewState();
 }
 
-class _VoiceTranslateViewState extends State<VoiceTranslateView> {
+class _VoiceTranslateViewState extends ConsumerState<VoiceTranslateView> {
   final List<_LangItem> _langs = const [
     _LangItem(code: "tr", flagAsset: "assets/images/flags/Turkish.png"),
     _LangItem(code: "en", flagAsset: "assets/images/flags/English.png"),
@@ -27,11 +29,17 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
     _LangItem(code: "es", flagAsset: "assets/images/flags/Spanish.png"),
   ];
 
-  String _sourceLangCode = "tr";
+  late String _sourceLangCode;
   String _targetLangCode = "en";
   final GlobalKey _langBarKey = GlobalKey();
   OverlayEntry? _langOverlay;
   bool? _overlayForSource;
+
+  @override
+  void initState() {
+    super.initState();
+    _sourceLangCode = ref.read(translationSourceLanguageProvider);
+  }
 
   _LangItem _find(String code) =>
       _langs.firstWhere((e) => e.code == code, orElse: () => _langs.first);
@@ -89,6 +97,10 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
       _sourceLangCode = _targetLangCode;
       _targetLangCode = t;
     });
+
+    ref
+        .read(translationSourceLanguageProvider.notifier)
+        .setSourceLanguage(_sourceLangCode);
   }
 
   void _closeOverlay() {
@@ -140,6 +152,13 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
                             setState(() {
                               if (forSource) {
                                 _sourceLangCode = _langs[i].code;
+                                ref
+                                    .read(
+                                      translationSourceLanguageProvider
+                                          .notifier,
+                                    )
+                                    .setSourceLanguage(_sourceLangCode);
+
                                 if (_sourceLangCode == _targetLangCode) {
                                   _targetLangCode = _langs
                                       .firstWhere(
@@ -157,6 +176,13 @@ class _VoiceTranslateViewState extends State<VoiceTranslateView> {
                                         orElse: () => _langs.first,
                                       )
                                       .code;
+
+                                  ref
+                                      .read(
+                                        translationSourceLanguageProvider
+                                            .notifier,
+                                      )
+                                      .setSourceLanguage(_sourceLangCode);
                                 }
                               }
                             });

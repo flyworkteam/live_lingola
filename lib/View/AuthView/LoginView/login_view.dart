@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 
@@ -47,6 +48,22 @@ class _LoginViewState extends ConsumerState<LoginView> {
       'https://fly-work.com/livelingola/privacy-policy/';
   static const String _cookiesUrl = 'https://fly-work.com/livelingola/cookies/';
 
+  Future<void> _setGuestMode(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('is_guest_mode', value);
+    await prefs.setBool('guest_session_active', value);
+    debugPrint('LOGIN -> is_guest_mode = $value');
+    debugPrint('LOGIN -> guest_session_active = $value');
+  }
+
+  Future<void> _goOnboardingAsGuest() async {
+    await _setGuestMode(true);
+    ref.read(currentUserProvider.notifier).state = null;
+
+    if (!mounted) return;
+    Navigator.pushReplacementNamed(context, AppRoutes.onboardingFlow);
+  }
+
   void _goOnboarding() {
     Navigator.pushReplacementNamed(context, AppRoutes.onboardingFlow);
   }
@@ -84,11 +101,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
       return l10n.appleSignInFailed;
     }
 
-    /* FACEBOOK ERROR HANDLING DISABLED
     if (provider == 'Facebook') {
       return l10n.facebookSignInFailed;
     }
-    */
 
     if (provider == 'Google') {
       return l10n.googleSignInFailed;
@@ -119,6 +134,9 @@ class _LoginViewState extends ConsumerState<LoginView> {
     final l10n = AppLocalizations.of(context)!;
 
     try {
+      debugPrint('AUTH SUCCESS -> CLEAR GUEST MODE');
+      await _setGuestMode(false);
+
       debugPrint('AUTH SUCCESS -> SYNC USER');
 
       final user = await BackendAuthService.syncMe();
@@ -175,8 +193,8 @@ class _LoginViewState extends ConsumerState<LoginView> {
     }
   }
 
-  /* FACEBOOK SIGN IN FUNCTION DISABLED
-  Future<void> _signInWithFacebook() async {
+  // Facebook şimdilik pasif bırakıldı.
+  /*Future<void> _signInWithFacebook() async {
     try {
       debugPrint('FACEBOOK SIGN IN STARTED');
       await ref.read(authControllerProvider.notifier).signInWithFacebook();
@@ -186,8 +204,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
       debugPrintStack(stackTrace: st);
       _snack(_readableError(e, provider: 'Facebook'));
     }
-  }
-  */
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -315,32 +332,6 @@ class _LoginViewState extends ConsumerState<LoginView> {
             top: 389,
             left: 37,
             child: _LoginButtonAligned(
-              label: authState.isLoading
-                  ? l10n.signingIn
-                  : l10n.continueWithGoogle,
-              provider: _AuthProvider.google,
-              onTap: authState.isLoading ? null : _signInWithGoogle,
-              iconSize: const Size(18, 18.64),
-            ),
-          ),
-          /* FACEBOOK BUTTON POSITIONED DISABLED
-          Positioned(
-            top: 453,
-            left: 37,
-            child: _LoginButtonAligned(
-              label: authState.isLoading
-                  ? l10n.signingIn
-                  : l10n.continueWithFacebook,
-              provider: _AuthProvider.facebook,
-              onTap: authState.isLoading ? null : _signInWithFacebook,
-              iconSize: const Size(12, 21.81),
-            ),
-          ),
-          */
-          Positioned(
-            top: 517,
-            left: 37,
-            child: _LoginButtonAligned(
               label:
                   authState.isLoading ? l10n.signingIn : l10n.continueWithApple,
               provider: _AuthProvider.apple,
@@ -349,13 +340,38 @@ class _LoginViewState extends ConsumerState<LoginView> {
             ),
           ),
           Positioned(
+            top: 453,
+            left: 37,
+            child: _LoginButtonAligned(
+              label: authState.isLoading
+                  ? l10n.signingIn
+                  : l10n.continueWithGoogle,
+              provider: _AuthProvider.google,
+              onTap: authState.isLoading ? null : _signInWithGoogle,
+              iconSize: const Size(18, 18.64),
+            ),
+          ),
+
+          /*
+          Positioned(
+            top: 517,
+            left: 37,
+            child: _LoginButtonAligned(
+              label: l10n.continueWithFacebook,
+              provider: _AuthProvider.facebook,
+              onTap: null,
+              iconSize: const Size(12, 21.81),
+            ),
+          ),
+*/
+          Positioned(
             bottom: 80 + bottomPad,
             left: 0,
             right: 0,
             child: Center(
               child: InkWell(
                 borderRadius: BorderRadius.circular(999),
-                onTap: authState.isLoading ? null : _goOnboarding,
+                onTap: authState.isLoading ? null : _goOnboardingAsGuest,
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -481,28 +497,28 @@ class _LoginViewState extends ConsumerState<LoginView> {
   }
 }
 
-enum _AuthProvider { google, /* facebook, */ apple }
+enum _AuthProvider { apple, google, facebook }
 
 extension _AuthProviderAssets on _AuthProvider {
   String get assetPath {
     switch (this) {
-      case _AuthProvider.google:
-        return 'assets/images/auth/google.svg';
-      /* case _AuthProvider.facebook:
-        return 'assets/images/auth/facebook.svg'; */
       case _AuthProvider.apple:
         return 'assets/images/auth/apple.svg';
+      case _AuthProvider.google:
+        return 'assets/images/auth/google.svg';
+      case _AuthProvider.facebook:
+        return 'assets/images/auth/facebook.svg';
     }
   }
 
   String get semanticLabel {
     switch (this) {
-      case _AuthProvider.google:
-        return 'Google';
-      /* case _AuthProvider.facebook:
-        return 'Facebook'; */
       case _AuthProvider.apple:
         return 'Apple';
+      case _AuthProvider.google:
+        return 'Google';
+      case _AuthProvider.facebook:
+        return 'Facebook';
     }
   }
 }

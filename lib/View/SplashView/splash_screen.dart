@@ -2,10 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Core/Routes/app_routes.dart';
 import '../../Core/Theme/app_text_styles.dart';
 import '../../Riverpod/Providers/current_user_provider.dart';
+import '../../Riverpod/Providers/language_provider.dart';
 import '../../Services/backend_auth_service.dart';
 
 class SplashView extends ConsumerStatefulWidget {
@@ -22,10 +24,93 @@ class _SplashViewState extends ConsumerState<SplashView> {
     _bootstrap();
   }
 
+  Future<void> _clearStoredUiAndSessionData({String? firebaseUid}) async {
+    try {
+      ref.read(currentUserProvider.notifier).state = null;
+      debugPrint('SPLASH -> CURRENT USER PROVIDER CLEARED');
+    } catch (e) {
+      debugPrint('SPLASH CURRENT USER CLEAR ERROR: $e');
+    }
+
+    try {
+      await ref
+          .read(translationSourceLanguageProvider.notifier)
+          .resetSourceLanguage();
+      debugPrint('SPLASH -> SOURCE LANGUAGE RESET');
+    } catch (e) {
+      debugPrint('SPLASH SOURCE LANGUAGE RESET ERROR: $e');
+    }
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      await prefs.remove('selected_translation_source_language_code');
+
+      if (firebaseUid != null && firebaseUid.isNotEmpty) {
+        await prefs.remove('app_locale_code_$firebaseUid');
+      }
+
+      await prefs.remove('selected_language_code');
+      await prefs.remove('app_locale_code');
+      await prefs.remove('is_guest_mode');
+      await prefs.remove('guest_session_active');
+      await prefs.remove('guest_user_id');
+      await prefs.remove('onboarding_completed');
+
+      await prefs.remove('guest_selected_language');
+      await prefs.remove('guest_selected_level');
+      await prefs.remove('guest_selected_translation_source_language_code');
+      await prefs.remove('guest_app_locale_code');
+
+      debugPrint('SPLASH -> SHARED PREFERENCES SESSION/UI DATA CLEARED');
+    } catch (e) {
+      debugPrint('SPLASH PREF CLEAR ERROR: $e');
+    }
+
+    try {
+      await OneSignal.logout();
+      debugPrint('SPLASH -> ONESIGNAL LOGOUT OK');
+    } catch (e) {
+      debugPrint('SPLASH ONESIGNAL LOGOUT ERROR: $e');
+    }
+  }
+
+  Future<void> _goLoginAfterFullCleanup({String? firebaseUid}) async {
+    await _clearStoredUiAndSessionData(firebaseUid: firebaseUid);
+
+    if (!mounted) return;
+
+    Navigator.pushReplacementNamed(context, AppRoutes.login);
+  }
+
+  Future<void> _goGuestHome() async {
+    ref.read(currentUserProvider.notifier).state = {
+      'id': 'guest',
+      'name': 'Guest',
+      'email': '',
+      'photo_url': '',
+      'is_guest': true,
+    };
+
+    if (!mounted) return;
+
+    Navigator.pushReplacementNamed(
+      context,
+      AppRoutes.homeAndNotifications,
+    );
+  }
+
   Future<void> _bootstrap() async {
     await Future.delayed(const Duration(seconds: 2));
 
+    final prefs = await SharedPreferences.getInstance();
+    final isGuestMode = prefs.getBool('is_guest_mode') ?? false;
+    final guestSessionActive = prefs.getBool('guest_session_active') ?? false;
+
     final firebaseUser = FirebaseAuth.instance.currentUser;
+
+    debugPrint('SPLASH GUEST MODE: $isGuestMode');
+    debugPrint('SPLASH GUEST SESSION ACTIVE: $guestSessionActive');
     debugPrint('SPLASH FIREBASE USER: ${firebaseUser?.uid}');
     debugPrint('SPLASH FIREBASE EMAIL: ${firebaseUser?.email}');
     debugPrint('SPLASH FIREBASE DISPLAY NAME: ${firebaseUser?.displayName}');
@@ -33,9 +118,17 @@ class _SplashViewState extends ConsumerState<SplashView> {
 
     if (!mounted) return;
 
+    if (isGuestMode || guestSessionActive) {
+      debugPrint(
+        'SPLASH -> GUEST SESSION FOUND -> GO HOME',
+      );
+      await _goGuestHome();
+      return;
+    }
+
     if (firebaseUser == null) {
-      debugPrint('SPLASH -> NO ACTIVE SESSION -> GO LOGIN');
-      Navigator.pushReplacementNamed(context, AppRoutes.login);
+      debugPrint('SPLASH -> NO ACTIVE SESSION -> CLEAR EVERYTHING -> GO LOGIN');
+      await _goLoginAfterFullCleanup();
       return;
     }
 
@@ -46,11 +139,9 @@ class _SplashViewState extends ConsumerState<SplashView> {
       debugPrint('SPLASH SYNCED USER RAW: $user');
 
       if (user == null) {
-        debugPrint('SPLASH -> SYNC USER IS NULL -> GO LOGIN');
-        ref.read(currentUserProvider.notifier).state = null;
-
-        if (!mounted) return;
-        Navigator.pushReplacementNamed(context, AppRoutes.login);
+        debugPrint(
+            'SPLASH -> SYNC USER IS NULL -> CLEAR EVERYTHING -> GO LOGIN');
+        await _goLoginAfterFullCleanup(firebaseUid: firebaseUser.uid);
         return;
       }
 
@@ -85,10 +176,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
       debugPrint('SPLASH SYNC ERROR: $e');
       debugPrintStack(stackTrace: st);
 
-      ref.read(currentUserProvider.notifier).state = null;
-
-      if (!mounted) return;
-      Navigator.pushReplacementNamed(context, AppRoutes.login);
+      await _goLoginAfterFullCleanup(firebaseUid: firebaseUser.uid);
     }
   }
 

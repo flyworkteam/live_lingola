@@ -6,6 +6,7 @@ import 'package:lingola_app/l10n/app_localizations.dart';
 
 import '../../../Core/Utils/assets.dart';
 import '../../../Riverpod/Providers/app_locale_provider.dart';
+import '../../../Riverpod/Providers/language_provider.dart';
 
 class SelectLanguageView extends ConsumerStatefulWidget {
   const SelectLanguageView({super.key});
@@ -39,15 +40,26 @@ class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
     if (_didInitSelection) return;
     _didInitSelection = true;
 
-    final locale = ref.read(appLocaleProvider);
-    final currentCode = locale?.languageCode.toLowerCase();
+    final sourceCode = ref.read(translationSourceLanguageProvider);
 
     final index = _langs.indexWhere(
-      (e) => e.locale.languageCode.toLowerCase() == currentCode,
+      (e) => e.locale.languageCode.toLowerCase() == sourceCode.toLowerCase(),
     );
 
     if (index != -1) {
       _selected = index;
+      return;
+    }
+
+    final locale = ref.read(appLocaleProvider);
+    final currentCode = locale?.languageCode.toLowerCase();
+
+    final localeIndex = _langs.indexWhere(
+      (e) => e.locale.languageCode.toLowerCase() == currentCode,
+    );
+
+    if (localeIndex != -1) {
+      _selected = localeIndex;
     }
   }
 
@@ -96,17 +108,18 @@ class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
   Future<void> _applyLanguage() async {
     final t = AppLocalizations.of(context)!;
     final selectedLang = _langs[_selected];
-    final currentLocale = ref.read(appLocaleProvider);
-    final currentCode = currentLocale?.languageCode.toLowerCase();
     final nextCode = selectedLang.locale.languageCode.toLowerCase();
 
-    if (currentCode == nextCode) {
-      if (!mounted) return;
-      Navigator.of(context).pop();
-      return;
-    }
+    ref
+        .read(translationSourceLanguageProvider.notifier)
+        .setSourceLanguage(nextCode);
 
-    await ref.read(appLocaleProvider.notifier).setLocale(selectedLang.locale);
+    final currentLocale = ref.read(appLocaleProvider);
+    final currentCode = currentLocale?.languageCode.toLowerCase();
+
+    if (currentCode != nextCode) {
+      await ref.read(appLocaleProvider.notifier).setLocale(selectedLang.locale);
+    }
 
     if (!mounted) return;
 
