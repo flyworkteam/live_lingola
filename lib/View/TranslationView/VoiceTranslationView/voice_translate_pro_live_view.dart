@@ -68,6 +68,24 @@ class _VoiceTranslateProLiveViewState
   String _lastTranslatedSource = '';
   String _lastSubmittedSource = '';
 
+  final List<_LangItem> _langs = const [
+    _LangItem(code: "tr", flagAsset: "assets/images/flags/Turkish.png"),
+    _LangItem(code: "en", flagAsset: "assets/images/flags/English.png"),
+    _LangItem(code: "de", flagAsset: "assets/images/flags/German.png"),
+    _LangItem(code: "it", flagAsset: "assets/images/flags/Italian.png"),
+    _LangItem(code: "fr", flagAsset: "assets/images/flags/French.png"),
+    _LangItem(code: "es", flagAsset: "assets/images/flags/Spanish.png"),
+    _LangItem(code: "ru", flagAsset: "assets/images/flags/Russian.png"),
+    _LangItem(code: "pt", flagAsset: "assets/images/flags/Portuguese.png"),
+    _LangItem(code: "ko", flagAsset: "assets/images/flags/Korean.png"),
+    _LangItem(code: "hi", flagAsset: "assets/images/flags/Hindi.png"),
+    _LangItem(code: "ja", flagAsset: "assets/images/flags/Japanese.png"),
+  ];
+
+  final GlobalKey _langBarKey = GlobalKey();
+  OverlayEntry? _langOverlay;
+  bool? _overlayForSource;
+
   @override
   void initState() {
     super.initState();
@@ -110,6 +128,7 @@ class _VoiceTranslateProLiveViewState
     _copyTimer?.cancel();
     _translateDebounce?.cancel();
     _silenceTimer?.cancel();
+    _closeOverlay();
     _speech.cancel();
     _flutterTts.stop();
     super.dispose();
@@ -875,6 +894,8 @@ class _VoiceTranslateProLiveViewState
       await _flutterTts.stop();
     }
 
+    _closeOverlay();
+
     setState(() {
       final oldSource = _sourceLangCode;
       _sourceLangCode = _targetLangCode;
@@ -893,12 +914,125 @@ class _VoiceTranslateProLiveViewState
     });
   }
 
-  void _selectSourceLanguage() {
+  void _closeOverlay() {
+    _langOverlay?.remove();
+    _langOverlay = null;
+    _overlayForSource = null;
+  }
+
+  void _toggleDropdown({required bool forSource}) {
     if (_isListening) return;
+
+    final l10n = AppLocalizations.of(context)!;
+
+    if (_langOverlay != null && _overlayForSource == forSource) {
+      _closeOverlay();
+      return;
+    }
+
+    final barCtx = _langBarKey.currentContext;
+    if (barCtx == null) return;
+
+    final RenderBox barBox = barCtx.findRenderObject() as RenderBox;
+    final barPos = barBox.localToGlobal(Offset.zero);
+    final barSize = barBox.size;
+
+    _closeOverlay();
+    _overlayForSource = forSource;
+
+    _langOverlay = OverlayEntry(
+      builder: (_) => _TapOutsideToClose(
+        onClose: _closeOverlay,
+        child: Stack(
+          children: [
+            Positioned.fill(child: Container(color: Colors.transparent)),
+            Positioned(
+              left: barPos.dx,
+              top: barPos.dy + barSize.height + 10.h,
+              width: barSize.width,
+              child: Material(
+                color: Colors.transparent,
+                child: _DropdownCard(
+                  width: barSize.width,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (int i = 0; i < _langs.length; i++) ...[
+                        _LangRow(
+                          item: _langs[i],
+                          title: _localizedLanguageName(l10n, _langs[i].code),
+                          active: forSource
+                              ? _langs[i].code == _sourceLangCode
+                              : _langs[i].code == _targetLangCode,
+                          onTap: () async {
+                            if (_isSpeaking) {
+                              await _flutterTts.stop();
+                            }
+
+                            setState(() {
+                              if (forSource) {
+                                _sourceLangCode = _langs[i].code;
+                                if (_sourceLangCode == _targetLangCode) {
+                                  _targetLangCode = _langs
+                                      .firstWhere(
+                                        (e) => e.code != _sourceLangCode,
+                                        orElse: () => _langs.first,
+                                      )
+                                      .code;
+                                }
+                              } else {
+                                _targetLangCode = _langs[i].code;
+                                if (_sourceLangCode == _targetLangCode) {
+                                  _sourceLangCode = _langs
+                                      .firstWhere(
+                                        (e) => e.code != _targetLangCode,
+                                        orElse: () => _langs.first,
+                                      )
+                                      .code;
+                                }
+                              }
+
+                              _liveSourceText = '';
+                              _liveTranslatedText = '';
+                              _lastTranslatedSource = '';
+                              _lastSubmittedSource = '';
+                              _lastSavedTranslationId = null;
+                              _isFavorite = false;
+                              _isSpeaking = false;
+                              _isSaving = false;
+                              _isFinalizing = false;
+                            });
+
+                            _closeOverlay();
+                          },
+                        ),
+                        if (i != _langs.length - 1)
+                          const Divider(
+                            height: 1,
+                            color: Color(0xFFE9EEF7),
+                            indent: 14,
+                            endIndent: 14,
+                          ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(_langOverlay!);
+  }
+
+  void _selectSourceLanguage() {
+    _toggleDropdown(forSource: true);
   }
 
   void _selectTargetLanguage() {
-    if (_isListening) return;
+    _toggleDropdown(forSource: false);
   }
 
   @override
@@ -961,14 +1095,18 @@ class _VoiceTranslateProLiveViewState
                 SizedBox(height: 51.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: VoiceLangBar(
-                    leftFlagAsset: _flagAssetForLanguageCode(_sourceLangCode),
-                    leftText: _localizedLanguageName(t, _sourceLangCode),
-                    rightFlagAsset: _flagAssetForLanguageCode(_targetLangCode),
-                    rightText: _localizedLanguageName(t, _targetLangCode),
-                    onSwap: _swapLanguages,
-                    onLeftTap: _selectSourceLanguage,
-                    onRightTap: _selectTargetLanguage,
+                  child: Container(
+                    key: _langBarKey,
+                    child: VoiceLangBar(
+                      leftFlagAsset: _flagAssetForLanguageCode(_sourceLangCode),
+                      leftText: _localizedLanguageName(t, _sourceLangCode),
+                      rightFlagAsset:
+                          _flagAssetForLanguageCode(_targetLangCode),
+                      rightText: _localizedLanguageName(t, _targetLangCode),
+                      onSwap: _swapLanguages,
+                      onLeftTap: _selectSourceLanguage,
+                      onRightTap: _selectTargetLanguage,
+                    ),
                   ),
                 ),
                 SizedBox(height: 30.h),
@@ -1219,6 +1357,123 @@ class _VoiceMicButton extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _LangItem {
+  final String code;
+  final String flagAsset;
+
+  const _LangItem({
+    required this.code,
+    required this.flagAsset,
+  });
+}
+
+class _DropdownCard extends StatelessWidget {
+  final double width;
+  final Widget child;
+
+  const _DropdownCard({
+    required this.width,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      constraints: BoxConstraints(maxHeight: 310.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18.r),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x1F0B2B6B),
+            blurRadius: 18,
+            offset: Offset(0, 10),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(18.r),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+class _LangRow extends StatelessWidget {
+  final _LangItem item;
+  final String title;
+  final bool active;
+  final VoidCallback onTap;
+
+  const _LangRow({
+    required this.item,
+    required this.title,
+    required this.active,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
+        child: Row(
+          children: [
+            Image.asset(
+              item.flagAsset,
+              width: 26.w,
+              height: 18.h,
+              fit: BoxFit.cover,
+            ),
+            SizedBox(width: 10.w),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14.sp,
+                  color: const Color(0xFF0F172A),
+                ),
+              ),
+            ),
+            if (active)
+              Icon(
+                Icons.check_rounded,
+                size: 18.sp,
+                color: const Color(0xFF0A70FF),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TapOutsideToClose extends StatelessWidget {
+  final VoidCallback onClose;
+  final Widget child;
+
+  const _TapOutsideToClose({
+    required this.onClose,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: onClose,
+      child: child,
     );
   }
 }
