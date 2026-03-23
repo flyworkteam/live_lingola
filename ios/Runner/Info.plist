@@ -10,7 +10,7 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 
 	<key>CFBundleDisplayName</key>
-	<string>Livelingolaapp</string>
+	<string>Live Lingola</string>
 
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
