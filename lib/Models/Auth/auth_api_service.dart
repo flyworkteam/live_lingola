@@ -8,8 +8,8 @@ import '../../Models/Auth/app_user_model.dart';
 
 class AuthApiService {
   String get _baseUrl {
-    if (Platform.isAndroid) return 'http://127.0.0.1:4000';
-    return 'http://127.0.0.1:4000';
+    if (Platform.isAndroid) return 'https://livelingolaapp.fly-work.com';
+    return 'https://livelingolaapp.fly-work.com';
   }
 
   Future<AppUserModel> fetchMe(String idToken) async {

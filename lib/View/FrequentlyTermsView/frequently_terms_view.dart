@@ -20,7 +20,7 @@ class FrequentlyTermsView extends ConsumerStatefulWidget {
 }
 
 class _FrequentlyTermsViewState extends ConsumerState<FrequentlyTermsView> {
-  static const String _baseUrl = 'http://127.0.0.1:4000';
+  static const String _baseUrl = 'https://livelingolaapp.fly-work.com';
 
   String _query = '';
   bool _isLoading = false;

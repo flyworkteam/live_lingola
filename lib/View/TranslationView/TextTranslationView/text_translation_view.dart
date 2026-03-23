@@ -41,7 +41,7 @@ class TextTranslationView extends ConsumerStatefulWidget {
 
 class _TextTranslationViewState extends ConsumerState<TextTranslationView> {
   static const int _charLimit = 2000;
-  static const String _baseUrl = 'http://127.0.0.1:4000';
+  static const String _baseUrl = 'https://livelingolaapp.fly-work.com';
 
   final TextEditingController _sourceCtrl = TextEditingController();
 
