@@ -11,6 +11,7 @@ class VoiceLangBar extends StatelessWidget {
   final VoidCallback onLeftTap;
   final VoidCallback onRightTap;
   final VoidCallback onSwap;
+  final String? swapIconAsset;
 
   const VoiceLangBar({
     super.key,
@@ -21,13 +22,14 @@ class VoiceLangBar extends StatelessWidget {
     required this.onLeftTap,
     required this.onRightTap,
     required this.onSwap,
+    this.swapIconAsset,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 58.h,
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      padding: EdgeInsets.symmetric(horizontal: 14.w),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18.r),
@@ -41,32 +43,38 @@ class VoiceLangBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          InkWell(
-            onTap: onLeftTap,
-            borderRadius: BorderRadius.circular(14.r),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  leftFlagAsset,
-                  width: 26.w,
-                  height: 18.h,
-                  fit: BoxFit.cover,
-                ),
-                SizedBox(width: 10.w),
-                Text(
-                  leftText,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF0F172A),
+          Expanded(
+            child: InkWell(
+              onTap: onLeftTap,
+              borderRadius: BorderRadius.circular(14.r),
+              child: Row(
+                children: [
+                  Image.asset(
+                    leftFlagAsset,
+                    width: 26.w,
+                    height: 18.h,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) =>
+                        SizedBox(width: 26.w, height: 18.h),
                   ),
-                ),
-              ],
+                  SizedBox(width: 10.w),
+                  Expanded(
+                    child: Text(
+                      leftText,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF0F172A),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          const Spacer(),
           InkWell(
             onTap: onSwap,
             borderRadius: BorderRadius.circular(999.r),
@@ -79,7 +87,7 @@ class VoiceLangBar extends StatelessWidget {
               ),
               child: Center(
                 child: SvgPicture.asset(
-                  AppAssets.icDegisim,
+                  swapIconAsset ?? AppAssets.icDegisim,
                   width: 15.w,
                   height: 15.w,
                   colorFilter: const ColorFilter.mode(
@@ -90,30 +98,38 @@ class VoiceLangBar extends StatelessWidget {
               ),
             ),
           ),
-          const Spacer(),
-          InkWell(
-            onTap: onRightTap,
-            borderRadius: BorderRadius.circular(14.r),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  rightText,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF0F172A),
+          Expanded(
+            child: InkWell(
+              onTap: onRightTap,
+              borderRadius: BorderRadius.circular(14.r),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: Text(
+                      rightText,
+                      maxLines: 1,
+                      textAlign: TextAlign.end,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF0F172A),
+                      ),
+                    ),
                   ),
-                ),
-                SizedBox(width: 10.w),
-                Image.asset(
-                  rightFlagAsset,
-                  width: 26.w,
-                  height: 18.h,
-                  fit: BoxFit.cover,
-                ),
-              ],
+                  SizedBox(width: 10.w),
+                  Image.asset(
+                    rightFlagAsset,
+                    width: 26.w,
+                    height: 18.h,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) =>
+                        SizedBox(width: 26.w, height: 18.h),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
