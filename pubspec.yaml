@@ -1,7 +1,6 @@
 name: lingola_app
 description: "Live Lingola Application"
 publish_to: "none"
-version: 1.0.0+5
 
 environment:
   sdk: ">=3.3.4 <4.0.0"
@@ -40,7 +39,6 @@ dependencies:
   package_info_plus: ^8.0.2
   flutter_gen: ^5.13.0+1
   
-
 dependency_overrides:
   win32: 5.8.0
 

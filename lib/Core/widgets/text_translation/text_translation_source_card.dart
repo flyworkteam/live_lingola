@@ -42,7 +42,7 @@ class TextTranslationSourceCard extends StatelessWidget {
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 11.sp,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w400,
                   letterSpacing: 0.6,
                   color: const Color(0xFF94A3B8),
                 ),
@@ -101,9 +101,16 @@ class TextTranslationSourceCard extends StatelessWidget {
               height: 22 / 16,
               color: const Color(0xFF0F172A),
             ),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               border: InputBorder.none,
               counterText: '',
+              hintStyle: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w400,
+                height: 22 / 16,
+                color: const Color(0xFF94A3B8),
+              ),
             ),
           ),
           SizedBox(height: 8.h),

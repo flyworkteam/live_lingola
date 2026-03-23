@@ -13,9 +13,9 @@ import 'package:lingola_app/l10n/app_localizations.dart';
 import '../../Core/Utils/assets.dart';
 import '../../Core/config/app_config.dart';
 import '../../Core/widgets/photo_translate/photo_scan_frame.dart';
-import '../../Core/widgets/photo_translate/photo_translate_lang_bar.dart';
 import '../../Core/widgets/photo_translate/photo_translate_top_bar.dart';
 import '../../Riverpod/Providers/current_user_provider.dart';
+import '../../Core/widgets/photo_translate/photo_translate_lang_bar.dart';
 
 class PhotoTranslateView extends ConsumerStatefulWidget {
   final VoidCallback? onBackToHome;

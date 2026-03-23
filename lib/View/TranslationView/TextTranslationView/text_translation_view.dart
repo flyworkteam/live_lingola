@@ -579,18 +579,39 @@ class _TextTranslationViewState extends ConsumerState<TextTranslationView> {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final translated = _extractTranslatedText(data, source);
         final savedId = _extractTranslationId(data);
+        final detectedSourceLangCode = _extractDetectedSourceLanguageCode(data);
+
+        final shouldUpdateSourceLanguage = detectedSourceLangCode != null &&
+            detectedSourceLangCode != _sourceLangCode;
 
         setState(() {
+          if (shouldUpdateSourceLanguage) {
+            _sourceLangCode = detectedSourceLangCode;
+          }
+
           _translatedText = translated;
           _isTranslating = false;
           _hasUnsavedResult = !saveToHistory;
+
           if (saveToHistory && savedId != null) {
             _lastSavedTranslationId = savedId;
           }
+
           if (saveToHistory) {
             _hasUnsavedResult = false;
           }
         });
+
+        if (shouldUpdateSourceLanguage) {
+          await ref
+              .read(translationSourceLanguageProvider.notifier)
+              .setSourceLanguage(_sourceLangCode);
+
+          _log(
+            'DETECTED SOURCE LANGUAGE UPDATED => '
+            '$_sourceLangCode(${backendLanguageName(_sourceLangCode)})',
+          );
+        }
 
         _lastCompletedSignature = signature;
         _log('TRANSLATE SUCCESS => $_translatedText');
@@ -630,6 +651,20 @@ class _TextTranslationViewState extends ConsumerState<TextTranslationView> {
         return data["translation"] as String;
       }
 
+      if (data["translated_text"] is Map<String, dynamic>) {
+        final innerTranslated = data["translated_text"] as Map<String, dynamic>;
+
+        if (innerTranslated["translated_text"] is String &&
+            (innerTranslated["translated_text"] as String).trim().isNotEmpty) {
+          return innerTranslated["translated_text"] as String;
+        }
+
+        if (innerTranslated["translatedText"] is String &&
+            (innerTranslated["translatedText"] as String).trim().isNotEmpty) {
+          return innerTranslated["translatedText"] as String;
+        }
+      }
+
       if (data["data"] is Map<String, dynamic>) {
         final inner = data["data"] as Map<String, dynamic>;
 
@@ -641,6 +676,23 @@ class _TextTranslationViewState extends ConsumerState<TextTranslationView> {
         if (inner["translatedText"] is String &&
             (inner["translatedText"] as String).trim().isNotEmpty) {
           return inner["translatedText"] as String;
+        }
+
+        if (inner["translated_text"] is Map<String, dynamic>) {
+          final innerTranslated =
+              inner["translated_text"] as Map<String, dynamic>;
+
+          if (innerTranslated["translated_text"] is String &&
+              (innerTranslated["translated_text"] as String)
+                  .trim()
+                  .isNotEmpty) {
+            return innerTranslated["translated_text"] as String;
+          }
+
+          if (innerTranslated["translatedText"] is String &&
+              (innerTranslated["translatedText"] as String).trim().isNotEmpty) {
+            return innerTranslated["translatedText"] as String;
+          }
         }
       }
     }
@@ -662,6 +714,82 @@ class _TextTranslationViewState extends ConsumerState<TextTranslationView> {
       }
     }
     return null;
+  }
+
+  String? _extractDetectedSourceLanguageCode(dynamic data) {
+    String? raw;
+
+    if (data is Map<String, dynamic>) {
+      if (data["detected_source_language"] is String) {
+        raw = data["detected_source_language"] as String;
+      } else if (data["detectedSourceLanguage"] is String) {
+        raw = data["detectedSourceLanguage"] as String;
+      } else if (data["translated_text"] is Map<String, dynamic>) {
+        final innerTranslated = data["translated_text"] as Map<String, dynamic>;
+
+        if (innerTranslated["detected_source_language"] is String) {
+          raw = innerTranslated["detected_source_language"] as String;
+        } else if (innerTranslated["detectedSourceLanguage"] is String) {
+          raw = innerTranslated["detectedSourceLanguage"] as String;
+        }
+      } else if (data["data"] is Map<String, dynamic>) {
+        final inner = data["data"] as Map<String, dynamic>;
+
+        if (inner["detected_source_language"] is String) {
+          raw = inner["detected_source_language"] as String;
+        } else if (inner["detectedSourceLanguage"] is String) {
+          raw = inner["detectedSourceLanguage"] as String;
+        } else if (inner["translated_text"] is Map<String, dynamic>) {
+          final innerTranslated =
+              inner["translated_text"] as Map<String, dynamic>;
+
+          if (innerTranslated["detected_source_language"] is String) {
+            raw = innerTranslated["detected_source_language"] as String;
+          } else if (innerTranslated["detectedSourceLanguage"] is String) {
+            raw = innerTranslated["detectedSourceLanguage"] as String;
+          }
+        }
+      }
+    }
+
+    final value = raw?.trim();
+    if (value == null || value.isEmpty) return null;
+
+    final lower = value.toLowerCase();
+
+    const languageMap = {
+      "auto": "auto",
+      "tr": "tr",
+      "turkish": "tr",
+      "en": "en",
+      "english": "en",
+      "de": "de",
+      "german": "de",
+      "it": "it",
+      "italian": "it",
+      "fr": "fr",
+      "french": "fr",
+      "es": "es",
+      "spanish": "es",
+      "pt": "pt",
+      "portuguese": "pt",
+      "ru": "ru",
+      "russian": "ru",
+      "ja": "ja",
+      "japanese": "ja",
+      "ko": "ko",
+      "korean": "ko",
+      "hi": "hi",
+      "hindi": "hi",
+      "ar": "ar",
+      "arabic": "ar",
+    };
+
+    final mapped = languageMap[lower];
+    if (mapped == null) return null;
+
+    final existsInUi = textTranslateLangs.any((e) => e.name == mapped);
+    return existsInUi ? mapped : null;
   }
 
   void _applyBackendFailure(
