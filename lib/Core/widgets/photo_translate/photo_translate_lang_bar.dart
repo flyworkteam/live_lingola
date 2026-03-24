@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../Utils/assets.dart';
-import '../../../Riverpod/Providers/language_provider.dart';
 
 class PhotoTranslateLangBar extends ConsumerWidget {
   final String leftFlagAssetOrEmoji;
@@ -26,75 +25,10 @@ class PhotoTranslateLangBar extends ConsumerWidget {
     this.onRightTap,
   });
 
-  String _mapLanguageCodeToText(String code) {
-    switch (code.toLowerCase()) {
-      case 'tr':
-        return 'Turkish';
-      case 'en':
-        return 'English';
-      case 'de':
-        return 'German';
-      case 'it':
-        return 'Italian';
-      case 'fr':
-        return 'French';
-      case 'ja':
-        return 'Japanese';
-      case 'es':
-        return 'Spanish';
-      case 'ru':
-        return 'Russian';
-      case 'pt':
-        return 'Portuguese';
-      case 'ko':
-        return 'Korean';
-      case 'hi':
-        return 'Hindi';
-      default:
-        return code.toUpperCase();
-    }
-  }
-
-  String _mapLanguageCodeToFlag(String code) {
-    switch (code.toLowerCase()) {
-      case 'tr':
-        return 'assets/images/flags/Turkish.png';
-      case 'en':
-        return 'assets/images/flags/English.png';
-      case 'de':
-        return 'assets/images/flags/German.png';
-      case 'it':
-        return 'assets/images/flags/Italian.png';
-      case 'fr':
-        return 'assets/images/flags/French.png';
-      case 'ja':
-        return 'assets/images/flags/Japanese.png';
-      case 'es':
-        return 'assets/images/flags/Spanish.png';
-      case 'ru':
-        return 'assets/images/flags/Russian.png';
-      case 'pt':
-        return 'assets/images/flags/Portuguese.png';
-      case 'ko':
-        return 'assets/images/flags/Korean.png';
-      case 'hi':
-        return 'assets/images/flags/Hindi.png';
-      default:
-        return leftFlagAssetOrEmoji;
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sourceLangCode = ref.watch(translationSourceLanguageProvider);
-
-    final displayLeftText = (sourceLangCode.trim().isNotEmpty)
-        ? _mapLanguageCodeToText(sourceLangCode)
-        : leftText;
-
-    final displayLeftFlag = (sourceLangCode.trim().isNotEmpty)
-        ? _mapLanguageCodeToFlag(sourceLangCode)
-        : leftFlagAssetOrEmoji;
+    final displayLeftText = leftText;
+    final displayLeftFlag = leftFlagAssetOrEmoji;
 
     return Container(
       height: 58.h,

@@ -49,11 +49,11 @@ class _VoiceTranslateProLiveViewState
   bool _isCopyActive = false;
   bool _isSpeaking = false;
   bool _isFinalizing = false;
+  bool _hasFinalizedCurrentSession = false;
 
   int? _lastSavedTranslationId;
 
   Timer? _copyTimer;
-  Timer? _translateDebounce;
   Timer? _silenceTimer;
 
   late String _sourceLangCode;
@@ -62,10 +62,8 @@ class _VoiceTranslateProLiveViewState
   String _liveSourceText = '';
   String _liveTranslatedText = '';
 
-  int _liveTranslateRequestId = 0;
   int _finalTranslateRequestId = 0;
 
-  String _lastTranslatedSource = '';
   String _lastSubmittedSource = '';
 
   final List<_LangItem> _langs = const [
@@ -111,7 +109,6 @@ class _VoiceTranslateProLiveViewState
 
         _liveSourceText = '';
         _liveTranslatedText = '';
-        _lastTranslatedSource = '';
         _lastSubmittedSource = '';
         _lastSavedTranslationId = null;
         _isFavorite = false;
@@ -119,6 +116,7 @@ class _VoiceTranslateProLiveViewState
         _isSaving = false;
         _isListening = false;
         _isFinalizing = false;
+        _hasFinalizedCurrentSession = false;
       });
     }
   }
@@ -126,7 +124,6 @@ class _VoiceTranslateProLiveViewState
   @override
   void dispose() {
     _copyTimer?.cancel();
-    _translateDebounce?.cancel();
     _silenceTimer?.cancel();
     _closeOverlay();
     _speech.cancel();
@@ -418,6 +415,7 @@ class _VoiceTranslateProLiveViewState
 
   void _onSpeechStatus(String status) {
     debugPrint('VOICE PRO SPEECH STATUS: $status');
+    debugPrint('VOICE PRO STATUS CURRENT TEXT: "$_liveSourceText"');
 
     if (!mounted) return;
 
@@ -470,37 +468,53 @@ class _VoiceTranslateProLiveViewState
 
   String _extractTranslatedText(dynamic data, String sourceFallback) {
     if (data is Map<String, dynamic>) {
-      if (data["translated_text"] is String &&
-          (data["translated_text"] as String).trim().isNotEmpty) {
-        return data["translated_text"] as String;
+      final translatedField = data["translated_text"];
+      if (translatedField is String && translatedField.trim().isNotEmpty) {
+        return translatedField;
+      }
+      if (translatedField is Map<String, dynamic>) {
+        final nested = translatedField["translated_text"];
+        if (nested is String && nested.trim().isNotEmpty) {
+          return nested.trim();
+        }
+        final nestedAlt = translatedField["translation"];
+        if (nestedAlt is String && nestedAlt.trim().isNotEmpty) {
+          return nestedAlt.trim();
+        }
       }
 
       if (data["translatedText"] is String &&
           (data["translatedText"] as String).trim().isNotEmpty) {
-        return data["translatedText"] as String;
+        return (data["translatedText"] as String).trim();
       }
 
       if (data["translation"] is String &&
           (data["translation"] as String).trim().isNotEmpty) {
-        return data["translation"] as String;
+        return (data["translation"] as String).trim();
       }
 
       if (data["data"] is Map<String, dynamic>) {
         final inner = data["data"] as Map<String, dynamic>;
 
-        if (inner["translated_text"] is String &&
-            (inner["translated_text"] as String).trim().isNotEmpty) {
-          return inner["translated_text"] as String;
+        final innerTranslated = inner["translated_text"];
+        if (innerTranslated is String && innerTranslated.trim().isNotEmpty) {
+          return innerTranslated.trim();
+        }
+        if (innerTranslated is Map<String, dynamic>) {
+          final nested = innerTranslated["translated_text"];
+          if (nested is String && nested.trim().isNotEmpty) {
+            return nested.trim();
+          }
         }
 
         if (inner["translatedText"] is String &&
             (inner["translatedText"] as String).trim().isNotEmpty) {
-          return inner["translatedText"] as String;
+          return (inner["translatedText"] as String).trim();
         }
 
         if (inner["translation"] is String &&
             (inner["translation"] as String).trim().isNotEmpty) {
-          return inner["translation"] as String;
+          return (inner["translation"] as String).trim();
         }
       }
     }
@@ -528,7 +542,6 @@ class _VoiceTranslateProLiveViewState
     }
 
     if (_isListening) {
-      _translateDebounce?.cancel();
       _silenceTimer?.cancel();
 
       setState(() {
@@ -541,11 +554,23 @@ class _VoiceTranslateProLiveViewState
         debugPrint('VOICE PRO STOP ERROR: $e');
       }
 
-      if (_liveSourceText.trim().isNotEmpty) {
+      if (_liveSourceText.trim().isNotEmpty && !_hasFinalizedCurrentSession) {
         await _finalizeTranslationAndSpeak();
       }
       return;
     }
+
+    _silenceTimer?.cancel();
+
+    try {
+      await _speech.stop();
+    } catch (_) {}
+
+    try {
+      await _speech.cancel();
+    } catch (_) {}
+
+    if (!mounted) return;
 
     setState(() {
       _isListening = true;
@@ -556,9 +581,9 @@ class _VoiceTranslateProLiveViewState
       _lastSavedTranslationId = null;
       _liveSourceText = '';
       _liveTranslatedText = '';
-      _lastTranslatedSource = '';
       _lastSubmittedSource = '';
       _isFinalizing = false;
+      _hasFinalizedCurrentSession = false;
     });
 
     try {
@@ -584,99 +609,56 @@ class _VoiceTranslateProLiveViewState
   void _onSpeechResult(SpeechRecognitionResult result) {
     final recognized = result.recognizedWords.trim();
 
+    debugPrint('VOICE PRO RESULT RAW: "${result.recognizedWords}"');
+    debugPrint('VOICE PRO RESULT FINAL: ${result.finalResult}');
+
     if (!mounted || recognized.isEmpty) return;
 
     setState(() {
       _liveSourceText = recognized;
     });
 
-    _queueLiveTranslate();
+    debugPrint('VOICE PRO LIVE SOURCE TEXT: "$_liveSourceText"');
+
+    if (_hasFinalizedCurrentSession) {
+      debugPrint('VOICE PRO FINAL ALREADY SENT FOR THIS SESSION');
+      return;
+    }
 
     _silenceTimer?.cancel();
-    _silenceTimer = Timer(const Duration(milliseconds: 1500), () {
-      if (!_isListening) return;
+    _silenceTimer = Timer(const Duration(seconds: 2), () {
+      if (_liveSourceText.trim().isEmpty) return;
+      if (_hasFinalizedCurrentSession) return;
       _finalizeTranslationAndSpeak();
     });
-
-    if (result.finalResult) {
-      _translateDebounce?.cancel();
-      _silenceTimer?.cancel();
-      _finalizeTranslationAndSpeak();
-    }
-  }
-
-  void _queueLiveTranslate() {
-    _translateDebounce?.cancel();
-    _translateDebounce = Timer(
-      const Duration(milliseconds: 450),
-      _translateLiveText,
-    );
-  }
-
-  Future<void> _translateLiveText() async {
-    final firebaseUid = _currentFirebaseUid();
-    final sourceText = _liveSourceText.trim();
-
-    if (firebaseUid == null || sourceText.isEmpty) return;
-    if (sourceText == _lastTranslatedSource) return;
-    if (_isFinalizing) return;
-
-    final requestId = ++_liveTranslateRequestId;
-
-    if (mounted) {
-      setState(() {});
-    }
-
-    try {
-      final response = await http.post(
-        Uri.parse("${AppConfig.baseUrl}/translate/text"),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode({
-          "firebase_uid": firebaseUid,
-          "source_text": sourceText,
-          "source_language": _backendLanguageName(_sourceLangCode),
-          "target_language": _backendLanguageName(_targetLangCode),
-          "expert": "Pro",
-          "translation_type": "voice",
-          "save_to_history": false,
-        }),
-      );
-
-      final data = response.body.isNotEmpty ? jsonDecode(response.body) : {};
-
-      if (!mounted) return;
-      if (requestId != _liveTranslateRequestId) return;
-
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        final translatedText = _extractTranslatedText(data, sourceText);
-
-        setState(() {
-          _liveTranslatedText = translatedText;
-          _lastTranslatedSource = sourceText;
-        });
-      } else {
-        debugPrint('VOICE PRO LIVE TRANSLATE STATUS: ${response.statusCode}');
-        debugPrint('VOICE PRO LIVE TRANSLATE BODY: ${response.body}');
-      }
-    } catch (e) {
-      debugPrint('VOICE PRO LIVE TRANSLATE ERROR: $e');
-    } finally {
-      if (mounted && requestId == _liveTranslateRequestId) {
-        setState(() {});
-      }
-    }
   }
 
   Future<void> _finalizeTranslationAndSpeak() async {
     final firebaseUid = _currentFirebaseUid();
     final sourceText = _liveSourceText.trim();
 
-    if (firebaseUid == null || sourceText.isEmpty) return;
-    if (_isFinalizing) return;
+    debugPrint('VOICE PRO FINAL REQUEST START');
+    debugPrint('VOICE PRO FINAL UID: $firebaseUid');
+    debugPrint('VOICE PRO FINAL TEXT: "$sourceText"');
+    debugPrint('VOICE PRO FINAL URL: ${AppConfig.baseUrl}/translate/text');
 
-    _translateDebounce?.cancel();
+    if (firebaseUid == null) {
+      debugPrint('VOICE PRO ERROR: firebaseUid is null');
+      return;
+    }
+
+    if (sourceText.isEmpty) {
+      debugPrint('VOICE PRO ERROR: sourceText is empty');
+      return;
+    }
+
+    if (_isFinalizing) return;
+    if (_hasFinalizedCurrentSession) {
+      debugPrint('VOICE PRO SKIP: final already sent for current session');
+      return;
+    }
+
+    _hasFinalizedCurrentSession = true;
     _silenceTimer?.cancel();
 
     if (_isListening) {
@@ -728,6 +710,9 @@ class _VoiceTranslateProLiveViewState
 
       final data = response.body.isNotEmpty ? jsonDecode(response.body) : {};
 
+      debugPrint('VOICE PRO FINAL RESPONSE STATUS: ${response.statusCode}');
+      debugPrint('VOICE PRO FINAL RESPONSE BODY: ${response.body}');
+
       if (!mounted) return;
       if (requestId != _finalTranslateRequestId) return;
 
@@ -737,7 +722,6 @@ class _VoiceTranslateProLiveViewState
 
         setState(() {
           _liveTranslatedText = translatedText;
-          _lastTranslatedSource = sourceText;
           _isSaving = false;
           if (savedId != null) {
             _lastSavedTranslationId = savedId;
@@ -903,7 +887,6 @@ class _VoiceTranslateProLiveViewState
 
       _liveSourceText = '';
       _liveTranslatedText = '';
-      _lastTranslatedSource = '';
       _lastSubmittedSource = '';
       _lastSavedTranslationId = null;
       _isFavorite = false;
@@ -911,6 +894,7 @@ class _VoiceTranslateProLiveViewState
       _isSaving = false;
       _isListening = false;
       _isFinalizing = false;
+      _hasFinalizedCurrentSession = false;
     });
   }
 
@@ -994,13 +978,13 @@ class _VoiceTranslateProLiveViewState
 
                               _liveSourceText = '';
                               _liveTranslatedText = '';
-                              _lastTranslatedSource = '';
                               _lastSubmittedSource = '';
                               _lastSavedTranslationId = null;
                               _isFavorite = false;
                               _isSpeaking = false;
                               _isSaving = false;
                               _isFinalizing = false;
+                              _hasFinalizedCurrentSession = false;
                             });
 
                             _closeOverlay();
@@ -1068,19 +1052,7 @@ class _VoiceTranslateProLiveViewState
           Positioned(
             left: -150.w,
             top: 450.h,
-            child: IgnorePointer(
-              child: SizedBox(
-                width: 680.w,
-                height: 680.h,
-                child: _isListening
-                    ? Lottie.asset(
-                        'assets/animations/Light-blue-orbit.json',
-                        repeat: true,
-                        fit: BoxFit.contain,
-                      )
-                    : const SizedBox.shrink(),
-              ),
-            ),
+            child: _ListeningOrbit(isListening: _isListening),
           ),
           SafeArea(
             child: Column(
@@ -1355,6 +1327,94 @@ class _VoiceMicButton extends StatelessWidget {
               BlendMode.srcIn,
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ListeningOrbit extends StatefulWidget {
+  final bool isListening;
+
+  const _ListeningOrbit({
+    required this.isListening,
+  });
+
+  @override
+  State<_ListeningOrbit> createState() => _ListeningOrbitState();
+}
+
+class _ListeningOrbitState extends State<_ListeningOrbit>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  Future<LottieComposition>? _compositionFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this);
+    _compositionFuture = AssetLottie(
+      'assets/animations/Light-blue-orbit.json',
+    ).load();
+
+    if (widget.isListening) {
+      _startIfReady();
+    }
+  }
+
+  Future<void> _startIfReady() async {
+    final composition = await _compositionFuture;
+    if (!mounted) return;
+
+    _controller.duration = composition?.duration;
+
+    if (widget.isListening && !_controller.isAnimating) {
+      _controller.repeat();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _ListeningOrbit oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.isListening && !_controller.isAnimating) {
+      _startIfReady();
+    } else if (!widget.isListening && _controller.isAnimating) {
+      _controller.stop();
+      _controller.reset();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: SizedBox(
+        width: 680.w,
+        height: 680.h,
+        child: RepaintBoundary(
+          child: widget.isListening
+              ? FutureBuilder<LottieComposition>(
+                  future: _compositionFuture,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const SizedBox.shrink();
+                    }
+
+                    return Lottie(
+                      composition: snapshot.data!,
+                      controller: _controller,
+                      fit: BoxFit.contain,
+                      frameRate: FrameRate.max,
+                    );
+                  },
+                )
+              : const SizedBox.shrink(),
         ),
       ),
     );

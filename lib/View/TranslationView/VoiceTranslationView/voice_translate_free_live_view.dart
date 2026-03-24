@@ -41,7 +41,7 @@ class _VoiceTranslateFreeLiveViewState
   bool _speechReady = false;
   bool _isSaving = false;
   bool _isTranslating = false;
-  bool _translateOnManualStop = false;
+  bool _awaitingManualTranslate = false;
 
   late String _leftLangCode;
   late String _rightLangCode;
@@ -72,17 +72,35 @@ class _VoiceTranslateFreeLiveViewState
 
     if (oldWidget.sourceLanguage != widget.sourceLanguage ||
         oldWidget.targetLanguage != widget.targetLanguage) {
-      setState(() {
-        _leftLangCode = _normalizeLanguageCode(widget.sourceLanguage);
-        _rightLangCode = _normalizeLanguageCode(widget.targetLanguage);
-        _isLeftSource = true;
-        _stage = _FreeStage.idle;
-        _recognizedText = "";
-        _translatedText = "";
-        _lastSubmittedSource = "";
-        _translateOnManualStop = false;
-      });
+      _leftLangCode = _normalizeLanguageCode(widget.sourceLanguage);
+      _rightLangCode = _normalizeLanguageCode(widget.targetLanguage);
+
+      _resetStateForLanguageChange();
     }
+  }
+
+  Future<void> _resetStateForLanguageChange() async {
+    try {
+      await _speech.stop();
+    } catch (_) {}
+
+    try {
+      await _speech.cancel();
+    } catch (_) {}
+
+    if (!mounted) return;
+
+    setState(() {
+      _isLeftSource = true;
+      _stage = _FreeStage.idle;
+      _recognizedText = "";
+      _translatedText = "";
+      _lastSubmittedSource = "";
+      _speechReady = false;
+      _awaitingManualTranslate = false;
+    });
+
+    await _initSpeech();
   }
 
   @override
@@ -275,8 +293,8 @@ class _VoiceTranslateFreeLiveViewState
           debugPrint('VOICE FREE SPEECH ERROR: $error');
           if (!mounted) return;
           setState(() {
-            _stage = _FreeStage.idle;
-            _translateOnManualStop = false;
+            _stage =
+                _awaitingManualTranslate ? _FreeStage.result : _FreeStage.idle;
           });
         },
         debugLogging: false,
@@ -288,6 +306,10 @@ class _VoiceTranslateFreeLiveViewState
       });
 
       debugPrint('VOICE FREE SPEECH READY: $_speechReady');
+      debugPrint('VOICE FREE CURRENT SOURCE CODE: $_sourceLangCode');
+      debugPrint(
+        'VOICE FREE CURRENT LOCALE: ${_speechLocaleIdForLanguageCode(_sourceLangCode)}',
+      );
     } catch (e) {
       debugPrint('VOICE FREE INIT ERROR: $e');
       if (!mounted) return;
@@ -303,24 +325,45 @@ class _VoiceTranslateFreeLiveViewState
     if (!mounted) return;
 
     if (status == 'done' || status == 'notListening') {
-      final shouldTranslate = _translateOnManualStop;
-      final hasSource = _recognizedText.trim().isNotEmpty;
+      final finalText = _recognizedText.trim();
+
+      debugPrint('VOICE FREE FINAL recognizedText: "$finalText"');
 
       setState(() {
-        _stage = _FreeStage.idle;
+        if (_awaitingManualTranslate) {
+          _stage = _FreeStage.result;
+        } else {
+          _stage = _FreeStage.idle;
+        }
       });
-
-      if (shouldTranslate && hasSource) {
-        _translateOnManualStop = false;
-        _translateCurrentText(saveToHistory: true);
-      } else {
-        _translateOnManualStop = false;
-      }
     }
   }
 
   Future<void> _toggleMic() async {
     final l10n = AppLocalizations.of(context)!;
+
+    if (_isListening || _awaitingManualTranslate) {
+      final finalText = _recognizedText.trim();
+
+      setState(() {
+        _stage = _FreeStage.idle;
+        _awaitingManualTranslate = false;
+      });
+
+      try {
+        await _speech.stop();
+      } catch (_) {}
+
+      if (finalText.isNotEmpty) {
+        await _translateCurrentText(saveToHistory: true);
+      }
+
+      return;
+    }
+
+    try {
+      await _speech.stop();
+    } catch (_) {}
 
     if (!_speechReady) {
       await _initSpeech();
@@ -336,23 +379,23 @@ class _VoiceTranslateFreeLiveViewState
       return;
     }
 
-    if (_isListening) {
-      setState(() {
-        _stage = _FreeStage.idle;
-        _translateOnManualStop = true;
-      });
-
-      await _speech.stop();
-      return;
-    }
-
     setState(() {
       _stage = _FreeStage.listening;
       _recognizedText = "";
       _translatedText = "";
       _lastSubmittedSource = "";
-      _translateOnManualStop = false;
+      _awaitingManualTranslate = true;
     });
+
+    debugPrint('VOICE FREE WIDGET sourceLanguage: ${widget.sourceLanguage}');
+    debugPrint('VOICE FREE WIDGET targetLanguage: ${widget.targetLanguage}');
+    debugPrint('VOICE FREE leftLangCode: $_leftLangCode');
+    debugPrint('VOICE FREE rightLangCode: $_rightLangCode');
+    debugPrint('VOICE FREE sourceLangCode: $_sourceLangCode');
+    debugPrint('VOICE FREE targetLangCode: $_targetLangCode');
+    debugPrint(
+      'VOICE FREE localeId: ${_speechLocaleIdForLanguageCode(_sourceLangCode)}',
+    );
 
     try {
       await _speech.listen(
@@ -370,7 +413,7 @@ class _VoiceTranslateFreeLiveViewState
       if (!mounted) return;
       setState(() {
         _stage = _FreeStage.idle;
-        _translateOnManualStop = false;
+        _awaitingManualTranslate = false;
       });
     }
   }
@@ -391,9 +434,11 @@ class _VoiceTranslateFreeLiveViewState
     final sourceText = _recognizedText.trim();
 
     if (sourceText.isEmpty) return;
-    if (firebaseUid == null && userId == null) return;
     if (_isTranslating) return;
     if (_lastSubmittedSource == sourceText) return;
+
+    final bool canSaveToHistory =
+        saveToHistory && (firebaseUid != null || userId != null);
 
     final requestVersion = ++_translateRequestVersion;
     _lastSubmittedSource = sourceText;
@@ -408,7 +453,7 @@ class _VoiceTranslateFreeLiveViewState
         "target_language": _backendLanguageName(_targetLangCode),
         "expert": "General",
         "translation_type": "voice",
-        "save_to_history": saveToHistory,
+        "save_to_history": canSaveToHistory,
       };
 
       debugPrint(
@@ -416,7 +461,7 @@ class _VoiceTranslateFreeLiveViewState
       );
       debugPrint('VOICE FREE TRANSLATE PAYLOAD: ${jsonEncode(payload)}');
 
-      if (saveToHistory && mounted) {
+      if (canSaveToHistory && mounted) {
         setState(() => _isSaving = true);
       }
 
@@ -459,6 +504,17 @@ class _VoiceTranslateFreeLiveViewState
       }
     } catch (e) {
       debugPrint('VOICE FREE TRANSLATE ERROR: $e');
+
+      if (!mounted) return;
+
+      setState(() {
+        _translatedText = "";
+        _stage = _FreeStage.result;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Translation failed")),
+      );
     } finally {
       _isTranslating = false;
       if (mounted) {
@@ -469,9 +525,27 @@ class _VoiceTranslateFreeLiveViewState
 
   String _extractTranslatedText(dynamic data, String sourceFallback) {
     if (data is Map<String, dynamic>) {
-      if (data["translated_text"] is String &&
-          (data["translated_text"] as String).trim().isNotEmpty) {
-        return data["translated_text"] as String;
+      final translatedText = data["translated_text"];
+
+      if (translatedText is String && translatedText.trim().isNotEmpty) {
+        return translatedText;
+      }
+
+      if (translatedText is Map<String, dynamic>) {
+        if (translatedText["translated_text"] is String &&
+            (translatedText["translated_text"] as String).trim().isNotEmpty) {
+          return translatedText["translated_text"] as String;
+        }
+
+        if (translatedText["translatedText"] is String &&
+            (translatedText["translatedText"] as String).trim().isNotEmpty) {
+          return translatedText["translatedText"] as String;
+        }
+
+        if (translatedText["translation"] is String &&
+            (translatedText["translation"] as String).trim().isNotEmpty) {
+          return translatedText["translation"] as String;
+        }
       }
 
       if (data["translatedText"] is String &&
@@ -490,6 +564,25 @@ class _VoiceTranslateFreeLiveViewState
         if (inner["translated_text"] is String &&
             (inner["translated_text"] as String).trim().isNotEmpty) {
           return inner["translated_text"] as String;
+        }
+
+        if (inner["translated_text"] is Map<String, dynamic>) {
+          final nested = inner["translated_text"] as Map<String, dynamic>;
+
+          if (nested["translated_text"] is String &&
+              (nested["translated_text"] as String).trim().isNotEmpty) {
+            return nested["translated_text"] as String;
+          }
+
+          if (nested["translatedText"] is String &&
+              (nested["translatedText"] as String).trim().isNotEmpty) {
+            return nested["translatedText"] as String;
+          }
+
+          if (nested["translation"] is String &&
+              (nested["translation"] as String).trim().isNotEmpty) {
+            return nested["translation"] as String;
+          }
         }
 
         if (inner["translatedText"] is String &&
@@ -523,7 +616,7 @@ class _VoiceTranslateFreeLiveViewState
   }
 
   void _selectLeftLanguage() {
-    if (_isListening) return;
+    if (_isListening || _awaitingManualTranslate) return;
 
     setState(() {
       _isLeftSource = true;
@@ -531,12 +624,11 @@ class _VoiceTranslateFreeLiveViewState
       _recognizedText = "";
       _translatedText = "";
       _lastSubmittedSource = "";
-      _translateOnManualStop = false;
     });
   }
 
   void _selectRightLanguage() {
-    if (_isListening) return;
+    if (_isListening || _awaitingManualTranslate) return;
 
     setState(() {
       _isLeftSource = false;
@@ -544,7 +636,6 @@ class _VoiceTranslateFreeLiveViewState
       _recognizedText = "";
       _translatedText = "";
       _lastSubmittedSource = "";
-      _translateOnManualStop = false;
     });
   }
 
@@ -686,7 +777,8 @@ class _VoiceTranslateFreeLiveViewState
                   padding: EdgeInsets.fromLTRB(20.w, 18.h, 20.w, 0),
                   child: Column(
                     children: [
-                      if (_stage == _FreeStage.listening) ...[
+                      if (_stage == _FreeStage.listening ||
+                          _awaitingManualTranslate) ...[
                         Text(
                           l10n.listening,
                           style: TextStyle(
@@ -776,7 +868,7 @@ class _VoiceTranslateFreeLiveViewState
                       SizedBox(height: 14.h),
                       _UnifiedLangBar(
                         height: 74.h,
-                        isListening: _isListening,
+                        isListening: _isListening || _awaitingManualTranslate,
                         isLeftSource: _isLeftSource,
                         leftLanguage:
                             _localizedLanguageName(l10n, _leftLangCode),
@@ -788,7 +880,7 @@ class _VoiceTranslateFreeLiveViewState
                       ),
                       SizedBox(height: 10.h),
                       Text(
-                        _isListening
+                        (_isListening || _awaitingManualTranslate)
                             ? l10n.tapToTranslateNow
                             : l10n.selectLanguageToSpeak,
                         style: TextStyle(
