@@ -1159,160 +1159,166 @@ class _TextTranslationViewState extends ConsumerState<TextTranslationView> {
         }
       },
       child: Scaffold(
-        body: Stack(
-          children: [
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      const Color(0xFF0A70FF),
-                      const Color(0xFF03B7FF),
-                      const Color(0xFFEFF2F9).withValues(alpha: 0.72),
-                      const Color(0xFFEFF2F9).withValues(alpha: 0.0),
-                    ],
-                    stops: const [0.0043, 0.2741, 0.575, 0.9957],
+        body: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        const Color(0xFF0A70FF),
+                        const Color(0xFF03B7FF),
+                        const Color(0xFFEFF2F9).withValues(alpha: 0.72),
+                        const Color(0xFFEFF2F9).withValues(alpha: 0.0),
+                      ],
+                      stops: const [0.0043, 0.2741, 0.575, 0.9957],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Column(
-              children: [
-                SizedBox(height: topPad + 8.h),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 83.h - topPad - 8.h,
-                    left: 16.w,
-                    right: 16.w,
-                  ),
-                  child: SizedBox(
-                    height: 26.h,
-                    child: Row(
-                      children: [
-                        InkWell(
-                          borderRadius: BorderRadius.circular(999),
-                          onTap: () {
-                            if (widget.onBackToHome != null) {
-                              widget.onBackToHome!();
-                            }
-                          },
-                          child: Container(
-                            width: 24.w,
-                            height: 24.w,
-                            color: Colors.transparent,
-                            child: Center(
-                              child: SvgPicture.asset(
-                                AppAssets.icBack,
-                                width: 24.w,
-                                height: 24.w,
-                                colorFilter: const ColorFilter.mode(
-                                  Colors.white,
-                                  BlendMode.srcIn,
+              Column(
+                children: [
+                  SizedBox(height: topPad + 8.h),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: 83.h - topPad - 8.h,
+                      left: 16.w,
+                      right: 16.w,
+                    ),
+                    child: SizedBox(
+                      height: 26.h,
+                      child: Row(
+                        children: [
+                          InkWell(
+                            borderRadius: BorderRadius.circular(999),
+                            onTap: () {
+                              if (widget.onBackToHome != null) {
+                                widget.onBackToHome!();
+                              }
+                            },
+                            child: Container(
+                              width: 24.w,
+                              height: 24.w,
+                              color: Colors.transparent,
+                              child: Center(
+                                child: SvgPicture.asset(
+                                  AppAssets.icBack,
+                                  width: 24.w,
+                                  height: 24.w,
+                                  colorFilter: const ColorFilter.mode(
+                                    Colors.white,
+                                    BlendMode.srcIn,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              l10n.textTranslationTitle,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w500,
-                                height: 26 / 20,
-                                color: Colors.white,
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                l10n.textTranslationTitle,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w500,
+                                  height: 26 / 20,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 24.w),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 51.h),
-                Expanded(
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Padding(
-                      padding:
-                          EdgeInsets.fromLTRB(16.w, 0, 16.w, bottomReserve),
-                      child: Column(
-                        children: [
-                          CompositedTransformTarget(
-                            link: _langBarLink,
-                            child: TextTranslationLangBar(
-                              sourceLink: _sourceLangLink,
-                              targetLink: _targetLangLink,
-                              sourceFlagAsset: _sourceFlagAsset,
-                              targetFlagAsset: _targetFlagAsset,
-                              leftText: localizedLanguageName(
-                                l10n,
-                                _sourceLangCode,
-                              ),
-                              rightText: localizedLanguageName(
-                                l10n,
-                                _targetLangCode,
-                              ),
-                              onLeftTap: () =>
-                                  _toggleLangDropdown(forSource: true),
-                              onRightTap: () =>
-                                  _toggleLangDropdown(forSource: false),
-                              onSwap: _swapLang,
-                            ),
-                          ),
-                          SizedBox(height: 14.h),
-                          TextTranslationSourceCard(
-                            controller: _sourceCtrl,
-                            charLimit: _charLimit,
-                            sourceLength: _sourceLength,
-                            onPaste: _pasteFromClipboard,
-                            onSave: _saveCurrentTranslation,
-                            onChanged: (_) => _scheduleTranslate(),
-                            isSaveAnimating: _isSaveAnimating,
-                            isBusy: _isTranslating,
-                          ),
-                          SizedBox(height: 14.h),
-                          TextTranslationResultCard(
-                            isTranslating: _isTranslating,
-                            translatedText: _translatedText,
-                            isFavorite: _isFavorite,
-                            isSpeaking: _isSpeaking,
-                            onCopy: _copyTranslatedText,
-                            onFavorite: _toggleFavorite,
-                            onSpeak: _speakTranslatedText,
-                          ),
-                          SizedBox(height: 14.h),
-                          CompositedTransformTarget(
-                            link: _expertLink,
-                            child: TextTranslationExpertCard(
-                              title: l10n.aiExpertsTitle,
-                              selectedExpert: localizedExpertName(
-                                l10n,
-                                _expertKey,
-                              ),
-                              onTap: _toggleExpertDropdown,
-                            ),
-                          ),
-                          SizedBox(height: 14.h),
-                          TextTranslationExamplesCard(
-                            examples: _examples,
-                            onExampleTap: _applyExample,
-                            onMore: _showSaveMenu,
-                          ),
+                          SizedBox(width: 24.w),
                         ],
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  SizedBox(height: 51.h),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Padding(
+                        padding:
+                            EdgeInsets.fromLTRB(16.w, 0, 16.w, bottomReserve),
+                        child: Column(
+                          children: [
+                            CompositedTransformTarget(
+                              link: _langBarLink,
+                              child: TextTranslationLangBar(
+                                sourceLink: _sourceLangLink,
+                                targetLink: _targetLangLink,
+                                sourceFlagAsset: _sourceFlagAsset,
+                                targetFlagAsset: _targetFlagAsset,
+                                leftText: localizedLanguageName(
+                                  l10n,
+                                  _sourceLangCode,
+                                ),
+                                rightText: localizedLanguageName(
+                                  l10n,
+                                  _targetLangCode,
+                                ),
+                                onLeftTap: () =>
+                                    _toggleLangDropdown(forSource: true),
+                                onRightTap: () =>
+                                    _toggleLangDropdown(forSource: false),
+                                onSwap: _swapLang,
+                              ),
+                            ),
+                            SizedBox(height: 14.h),
+                            TextTranslationSourceCard(
+                              controller: _sourceCtrl,
+                              charLimit: _charLimit,
+                              sourceLength: _sourceLength,
+                              onPaste: _pasteFromClipboard,
+                              onSave: _saveCurrentTranslation,
+                              onChanged: (_) => _scheduleTranslate(),
+                              isSaveAnimating: _isSaveAnimating,
+                              isBusy: _isTranslating,
+                            ),
+                            SizedBox(height: 14.h),
+                            TextTranslationResultCard(
+                              isTranslating: _isTranslating,
+                              translatedText: _translatedText,
+                              isFavorite: _isFavorite,
+                              isSpeaking: _isSpeaking,
+                              onCopy: _copyTranslatedText,
+                              onFavorite: _toggleFavorite,
+                              onSpeak: _speakTranslatedText,
+                            ),
+                            SizedBox(height: 14.h),
+                            CompositedTransformTarget(
+                              link: _expertLink,
+                              child: TextTranslationExpertCard(
+                                title: l10n.aiExpertsTitle,
+                                selectedExpert: localizedExpertName(
+                                  l10n,
+                                  _expertKey,
+                                ),
+                                onTap: _toggleExpertDropdown,
+                              ),
+                            ),
+                            SizedBox(height: 14.h),
+                            TextTranslationExamplesCard(
+                              examples: _examples,
+                              onExampleTap: _applyExample,
+                              onMore: _showSaveMenu,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

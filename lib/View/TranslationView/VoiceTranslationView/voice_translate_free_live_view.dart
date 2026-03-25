@@ -10,7 +10,9 @@ import 'package:lottie/lottie.dart';
 import 'package:lingola_app/Core/Utils/assets.dart';
 import 'package:lingola_app/Core/config/app_config.dart';
 import 'package:lingola_app/Core/widgets/navigation/bottom_nav_item_tile.dart';
+import 'package:lingola_app/Core/widgets/voice_translate/voice_language_dropdown.dart';
 import 'package:lingola_app/Riverpod/Providers/current_user_provider.dart';
+import 'package:lingola_app/View/TranslationView/VoiceTranslationView/voice_translate_pro_live_view.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -37,6 +39,7 @@ class _VoiceTranslateFreeLiveViewState
   _FreeStage _stage = _FreeStage.idle;
 
   final SpeechToText _speech = SpeechToText();
+  final GlobalKey _langBarKey = GlobalKey();
 
   bool _speechReady = false;
   bool _isSaving = false;
@@ -53,6 +56,26 @@ class _VoiceTranslateFreeLiveViewState
   int _translateRequestVersion = 0;
   String _lastSubmittedSource = "";
 
+  bool _showLanguageDropdown = false;
+  bool _dropdownForLeft = true;
+  double _dropdownTop = 0;
+  double _dropdownLeft = 20;
+  double _dropdownWidth = 0;
+
+  final List<String> _supportedLanguageCodes = const [
+    'tr',
+    'en',
+    'de',
+    'it',
+    'fr',
+    'ja',
+    'es',
+    'ru',
+    'pt',
+    'ko',
+    'hi',
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -63,6 +86,7 @@ class _VoiceTranslateFreeLiveViewState
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initSpeech();
+      _updateLangBarPosition();
     });
   }
 
@@ -77,6 +101,10 @@ class _VoiceTranslateFreeLiveViewState
 
       _resetStateForLanguageChange();
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateLangBarPosition();
+    });
   }
 
   Future<void> _resetStateForLanguageChange() async {
@@ -98,9 +126,24 @@ class _VoiceTranslateFreeLiveViewState
       _lastSubmittedSource = "";
       _speechReady = false;
       _awaitingManualTranslate = false;
+      _showLanguageDropdown = false;
     });
 
     await _initSpeech();
+  }
+
+  void _goToProVoiceTranslate() {
+    if (!mounted) return;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => VoiceTranslateProLiveView(
+          sourceLanguage: _leftLangCode,
+          targetLanguage: _rightLangCode,
+        ),
+      ),
+    );
   }
 
   @override
@@ -271,6 +314,35 @@ class _VoiceTranslateFreeLiveViewState
     }
   }
 
+  String _flagAssetForLanguageCode(String code) {
+    switch (code) {
+      case 'tr':
+        return 'assets/images/flags/Turkish.png';
+      case 'en':
+        return 'assets/images/flags/English.png';
+      case 'de':
+        return 'assets/images/flags/German.png';
+      case 'it':
+        return 'assets/images/flags/Italian.png';
+      case 'fr':
+        return 'assets/images/flags/French.png';
+      case 'ja':
+        return 'assets/images/flags/Japanese.png';
+      case 'es':
+        return 'assets/images/flags/Spanish.png';
+      case 'ru':
+        return 'assets/images/flags/Russian.png';
+      case 'pt':
+        return 'assets/images/flags/Portuguese.png';
+      case 'ko':
+        return 'assets/images/flags/Korean.png';
+      case 'hi':
+        return 'assets/images/flags/Hindi.png';
+      default:
+        return 'assets/images/flags/English.png';
+    }
+  }
+
   String? _currentFirebaseUid() {
     final user = ref.read(currentUserProvider);
     final uid = user?['firebase_uid']?.toString().trim();
@@ -339,8 +411,77 @@ class _VoiceTranslateFreeLiveViewState
     }
   }
 
+  void _updateLangBarPosition() {
+    final ctx = _langBarKey.currentContext;
+    if (ctx == null) return;
+
+    final box = ctx.findRenderObject() as RenderBox?;
+    if (box == null || !box.hasSize) return;
+
+    final offset = box.localToGlobal(Offset.zero);
+
+    final estimatedHeight =
+        (_supportedLanguageCodes.length * 57.h).clamp(0.0, 360.h).toDouble();
+
+    if (!mounted) return;
+    setState(() {
+      _dropdownLeft = offset.dx;
+      _dropdownWidth = box.size.width;
+      _dropdownTop = offset.dy - estimatedHeight - 12.h;
+    });
+  }
+
+  void _toggleLanguageDropdown(bool isLeft) {
+    if (_isListening || _awaitingManualTranslate) return;
+
+    final wasOpen = _showLanguageDropdown;
+    final sameSide = _dropdownForLeft == isLeft;
+
+    _updateLangBarPosition();
+
+    setState(() {
+      _dropdownForLeft = isLeft;
+      _showLanguageDropdown = !(wasOpen && sameSide);
+    });
+  }
+
+  void _hideLanguageDropdown() {
+    if (!_showLanguageDropdown) return;
+    setState(() {
+      _showLanguageDropdown = false;
+    });
+  }
+
+  Future<void> _changeLanguage({
+    required bool isLeft,
+    required String selectedCode,
+  }) async {
+    if (_isListening || _awaitingManualTranslate) return;
+
+    setState(() {
+      if (isLeft) {
+        _leftLangCode = selectedCode;
+        _isLeftSource = true;
+      } else {
+        _rightLangCode = selectedCode;
+        _isLeftSource = false;
+      }
+
+      _stage = _FreeStage.idle;
+      _recognizedText = "";
+      _translatedText = "";
+      _lastSubmittedSource = "";
+      _awaitingManualTranslate = false;
+      _showLanguageDropdown = false;
+    });
+
+    await _resetStateForLanguageChange();
+  }
+
   Future<void> _toggleMic() async {
     final l10n = AppLocalizations.of(context)!;
+
+    _hideLanguageDropdown();
 
     if (_isListening || _awaitingManualTranslate) {
       final finalText = _recognizedText.trim();
@@ -616,27 +757,11 @@ class _VoiceTranslateFreeLiveViewState
   }
 
   void _selectLeftLanguage() {
-    if (_isListening || _awaitingManualTranslate) return;
-
-    setState(() {
-      _isLeftSource = true;
-      _stage = _FreeStage.idle;
-      _recognizedText = "";
-      _translatedText = "";
-      _lastSubmittedSource = "";
-    });
+    _toggleLanguageDropdown(true);
   }
 
   void _selectRightLanguage() {
-    if (_isListening || _awaitingManualTranslate) return;
-
-    setState(() {
-      _isLeftSource = false;
-      _stage = _FreeStage.idle;
-      _recognizedText = "";
-      _translatedText = "";
-      _lastSubmittedSource = "";
-    });
+    _toggleLanguageDropdown(false);
   }
 
   @override
@@ -648,12 +773,19 @@ class _VoiceTranslateFreeLiveViewState
     final bottomPad = MediaQuery.of(context).padding.bottom;
     final bottomNavReserve = 62.h + 20.h + bottomPad;
 
+    final currentDropdownCode =
+        _dropdownForLeft ? _leftLangCode : _rightLangCode;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF3F6FB),
       body: Stack(
         children: [
           Positioned.fill(
-            child: Container(color: const Color(0xFFF3F6FB)),
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTap: _hideLanguageDropdown,
+              child: Container(color: const Color(0xFFF3F6FB)),
+            ),
           ),
           Column(
             children: [
@@ -717,22 +849,26 @@ class _VoiceTranslateFreeLiveViewState
                         ),
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 14.w,
-                        vertical: 8.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE7F0FF),
-                        borderRadius: BorderRadius.circular(999.r),
-                      ),
-                      child: Text(
-                        l10n.tryNow,
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 11.sp,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF0A70FF),
+                    InkWell(
+                      borderRadius: BorderRadius.circular(999.r),
+                      onTap: _goToProVoiceTranslate,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 14.w,
+                          vertical: 8.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE7F0FF),
+                          borderRadius: BorderRadius.circular(999.r),
+                        ),
+                        child: Text(
+                          l10n.tryNow,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF0A70FF),
+                          ),
                         ),
                       ),
                     ),
@@ -827,56 +963,63 @@ class _VoiceTranslateFreeLiveViewState
                         const Spacer(),
                       ],
                       const Spacer(),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 18.w,
-                          vertical: 8.h,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(999.r),
-                          border: Border.all(
-                            color: const Color(0xFF0A70FF),
-                            width: 1,
+                      InkWell(
+                        borderRadius: BorderRadius.circular(999.r),
+                        onTap: _goToProVoiceTranslate,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 18.w,
+                            vertical: 8.h,
                           ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SvgPicture.asset(
-                              AppAssets.icMicrophone,
-                              width: 14.w,
-                              height: 14.w,
-                              colorFilter: const ColorFilter.mode(
-                                Color(0xFF0A70FF),
-                                BlendMode.srcIn,
-                              ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(999.r),
+                            border: Border.all(
+                              color: const Color(0xFF0A70FF),
+                              width: 1,
                             ),
-                            SizedBox(width: 8.w),
-                            Text(
-                              l10n.realTimeTranslation,
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 11.sp,
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xFF0A70FF),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SvgPicture.asset(
+                                AppAssets.icMicrophone,
+                                width: 14.w,
+                                height: 14.w,
+                                colorFilter: const ColorFilter.mode(
+                                  Color(0xFF0A70FF),
+                                  BlendMode.srcIn,
+                                ),
                               ),
-                            ),
-                          ],
+                              SizedBox(width: 8.w),
+                              Text(
+                                l10n.realTimeTranslation,
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 11.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color(0xFF0A70FF),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(height: 14.h),
-                      _UnifiedLangBar(
-                        height: 74.h,
-                        isListening: _isListening || _awaitingManualTranslate,
-                        isLeftSource: _isLeftSource,
-                        leftLanguage:
-                            _localizedLanguageName(l10n, _leftLangCode),
-                        rightLanguage:
-                            _localizedLanguageName(l10n, _rightLangCode),
-                        onSelectLeft: _selectLeftLanguage,
-                        onSelectRight: _selectRightLanguage,
-                        onMicTap: _toggleMic,
+                      Container(
+                        key: _langBarKey,
+                        child: _UnifiedLangBar(
+                          height: 74.h,
+                          isListening: _isListening || _awaitingManualTranslate,
+                          isLeftSource: _isLeftSource,
+                          leftLanguage:
+                              _localizedLanguageName(l10n, _leftLangCode),
+                          rightLanguage:
+                              _localizedLanguageName(l10n, _rightLangCode),
+                          onSelectLeft: _selectLeftLanguage,
+                          onSelectRight: _selectRightLanguage,
+                          onMicTap: _toggleMic,
+                        ),
                       ),
                       SizedBox(height: 10.h),
                       Text(
@@ -898,6 +1041,36 @@ class _VoiceTranslateFreeLiveViewState
               ),
             ],
           ),
+          if (_showLanguageDropdown)
+            Positioned.fill(
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: _hideLanguageDropdown,
+                child: const SizedBox.expand(),
+              ),
+            ),
+          if (_showLanguageDropdown)
+            Positioned(
+              left: _dropdownLeft,
+              top: _dropdownTop < topPad + 10.h ? topPad + 10.h : _dropdownTop,
+              width: _dropdownWidth <= 0 ? null : _dropdownWidth,
+              child: Material(
+                color: Colors.transparent,
+                child: VoiceLanguageDropdown(
+                  selectedCode: currentDropdownCode,
+                  languages: _supportedLanguageCodes,
+                  localizedNameBuilder: (code) =>
+                      _localizedLanguageName(l10n, code),
+                  flagAssetBuilder: (code) => _flagAssetForLanguageCode(code),
+                  onSelected: (code) {
+                    _changeLanguage(
+                      isLeft: _dropdownForLeft,
+                      selectedCode: code,
+                    );
+                  },
+                ),
+              ),
+            ),
           Positioned(
             left: 0,
             right: 0,
