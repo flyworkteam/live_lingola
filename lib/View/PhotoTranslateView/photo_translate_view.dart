@@ -15,6 +15,7 @@ import '../../Core/config/app_config.dart';
 import '../../Core/widgets/photo_translate/photo_scan_frame.dart';
 import '../../Core/widgets/photo_translate/photo_translate_top_bar.dart';
 import '../../Riverpod/Providers/current_user_provider.dart';
+import '../../Riverpod/Providers/language_provider.dart';
 import '../../Core/widgets/photo_translate/photo_translate_lang_bar.dart';
 
 class PhotoTranslateView extends ConsumerStatefulWidget {
@@ -41,7 +42,7 @@ class _PhotoTranslateViewState extends ConsumerState<PhotoTranslateView> {
     _LangItem(code: "pt", flagAsset: "assets/images/flags/Portuguese.png"),
   ];
 
-  String _sourceLangCode = "tr";
+  late String _sourceLangCode;
   String _targetLangCode = "en";
 
   final GlobalKey _langBarKey = GlobalKey();
@@ -57,6 +58,12 @@ class _PhotoTranslateViewState extends ConsumerState<PhotoTranslateView> {
   List<PhotoTranslatedBlock> _translatedBlocks = [];
   ImageProvider? _originalImageProvider;
   ImageProvider? _translatedImageProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    _sourceLangCode = ref.read(translationSourceLanguageProvider);
+  }
 
   _LangItem _find(String code) =>
       _langs.firstWhere((e) => e.code == code, orElse: () => _langs.first);
@@ -140,6 +147,10 @@ class _PhotoTranslateViewState extends ConsumerState<PhotoTranslateView> {
       _targetLangCode = temp;
     });
 
+    ref
+        .read(translationSourceLanguageProvider.notifier)
+        .setSourceLanguage(_sourceLangCode);
+
     if (_selectedImageFile != null && !_isProcessing) {
       _handlePickedFile(_selectedImageFile!);
     }
@@ -195,6 +206,13 @@ class _PhotoTranslateViewState extends ConsumerState<PhotoTranslateView> {
                             setState(() {
                               if (forSource) {
                                 _sourceLangCode = _langs[i].code;
+                                ref
+                                    .read(
+                                      translationSourceLanguageProvider
+                                          .notifier,
+                                    )
+                                    .setSourceLanguage(_sourceLangCode);
+
                                 if (_sourceLangCode == _targetLangCode) {
                                   _targetLangCode = _langs
                                       .firstWhere(
@@ -212,6 +230,13 @@ class _PhotoTranslateViewState extends ConsumerState<PhotoTranslateView> {
                                         orElse: () => _langs.first,
                                       )
                                       .code;
+
+                                  ref
+                                      .read(
+                                        translationSourceLanguageProvider
+                                            .notifier,
+                                      )
+                                      .setSourceLanguage(_sourceLangCode);
                                 }
                               }
                             });
@@ -489,6 +514,17 @@ class _PhotoTranslateViewState extends ConsumerState<PhotoTranslateView> {
 
   @override
   Widget build(BuildContext context) {
+    final providerSourceLangCode = ref.watch(translationSourceLanguageProvider);
+    if (providerSourceLangCode != _sourceLangCode) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        if (providerSourceLangCode == _sourceLangCode) return;
+        setState(() {
+          _sourceLangCode = providerSourceLangCode;
+        });
+      });
+    }
+
     final l10n = AppLocalizations.of(context)!;
     final bottomReserve = 62.h + 20.h + 18.h;
     final src = _find(_sourceLangCode);

@@ -40,17 +40,6 @@ class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
     if (_didInitSelection) return;
     _didInitSelection = true;
 
-    final sourceCode = ref.read(translationSourceLanguageProvider);
-
-    final index = _langs.indexWhere(
-      (e) => e.locale.languageCode.toLowerCase() == sourceCode.toLowerCase(),
-    );
-
-    if (index != -1) {
-      _selected = index;
-      return;
-    }
-
     final locale = ref.read(appLocaleProvider);
     final currentCode = locale?.languageCode.toLowerCase();
 
@@ -110,7 +99,7 @@ class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
     final selectedLang = _langs[_selected];
     final nextCode = selectedLang.locale.languageCode.toLowerCase();
 
-    ref
+    await ref
         .read(translationSourceLanguageProvider.notifier)
         .setSourceLanguage(nextCode);
 

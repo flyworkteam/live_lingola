@@ -58,7 +58,7 @@ class OnboardingFlowView2 extends ConsumerWidget {
     Future<void> handleNext() async {
       if (!s.canGoNext) return;
 
-      ref
+      await ref
           .read(translationSourceLanguageProvider.notifier)
           .setSourceLanguage(s.fromLangCode);
 
@@ -169,7 +169,7 @@ class OnboardingFlowView2 extends ConsumerWidget {
                             onTap: () async {
                               if (s.isSelectingFrom) {
                                 c.setFromLang(lang.code);
-                                ref
+                                await ref
                                     .read(
                                       translationSourceLanguageProvider
                                           .notifier,

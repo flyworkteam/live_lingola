@@ -1145,6 +1145,17 @@ class _TextTranslationViewState extends ConsumerState<TextTranslationView> {
 
   @override
   Widget build(BuildContext context) {
+    final providerSourceLangCode = ref.watch(translationSourceLanguageProvider);
+    if (providerSourceLangCode != _sourceLangCode) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        if (providerSourceLangCode == _sourceLangCode) return;
+        setState(() {
+          _sourceLangCode = providerSourceLangCode;
+        });
+      });
+    }
+
     final l10n = AppLocalizations.of(context)!;
     final topPad = MediaQuery.of(context).padding.top;
     final bottomReserve = 62.h + 20.h + 22.h;

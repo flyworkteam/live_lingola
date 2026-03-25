@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,17 +15,25 @@ class TranslationSourceLanguageNotifier extends StateNotifier<String> {
 
   static const String _sourceLanguageCodeKey =
       'selected_translation_source_language_code';
+  static const String _appLocaleCodeKey = 'app_locale_code';
 
   Future<void> loadSourceLanguage() async {
     final prefs = await SharedPreferences.getInstance();
     final code = prefs.getString(_sourceLanguageCodeKey);
 
-    if (code == null || code.isEmpty) {
-      state = 'en';
+    if (code != null && code.isNotEmpty) {
+      state = code.toLowerCase();
       return;
     }
 
-    state = code.toLowerCase();
+    final appLocaleCode = prefs.getString(_appLocaleCodeKey);
+    if (appLocaleCode != null && appLocaleCode.isNotEmpty) {
+      state = appLocaleCode.toLowerCase();
+      return;
+    }
+
+    final deviceCode = PlatformDispatcher.instance.locale.languageCode.trim();
+    state = deviceCode.isEmpty ? 'en' : deviceCode.toLowerCase();
   }
 
   Future<void> setSourceLanguage(String code) async {
@@ -38,6 +48,14 @@ class TranslationSourceLanguageNotifier extends StateNotifier<String> {
   Future<void> resetSourceLanguage() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_sourceLanguageCodeKey);
-    state = 'en';
+
+    final appLocaleCode = prefs.getString(_appLocaleCodeKey);
+    if (appLocaleCode != null && appLocaleCode.isNotEmpty) {
+      state = appLocaleCode.toLowerCase();
+      return;
+    }
+
+    final deviceCode = PlatformDispatcher.instance.locale.languageCode.trim();
+    state = deviceCode.isEmpty ? 'en' : deviceCode.toLowerCase();
   }
 }

@@ -222,6 +222,17 @@ class _VoiceTranslateViewState extends ConsumerState<VoiceTranslateView> {
 
   @override
   Widget build(BuildContext context) {
+    final providerSourceLangCode = ref.watch(translationSourceLanguageProvider);
+    if (providerSourceLangCode != _sourceLangCode) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        if (providerSourceLangCode == _sourceLangCode) return;
+        setState(() {
+          _sourceLangCode = providerSourceLangCode;
+        });
+      });
+    }
+
     final t = AppLocalizations.of(context)!;
     final bottomReserve = 62.h + 20.h + 22.h;
     final src = _find(_sourceLangCode);

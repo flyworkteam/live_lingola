@@ -1,0 +1,1 @@
+ /Users/aysenuratalay/Desktop/livelingolaapp/.dart_tool/flutter_build/bf1fc3ab5f06c0e6ee6b8818f5c1ea27/native_assets.yaml: 

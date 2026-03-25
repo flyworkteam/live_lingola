@@ -35,8 +35,9 @@ class _FaqViewState extends State<FaqView> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
+        bottom: false, // ✅ SADECE BU EKLENDİ (alt boşluğu kaldırır)
         child: Padding(
-          padding: EdgeInsets.fromLTRB(18.w, 10.h, 18.w, 18.h),
+          padding: EdgeInsets.fromLTRB(18.w, 0, 18.w, 0),
           child: Column(
             children: [
               _TopBar(
@@ -46,12 +47,17 @@ class _FaqViewState extends State<FaqView> {
               SizedBox(height: 18.h),
               Expanded(
                 child: ListView.separated(
+                  padding: EdgeInsets.zero,
                   physics: const BouncingScrollPhysics(
                     parent: ClampingScrollPhysics(),
                   ),
-                  itemCount: items.length,
+                  itemCount: items.length + 1,
                   separatorBuilder: (_, __) => SizedBox(height: 12.h),
                   itemBuilder: (context, i) {
+                    if (i == items.length) {
+                      return SizedBox(height: 20.h);
+                    }
+
                     final item = items[i];
                     final isOpen = _openIndex == i;
 
@@ -103,8 +109,8 @@ class _TopBar extends StatelessWidget {
             child: Center(
               child: SvgPicture.asset(
                 AppAssets.icBack,
-                width: 18.sp,
-                height: 18.sp,
+                width: 24.sp,
+                height: 24.sp,
                 colorFilter: const ColorFilter.mode(
                   Color(0xFF0F172A),
                   BlendMode.srcIn,

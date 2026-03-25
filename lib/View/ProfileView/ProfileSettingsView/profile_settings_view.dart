@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
@@ -8,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,7 +21,6 @@ import '../../../Core/Routes/app_routes.dart';
 import '../../../Core/Utils/assets.dart';
 import '../../../Riverpod/Providers/current_user_provider.dart';
 import '../../../Riverpod/Providers/language_provider.dart';
-import '../../../firebase_options.dart';
 
 class ProfileSettingsView extends ConsumerStatefulWidget {
   const ProfileSettingsView({super.key});
@@ -158,14 +159,8 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
 
       final storage = FirebaseStorage.instanceFor(
         app: Firebase.app(),
-        bucket: DefaultFirebaseOptions.currentPlatform.storageBucket,
+        bucket: 'gs://live-lingola.appspot.com',
       );
-
-      debugPrint('UPLOAD FILE PATH: ${file.path}');
-      debugPrint('FIREBASE PROJECT ID: ${Firebase.app().options.projectId}');
-      debugPrint(
-          'STORAGE BUCKET FROM OPTIONS: ${DefaultFirebaseOptions.currentPlatform.storageBucket}');
-      debugPrint('STORAGE BUCKET FROM INSTANCE: ${storage.bucket}');
 
       final fileName =
           'profile_${firebaseUid}_${DateTime.now().millisecondsSinceEpoch}.jpg';
@@ -176,6 +171,9 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
           .child(firebaseUid)
           .child(fileName);
 
+      debugPrint('UPLOAD FILE PATH: ${file.path}');
+      debugPrint('FIREBASE UID: $firebaseUid');
+      debugPrint('STORAGE BUCKET: ${storage.bucket}');
       debugPrint('UPLOAD REF FULL PATH: ${photoRef.fullPath}');
 
       final snapshot = await photoRef.putFile(
@@ -186,6 +184,10 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
       debugPrint('UPLOAD TASK STATE: ${snapshot.state}');
       debugPrint('UPLOAD REF NAME: ${snapshot.ref.name}');
       debugPrint('UPLOAD REF FULL PATH AFTER PUT: ${snapshot.ref.fullPath}');
+
+      final metadata = await snapshot.ref.getMetadata();
+      debugPrint('UPLOAD METADATA NAME: ${metadata.name}');
+      debugPrint('UPLOAD METADATA FULL PATH: ${metadata.fullPath}');
 
       final downloadUrl = await snapshot.ref.getDownloadURL();
 
@@ -204,6 +206,19 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
       });
 
       await _saveProfile();
+    } on FirebaseException catch (e, st) {
+      debugPrint("FIREBASE STORAGE ERROR CODE: ${e.code}");
+      debugPrint("FIREBASE STORAGE ERROR MESSAGE: ${e.message}");
+      debugPrintStack(stackTrace: st);
+
+      if (!mounted) return;
+
+      if (e.code == 'object-not-found') {
+        _toast(
+            "Storage bucket bulunamadı. Firebase bucket ayarını kontrol et.");
+      } else {
+        _toast("Fotoğraf yüklenemedi: ${e.message ?? e.code}");
+      }
     } catch (e, st) {
       debugPrint("PROFILE PHOTO UPLOAD ERROR: $e");
       debugPrintStack(stackTrace: st);
@@ -302,13 +317,11 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
         await prefs.remove('app_locale_code_$firebaseUid');
       }
 
-      // Guest / onboarding / geçici kullanım için muhtemel kayıtlar
       await prefs.remove('guest_selected_language');
       await prefs.remove('guest_selected_level');
       await prefs.remove('guest_selected_translation_source_language_code');
       await prefs.remove('guest_app_locale_code');
 
-      // İleride benzer local kayıtlar eklersen buraya ekleyebilirsin.
       debugPrint("ALL LOCAL APP DATA CLEARED");
     } catch (e) {
       debugPrint("LOCAL APP DATA CLEAR ERROR: $e");
@@ -820,6 +833,7 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
                                     enabled: true,
                                     iconPx: _iconPx,
                                     textStyle: _inputTextStyle,
+                                    maxLength: 25,
                                   ),
                                   SizedBox(height: 14.h),
                                   _Label(l10n.email, style: _labelStyle),
@@ -955,6 +969,7 @@ class _InputPill extends StatelessWidget {
   final bool enabled;
   final double iconPx;
   final TextStyle textStyle;
+  final int? maxLength;
 
   const _InputPill({
     required this.controller,
@@ -964,6 +979,7 @@ class _InputPill extends StatelessWidget {
     required this.enabled,
     required this.iconPx,
     required this.textStyle,
+    this.maxLength,
   });
 
   @override
@@ -992,10 +1008,14 @@ class _InputPill extends StatelessWidget {
               controller: controller,
               enabled: enabled,
               style: textStyle,
+              inputFormatters: maxLength != null
+                  ? [LengthLimitingTextInputFormatter(maxLength)]
+                  : null,
               decoration: InputDecoration(
                 hintText: hint,
                 border: InputBorder.none,
                 isDense: true,
+                counterText: '',
                 hintStyle: textStyle.copyWith(
                   color: const Color(0xFF94A3B8),
                 ),

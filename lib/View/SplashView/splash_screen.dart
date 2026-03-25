@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Core/Routes/app_routes.dart';
 import '../../Core/Theme/app_text_styles.dart';
+import '../../Riverpod/Providers/app_locale_provider.dart';
 import '../../Riverpod/Providers/current_user_provider.dart';
 import '../../Riverpod/Providers/language_provider.dart';
 import '../../Services/backend_auth_service.dart';
@@ -22,6 +23,38 @@ class _SplashViewState extends ConsumerState<SplashView> {
   void initState() {
     super.initState();
     _bootstrap();
+  }
+
+  String? _normalizeLanguageCode(dynamic value) {
+    final raw = value?.toString().trim().toLowerCase();
+    if (raw == null || raw.isEmpty) return null;
+
+    const map = {
+      'tr': 'tr',
+      'turkish': 'tr',
+      'en': 'en',
+      'english': 'en',
+      'de': 'de',
+      'german': 'de',
+      'it': 'it',
+      'italian': 'it',
+      'fr': 'fr',
+      'french': 'fr',
+      'es': 'es',
+      'spanish': 'es',
+      'ru': 'ru',
+      'russian': 'ru',
+      'pt': 'pt',
+      'portuguese': 'pt',
+      'ko': 'ko',
+      'korean': 'ko',
+      'hi': 'hi',
+      'hindi': 'hi',
+      'ja': 'ja',
+      'japanese': 'ja',
+    };
+
+    return map[raw];
   }
 
   Future<void> _clearStoredUiAndSessionData({String? firebaseUid}) async {
@@ -154,6 +187,22 @@ class _SplashViewState extends ConsumerState<SplashView> {
       debugPrint('SPLASH USER PHOTO URL: ${userMap['photo_url']}');
       debugPrint('SPLASH USER AGE: ${userMap['age']}');
       debugPrint('SPLASH USER UPDATED AT: ${userMap['updated_at']}');
+
+      final fromLangCode = _normalizeLanguageCode(
+        userMap['from_language'] ?? userMap['source_language'],
+      );
+
+      if (fromLangCode != null) {
+        await ref
+            .read(translationSourceLanguageProvider.notifier)
+            .setSourceLanguage(fromLangCode);
+
+        await ref.read(appLocaleProvider.notifier).setLocale(
+              Locale(fromLangCode),
+            );
+
+        debugPrint('SPLASH -> SOURCE / APP LANGUAGE SYNCED: $fromLangCode');
+      }
 
       ref.read(currentUserProvider.notifier).state = userMap;
       debugPrint('SPLASH -> CURRENT USER PROVIDER FILLED');
