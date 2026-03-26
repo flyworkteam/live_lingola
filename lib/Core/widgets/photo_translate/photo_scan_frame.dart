@@ -246,30 +246,37 @@ class _TranslatedOverlay extends StatelessWidget {
       builder: (context, constraints) {
         return Stack(
           children: blocks.map((block) {
+            final width = block.width * constraints.maxWidth;
+            final height = block.height * constraints.maxHeight;
+
+            final fontSize = height < 20
+                ? 9.sp
+                : height < 32
+                    ? 10.sp
+                    : 11.sp;
+
             return Positioned(
               left: block.x * constraints.maxWidth,
               top: block.y * constraints.maxHeight,
-              width: block.width * constraints.maxWidth,
-              height: block.height * constraints.maxHeight,
+              width: width,
+              height: height,
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.92),
-                  borderRadius: BorderRadius.circular(8.r),
+                  color: Colors.white.withValues(alpha: 0.96),
+                  borderRadius: BorderRadius.circular(4.r),
                 ),
-                alignment: Alignment.centerLeft,
-                child: FittedBox(
-                  alignment: Alignment.centerLeft,
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    block.translatedText,
-                    maxLines: 2,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 11.sp,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF0F172A),
-                    ),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  block.translatedText,
+                  maxLines: 4,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(0xFF0F172A),
+                    height: 1.08,
                   ),
                 ),
               ),

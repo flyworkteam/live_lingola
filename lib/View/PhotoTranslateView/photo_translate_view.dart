@@ -458,7 +458,11 @@ class _PhotoTranslateViewState extends ConsumerState<PhotoTranslateView> {
         final translatedImageProvider = _buildTranslatedImageProvider(data);
 
         ImageProvider? originalImageProvider;
+        String renderMode = '';
+
         if (data is Map<String, dynamic>) {
+          renderMode = (data['render_mode'] ?? '').toString();
+
           originalImageProvider = _buildImageProviderFromBase64(
             data['original_image_base64']?.toString(),
           );
@@ -471,6 +475,14 @@ class _PhotoTranslateViewState extends ConsumerState<PhotoTranslateView> {
                 : null,
           );
         }
+
+        debugPrint("PHOTO TRANSLATE RENDER MODE: $renderMode");
+        debugPrint(
+          "PHOTO TRANSLATE PARSED BLOCK COUNT: ${blocksJson.length}",
+        );
+        debugPrint(
+          "PHOTO TRANSLATE HAS RENDERED IMAGE: ${translatedImageProvider != null}",
+        );
 
         if (!mounted) return;
         setState(() {
