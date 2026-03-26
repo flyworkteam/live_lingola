@@ -1,19 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 
@@ -155,70 +153,71 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
         _isUploadingPhoto = true;
       });
 
-      final file = File(picked.path);
-
-      final storage = FirebaseStorage.instanceFor(
-        app: Firebase.app(),
-        bucket: 'gs://live-lingola.appspot.com',
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse("$_baseUrl/users/firebase/$firebaseUid/photo"),
       );
 
-      final fileName =
-          'profile_${firebaseUid}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final lowerName = picked.name.toLowerCase();
 
-      final photoRef = storage
-          .ref()
-          .child('profile_photos')
-          .child(firebaseUid)
-          .child(fileName);
+      MediaType contentType;
+      if (lowerName.endsWith('.png')) {
+        contentType = MediaType('image', 'png');
+      } else if (lowerName.endsWith('.webp')) {
+        contentType = MediaType('image', 'webp');
+      } else {
+        contentType = MediaType('image', 'jpeg');
+      }
 
-      debugPrint('UPLOAD FILE PATH: ${file.path}');
-      debugPrint('FIREBASE UID: $firebaseUid');
-      debugPrint('STORAGE BUCKET: ${storage.bucket}');
-      debugPrint('UPLOAD REF FULL PATH: ${photoRef.fullPath}');
-
-      final snapshot = await photoRef.putFile(
-        file,
-        SettableMetadata(contentType: 'image/jpeg'),
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'photo',
+          picked.path,
+          filename: picked.name,
+          contentType: contentType,
+        ),
       );
 
-      debugPrint('UPLOAD TASK STATE: ${snapshot.state}');
-      debugPrint('UPLOAD REF NAME: ${snapshot.ref.name}');
-      debugPrint('UPLOAD REF FULL PATH AFTER PUT: ${snapshot.ref.fullPath}');
+      debugPrint(
+          "PROFILE PHOTO UPLOAD URL: $_baseUrl/users/firebase/$firebaseUid/photo");
+      debugPrint("PROFILE PHOTO LOCAL PATH: ${picked.path}");
+      debugPrint("PROFILE PHOTO FILE NAME: ${picked.name}");
+      debugPrint("PROFILE PHOTO CONTENT TYPE: $contentType");
 
-      final metadata = await snapshot.ref.getMetadata();
-      debugPrint('UPLOAD METADATA NAME: ${metadata.name}');
-      debugPrint('UPLOAD METADATA FULL PATH: ${metadata.fullPath}');
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
 
-      final downloadUrl = await snapshot.ref.getDownloadURL();
+      debugPrint("PROFILE PHOTO UPLOAD STATUS: ${response.statusCode}");
+      debugPrint("PROFILE PHOTO UPLOAD BODY: ${response.body}");
 
-      debugPrint('DOWNLOAD URL: $downloadUrl');
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        throw Exception("Photo upload failed: ${response.statusCode}");
+      }
+
+      final dynamic decoded =
+          response.body.isNotEmpty ? jsonDecode(response.body) : {};
+
+      final String? uploadedPhotoUrl = decoded is Map<String, dynamic>
+          ? decoded["photo_url"]?.toString()
+          : null;
+
+      if (uploadedPhotoUrl == null || uploadedPhotoUrl.trim().isEmpty) {
+        throw Exception("photo_url missing in upload response");
+      }
 
       if (!mounted) return;
 
       setState(() {
-        _photoUrl = downloadUrl;
+        _photoUrl = uploadedPhotoUrl;
       });
 
       final oldUser = ref.read(currentUserProvider) ?? <String, dynamic>{};
       _setCurrentUser({
         ...oldUser,
-        "photo_url": downloadUrl,
+        "photo_url": uploadedPhotoUrl,
       });
 
       await _saveProfile();
-    } on FirebaseException catch (e, st) {
-      debugPrint("FIREBASE STORAGE ERROR CODE: ${e.code}");
-      debugPrint("FIREBASE STORAGE ERROR MESSAGE: ${e.message}");
-      debugPrintStack(stackTrace: st);
-
-      if (!mounted) return;
-
-      if (e.code == 'object-not-found') {
-        _toast(
-            "Storage bucket bulunamadı. Firebase bucket ayarını kontrol et.");
-      } else {
-        _toast("Fotoğraf yüklenemedi: ${e.message ?? e.code}");
-      }
     } catch (e, st) {
       debugPrint("PROFILE PHOTO UPLOAD ERROR: $e");
       debugPrintStack(stackTrace: st);
