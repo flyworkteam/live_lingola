@@ -9,7 +9,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:lingola_app/Core/Utils/assets.dart';
 import 'package:lingola_app/Core/widgets/common/dropdown_card.dart';
 import 'package:lingola_app/Core/widgets/common/tap_outside_to_close.dart';
@@ -41,7 +40,7 @@ class TextTranslationView extends ConsumerStatefulWidget {
 
 class _TextTranslationViewState extends ConsumerState<TextTranslationView> {
   static const int _charLimit = 2000;
-  static const String _baseUrl = 'http://127.0.0.1:4000';
+  static const String _baseUrl = 'https://livelingolaappnew.fly-work.com';
 
   final TextEditingController _sourceCtrl = TextEditingController();
 

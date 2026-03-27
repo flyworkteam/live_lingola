@@ -2,9 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lingola_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:lingola_app/l10n/app_localizations.dart';
 
 import '../../../Core/Routes/app_routes.dart';
 import '../../../Core/Theme/app_colors.dart';
@@ -540,11 +540,7 @@ class _LoginButtonAligned extends StatelessWidget {
   Widget build(BuildContext context) {
     const double buttonW = 319;
     const double buttonH = 45;
-
-    const double iconSlotW = 44;
-    const double gap = 14;
-    const double textW = 190;
-    const double contentW = iconSlotW + gap + textW;
+    const double gap = 12; // İkon ile metin arasındaki boşluk
 
     return Material(
       color: Colors.transparent,
@@ -568,51 +564,40 @@ class _LoginButtonAligned extends StatelessWidget {
               ],
             ),
             child: Center(
-              child: SizedBox(
-                width: contentW,
-                height: buttonH,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: iconSlotW,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: SizedBox(
-                          width: iconSize.width,
-                          height: iconSize.height,
-                          child: SvgPicture.asset(
-                            provider.assetPath,
-                            fit: BoxFit.contain,
-                            semanticsLabel: provider.semanticLabel,
-                          ),
-                        ),
+              child: Row(
+                mainAxisSize: MainAxisSize
+                    .min, // İkon ve metni birleştirip tam ortaya toplar
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: iconSize.width,
+                    height: iconSize.height,
+                    child: SvgPicture.asset(
+                      provider.assetPath,
+                      fit: BoxFit.contain,
+                      semanticsLabel: provider.semanticLabel,
+                    ),
+                  ),
+                  const SizedBox(width: gap),
+                  ConstrainedBox(
+                    // _AdaptiveText'in layout hesaplamasını yapabilmesi için max bir genişlik sınırı veriyoruz
+                    constraints: const BoxConstraints(maxWidth: buttonW - 80),
+                    child: _AdaptiveText(
+                      label,
+                      maxLines: 1,
+                      minFontSize: 9,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: AppTextStyles.fontFamily,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        height: 1.0,
+                        letterSpacing: 0.0,
+                        color: Colors.black,
                       ),
                     ),
-                    const SizedBox(width: gap),
-                    SizedBox(
-                      width: textW,
-                      height: buttonH,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: _AdaptiveText(
-                          label,
-                          maxLines: 1,
-                          minFontSize: 9,
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                            fontFamily: AppTextStyles.fontFamily,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            height: 1.0,
-                            letterSpacing: 0.0,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

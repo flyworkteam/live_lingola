@@ -1,9 +1,10 @@
 import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 
 class UserSyncService {
-  static const String baseUrl = 'http://127.0.0.1:4000';
+  static const String baseUrl = 'https://livelingolaappnew.fly-work.com';
 
   static Future<Map<String, dynamic>?> syncCurrentUser() async {
     final user = FirebaseAuth.instance.currentUser;
