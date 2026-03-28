@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -145,6 +146,24 @@ class _LoginViewState extends ConsumerState<LoginView> {
       final userMap = user as Map<String, dynamic>;
       ref.read(currentUserProvider.notifier).state = userMap;
       debugPrint('CURRENT USER PROVIDER FILLED');
+
+      try {
+        final externalId = (userMap['firebase_uid']).toString();
+
+        await OneSignal.login(externalId);
+        debugPrint('ONESIGNAL LOGIN OK: $externalId');
+
+        await OneSignal.User.addTags({
+          'firebase_uid': externalId,
+          'user_id': '${userMap['id']}',
+          'email': '${userMap['email'] ?? ''}',
+        });
+
+        debugPrint('ONESIGNAL TAGS OK');
+      } catch (e, st) {
+        debugPrint('ONESIGNAL LOGIN ERROR: $e');
+        debugPrintStack(stackTrace: st);
+      }
 
       if (!mounted) return;
 

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final translationSourceLanguageProvider =
@@ -43,6 +44,12 @@ class TranslationSourceLanguageNotifier extends StateNotifier<String> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_sourceLanguageCodeKey, normalized);
     state = normalized;
+
+    try {
+      await OneSignal.User.addTags({
+        'source_lang': normalized,
+      });
+    } catch (_) {}
   }
 
   Future<void> resetSourceLanguage() async {
