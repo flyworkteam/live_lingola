@@ -7,13 +7,11 @@ import '../Riverpod/Providers/notifications_inbox_provider.dart';
 class NotificationService {
   static const String _appId = '8abda957-7534-4ef5-9e2e-c960d3080642';
 
-  static Future<void> initApp() async {
-    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-    OneSignal.initialize(_appId);
-  }
-
   static Future<void> init(WidgetRef ref) async {
     try {
+      OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+      OneSignal.initialize(_appId);
+
       final granted = await OneSignal.Notifications.requestPermission(true);
       debugPrint('ONESIGNAL PERMISSION: $granted');
 

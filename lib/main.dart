@@ -32,14 +32,6 @@ Future<void> main() async {
     debugPrintStack(stackTrace: s);
   }
 
-  try {
-    await NotificationService.initApp();
-    debugPrint('ONESIGNAL INIT OK');
-  } catch (e, s) {
-    debugPrint('ONESIGNAL INIT ERROR: $e');
-    debugPrintStack(stackTrace: s);
-  }
-
   runApp(
     const ProviderScope(
       child: LingoraApp(),

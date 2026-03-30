@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
 import '../../Riverpod/Providers/current_user_provider.dart';
@@ -20,15 +19,6 @@ class PaywallView {
 
         if (userId != null) {
           await SubscriptionService.activatePro(userId as int);
-        }
-
-        try {
-          await OneSignal.User.addTags({
-            'is_premium': 'true',
-          });
-          debugPrint('ONESIGNAL PREMIUM TAG UPDATED');
-        } catch (e) {
-          debugPrint('ONESIGNAL PREMIUM TAG ERROR: $e');
         }
       }
     } catch (e) {

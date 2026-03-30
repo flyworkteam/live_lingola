@@ -208,12 +208,10 @@ class _SplashViewState extends ConsumerState<SplashView> {
       debugPrint('SPLASH -> CURRENT USER PROVIDER FILLED');
 
       try {
-        await OneSignal.User.addTags({
-          'last_active': DateTime.now().toIso8601String(),
-        });
-        debugPrint('ONESIGNAL LAST ACTIVE UPDATED');
+        await OneSignal.login('user_${userMap['id']}');
+        debugPrint("ONESIGNAL LOGIN OK: user_${userMap['id']}");
       } catch (e) {
-        debugPrint('ONESIGNAL LAST ACTIVE ERROR: $e');
+        debugPrint("ONESIGNAL LOGIN ERROR: $e");
       }
 
       if (!mounted) return;
