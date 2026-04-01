@@ -11,6 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:lingola_app/Core/Utils/assets.dart';
+import 'package:lingola_app/Core/widgets/common/ai_consent_dialog.dart';
 import 'package:lingola_app/Core/widgets/common/dropdown_card.dart';
 import 'package:lingola_app/Core/widgets/common/tap_outside_to_close.dart';
 import 'package:lingola_app/Core/widgets/text_translation/lang_bar.dart';
@@ -23,6 +24,7 @@ import 'package:lingola_app/Core/widgets/text_translation/text_translation_resul
 import 'package:lingola_app/Core/widgets/text_translation/text_translation_source_card.dart';
 import 'package:lingola_app/Core/widgets/text_translation/text_translation_utils.dart';
 import 'package:lingola_app/Riverpod/Providers/language_provider.dart';
+import 'package:lingola_app/Services/ai_consent_service.dart';
 import 'package:lingola_app/Services/Translation/text_to_speech_service.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 
@@ -517,6 +519,24 @@ class _TextTranslationViewState extends ConsumerState<TextTranslationView> {
       });
       _log('TRANSLATE STOPPED => source empty');
       return;
+    }
+
+    final consent = await AiConsentService.getConsent();
+
+    if (consent != true) {
+      // ignore: use_build_context_synchronously
+      final accepted = await showAiConsentDialog(context);
+
+      if (!accepted) {
+        if (!mounted) return;
+
+        setState(() {
+          _isTranslating = false;
+        });
+
+        _log('TRANSLATE STOPPED => ai consent rejected');
+        return;
+      }
     }
 
     final signature = _buildTranslationSignature(

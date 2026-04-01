@@ -866,4 +866,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get notificationTimeJustNow => 'たった今';
+  @override
+  String get aiConsentTitle => 'AIデータ処理の許可';
+
+  @override
+  String get aiConsentBody =>
+      'テキスト、音声、画像の翻訳を提供するために、AIサービスを使用しています。翻訳を提供する目的で、お客様のデータが Google などの第三者プロバイダーに安全に送信される場合があります。';
+
+  @override
+  String get aiConsentAccept => '許可する';
+
+  @override
+  String get aiConsentDecline => '今はしない';
+
+  @override
+  String get aiConsentLearnMore => '詳細を見る';
 }

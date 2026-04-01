@@ -904,4 +904,20 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get notificationTimeJustNow => 'Gerade eben';
+
+  @override
+  String get aiConsentTitle => 'Einwilligung zur KI-Datenverarbeitung';
+
+  @override
+  String get aiConsentBody =>
+      'Wir verwenden KI-Dienste, um Ihre Texte, Sprache und Bilder zu übersetzen. Ihre Daten können zur Bereitstellung von Übersetzungen sicher an Drittanbieter wie Google übermittelt werden.';
+
+  @override
+  String get aiConsentAccept => 'Zulassen';
+
+  @override
+  String get aiConsentDecline => 'Jetzt nicht';
+
+  @override
+  String get aiConsentLearnMore => 'Mehr erfahren';
 }

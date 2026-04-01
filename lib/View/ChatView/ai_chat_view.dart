@@ -8,8 +8,10 @@ import '../../Core/widgets/chat/chat_chip.dart';
 import '../../Core/widgets/chat/chat_input.dart';
 import '../../Core/widgets/chat/chat_message.dart';
 import '../../Core/widgets/chat/chat_top_bar.dart';
+import '../../Core/widgets/common/ai_consent_dialog.dart';
 import '../../Repositories/ai_repository.dart';
 import '../../Services/AI/gemini_service.dart';
+import '../../Services/ai_consent_service.dart';
 
 class AiChatView extends StatefulWidget {
   final VoidCallback? onBackToHome;
@@ -70,6 +72,17 @@ class _AiChatViewState extends State<AiChatView> {
 
     final text = _controller.text.trim();
     if (text.isEmpty || _isBotTyping) return;
+
+    final consent = await AiConsentService.getConsent();
+
+    if (consent != true) {
+      // ignore: use_build_context_synchronously
+      final accepted = await showAiConsentDialog(context);
+
+      if (!accepted) {
+        return;
+      }
+    }
 
     setState(() {
       _mutableMessages.add(ChatMessage(fromBot: false, text: text));

@@ -155,9 +155,13 @@ class FirebaseAuthService {
         throw Exception('Apple identity token is null');
       }
 
-      final oauthCredential = OAuthProvider('apple.com').credential(
-        idToken: identityToken,
-        rawNonce: rawNonce,
+      final oauthCredential = AppleAuthProvider.credentialWithIDToken(
+        identityToken,
+        rawNonce,
+        AppleFullPersonName(
+          givenName: appleCredential.givenName,
+          familyName: appleCredential.familyName,
+        ),
       );
 
       debugPrint(
@@ -211,7 +215,8 @@ class FirebaseAuthService {
       );
     } on FirebaseAuthException catch (e, st) {
       debugPrint(
-          'FIREBASE AUTH SERVICE APPLE FIREBASE ERROR: ${e.code} - ${e.message}');
+        'FIREBASE AUTH SERVICE APPLE FIREBASE ERROR: ${e.code} - ${e.message}',
+      );
       debugPrintStack(stackTrace: st);
 
       throw Exception('Firebase Apple auth failed: ${e.code} - ${e.message}');

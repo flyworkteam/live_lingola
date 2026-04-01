@@ -12,10 +12,12 @@ import 'package:lingola_app/l10n/app_localizations.dart';
 
 import '../../Core/Utils/assets.dart';
 import '../../Core/config/app_config.dart';
+import '../../Core/widgets/common/ai_consent_dialog.dart';
 import '../../Core/widgets/photo_translate/photo_scan_frame.dart';
 import '../../Core/widgets/photo_translate/photo_translate_top_bar.dart';
 import '../../Riverpod/Providers/current_user_provider.dart';
 import '../../Riverpod/Providers/language_provider.dart';
+import '../../Services/ai_consent_service.dart';
 import '../../Core/widgets/photo_translate/photo_translate_lang_bar.dart';
 
 class PhotoTranslateView extends ConsumerStatefulWidget {
@@ -413,6 +415,21 @@ class _PhotoTranslateViewState extends ConsumerState<PhotoTranslateView> {
     debugPrint('PHOTO TRANSLATE USER ID: $userId');
     debugPrint('PHOTO TRANSLATE SOURCE: $_sourceLangCode');
     debugPrint('PHOTO TRANSLATE TARGET: $_targetLangCode');
+
+    final consent = await AiConsentService.getConsent();
+
+    if (consent != true) {
+      // ignore: use_build_context_synchronously
+      final accepted = await showAiConsentDialog(context);
+
+      if (!accepted) {
+        if (!mounted) return;
+        setState(() {
+          _isProcessing = false;
+        });
+        return;
+      }
+    }
 
     try {
       final request = http.MultipartRequest(

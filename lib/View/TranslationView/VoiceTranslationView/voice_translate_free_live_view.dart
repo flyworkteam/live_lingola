@@ -9,9 +9,11 @@ import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
 import 'package:lingola_app/Core/Utils/assets.dart';
 import 'package:lingola_app/Core/config/app_config.dart';
+import 'package:lingola_app/Core/widgets/common/ai_consent_dialog.dart';
 import 'package:lingola_app/Core/widgets/navigation/bottom_nav_item_tile.dart';
 import 'package:lingola_app/Core/widgets/voice_translate/voice_language_dropdown.dart';
 import 'package:lingola_app/Riverpod/Providers/current_user_provider.dart';
+import 'package:lingola_app/Services/ai_consent_service.dart';
 import 'package:lingola_app/View/TranslationView/VoiceTranslationView/voice_translate_pro_live_view.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -577,6 +579,21 @@ class _VoiceTranslateFreeLiveViewState
     if (sourceText.isEmpty) return;
     if (_isTranslating) return;
     if (_lastSubmittedSource == sourceText) return;
+
+    final consent = await AiConsentService.getConsent();
+
+    if (consent != true) {
+      // ignore: use_build_context_synchronously
+      final accepted = await showAiConsentDialog(context);
+
+      if (!accepted) {
+        if (!mounted) return;
+        setState(() {
+          _isSaving = false;
+        });
+        return;
+      }
+    }
 
     final bool canSaveToHistory =
         saveToHistory && (firebaseUid != null || userId != null);

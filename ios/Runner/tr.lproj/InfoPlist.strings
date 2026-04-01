@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "Fotoğraf çevirisi için kameranıza erişmemiz gerekiyor.";
+"NSMicrophoneUsageDescription" = "Sesli çeviri için mikrofona erişmemiz gerekiyor.";
+"NSPhotoLibraryAddUsageDescription" = "Çevrilen görselleri fotoğraf arşivinize kaydedebilmek için erişim gerekiyor.";
+"NSPhotoLibraryUsageDescription" = "Çeviri için görsel seçebilmeniz adına fotoğraf arşivinize erişmemiz gerekiyor.";
+"NSSpeechRecognitionUsageDescription" = "Sesli çeviri için konuşmanızı metne dönüştürmemiz gerekiyor.";

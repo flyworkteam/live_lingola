@@ -1724,6 +1724,12 @@ abstract class AppLocalizations {
   /// No description provided for @notificationTimeJustNow.
   String get notificationTimeJustNow;
 
+  String get aiConsentTitle;
+  String get aiConsentBody;
+  String get aiConsentAccept;
+  String get aiConsentDecline;
+  String get aiConsentLearnMore;
+
   get photoTranslation => null;
 }
 

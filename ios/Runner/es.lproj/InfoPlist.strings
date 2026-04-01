@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "Necesitamos acceso a la cámara para la traducción de fotos.";
+"NSMicrophoneUsageDescription" = "Necesitamos acceso al micrófono para la traducción de voz.";
+"NSPhotoLibraryAddUsageDescription" = "Necesitamos acceso para guardar imágenes traducidas en tu galería.";
+"NSPhotoLibraryUsageDescription" = "Necesitamos acceso a tu galería para seleccionar imágenes para traducir.";
+"NSSpeechRecognitionUsageDescription" = "Necesitamos acceso al reconocimiento de voz para convertir tu voz en texto.";

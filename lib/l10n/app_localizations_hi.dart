@@ -898,4 +898,19 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get notificationTimeJustNow => 'अभी अभी';
+  @override
+  String get aiConsentTitle => 'AI डेटा प्रोसेसिंग अनुमति';
+
+  @override
+  String get aiConsentBody =>
+      'हम आपके टेक्स्ट, आवाज़ और चित्रों का अनुवाद करने के लिए AI सेवाओं का उपयोग करते हैं। अनुवाद प्रदान करने के लिए आपका डेटा Google जैसे तृतीय-पक्ष प्रदाताओं को सुरक्षित रूप से भेजा जा सकता है।';
+
+  @override
+  String get aiConsentAccept => 'अनुमति दें';
+
+  @override
+  String get aiConsentDecline => 'अभी नहीं';
+
+  @override
+  String get aiConsentLearnMore => 'और जानें';
 }

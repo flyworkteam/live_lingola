@@ -413,7 +413,14 @@
   "notificationTime2hAgo": "2h ago",
   "notificationSeeOpportunity": "SEE THE OPPORTUNITY",
   "notificationAiChatTitle": "Chat with AI",
-  "notificationAiChatBody": "Get instant answers to the questions on your mind with AI chat."
+  "notificationAiChatBody": "Get instant answers to the questions on your mind with AI chat.",
+  
+  "aiConsentTitle": "AI Usage",
+  "aiConsentDescription": "Your text, voice, and photos will be sent to AI services for translation and AI-assisted responses. You must accept to continue.",
+  "aiConsentAccept": "Accept",
+  "aiConsentDecline": "Cancel",
+  
+
 
 
 

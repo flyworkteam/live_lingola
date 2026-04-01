@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Core/Routes/app_routes.dart';
 import '../../Core/Theme/app_text_styles.dart';
-import '../../Riverpod/Providers/app_locale_provider.dart';
 import '../../Riverpod/Providers/current_user_provider.dart';
 import '../../Riverpod/Providers/language_provider.dart';
 import '../../Services/backend_auth_service.dart';
@@ -197,11 +196,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
             .read(translationSourceLanguageProvider.notifier)
             .setSourceLanguage(fromLangCode);
 
-        await ref.read(appLocaleProvider.notifier).setLocale(
-              Locale(fromLangCode),
-            );
-
-        debugPrint('SPLASH -> SOURCE / APP LANGUAGE SYNCED: $fromLangCode');
+        debugPrint('SPLASH -> SOURCE LANGUAGE SYNCED: $fromLangCode');
       }
 
       ref.read(currentUserProvider.notifier).state = userMap;

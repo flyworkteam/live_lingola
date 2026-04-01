@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd">
+  <file original="Pods/RevenueCatUI/RevenueCatUI/Resources/en.lproj/Localizable.strings" source-language="en" target-language="he" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="15.2" build-num="15C500b"/>
+    </header>
+    <body>
+      <trans-unit id="%d%% off" xml:space="preserve">
+        <source>%d%% off</source>
+        <target>%d%% הנחה</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="2 Month" xml:space="preserve">
+        <source>2 Month</source>
+        <target>חודש 2</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="3 Month" xml:space="preserve">
+        <source>3 Month</source>
+        <target>3 חודשים</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="6 Month" xml:space="preserve">
+        <source>6 Month</source>
+        <target>6 חודשים</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="All subscriptions" xml:space="preserve">
+        <source>All plans</source>
+        <target>כל המנויים</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Annual" xml:space="preserve">
+        <source>Annual</source>
+        <target>שנתי</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Continue" xml:space="preserve">
+        <source>Continue</source>
+        <target>לְהַמשִׁיך</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Default_offer_details_with_intro_offer" xml:space="preserve">
+        <source>Start your {{ sub_offer_duration }} trial, then {{ total_price_and_per_month }}.</source>
+        <target>התחל את תקופת הניסיון של {{ sub_offer_duration }} ולאחר מכן {{ total_price_and_per_month }}.</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Lifetime" xml:space="preserve">
+        <source>Lifetime</source>
+        <target>לכל החיים</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Monthly" xml:space="preserve">
+        <source>Monthly</source>
+        <target>יַרחוֹן</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="OK" xml:space="preserve">
+        <source>OK</source>
+        <target>בסדר</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Privacy" xml:space="preserve">
+        <source>Privacy</source>
+        <target>פְּרָטִיוּת</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Privacy policy" xml:space="preserve">
+        <source>Privacy policy</source>
+        <target>מדיניות הפרטיות</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Purchases restored successfully!" xml:space="preserve">
+        <source>Purchases restored successfully!</source>
+        <target>רכישות שוחזרו בהצלחה!</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Restore" xml:space="preserve">
+        <source>Restore</source>
+        <target>לשחזר</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Restore purchases" xml:space="preserve">
+        <source>Restore purchases</source>
+        <target>לשחזר רכישות</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Something went wrong" xml:space="preserve">
+        <source>Something went wrong</source>
+        <target>משהו השתבש</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Terms" xml:space="preserve">
+        <source>Terms</source>
+        <target>תנאים</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Terms and conditions" xml:space="preserve">
+        <source>Terms and conditions</source>
+        <target>תנאים</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Weekly" xml:space="preserve">
+        <source>Weekly</source>
+        <target>שְׁבוּעִי</target>
+        <note/>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Pods/Target Support Files/image_picker_ios/en.lproj/Localizable.strings" datatype="plaintext" source-language="en" target-language="he">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="15.2" build-num="15C500b"/>
+    </header>
+    <body>
+      <trans-unit id="Camera not available." xml:space="preserve">
+        <source>Camera not available.</source>
+        <note>Alert message when camera unavailable</note>
+      </trans-unit>
+      <trans-unit id="Error" xml:space="preserve">
+        <source>Error</source>
+        <note>Alert title when camera unavailable</note>
+      </trans-unit>
+      <trans-unit id="OK" xml:space="preserve">
+        <source>OK</source>
+        <note>Alert button when camera unavailable</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Pods/Target Support Files/RevenueCat/en.lproj/Localizable.strings" datatype="plaintext" source-language="en" target-language="he">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="15.2" build-num="15C500b"/>
+    </header>
+    <body>
+      <trans-unit id="Diagnostics" xml:space="preserve">
+        <source>Diagnostics</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Display StoreView" xml:space="preserve">
+        <source>Display StoreView</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Display SubscriptionStoreView" xml:space="preserve">
+        <source>Display SubscriptionStoreView</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Error loading customer info: %@" xml:space="preserve">
+        <source>Error loading customer info: %@</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Error loading offerings: %@" xml:space="preserve">
+        <source>Error loading offerings: %@</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Loading..." xml:space="preserve">
+        <source>Loading...</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Metadata" xml:space="preserve">
+        <source>Metadata</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="No offerings configured" xml:space="preserve">
+        <source>No offerings configured</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Purchase with RevenueCat" xml:space="preserve">
+        <source>Purchase with RevenueCat</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Purchase with StoreKit" xml:space="preserve">
+        <source>Purchase with StoreKit</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="RevenueCat Debug view" xml:space="preserve">
+        <source>RevenueCat Debug view</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="RevenueCat Demo Paywall" xml:space="preserve">
+        <source>RevenueCat Demo Paywall</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="RevenueCatUI paywall" xml:space="preserve">
+        <source>RevenueCatUI paywall</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Show in Finder" xml:space="preserve">
+        <source>Show in Finder</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="While offerings are not mandatory, they are the way to 'offer' products to your customers on your paywalls." xml:space="preserve">
+        <source>While offerings are not mandatory, they are the way to 'offer' products to your customers on your paywalls.</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="🐈" xml:space="preserve">
+        <source>🐈</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Pods/Target Support Files/RevenueCatUI/en.lproj/Localizable.strings" datatype="plaintext" source-language="en" target-language="he">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="15.2" build-num="15C500b"/>
+    </header>
+    <body>
+      <trans-unit id="%@ (%@)" xml:space="preserve">
+        <source>%1$@ (%2$@)</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Accessible Content" xml:space="preserve">
+        <source>Accessible Content</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="All subscriptions" xml:space="preserve">
+        <source>All subscriptions</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Can't open URL" xml:space="preserve">
+        <source>Can't open URL</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Customer Center" xml:space="preserve">
+        <source>Customer Center</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Eligible" xml:space="preserve">
+        <source>Eligible</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Emerge Effect" xml:space="preserve">
+        <source>Emerge Effect</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Fallback paywall" xml:space="preserve">
+        <source>Fallback paywall</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="First Name" xml:space="preserve">
+        <source>First Name</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Generated Dual Color Image" xml:space="preserve">
+        <source>Generated Dual Color Image</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Go to Dashboard" xml:space="preserve">
+        <source>Go to Dashboard</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Hello" xml:space="preserve">
+        <source>Hello</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Hello, World!" xml:space="preserve">
+        <source>Hello, World!</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Ineligible" xml:space="preserve">
+        <source>Ineligible</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="John Doe" xml:space="preserve">
+        <source>John Doe</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Last Name" xml:space="preserve">
+        <source>Last Name</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Loading" xml:space="preserve">
+        <source>Loading</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="My App Store listing!" xml:space="preserve">
+        <source>My App Store listing!</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Name:" xml:space="preserve">
+        <source>Name:</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="OK" xml:space="preserve">
+        <source>OK</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Ok" xml:space="preserve">
+        <source>Ok</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Please enter a valid email address" xml:space="preserve">
+        <source>Please enter a valid email address</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Purchase" xml:space="preserve">
+        <source>Purchase</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Purchases restored successfully!" xml:space="preserve">
+        <source>Purchases restored successfully!</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Restore" xml:space="preserve">
+        <source>Restore</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Restore Purchases" xml:space="preserve">
+        <source>Restore Purchases</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Restore purchases" xml:space="preserve">
+        <source>Restore purchases</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="RevenueCat Paywalls" xml:space="preserve">
+        <source>RevenueCat Paywalls</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Text" xml:space="preserve">
+        <source>Text</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="There's no email app in the simulator" xml:space="preserve">
+        <source>There's no email app in the simulator</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="This view will have a sheet over it" xml:space="preserve">
+        <source>This view will have a sheet over it</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="Unavailable on iOS &lt;15.0" xml:space="preserve">
+        <source>Unavailable on iOS &lt;15.0</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="VirtualCurrencyBalancesSectionView is not available on this platform" xml:space="preserve">
+        <source>VirtualCurrencyBalancesSectionView is not available on this platform</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+      <trans-unit id="width: **%@** height: **%@**&#10;fitMode: **%@**&#10;width: **%@** height: **%@**" xml:space="preserve">
+        <source>width: **%1$@** height: **%2$@**
+fitMode: **%3$@**
+width: **%4$@** height: **%5$@**</source>
+        <note>No comment provided by engineer.</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Runner/en.lproj/InfoPlist.strings" datatype="plaintext" source-language="en" target-language="he">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="15.2" build-num="15C500b"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleDisplayName" xml:space="preserve">
+        <source>Live Lingola</source>
+        <note>Bundle display name</note>
+      </trans-unit>
+      <trans-unit id="CFBundleName" xml:space="preserve">
+        <source>Live Lingola</source>
+        <note>Bundle name</note>
+      </trans-unit>
+      <trans-unit id="NSCameraUsageDescription" xml:space="preserve">
+        <source>We need camera access for photo translation.</source>
+        <note>Privacy - Camera Usage Description</note>
+      </trans-unit>
+      <trans-unit id="NSMicrophoneUsageDescription" xml:space="preserve">
+        <source>We need microphone access for voice translation.</source>
+        <note>Privacy - Microphone Usage Description</note>
+      </trans-unit>
+      <trans-unit id="NSPhotoLibraryAddUsageDescription" xml:space="preserve">
+        <source>We need access to save translated images to your photo library.</source>
+        <note>Privacy - Photo Library Additions Usage Description</note>
+      </trans-unit>
+      <trans-unit id="NSPhotoLibraryUsageDescription" xml:space="preserve">
+        <source>We need photo library access so you can select images for translation.</source>
+        <note>Privacy - Photo Library Usage Description</note>
+      </trans-unit>
+      <trans-unit id="NSSpeechRecognitionUsageDescription" xml:space="preserve">
+        <source>We need speech recognition access to convert your speech to text for voice translation.</source>
+        <note>Privacy - Speech Recognition Usage Description</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

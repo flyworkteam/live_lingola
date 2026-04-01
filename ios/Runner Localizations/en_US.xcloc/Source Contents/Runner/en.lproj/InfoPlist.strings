@@ -1,0 +1,14 @@
+/* Bundle display name */
+"CFBundleDisplayName" = "Live Lingola";
+/* Bundle name */
+"CFBundleName" = "Live Lingola";
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "We need camera access for photo translation.";
+/* Privacy - Microphone Usage Description */
+"NSMicrophoneUsageDescription" = "We need microphone access for voice translation.";
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "We need access to save translated images to your photo library.";
+/* Privacy - Photo Library Usage Description */
+"NSPhotoLibraryUsageDescription" = "We need photo library access so you can select images for translation.";
+/* Privacy - Speech Recognition Usage Description */
+"NSSpeechRecognitionUsageDescription" = "We need speech recognition access to convert your speech to text for voice translation.";

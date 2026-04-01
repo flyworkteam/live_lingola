@@ -899,4 +899,19 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get notificationTimeJustNow => 'Только что';
+  @override
+  String get aiConsentTitle => 'Разрешение на обработку данных ИИ';
+
+  @override
+  String get aiConsentBody =>
+      'Мы используем сервисы искусственного интеллекта для перевода текста, голоса и изображений. Ваши данные могут безопасно передаваться сторонним поставщикам, таким как Google, для предоставления перевода.';
+
+  @override
+  String get aiConsentAccept => 'Разрешить';
+
+  @override
+  String get aiConsentDecline => 'Не сейчас';
+
+  @override
+  String get aiConsentLearnMore => 'Подробнее';
 }

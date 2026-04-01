@@ -414,7 +414,13 @@
   "notificationTime2hAgo": "vor 2 Std.",
   "notificationSeeOpportunity": "ANGEBOT ANSEHEN",
   "notificationAiChatTitle": "Mit KI chatten",
-  "notificationAiChatBody": "Erhalten Sie mit dem KI-Chat sofort Antworten auf Ihre Fragen."
+  "notificationAiChatBody": "Erhalten Sie mit dem KI-Chat sofort Antworten auf Ihre Fragen.",
+  
+  "aiConsentTitle": "KI-Nutzung",
+  "aiConsentDescription": "Ihre Texte, Sprachaufnahmen und Fotos werden für Übersetzungen und KI-gestützte Antworten an KI-Dienste gesendet. Sie müssen zustimmen, um fortzufahren.",
+  "aiConsentAccept": "Akzeptieren",
+  "aiConsentDecline": "Abbrechen"
+
 
 
 

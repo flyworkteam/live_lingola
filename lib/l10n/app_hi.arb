@@ -414,7 +414,13 @@
   "notificationTime2hAgo": "2 घंटे पहले",
   "notificationSeeOpportunity": "ऑफर देखें",
   "notificationAiChatTitle": "AI चैट से बात करें",
-  "notificationAiChatBody": "AI चैट के साथ अपने सवालों के तुरंत जवाब पाएं।"
+  "notificationAiChatBody": "AI चैट के साथ अपने सवालों के तुरंत जवाब पाएं।",
+  
+  "aiConsentTitle": "एआई उपयोग",
+  "aiConsentDescription": "आपका टेक्स्ट, आवाज़ और फ़ोटो अनुवाद और एआई-सहायित उत्तरों के लिए एआई सेवाओं को भेजे जाएंगे। आगे बढ़ने के लिए आपको सहमति देनी होगी।",
+  "aiConsentAccept": "स्वीकार करें",
+  "aiConsentDecline": "रद्द करें"
+
 
 
 

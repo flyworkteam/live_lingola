@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "We need camera access for photo translation.";
+"NSMicrophoneUsageDescription" = "We need microphone access for voice translation.";
+"NSPhotoLibraryAddUsageDescription" = "We need access to save translated images to your photo library.";
+"NSPhotoLibraryUsageDescription" = "We need access to your photo library so you can select images for translation.";
+"NSSpeechRecognitionUsageDescription" = "We need speech recognition access to convert your speech to text.";

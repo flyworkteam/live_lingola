@@ -27,7 +27,7 @@ class AppLocaleNotifier extends StateNotifier<Locale?> {
     'pt',
   ];
 
-  static const String _globalStorageKey = 'app_locale_code';
+  static const String globalStorageKey = 'app_locale_code';
 
   String _storageKeyForUser(String userId) => 'app_locale_code_$userId';
 
@@ -50,7 +50,7 @@ class AppLocaleNotifier extends StateNotifier<Locale?> {
   Future<void> loadInitialLocale() async {
     final prefs = await SharedPreferences.getInstance();
 
-    final globalCode = prefs.getString(_globalStorageKey);
+    final globalCode = prefs.getString(globalStorageKey);
 
     if (_isSupportedCode(globalCode)) {
       state = Locale(globalCode!.toLowerCase());
@@ -59,7 +59,7 @@ class AppLocaleNotifier extends StateNotifier<Locale?> {
 
     final fallback = _deviceLocaleOrFallback();
     state = fallback;
-    await prefs.setString(_globalStorageKey, fallback.languageCode);
+    await prefs.setString(globalStorageKey, fallback.languageCode);
   }
 
   Future<void> loadForUser(String userId) async {
@@ -71,11 +71,11 @@ class AppLocaleNotifier extends StateNotifier<Locale?> {
     if (_isSupportedCode(userCode)) {
       final locale = Locale(userCode!.toLowerCase());
       state = locale;
-      await prefs.setString(_globalStorageKey, locale.languageCode);
+      await prefs.setString(globalStorageKey, locale.languageCode);
       return;
     }
 
-    final globalCode = prefs.getString(_globalStorageKey);
+    final globalCode = prefs.getString(globalStorageKey);
     if (_isSupportedCode(globalCode)) {
       final locale = Locale(globalCode!.toLowerCase());
       state = locale;
@@ -85,7 +85,7 @@ class AppLocaleNotifier extends StateNotifier<Locale?> {
 
     final fallback = _deviceLocaleOrFallback();
     state = fallback;
-    await prefs.setString(_globalStorageKey, fallback.languageCode);
+    await prefs.setString(globalStorageKey, fallback.languageCode);
     await prefs.setString(_storageKeyForUser(userId), fallback.languageCode);
   }
 
@@ -94,7 +94,7 @@ class AppLocaleNotifier extends StateNotifier<Locale?> {
 
     final prefs = await SharedPreferences.getInstance();
 
-    await prefs.setString(_globalStorageKey, locale.languageCode);
+    await prefs.setString(globalStorageKey, locale.languageCode);
 
     final userId = _currentUserId;
     if (userId != null && userId.isNotEmpty) {
@@ -107,7 +107,7 @@ class AppLocaleNotifier extends StateNotifier<Locale?> {
     final systemLocale = _deviceLocaleOrFallback();
 
     state = systemLocale;
-    await prefs.setString(_globalStorageKey, systemLocale.languageCode);
+    await prefs.setString(globalStorageKey, systemLocale.languageCode);
 
     final userId = _currentUserId;
     if (userId != null && userId.isNotEmpty) {

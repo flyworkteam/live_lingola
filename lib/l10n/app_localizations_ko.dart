@@ -864,4 +864,19 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get notificationTimeJustNow => '방금 전';
+  @override
+  String get aiConsentTitle => 'AI 데이터 처리 권한';
+
+  @override
+  String get aiConsentBody =>
+      '텍스트, 음성 및 이미지 번역을 제공하기 위해 AI 서비스를 사용합니다. 번역을 제공하기 위해 귀하의 데이터가 Google과 같은 제3자 제공업체에 안전하게 전송될 수 있습니다.';
+
+  @override
+  String get aiConsentAccept => '허용';
+
+  @override
+  String get aiConsentDecline => '지금 안 함';
+
+  @override
+  String get aiConsentLearnMore => '자세히 알아보기';
 }

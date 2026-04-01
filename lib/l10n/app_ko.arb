@@ -404,7 +404,23 @@
   "notifications": "알림",
   "today": "오늘",
   "yesterday": "어제",
-  "noNotifications": "알림이 없습니다"
+  "noNotifications": "알림이 없습니다",
+  
+  "aiConsentTitle": "AI 사용",
+  "aiConsentDescription": "텍스트, 음성 및 사진은 번역과 AI 지원 응답을 위해 AI 서비스로 전송됩니다. 계속하려면 동의해야 합니다.",
+  "aiConsentAccept": "동의",
+  "aiConsentDecline": "취소",
+  "notificationAiChatTitle": "AI와 채팅",
+"notificationAiChatBody": "AI 채팅으로 궁금한 질문에 즉시 답변을 받아보세요.",
+"notificationNewTranslationReadyTitle": "새 번역이 준비되었습니다",
+"notificationNewTranslationReadyBody": "오디오 번역 파일이 성공적으로 텍스트로 변환되고 번역되었습니다.",
+"notificationSeeOpportunity": "기회를 확인하세요",
+"notificationSpecialOfferTitle": "특별한 혜택이 기다리고 있어요",
+"notificationSpecialOfferBody": "프리미엄으로 업그레이드하고 사진 번역을 무제한으로 50% 할인받으세요.",
+"notificationTime10MinAgo": "10분 전",
+"notificationTime2hAgo": "2시간 전"
+
+
 
 
 

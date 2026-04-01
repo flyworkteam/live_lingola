@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "Für die Fotoübersetzung benötigen wir Zugriff auf die Kamera.";
+"NSMicrophoneUsageDescription" = "Für die Sprachübersetzung benötigen wir Zugriff auf das Mikrofon.";
+"NSPhotoLibraryAddUsageDescription" = "Zum Speichern übersetzter Bilder benötigen wir Zugriff auf Ihre Fotomediathek.";
+"NSPhotoLibraryUsageDescription" = "Für die Übersetzung benötigen wir Zugriff auf Ihre Fotomediathek, um Bilder auszuwählen.";
+"NSSpeechRecognitionUsageDescription" = "Für die Umwandlung Ihrer Sprache in Text benötigen wir Zugriff auf die Spracherkennung.";

@@ -894,4 +894,20 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get notificationTimeJustNow => 'Az önce';
+
+  @override
+  String get aiConsentTitle => 'Yapay Zekâ Veri İşleme İzni';
+
+  @override
+  String get aiConsentBody =>
+      'Metin, ses ve görsel çevirilerini sunabilmek için yapay zekâ hizmetleri kullanıyoruz. Verileriniz, çeviri sağlamak amacıyla Google gibi üçüncü taraf sağlayıcılara güvenli şekilde gönderilebilir.';
+
+  @override
+  String get aiConsentAccept => 'İzin Ver';
+
+  @override
+  String get aiConsentDecline => 'Şimdi Değil';
+
+  @override
+  String get aiConsentLearnMore => 'Daha Fazla Bilgi';
 }

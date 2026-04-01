@@ -7,6 +7,7 @@ import 'package:lingola_app/l10n/app_localizations.dart';
 import '../../../Core/Utils/assets.dart';
 import '../../../Riverpod/Providers/app_locale_provider.dart';
 import '../../../Riverpod/Providers/language_provider.dart';
+import '../../../Services/language_sync_service.dart';
 
 class SelectLanguageView extends ConsumerStatefulWidget {
   const SelectLanguageView({super.key});
@@ -108,6 +109,7 @@ class _SelectLanguageViewState extends ConsumerState<SelectLanguageView> {
 
     if (currentCode != nextCode) {
       await ref.read(appLocaleProvider.notifier).setLocale(selectedLang.locale);
+      await LanguageSyncService.syncAppLanguageToIOS(nextCode);
     }
 
     if (!mounted) return;

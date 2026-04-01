@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "사진 번역을 위해 카메라 접근 권한이 필요합니다.";
+"NSMicrophoneUsageDescription" = "음성 번역을 위해 마이크 접근 권한이 필요합니다.";
+"NSPhotoLibraryAddUsageDescription" = "번역된 이미지를 사진 보관함에 저장하려면 접근 권한이 필요합니다.";
+"NSPhotoLibraryUsageDescription" = "번역할 이미지를 선택할 수 있도록 사진 보관함 접근 권한이 필요합니다.";
+"NSSpeechRecognitionUsageDescription" = "음성 번역을 위해 음성을 텍스트로 변환하려면 음성 인식 접근 권한이 필요합니다.";

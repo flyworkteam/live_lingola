@@ -11,10 +11,12 @@ import 'package:lottie/lottie.dart';
 
 import 'package:lingola_app/Core/Utils/assets.dart';
 import 'package:lingola_app/Core/config/app_config.dart';
+import 'package:lingola_app/Core/widgets/common/ai_consent_dialog.dart';
 import 'package:lingola_app/Core/widgets/voice_translate/voice_lang_bar.dart';
 import 'package:lingola_app/Core/widgets/voice_translate/voice_text_card.dart';
 import 'package:lingola_app/Core/widgets/voice_translate/voice_top_bar.dart';
 import 'package:lingola_app/Riverpod/Providers/current_user_provider.dart';
+import 'package:lingola_app/Services/ai_consent_service.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -650,6 +652,22 @@ class _VoiceTranslateProLiveViewState
     if (sourceText.isEmpty) {
       debugPrint('VOICE PRO ERROR: sourceText is empty');
       return;
+    }
+
+    final consent = await AiConsentService.getConsent();
+
+    if (consent != true) {
+      // ignore: use_build_context_synchronously
+      final accepted = await showAiConsentDialog(context);
+
+      if (!accepted) {
+        if (!mounted) return;
+        setState(() {
+          _isSaving = false;
+          _isListening = false;
+        });
+        return;
+      }
     }
 
     if (_isFinalizing) return;

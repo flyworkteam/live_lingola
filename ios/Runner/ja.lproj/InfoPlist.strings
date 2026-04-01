@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "写真翻訳のためにカメラへのアクセスが必要です。";
+"NSMicrophoneUsageDescription" = "音声翻訳のためにマイクへのアクセスが必要です。";
+"NSPhotoLibraryAddUsageDescription" = "翻訳した画像をフォトライブラリに保存するためにアクセスが必要です。";
+"NSPhotoLibraryUsageDescription" = "翻訳する画像を選択できるように、フォトライブラリへのアクセスが必要です。";
+"NSSpeechRecognitionUsageDescription" = "音声翻訳のために、音声をテキストに変換する音声認識へのアクセスが必要です。";

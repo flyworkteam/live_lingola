@@ -904,4 +904,21 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get notificationTimeJustNow => 'Proprio ora';
+
+  @override
+  String get aiConsentTitle =>
+      'Autorizzazione al trattamento dei dati tramite IA';
+
+  @override
+  String get aiConsentBody =>
+      'Utilizziamo servizi di intelligenza artificiale per tradurre testo, voce e immagini. I tuoi dati possono essere inviati in modo sicuro a fornitori terzi come Google per fornire traduzioni.';
+
+  @override
+  String get aiConsentAccept => 'Consenti';
+
+  @override
+  String get aiConsentDecline => 'Non ora';
+
+  @override
+  String get aiConsentLearnMore => 'Scopri di più';
 }

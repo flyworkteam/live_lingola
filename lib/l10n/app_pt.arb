@@ -415,7 +415,14 @@
   "notificationTime2hAgo": "há 2 h",
   "notificationSeeOpportunity": "VER A OFERTA",
   "notificationAiChatTitle": "Converse com IA",
-  "notificationAiChatBody": "Obtenha respostas instantâneas para suas dúvidas com o chat de IA."
+  "notificationAiChatBody": "Obtenha respostas instantâneas para suas dúvidas com o chat de IA.",
+
+  
+  "aiConsentTitle": "Uso de IA",
+  "aiConsentDescription": "Seus textos, voz e fotos serão enviados para serviços de IA para tradução e respostas assistidas por IA. Você precisa aceitar para continuar.",
+  "aiConsentAccept": "Aceitar",
+  "aiConsentDecline": "Cancelar"
+
 
 
 

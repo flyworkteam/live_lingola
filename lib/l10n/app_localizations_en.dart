@@ -893,4 +893,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationTimeJustNow => 'Just now';
+
+  @override
+  String get aiConsentTitle => 'AI Data Processing Permission';
+
+  @override
+  String get aiConsentBody =>
+      'We use AI services to translate your text, voice, and images. Your data may be securely sent to third-party providers such as Google to provide translations.';
+
+  @override
+  String get aiConsentAccept => 'Allow';
+
+  @override
+  String get aiConsentDecline => 'Not Now';
+
+  @override
+  String get aiConsentLearnMore => 'Learn More';
 }

@@ -404,7 +404,23 @@
   "notifications": "通知",
   "today": "今日",
   "yesterday": "昨日",
-  "noNotifications": "通知はありません"
+  "noNotifications": "通知はありません",
+
+  "aiConsentTitle": "AIの利用",
+  "aiConsentDescription": "テキスト、音声、写真は、翻訳およびAI支援の回答のためにAIサービスへ送信されます。続行するには同意が必要です。",
+  "aiConsentAccept": "同意する",
+  "aiConsentDecline": "キャンセル",
+  "notificationAiChatTitle": "AIとチャット",
+"notificationAiChatBody": "AIチャットで、気になる質問にすぐ答えを得られます。",
+"notificationNewTranslationReadyTitle": "新しい翻訳が準備できました",
+"notificationNewTranslationReadyBody": "音声翻訳ファイルは正常にテキスト化され、翻訳されました。",
+"notificationSeeOpportunity": "チャンスを見る",
+"notificationSpecialOfferTitle": "特別オファーをご用意しました",
+"notificationSpecialOfferBody": "プレミアムにアップグレードすると、写真翻訳が無制限で50%オフになります。",
+"notificationTime10MinAgo": "10分前",
+"notificationTime2hAgo": "2時間前"
+
+
 
 
 

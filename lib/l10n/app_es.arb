@@ -384,7 +384,24 @@
   "notificationTime2hAgo": "hace 2 h",
   "notificationSeeOpportunity": "VER LA OFERTA",
   "notificationAiChatTitle": "Chatea con IA",
-  "notificationAiChatBody": "Obtén respuestas instantáneas a tus preguntas con el chat de IA."
+  "notificationAiChatBody": "Obtén respuestas instantáneas a tus preguntas con el chat de IA.",
+
+  
+  "aiConsentTitle": "Uso de IA",
+  "aiConsentDescription": "Tus textos, voz y fotos se enviarán a servicios de IA para traducción y respuestas asistidas por IA. Debes aceptar para continuar.",
+  "aiConsentAccept": "Aceptar",
+  "aiConsentDecline": "Cancelar",
+  "faqQuestion6": "¿La aplicación graba mi voz durante la traducción por voz?",
+"faqAnswer6": "Tu privacidad es importante para nosotros. Tus datos de voz se procesan solo temporalmente para la traducción y no se almacenan en nuestros servidores ni se comparten con terceros sin tu consentimiento.",
+"faqQuestion7": "¿Qué debo hacer si tengo un problema técnico?",
+"faqAnswer7": "Puedes contactarnos desde la sección \"Configuración > Soporte\" dentro de la aplicación o enviar un correo a support@fly-work.com para recibir ayuda de nuestro equipo.",
+"faqQuestion8": "¿Puedo traducir documentos largos como PDFs con Live Lingola?",
+"faqAnswer8": "Sí, puedes subir archivos PDF, Word o TXT usando nuestra función de traducción de documentos y recibir la versión traducida sin perder el formato original.",
+"faqQuestion9": "¿Qué tan precisas son las traducciones?",
+"faqAnswer9": "Combinamos algunos de los motores de IA más avanzados del mundo, incluidos DeepL, Google y sistemas basados en OpenAI. Esto nos permite ofrecer no solo traducciones palabra por palabra, sino también resultados naturales y con conciencia de contexto.",
+"faqQuestion10": "¿Puedo traducir dentro de otras aplicaciones como WhatsApp o Instagram?",
+"faqAnswer10": "Sí, si otorgas permisos de accesibilidad, puedes usar nuestra función de burbuja flotante para traducir mensajes entrantes al instante sin salir de otras aplicaciones."
+
 
 
 

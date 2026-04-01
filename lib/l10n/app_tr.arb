@@ -412,8 +412,13 @@
   "notificationTime2hAgo": "2 sa. önce",
   "notificationSeeOpportunity": "FIRSATI GÖR",
   "notificationAiChatTitle": "AI Chat ile Sohbet Et",
-  "notificationAiChatBody": "AI chat ile aklınızdaki sorulara anında yanıt bulun."
+  "notificationAiChatBody": "AI chat ile aklınızdaki sorulara anında yanıt bulun.",
 
+
+  "aiConsentTitle": "AI Kullanımı",
+  "aiConsentDescription": "Metin, ses ve fotoğraflarınız çeviri ve yapay zeka destekli yanıtlar için yapay zeka servislerine gönderilecektir. Devam etmek için kabul etmeniz gerekir.",
+  "aiConsentAccept": "Kabul Et",
+  "aiConsentDecline": "Vazgeç"
 
 
 
