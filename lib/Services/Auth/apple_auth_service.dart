@@ -77,6 +77,7 @@ class AppleAuthService {
       final oauthCredential = OAuthProvider('apple.com').credential(
         idToken: identityToken,
         rawNonce: rawNonce,
+        accessToken: appleCredential.authorizationCode
       );
 
       debugPrint('APPLE AUTH SERVICE: signing in with Firebase credential');
