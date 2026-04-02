@@ -30,7 +30,7 @@ class ProfileSettingsView extends ConsumerStatefulWidget {
 
 class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
   static const double _iconPx = 24;
-  static const String _baseUrl =  'https://livelingolaappnew.fly-work.com';
+  static const String _baseUrl =  'https://livelingolaapp.fly-work.com';
 
   final TextEditingController _nameCtrl = TextEditingController();
   final TextEditingController _mailCtrl = TextEditingController();

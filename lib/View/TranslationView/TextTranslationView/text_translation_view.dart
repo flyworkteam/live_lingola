@@ -9,7 +9,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:lingola_app/Core/Utils/assets.dart';
 import 'package:lingola_app/Core/widgets/common/ai_consent_dialog.dart';
 import 'package:lingola_app/Core/widgets/common/dropdown_card.dart';
@@ -24,8 +23,8 @@ import 'package:lingola_app/Core/widgets/text_translation/text_translation_resul
 import 'package:lingola_app/Core/widgets/text_translation/text_translation_source_card.dart';
 import 'package:lingola_app/Core/widgets/text_translation/text_translation_utils.dart';
 import 'package:lingola_app/Riverpod/Providers/language_provider.dart';
-import 'package:lingola_app/Services/ai_consent_service.dart';
 import 'package:lingola_app/Services/Translation/text_to_speech_service.dart';
+import 'package:lingola_app/Services/ai_consent_service.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
 
 class TextTranslationView extends ConsumerStatefulWidget {
@@ -43,7 +42,7 @@ class TextTranslationView extends ConsumerStatefulWidget {
 
 class _TextTranslationViewState extends ConsumerState<TextTranslationView> {
   static const int _charLimit = 2000;
-  static const String _baseUrl =  'https://livelingolaappnew.fly-work.com';
+  static const String _baseUrl = 'https://livelingolaapp.fly-work.com';
 
   final TextEditingController _sourceCtrl = TextEditingController();
 

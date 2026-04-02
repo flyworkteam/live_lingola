@@ -22,7 +22,7 @@ class HistoryFavoriteView extends ConsumerStatefulWidget {
 }
 
 class _HistoryFavoriteViewState extends ConsumerState<HistoryFavoriteView> {
-  static const String _baseUrl =  'https://livelingolaappnew.fly-work.com';
+  static const String _baseUrl =  'https://livelingolaapp.fly-work.com';
 
   late int _tab;
   String _query = '';

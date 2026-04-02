@@ -20,7 +20,7 @@ class FrequentlyTermsView extends ConsumerStatefulWidget {
 }
 
 class _FrequentlyTermsViewState extends ConsumerState<FrequentlyTermsView> {
-  static const String _baseUrl =  'https://livelingolaappnew.fly-work.com';
+  static const String _baseUrl =  'https://livelingolaapp.fly-work.com';
 
   String _query = '';
   bool _isLoading = false;
