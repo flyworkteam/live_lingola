@@ -30,7 +30,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.example.lingora_app"
+    namespace "com.flywork.livelingolaapp"
     compileSdk 36
     ndkVersion flutter.ndkVersion
 
