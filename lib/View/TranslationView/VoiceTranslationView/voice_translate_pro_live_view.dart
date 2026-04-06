@@ -6,9 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:http/http.dart' as http;
-import 'package:lottie/lottie.dart';
-
 import 'package:lingola_app/Core/Utils/assets.dart';
 import 'package:lingola_app/Core/config/app_config.dart';
 import 'package:lingola_app/Core/widgets/common/ai_consent_dialog.dart';
@@ -18,9 +17,9 @@ import 'package:lingola_app/Core/widgets/voice_translate/voice_top_bar.dart';
 import 'package:lingola_app/Riverpod/Providers/current_user_provider.dart';
 import 'package:lingola_app/Services/ai_consent_service.dart';
 import 'package:lingola_app/l10n/app_localizations.dart';
+import 'package:lottie/lottie.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
 enum ProStage { empty, listening, result }
 

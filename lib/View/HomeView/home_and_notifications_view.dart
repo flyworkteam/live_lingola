@@ -131,6 +131,7 @@ class _HomeAndNotificationsViewState
       ),
       VoiceTranslateView(
         onBackToHome: () => _goToTab(0),
+        onNavigateToTab: _goToTab,
       ),
       PhotoTranslateView(
         onBackToHome: () => _goToTab(0),

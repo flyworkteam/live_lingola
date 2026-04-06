@@ -1094,7 +1094,9 @@ class _VoiceTranslateFreeLiveViewState
             bottom: 0,
             child: BottomNavBar(
               currentIndex: 2,
-              onTap: (_) {},
+              onTap: (i) {
+                if (i != 2) Navigator.of(context).pop(i);
+              },
               homeAsset: AppAssets.navHome,
               chatAsset: AppAssets.navChat,
               micAsset: AppAssets.navMic,

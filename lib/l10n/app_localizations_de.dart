@@ -906,11 +906,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get notificationTimeJustNow => 'Gerade eben';
 
   @override
-  String get aiConsentTitle => 'Einwilligung zur KI-Datenverarbeitung';
+  String get aiConsentTitle => 'KI-Datenfreigabe-Berechtigung';
 
   @override
   String get aiConsentBody =>
-      'Wir verwenden KI-Dienste, um Ihre Texte, Sprache und Bilder zu übersetzen. Ihre Daten können zur Bereitstellung von Übersetzungen sicher an Drittanbieter wie Google übermittelt werden.';
+      'Um Übersetzungs- und KI-gestützte Funktionen bereitzustellen, können die folgenden Daten an Google (Gemini AI) gesendet werden:\n\n• Text, den Sie zur Übersetzung eingeben\n• Sprachaufnahmen und Sprachtranskripte\n• Bilder, die Sie zur Fotoübersetzung einreichen\n\nDiese Daten werden sicher übertragen und ausschließlich zur Bereitstellung des angeforderten Dienstes verwendet. Durch Tippen auf „Erlauben" stimmen Sie der Weitergabe dieser Daten an Google zu.';
 
   @override
   String get aiConsentAccept => 'Zulassen';

@@ -867,11 +867,11 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get notificationTimeJustNow => 'たった今';
   @override
-  String get aiConsentTitle => 'AIデータ処理の許可';
+  String get aiConsentTitle => 'AIデータ共有の許可';
 
   @override
   String get aiConsentBody =>
-      'テキスト、音声、画像の翻訳を提供するために、AIサービスを使用しています。翻訳を提供する目的で、お客様のデータが Google などの第三者プロバイダーに安全に送信される場合があります。';
+      '翻訳およびAI支援機能を提供するために、以下のデータがGoogle（Gemini AI）に送信される場合があります：\n\n• 翻訳のために入力したテキスト\n• 音声録音および音声の文字起こし\n• 写真翻訳のために送信した画像\n\nこれらのデータは安全に送信され、要求されたサービスの提供のみに使用されます。「許可」をタップすると、これらのデータをGoogleと共有することに同意したことになります。';
 
   @override
   String get aiConsentAccept => '許可する';

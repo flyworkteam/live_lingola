@@ -900,11 +900,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get notificationTimeJustNow => 'Agora mesmo';
 
   @override
-  String get aiConsentTitle => 'Permissão para processamento de dados por IA';
+  String get aiConsentTitle => 'Permissão de compartilhamento de dados com IA';
 
   @override
   String get aiConsentBody =>
-      'Usamos serviços de inteligência artificial para traduzir seus textos, voz e imagens. Seus dados podem ser enviados com segurança para provedores terceirizados, como o Google, para fornecer traduções.';
+      'Para fornecer recursos de tradução e assistência por IA, os seguintes dados podem ser enviados ao Google (Gemini AI):\n\n• Texto que você insere para tradução\n• Gravações de voz e transcrições\n• Imagens que você envia para tradução fotográfica\n\nEstes dados são transmitidos de forma segura e utilizados exclusivamente para fornecer o serviço solicitado. Ao tocar em "Permitir", você consente com o compartilhamento destes dados com o Google.';
 
   @override
   String get aiConsentAccept => 'Permitir';

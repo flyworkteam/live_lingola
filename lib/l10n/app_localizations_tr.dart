@@ -896,11 +896,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get notificationTimeJustNow => 'Az önce';
 
   @override
-  String get aiConsentTitle => 'Yapay Zekâ Veri İşleme İzni';
+  String get aiConsentTitle => 'Yapay Zekâ Veri Paylaşım İzni';
 
   @override
   String get aiConsentBody =>
-      'Metin, ses ve görsel çevirilerini sunabilmek için yapay zekâ hizmetleri kullanıyoruz. Verileriniz, çeviri sağlamak amacıyla Google gibi üçüncü taraf sağlayıcılara güvenli şekilde gönderilebilir.';
+      'Çeviri ve yapay zekâ destekli özellikler sunabilmek için aşağıdaki veriler Google\'a (Gemini AI) gönderilebilir:\n\n• Çeviri için girdiğiniz metinler\n• Ses kayıtları ve konuşma dökümleri\n• Fotoğraf çevirisi için gönderdiğiniz görseller\n\nBu veriler güvenli bir şekilde iletilir ve yalnızca talep edilen hizmeti sunmak için kullanılır. "İzin Ver" seçeneğine dokunarak bu verilerin Google ile paylaşılmasını kabul etmiş olursunuz.';
 
   @override
   String get aiConsentAccept => 'İzin Ver';

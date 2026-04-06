@@ -912,11 +912,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get notificationTimeJustNow => 'À l’instant';
 
   @override
-  String get aiConsentTitle => 'Autorisation de traitement des données par IA';
+  String get aiConsentTitle => 'Autorisation de partage de données IA';
 
   @override
   String get aiConsentBody =>
-      'Nous utilisons des services d’intelligence artificielle pour traduire vos textes, votre voix et vos images. Vos données peuvent être envoyées en toute sécurité à des fournisseurs tiers tels que Google afin de fournir des traductions.';
+      'Pour fournir des fonctionnalités de traduction et d\'assistance par IA, les données suivantes peuvent être envoyées à Google (Gemini AI) :\n\n• Le texte que vous saisissez pour la traduction\n• Les enregistrements vocaux et transcriptions\n• Les images que vous soumettez pour la traduction photo\n\nCes données sont transmises de manière sécurisée et utilisées uniquement pour fournir le service demandé. En appuyant sur « Autoriser », vous consentez au partage de ces données avec Google.';
 
   @override
   String get aiConsentAccept => 'Autoriser';

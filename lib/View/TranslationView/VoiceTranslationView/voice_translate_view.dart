@@ -13,7 +13,8 @@ import 'package:lingola_app/l10n/app_localizations.dart';
 
 class VoiceTranslateView extends ConsumerStatefulWidget {
   final VoidCallback? onBackToHome;
-  const VoiceTranslateView({super.key, this.onBackToHome});
+  final ValueChanged<int>? onNavigateToTab;
+  const VoiceTranslateView({super.key, this.onBackToHome, this.onNavigateToTab});
 
   @override
   ConsumerState<VoiceTranslateView> createState() => _VoiceTranslateViewState();
@@ -78,8 +79,8 @@ class _VoiceTranslateViewState extends ConsumerState<VoiceTranslateView> {
     }
   }
 
-  void _push(BuildContext context, Widget page) {
-    Navigator.of(context).push(
+  Future<void> _push(BuildContext context, Widget page) async {
+    final result = await Navigator.of(context).push<int>(
       PageRouteBuilder(
         pageBuilder: (_, __, ___) => page,
         transitionsBuilder: (_, animation, __, child) {
@@ -94,6 +95,9 @@ class _VoiceTranslateViewState extends ConsumerState<VoiceTranslateView> {
         },
       ),
     );
+    if (result != null && mounted) {
+      widget.onNavigateToTab?.call(result);
+    }
   }
 
   void _swapLang() {

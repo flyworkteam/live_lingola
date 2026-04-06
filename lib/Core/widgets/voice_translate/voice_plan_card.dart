@@ -76,19 +76,19 @@ class VoicePlanCard extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 4.w, top: 5.h),
                 child: SizedBox(
-                  height: 68.w,
+                  height: 68.h,
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: isPro
                         ? SizedBox(
-                            width: 68.w,
-                            height: 68.w,
+                            width: 68.h,
+                            height: 68.h,
                             child:
                                 child ?? SvgPicture.asset(AppAssets.icMicicon),
                           )
                         : SizedBox(
-                            width: 46.w,
-                            height: 46.w,
+                            width: 46.h,
+                            height: 46.h,
                             child: SvgPicture.asset(
                               AppAssets.icKeyboard,
                               fit: BoxFit.contain,
@@ -188,24 +188,26 @@ class VoicePlanCard extends StatelessWidget {
             bottom: 42.h,
             left: 0,
             right: 0,
-            child: Center(
-              child: Container(
-                width: 56.w,
-                height: 17.h,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFF8A00),
-                  borderRadius: BorderRadius.circular(50.r),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  l10n.trial60s,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 8.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                    height: 1.0,
+            child: IgnorePointer(
+              child: Center(
+                child: Container(
+                  width: 56.w,
+                  height: 17.h,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFF8A00),
+                    borderRadius: BorderRadius.circular(50.r),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    l10n.trial60s,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 8.sp,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      height: 1.0,
+                    ),
                   ),
                 ),
               ),

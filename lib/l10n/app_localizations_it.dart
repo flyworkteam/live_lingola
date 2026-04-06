@@ -907,11 +907,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get aiConsentTitle =>
-      'Autorizzazione al trattamento dei dati tramite IA';
+      'Autorizzazione alla condivisione dati IA';
 
   @override
   String get aiConsentBody =>
-      'Utilizziamo servizi di intelligenza artificiale per tradurre testo, voce e immagini. I tuoi dati possono essere inviati in modo sicuro a fornitori terzi come Google per fornire traduzioni.';
+      'Per fornire funzionalità di traduzione e assistenza basate sull\'IA, i seguenti dati potrebbero essere inviati a Google (Gemini AI):\n\n• Testo inserito per la traduzione\n• Registrazioni vocali e trascrizioni\n• Immagini inviate per la traduzione fotografica\n\nQuesti dati vengono trasmessi in modo sicuro e utilizzati esclusivamente per fornire il servizio richiesto. Toccando "Consenti", acconsenti alla condivisione di questi dati con Google.';
 
   @override
   String get aiConsentAccept => 'Consenti';
