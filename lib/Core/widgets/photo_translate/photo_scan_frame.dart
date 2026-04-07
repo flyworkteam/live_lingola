@@ -127,7 +127,7 @@ class _PhotoScanFrameState extends State<PhotoScanFrame> {
                     borderRadius: BorderRadius.circular(999.r),
                   ),
                   child: Text(
-                    l10n.translated,
+                    l10n.translating,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11.sp,
@@ -148,7 +148,7 @@ class _PhotoScanFrameState extends State<PhotoScanFrame> {
                     borderRadius: BorderRadius.circular(999.r),
                   ),
                   child: Text(
-                    l10n.original,
+                    l10n.photoScanOriginal,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 11.sp,

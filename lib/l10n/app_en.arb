@@ -415,17 +415,10 @@
   "notificationAiChatTitle": "Chat with AI",
   "notificationAiChatBody": "Get instant answers to the questions on your mind with AI chat.",
   
-  "aiConsentTitle": "AI Usage",
-  "aiConsentDescription": "Your text, voice, and photos will be sent to AI services for translation and AI-assisted responses. You must accept to continue.",
-  "aiConsentAccept": "Accept",
-  "aiConsentDecline": "Cancel",
+  "aiConsentTitle": "AI Privacy & Data Usage",
+  "aiConsentBody": "To provide translation and AI-assisted responses, your text, voice recordings, and photos will be sent to our third-party AI partners (OpenAI and Google). Please do not share sensitive personal information. Do you agree to share your data with these providers?",
+  "aiConsentLearnMore": " Learn more in our Privacy Policy.",
+  "aiConsentAccept": "I Agree",
+  "aiConsentDecline": "Cancel"
   
-
-
-
-
-
-
-
-
 }

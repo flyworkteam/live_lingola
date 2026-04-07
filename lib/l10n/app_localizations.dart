@@ -71,8 +71,7 @@ import 'app_localizations_tr.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -80,8 +79,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -93,8 +91,7 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
     delegate,
     GlobalMaterialLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
@@ -737,61 +734,61 @@ abstract class AppLocalizations {
   /// No description provided for @faqQuestion1.
   ///
   /// In en, this message translates to:
-  /// **'How does Live Lingola work?'**
+  /// **'Which languages does Live Lingola support?'**
   String get faqQuestion1;
 
   /// No description provided for @faqAnswer1.
   ///
   /// In en, this message translates to:
-  /// **'Live Lingola helps you translate text, voice, and other content quickly with AI-powered tools.'**
+  /// **'Our app currently supports text, voice, and image translation in more than 100 languages. In addition to widely used languages such as English, German, and French, we also support many regional dialects.'**
   String get faqAnswer1;
 
   /// No description provided for @faqQuestion2.
   ///
   /// In en, this message translates to:
-  /// **'Is my data secure?'**
+  /// **'How does the \"Live Translation\" feature work?'**
   String get faqQuestion2;
 
   /// No description provided for @faqAnswer2.
   ///
   /// In en, this message translates to:
-  /// **'We take data security seriously and aim to protect your personal information and translation history.'**
+  /// **'In voice translation mode, the app analyzes your speech in real time and translates it into the target language within seconds, then reads it aloud. This allows two people speaking different languages to communicate fluently.'**
   String get faqAnswer2;
 
   /// No description provided for @faqQuestion3.
   ///
   /// In en, this message translates to:
-  /// **'Can I use it offline?'**
+  /// **'Can I use the app without internet (offline)?'**
   String get faqQuestion3;
 
   /// No description provided for @faqAnswer3.
   ///
   /// In en, this message translates to:
-  /// **'Some features may require an internet connection. Offline support depends on the translation service being used.'**
+  /// **'Yes! By downloading frequently used language packs in advance, you can benefit from offline mode during flights or trips abroad where you do not have an internet connection.'**
   String get faqAnswer3;
 
   /// No description provided for @faqQuestion4.
   ///
   /// In en, this message translates to:
-  /// **'How can I cancel my subscription?'**
+  /// **'Can the image translation feature recognize every text?'**
   String get faqQuestion4;
 
   /// No description provided for @faqAnswer4.
   ///
   /// In en, this message translates to:
-  /// **'You can manage or cancel your subscription from your store account settings or the subscription section of the app.'**
+  /// **'Our advanced OCR (Optical Character Recognition) technology can recognize and translate menus, signs, books, and even much of handwritten text with high accuracy.'**
   String get faqAnswer4;
 
   /// No description provided for @faqQuestion5.
   ///
   /// In en, this message translates to:
-  /// **'Is family sharing available?'**
+  /// **'Is the app paid?'**
   String get faqQuestion5;
 
   /// No description provided for @faqAnswer5.
   ///
   /// In en, this message translates to:
-  /// **'Family sharing availability depends on your subscription platform and store policies. Please check your account settings for supported options.'**
+  /// **'The basic features of Live Lingola are free. However, we also offer a Premium subscription option that includes benefits such as unlimited translation, offline mode, and an ad-free experience.'**
   String get faqAnswer5;
 
   /// No description provided for @photoTranslateTitle.
@@ -1292,6 +1289,36 @@ abstract class AppLocalizations {
   /// **'Popular'**
   String get popular;
 
+  /// No description provided for @moreFeaturesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'More Features'**
+  String get moreFeaturesTitle;
+
+  /// No description provided for @frequentlyUsedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequently Used'**
+  String get frequentlyUsedTitle;
+
+  /// No description provided for @frequentlyUsedDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Review the most frequently used terms.'**
+  String get frequentlyUsedDescription;
+
+  /// No description provided for @historyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get historyTitle;
+
+  /// No description provided for @favoriteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite'**
+  String get favoriteTitle;
+
   /// No description provided for @signInCancelled.
   ///
   /// In en, this message translates to:
@@ -1409,37 +1436,61 @@ abstract class AppLocalizations {
   /// No description provided for @faqQuestion6.
   ///
   /// In en, this message translates to:
-  /// **'Which languages does Live Lingola support?'**
+  /// **'Does the app record my voice during voice translation?'**
   String get faqQuestion6;
 
   /// No description provided for @faqAnswer6.
   ///
   /// In en, this message translates to:
-  /// **'Our app supports text, voice, and image translation in more than 100 languages.'**
+  /// **'Your privacy is important to us. Your voice data is processed only temporarily for translation and is not stored on our servers or shared with third parties without your consent.'**
   String get faqAnswer6;
 
   /// No description provided for @faqQuestion7.
+  ///
+  /// In en, this message translates to:
+  /// **'What should I do if I experience a technical issue?'**
   String get faqQuestion7;
 
   /// No description provided for @faqAnswer7.
+  ///
+  /// In en, this message translates to:
+  /// **'You can contact us through the \"Settings > Support\" section in the app or send an email to support@fly-work.com for assistance from our team.'**
   String get faqAnswer7;
 
   /// No description provided for @faqQuestion8.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I translate long documents like PDFs with Live Lingola?'**
   String get faqQuestion8;
 
   /// No description provided for @faqAnswer8.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, you can upload PDF, Word, or TXT files using our document translation feature and receive the translated version without losing the original formatting.'**
   String get faqAnswer8;
 
   /// No description provided for @faqQuestion9.
+  ///
+  /// In en, this message translates to:
+  /// **'How accurate are the translations?'**
   String get faqQuestion9;
 
   /// No description provided for @faqAnswer9.
+  ///
+  /// In en, this message translates to:
+  /// **'We combine some of the world\'s most advanced AI engines, including DeepL, Google, and OpenAI-based systems. This allows us to provide not only word-for-word translations but also context-aware and natural results.'**
   String get faqAnswer9;
 
   /// No description provided for @faqQuestion10.
+  ///
+  /// In en, this message translates to:
+  /// **'Can I translate inside other apps such as WhatsApp or Instagram?'**
   String get faqQuestion10;
 
   /// No description provided for @faqAnswer10.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, if you grant accessibility permissions, you can use our floating bubble feature to translate incoming messages instantly without leaving other apps.'**
   String get faqAnswer10;
 
   /// No description provided for @proLabel.
@@ -1547,7 +1598,7 @@ abstract class AppLocalizations {
   /// No description provided for @aiChatWelcomeMessage.
   ///
   /// In en, this message translates to:
-  /// **'Hello! I'm Lingola AI. How can I help you today?'**
+  /// **'Hello! I\'m Lingola AI. How can I help you today?'**
   String get aiChatWelcomeMessage;
 
   /// No description provided for @aiChatErrorMessage.
@@ -1676,65 +1727,128 @@ abstract class AppLocalizations {
   /// **'News'**
   String get expertNews;
 
-  /// No description provided for @translated.
+  /// No description provided for @photoScanTranslated.
   ///
   /// In en, this message translates to:
   /// **'Translated'**
-  String get translated;
+  String get photoScanTranslated;
 
-  /// No description provided for @original.
+  /// No description provided for @photoScanOriginal.
   ///
   /// In en, this message translates to:
   /// **'Original'**
-  String get original;
+  String get photoScanOriginal;
+
+  /// No description provided for @photoScanSelectOrCapture.
+  ///
+  /// In en, this message translates to:
+  /// **'Select or capture a photo'**
+  String get photoScanSelectOrCapture;
+
+  /// No description provided for @photoScanProcessing.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing...'**
+  String get photoScanProcessing;
 
   /// No description provided for @yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
   String get yesterday;
 
   /// No description provided for @noNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications'**
   String get noNotifications;
 
   /// No description provided for @notificationNewTranslationReadyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Translation Ready'**
   String get notificationNewTranslationReadyTitle;
 
   /// No description provided for @notificationNewTranslationReadyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your audio translation file has been successfully converted to text and translated.'**
   String get notificationNewTranslationReadyBody;
 
   /// No description provided for @notificationTime10MinAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'10 min. ago'**
   String get notificationTime10MinAgo;
 
   /// No description provided for @notificationSpecialOfferTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A Special Offer Awaits You'**
   String get notificationSpecialOfferTitle;
 
   /// No description provided for @notificationSpecialOfferBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to Premium for unlimited photo translations at 50% off.'**
   String get notificationSpecialOfferBody;
 
   /// No description provided for @notificationTime2hAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'2h ago'**
   String get notificationTime2hAgo;
 
   /// No description provided for @notificationSeeOpportunity.
+  ///
+  /// In en, this message translates to:
+  /// **'SEE THE OPPORTUNITY'**
   String get notificationSeeOpportunity;
 
   /// No description provided for @notificationAiChatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat with AI'**
   String get notificationAiChatTitle;
 
   /// No description provided for @notificationAiChatBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Get instant answers to the questions on your mind with AI chat.'**
   String get notificationAiChatBody;
 
-  /// No description provided for @notificationTimeJustNow.
-  String get notificationTimeJustNow;
-
+  /// No description provided for @aiConsentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Privacy & Data Usage'**
   String get aiConsentTitle;
+
+  /// No description provided for @aiConsentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'To provide translation and AI-assisted responses, your text, voice recordings, and photos will be sent to our third-party AI partners (OpenAI and Google). Please do not share sensitive personal information. Do you agree to share your data with these providers?'**
   String get aiConsentBody;
-  String get aiConsentAccept;
-  String get aiConsentDecline;
+
+  /// No description provided for @aiConsentLearnMore.
+  ///
+  /// In en, this message translates to:
+  /// **' Learn more in our Privacy Policy.'**
   String get aiConsentLearnMore;
 
-  get photoTranslation => null;
+  /// No description provided for @aiConsentAccept.
+  ///
+  /// In en, this message translates to:
+  /// **'I Agree'**
+  String get aiConsentAccept;
+
+  /// No description provided for @aiConsentDecline.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get aiConsentDecline;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -1743,54 +1857,34 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) => <String>[
-        'de',
-        'en',
-        'es',
-        'fr',
-        'hi',
-        'it',
-        'ja',
-        'ko',
-        'pt',
-        'ru',
-        'tr'
-      ].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'fr', 'hi', 'it', 'ja', 'ko', 'pt', 'ru', 'tr'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'de':
-      return AppLocalizationsDe();
-    case 'en':
-      return AppLocalizationsEn();
-    case 'es':
-      return AppLocalizationsEs();
-    case 'fr':
-      return AppLocalizationsFr();
-    case 'hi':
-      return AppLocalizationsHi();
-    case 'it':
-      return AppLocalizationsIt();
-    case 'ja':
-      return AppLocalizationsJa();
-    case 'ko':
-      return AppLocalizationsKo();
-    case 'pt':
-      return AppLocalizationsPt();
-    case 'ru':
-      return AppLocalizationsRu();
-    case 'tr':
-      return AppLocalizationsTr();
+    case 'de': return AppLocalizationsDe();
+    case 'en': return AppLocalizationsEn();
+    case 'es': return AppLocalizationsEs();
+    case 'fr': return AppLocalizationsFr();
+    case 'hi': return AppLocalizationsHi();
+    case 'it': return AppLocalizationsIt();
+    case 'ja': return AppLocalizationsJa();
+    case 'ko': return AppLocalizationsKo();
+    case 'pt': return AppLocalizationsPt();
+    case 'ru': return AppLocalizationsRu();
+    case 'tr': return AppLocalizationsTr();
   }
 
   throw FlutterError(
-      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.'
+  );
 }

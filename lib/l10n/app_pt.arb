@@ -418,9 +418,10 @@
   "notificationAiChatBody": "Obtenha respostas instantâneas para suas dúvidas com o chat de IA.",
 
   
-  "aiConsentTitle": "Uso de IA",
-  "aiConsentDescription": "Seus textos, voz e fotos serão enviados para serviços de IA para tradução e respostas assistidas por IA. Você precisa aceitar para continuar.",
-  "aiConsentAccept": "Aceitar",
+  "aiConsentTitle": "Privacidade de IA e Uso de Dados",
+  "aiConsentBody": "Para fornecer traduções e respostas assistidas por IA, seus textos, gravações de voz e fotos serão enviados aos nossos parceiros de IA terceirizados (OpenAI e Google). Por favor, não compartilhe informações pessoais sensíveis. Você concorda em compartilhar seus dados com esses provedores?",
+  "aiConsentLearnMore": " Saiba mais em nossa Política de Privacidade.",
+  "aiConsentAccept": "Eu concordo",
   "aiConsentDecline": "Cancelar"
 
 

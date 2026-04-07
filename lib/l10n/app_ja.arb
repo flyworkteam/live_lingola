@@ -406,8 +406,9 @@
   "yesterday": "昨日",
   "noNotifications": "通知はありません",
 
-  "aiConsentTitle": "AIの利用",
-  "aiConsentDescription": "テキスト、音声、写真は、翻訳およびAI支援の回答のためにAIサービスへ送信されます。続行するには同意が必要です。",
+"aiConsentTitle": "AIのプライバシーとデータ利用",
+  "aiConsentBody": "翻訳およびAIによる回答を提供するため、お客様のテキスト、音声録音、写真はサードパーティのAIパートナー（OpenAIおよびGoogle）に送信されます。機密性の高い個人情報は共有しないでください。これらのプロバイダーとデータを共有することに同意しますか？",
+  "aiConsentLearnMore": " 詳しくはプライバシーポリシーをご覧ください。",
   "aiConsentAccept": "同意する",
   "aiConsentDecline": "キャンセル",
   "notificationAiChatTitle": "AIとチャット",

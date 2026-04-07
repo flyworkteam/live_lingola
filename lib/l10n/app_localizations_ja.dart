@@ -198,15 +198,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get exampleTextTitle1 => '今日はとても天気がいいので、\n散歩に行きたいです。';
 
   @override
-  String get exampleTextSubtitle1 =>
-      'Bugün hava çok güzel; yürüyüşe çıkmak istiyorum.';
+  String get exampleTextSubtitle1 => 'Bugün hava çok güzel; yürüyüşe çıkmak istiyorum.';
 
   @override
   String get exampleTextTitle2 => '今日はとてもいい日なので、\n少し散歩しようと思います。';
 
   @override
-  String get exampleTextSubtitle2 =>
-      'Harika bir gün; sanırım kısa bir yürüyüş yapacağım.';
+  String get exampleTextSubtitle2 => 'Harika bir gün; sanırım kısa bir yürüyüş yapacağım.';
 
   @override
   String get profileTitle => 'プロフィール';
@@ -236,8 +234,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get profileLogoutDialogTitle => 'ログアウトしようとしています';
 
   @override
-  String get profileLogoutDialogSubtitle =>
-      'またすぐにお会いしましょう！\nあなたの呼吸エクササイズが恋しくなります。';
+  String get profileLogoutDialogSubtitle => 'またすぐにお会いしましょう！\nあなたの呼吸エクササイズが恋しくなります。';
 
   @override
   String get shareWithFriendTitle => '友達と共有';
@@ -288,8 +285,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get deleteAccountDialogTitle => '本当にアカウントを\n削除しますか？';
 
   @override
-  String get deleteAccountDialogDescription =>
-      'この操作は元に戻せず、すべての\n履歴とデータが完全に\n削除されます。';
+  String get deleteAccountDialogDescription => 'この操作は元に戻せず、すべての\n履歴とデータが完全に\n削除されます。';
 
   @override
   String get languageGerman => 'ドイツ語';
@@ -324,38 +320,34 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get faqQuestion1 => 'Live Lingolaはどのように機能しますか？';
+  String get faqQuestion1 => 'Live Lingola はどの言語をサポートしていますか？';
 
   @override
-  String get faqAnswer1 =>
-      'Live Lingolaは、AI搭載ツールでテキスト、音声、その他のコンテンツをすばやく翻訳するのに役立ちます。';
+  String get faqAnswer1 => '100以上の言語をサポートしています。';
 
   @override
-  String get faqQuestion2 => '私のデータは安全ですか？';
+  String get faqQuestion2 => 'ライブ翻訳はどのように動作しますか？';
 
   @override
-  String get faqAnswer2 => '私たちはデータセキュリティを重視し、個人情報と翻訳履歴の保護に努めています。';
+  String get faqAnswer2 => '音声をリアルタイムで翻訳します。';
 
   @override
   String get faqQuestion3 => 'オフラインで使えますか？';
 
   @override
-  String get faqAnswer3 =>
-      '一部の機能ではインターネット接続が必要な場合があります。オフライン対応は使用する翻訳サービスによって異なります。';
+  String get faqAnswer3 => 'はい、言語パックをダウンロードできます。';
 
   @override
-  String get faqQuestion4 => 'サブスクリプションを解約するには？';
+  String get faqQuestion4 => '画像翻訳はすべての文字を認識できますか？';
 
   @override
-  String get faqAnswer4 =>
-      'ストアアカウント設定またはアプリ内のサブスクリプションセクションから、サブスクリプションを管理または解約できます。';
+  String get faqAnswer4 => 'OCR技術により高精度で認識します。';
 
   @override
-  String get faqQuestion5 => 'ファミリー共有は利用できますか？';
+  String get faqQuestion5 => 'Live Lingola は無料ですか？';
 
   @override
-  String get faqAnswer5 =>
-      'ファミリー共有の利用可否は、サブスクリプションプラットフォームとストアポリシーによって異なります。対応オプションについてはアカウント設定をご確認ください。';
+  String get faqAnswer5 => '基本機能は無料です。';
 
   @override
   String get photoTranslateTitle => '写真翻訳';
@@ -388,12 +380,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get onboardingTitle2 => 'ライブ翻訳\n体験';
 
   @override
-  String get onboardingBody1 =>
-      'Live Lingolaなら、世界のどこにいても外国語はもう障害ではありません。最もスムーズなコミュニケーションを体験してください。';
+  String get onboardingBody1 => 'Live Lingolaなら、世界のどこにいても外国語はもう障害ではありません。最もスムーズなコミュニケーションを体験してください。';
 
   @override
-  String get onboardingBody2 =>
-      'あなたの声や周囲のテキストを、あなたの言語に瞬時に翻訳します。AI技術により会話がより自然になります。';
+  String get onboardingBody2 => 'あなたの声や周囲のテキストを、あなたの言語に瞬時に翻訳します。AI技術により会話がより自然になります。';
 
   @override
   String get getStarted => '始める';
@@ -402,24 +392,23 @@ class AppLocalizationsJa extends AppLocalizations {
   String get onboardingFlow5Title => 'あなた専用のアカウントを\n作成しています';
 
   @override
-  String get onboardingFlow5Subtitle =>
-      'AIアシスタントがあなたの体験をパーソナライズしています。\n数秒かかる場合があります。';
+  String get onboardingFlow5Subtitle => 'AIアシスタントがあなたの体験を最適化しています。\n数秒かかる場合があります。';
 
   @override
-  String get onboardingFlow5ProgressLabel => 'AIがあなたの体験をパーソナライズしています';
+  String get onboardingFlow5ProgressLabel => 'AIがあなたの体験を最適化しています';
 
   @override
-  String get onboardingFlow5StepProfile => 'プロフィールを作成中';
+  String get onboardingFlow5StepProfile => 'プロフィールを作成しています';
 
   @override
-  String get onboardingFlow5StepLanguage => '言語設定を構成中';
+  String get onboardingFlow5StepLanguage => '言語設定を構成しています';
 
   @override
-  String get onboardingFlow5StepAi => 'AIモデルを準備中';
+  String get onboardingFlow5StepAi => 'AIモデルを準備しています';
 
   @override
   String preferencesSaveFailed(Object error) {
-    return '設定の保存に失敗しました: $error';
+    return '設定を保存できませんでした: $error';
   }
 
   @override
@@ -429,7 +418,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get skip => 'スキップ';
 
   @override
-  String get onboardingFlow4Title => '翻訳アプリにどんな機能を\n求めますか？';
+  String get onboardingFlow4Title => '翻訳アプリに\nどんな機能が欲しいですか？';
 
   @override
   String get onboardingFlow4Subtitle => 'ご希望を選択してください。';
@@ -438,19 +427,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String get onboardingFlow4OptionAccurate => '正確な翻訳';
 
   @override
-  String get onboardingFlow4OptionEasy => '使いやすい';
+  String get onboardingFlow4OptionEasy => '使いやすさ';
 
   @override
   String get onboardingFlow4OptionPrivacy => 'プライバシー保護';
 
   @override
-  String get onboardingFlow4OptionTeach => '言語を教えてほしい';
+  String get onboardingFlow4OptionTeach => '語学を教えてほしい';
 
   @override
-  String get onboardingFlow4OptionAll => 'すべて';
+  String get onboardingFlow4OptionAll => '全部';
 
   @override
-  String get onboardingFlow3Title => 'これまでにAI翻訳を\n使ったことがありますか？';
+  String get onboardingFlow3Title => 'AI翻訳を以前に\n使ったことがありますか？';
 
   @override
   String get onboardingFlow3Subtitle => 'ご希望を選択してください。';
@@ -465,17 +454,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get onboardingFlow2Title => '言語を選択';
 
   @override
-  String get onboardingFlow2Subtitle =>
-      '翻訳したい言語を選択してください。\nあなたの選択はアプリ全体に反映されます。';
+  String get onboardingFlow2Subtitle => '翻訳したい言語を選択してください。\nこの選択はアプリ全体に適用されます。';
 
   @override
-  String get from => '元';
+  String get from => '元の言語';
 
   @override
-  String get to => '先';
+  String get to => '翻訳先';
 
   @override
-  String get onboardingFlow1Title => '翻訳を最もよく使う\n目的は何ですか？';
+  String get onboardingFlow1Title => '翻訳を最もよく使う目的は\n何ですか？';
 
   @override
   String get onboardingFlow1Subtitle => 'ご希望を選択してください。';
@@ -621,6 +609,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get popular => '人気';
 
   @override
+  String get moreFeaturesTitle => 'その他の機能';
+
+  @override
+  String get frequentlyUsedTitle => 'よく使う項目';
+
+  @override
+  String get frequentlyUsedDescription => '最もよく使われる用語を確認しましょう。';
+
+  @override
+  String get historyTitle => '履歴';
+
+  @override
+  String get favoriteTitle => 'お気に入り';
+
+  @override
   String get signInCancelled => 'サインインはキャンセルされました。';
 
   @override
@@ -680,34 +683,35 @@ class AppLocalizationsJa extends AppLocalizations {
   String get cookiesPolicyLinkText => 'クッキーポリシー';
 
   @override
-  String get faqQuestion6 => 'Live Lingola はどの言語に対応していますか？';
+  String get faqQuestion6 => '音声は保存されますか？';
 
   @override
-  String get faqAnswer6 => '100以上の言語でテキスト・音声・画像翻訳をサポートしています。';
+  String get faqAnswer6 => '音声は一時的に処理されます。';
 
   @override
-  String get faqQuestion7 => '翻訳中に音声は保存されますか？';
+  String get faqQuestion7 => '問題が発生した場合は？';
 
   @override
-  String get faqAnswer7 => '音声データは翻訳処理のために一時的に使用されるだけです。';
+  String get faqAnswer7 => 'サポートにお問い合わせください。';
 
   @override
-  String get faqQuestion8 => 'PDFなどの長い文書を翻訳できますか？';
+  String get faqQuestion8 => 'ドキュメント翻訳できますか？';
 
   @override
-  String get faqAnswer8 => 'はい。PDF、Word、TXT ファイルをアップロードできます。';
+  String get faqAnswer8 => 'PDFやWordを翻訳できます。';
 
   @override
-  String get faqQuestion9 => '翻訳の精度はどれくらいですか？';
+  String get faqQuestion9 => '翻訳の精度は？';
 
   @override
-  String get faqAnswer9 => 'DeepL、Google、OpenAI などのAI翻訳エンジンを使用しています。';
+  String get faqAnswer9 => '複数AIを使用しています。';
 
   @override
-  String get faqQuestion10 => '他のアプリのメッセージを翻訳できますか？';
+  String get faqQuestion10 => '他のアプリで翻訳できますか？';
 
   @override
-  String get faqAnswer10 => 'はい。アクセシビリティ権限を許可すると利用できます。';
+  String get faqAnswer10 => 'アクセシビリティで可能です。';
+
   @override
   String get proLabel => 'PRO';
 
@@ -749,6 +753,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get trial60s => '60秒トライアル';
+
   @override
   String get aiChatTitle => 'AIチャット';
 
@@ -827,58 +832,62 @@ class AppLocalizationsJa extends AppLocalizations {
   String get expertNews => 'ニュース';
 
   @override
-  String get translated => '翻訳済み';
+  String get photoScanTranslated => '翻訳済み';
 
   @override
-  String get original => '元の画像';
+  String get photoScanOriginal => '元の画像';
+
+  @override
+  String get photoScanSelectOrCapture => '写真を選択または撮影してください';
+
+  @override
+  String get photoScanProcessing => '処理中...';
+
   @override
   String get yesterday => '昨日';
 
   @override
   String get noNotifications => '通知はありません';
+
   @override
   String get notificationNewTranslationReadyTitle => '新しい翻訳が準備できました';
 
   @override
-  String get notificationNewTranslationReadyBody =>
-      '音声翻訳ファイルがテキストに変換され、翻訳されました。';
+  String get notificationNewTranslationReadyBody => '音声翻訳ファイルは正常にテキスト化され、翻訳されました。';
 
   @override
   String get notificationTime10MinAgo => '10分前';
 
   @override
-  String get notificationSpecialOfferTitle => '特別オファーがあります';
+  String get notificationSpecialOfferTitle => '特別オファーをご用意しました';
 
   @override
-  String get notificationSpecialOfferBody => 'Premiumにアップグレードして写真翻訳を無制限で50％オフ。';
+  String get notificationSpecialOfferBody => 'プレミアムにアップグレードすると、写真翻訳が無制限で50%オフになります。';
 
   @override
   String get notificationTime2hAgo => '2時間前';
 
   @override
-  String get notificationSeeOpportunity => 'オファーを見る';
+  String get notificationSeeOpportunity => 'チャンスを見る';
 
   @override
   String get notificationAiChatTitle => 'AIとチャット';
 
   @override
-  String get notificationAiChatBody => 'AIチャットで質問への回答をすぐに取得できます。';
+  String get notificationAiChatBody => 'AIチャットで、気になる質問にすぐ答えを得られます。';
 
   @override
-  String get notificationTimeJustNow => 'たった今';
-  @override
-  String get aiConsentTitle => 'AIデータ共有の許可';
+  String get aiConsentTitle => 'AIのプライバシーとデータ利用';
 
   @override
-  String get aiConsentBody =>
-      '翻訳およびAI支援機能を提供するために、以下のデータがGoogle（Gemini AI）に送信される場合があります：\n\n• 翻訳のために入力したテキスト\n• 音声録音および音声の文字起こし\n• 写真翻訳のために送信した画像\n\nこれらのデータは安全に送信され、要求されたサービスの提供のみに使用されます。「許可」をタップすると、これらのデータをGoogleと共有することに同意したことになります。';
+  String get aiConsentBody => '翻訳およびAIによる回答を提供するため、お客様のテキスト、音声録音、写真はサードパーティのAIパートナー（OpenAIおよびGoogle）に送信されます。機密性の高い個人情報は共有しないでください。これらのプロバイダーとデータを共有することに同意しますか？';
 
   @override
-  String get aiConsentAccept => '許可する';
+  String get aiConsentLearnMore => ' 詳しくはプライバシーポリシーをご覧ください。';
 
   @override
-  String get aiConsentDecline => '今はしない';
+  String get aiConsentAccept => '同意する';
 
   @override
-  String get aiConsentLearnMore => '詳細を見る';
+  String get aiConsentDecline => 'キャンセル';
 }

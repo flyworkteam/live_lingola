@@ -415,10 +415,10 @@
   "notificationSeeOpportunity": "VOIR L’OFFRE",
   "notificationAiChatTitle": "Discuter avec l’IA",
   "notificationAiChatBody": "Obtenez des réponses instantanées à vos questions grâce au chat IA.",
-  
-  "aiConsentTitle": "Utilisation de l’IA",
-  "aiConsentDescription": "Vos textes, votre voix et vos photos seront envoyés à des services d’IA pour la traduction et les réponses assistées par l’IA. Vous devez accepter pour continuer.",
-  "aiConsentAccept": "Accepter",
+  "aiConsentTitle": "Confidentialité de l'IA et données",
+  "aiConsentBody": "Pour fournir des traductions et des réponses assistées par l'IA, vos textes, enregistrements vocaux et photos seront envoyés à nos partenaires d'IA tiers (OpenAI et Google). Veuillez ne pas partager d'informations personnelles sensibles. Acceptez-vous de partager vos données avec ces fournisseurs ?",
+  "aiConsentLearnMore": " En savoir plus dans notre Politique de confidentialité.",
+  "aiConsentAccept": "J'accepte",
   "aiConsentDecline": "Annuler"
 
 

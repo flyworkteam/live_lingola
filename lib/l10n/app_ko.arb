@@ -406,9 +406,10 @@
   "yesterday": "어제",
   "noNotifications": "알림이 없습니다",
   
-  "aiConsentTitle": "AI 사용",
-  "aiConsentDescription": "텍스트, 음성 및 사진은 번역과 AI 지원 응답을 위해 AI 서비스로 전송됩니다. 계속하려면 동의해야 합니다.",
-  "aiConsentAccept": "동의",
+"aiConsentTitle": "AI 개인정보 보호 및 데이터 사용",
+  "aiConsentBody": "번역 및 AI 지원 응답을 제공하기 위해 귀하의 텍스트, 음성 녹음 및 사진이 타사 AI 파트너(OpenAI 및 Google)로 전송됩니다. 민감한 개인 정보는 공유하지 마십시오. 이러한 제공업체와 데이터를 공유하는 데 동의하십니까?",
+  "aiConsentLearnMore": " 개인정보 처리방침에서 자세히 알아보세요.",
+  "aiConsentAccept": "동의합니다",
   "aiConsentDecline": "취소",
   "notificationAiChatTitle": "AI와 채팅",
 "notificationAiChatBody": "AI 채팅으로 궁금한 질문에 즉시 답변을 받아보세요.",

@@ -387,10 +387,12 @@
   "notificationAiChatBody": "Obtén respuestas instantáneas a tus preguntas con el chat de IA.",
 
   
-  "aiConsentTitle": "Uso de IA",
-  "aiConsentDescription": "Tus textos, voz y fotos se enviarán a servicios de IA para traducción y respuestas asistidas por IA. Debes aceptar para continuar.",
-  "aiConsentAccept": "Aceptar",
+  "aiConsentTitle": "Privacidad de IA y uso de datos",
+  "aiConsentBody": "Para proporcionar traducciones y respuestas asistidas por IA, sus textos, grabaciones de voz y fotos se enviarán a nuestros socios de IA de terceros (OpenAI y Google). Por favor, no comparta información personal confidencial. ¿Acepta compartir sus datos con estos proveedores?",
+  "aiConsentLearnMore": " Más información en nuestra Política de Privacidad.",
+  "aiConsentAccept": "Acepto",
   "aiConsentDecline": "Cancelar",
+
   "faqQuestion6": "¿La aplicación graba mi voz durante la traducción por voz?",
 "faqAnswer6": "Tu privacidad es importante para nosotros. Tus datos de voz se procesan solo temporalmente para la traducción y no se almacenan en nuestros servidores ni se comparten con terceros sin tu consentimiento.",
 "faqQuestion7": "¿Qué debo hacer si tengo un problema técnico?",

@@ -416,9 +416,10 @@
   "notificationAiChatTitle": "Mit KI chatten",
   "notificationAiChatBody": "Erhalten Sie mit dem KI-Chat sofort Antworten auf Ihre Fragen.",
   
-  "aiConsentTitle": "KI-Nutzung",
-  "aiConsentDescription": "Ihre Texte, Sprachaufnahmen und Fotos werden für Übersetzungen und KI-gestützte Antworten an KI-Dienste gesendet. Sie müssen zustimmen, um fortzufahren.",
-  "aiConsentAccept": "Akzeptieren",
+ "aiConsentTitle": "KI-Datenschutz & Datennutzung",
+  "aiConsentBody": "Um Übersetzungen und KI-gestützte Antworten bereitzustellen, werden Ihre Texte, Sprachaufzeichnungen und Fotos an unsere Drittanbieter-KI-Partner (OpenAI und Google) gesendet. Bitte teilen Sie keine sensiblen persönlichen Daten. Stimmen Sie zu, Ihre Daten mit diesen Anbietern zu teilen?",
+  "aiConsentLearnMore": " Weitere Informationen in unserer Datenschutzerklärung.",
+  "aiConsentAccept": "Ich stimme zu",
   "aiConsentDecline": "Abbrechen"
 
 

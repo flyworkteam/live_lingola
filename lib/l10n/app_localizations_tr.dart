@@ -15,7 +15,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get selectLanguage => 'Dil Seç';
 
   @override
-  String get next => 'Devam';
+  String get next => 'İleri';
 
   @override
   String get photoTranslate => 'Fotoğraf Çeviri';
@@ -99,8 +99,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get goodEvening => 'İyi Akşamlar';
 
   @override
-  String get placeTextInsideFrame =>
-      'Çevirmek istediğiniz metni çerçevenin içine yerleştirin.';
+  String get placeTextInsideFrame => 'Çevirmek istediğiniz metni çerçevenin içine yerleştirin.';
 
   @override
   String get selectOrCapturePhoto => 'Fotoğraf seçin veya çekin';
@@ -136,8 +135,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get voiceTranslateTitle => 'Sesli Çeviri';
 
   @override
-  String get voiceTranslateSubtitle =>
-      'Gerçek Zamanlı Çeviri - Daha Hızlı,\nDaha Akıllı Yapay Zeka';
+  String get voiceTranslateSubtitle => 'Gerçek Zamanlı Çeviri - Daha Hızlı,\nDaha Akıllı Yapay Zeka';
 
   @override
   String get tryNow => 'Hemen Dene!';
@@ -197,20 +195,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get favoriteRouteNotReady => 'Favoriler sayfası henüz hazır değil';
 
   @override
-  String get exampleTextTitle1 =>
-      'Bugün hava çok güzel;\nYürüyüşe çıkmak istiyorum.';
+  String get exampleTextTitle1 => 'Bugün hava çok güzel;\nYürüyüşe çıkmak istiyorum.';
 
   @override
-  String get exampleTextSubtitle1 =>
-      'The weather is so nice today;\nI want to go for a walk.';
+  String get exampleTextSubtitle1 => 'The weather is so nice today;\nI want to go for a walk.';
 
   @override
-  String get exampleTextTitle2 =>
-      'Harika bir gün;\nsanırım kısa bir yürüyüş yapacağım.';
+  String get exampleTextTitle2 => 'Harika bir gün;\nsanırım kısa bir yürüyüş yapacağım.';
 
   @override
-  String get exampleTextSubtitle2 =>
-      'It’s a beautiful day; I think I’ll take a stroll.';
+  String get exampleTextSubtitle2 => 'It’s a beautiful day; I think I’ll take a stroll.';
 
   @override
   String get profileTitle => 'Profil';
@@ -240,15 +234,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileLogoutDialogTitle => 'Çıkış yapmak üzeresiniz';
 
   @override
-  String get profileLogoutDialogSubtitle =>
-      'Yakında tekrar görüşürüz! Nefes\nalıştırmalarınızı özleyeceğiz.';
+  String get profileLogoutDialogSubtitle => 'Yakında tekrar görüşürüz! Nefes\nalıştırmalarınızı özleyeceğiz.';
 
   @override
   String get shareWithFriendTitle => 'Arkadaşınla Paylaş';
 
   @override
-  String get shareWithFriendSubtitle =>
-      'Arkadaşlarını davet et ve\nçevirinin keyfini birlikte çıkar';
+  String get shareWithFriendSubtitle => 'Arkadaşlarını davet et ve\nçevirinin keyfini birlikte çıkar';
 
   @override
   String get linkLabel => 'BAĞLANTI';
@@ -290,12 +282,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get age => 'Yaş';
 
   @override
-  String get deleteAccountDialogTitle =>
-      'Hesabınızı silmek\nistediğinize emin misiniz?';
+  String get deleteAccountDialogTitle => 'Hesabınızı silmek\nistediğinize emin misiniz?';
 
   @override
-  String get deleteAccountDialogDescription =>
-      'Bu işlem geri alınamaz ve tüm\ngeçmişiniz ile verileriniz\nkalıcı olarak silinir.';
+  String get deleteAccountDialogDescription => 'Bu işlem geri alınamaz ve tüm\ngeçmişiniz ile verileriniz\nkalıcı olarak silinir.';
 
   @override
   String get languageGerman => 'Almanca';
@@ -330,46 +320,40 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get faqQuestion1 => 'Live Lingola nasıl çalışır?';
+  String get faqQuestion1 => 'Live Lingola hangi dilleri destekliyor?';
 
   @override
-  String get faqAnswer1 =>
-      'Live Lingola, yapay zeka destekli araçlarla metin, ses ve diğer içerikleri hızlıca çevirmenize yardımcı olur.';
+  String get faqAnswer1 => 'Uygulamamız 100\'den fazla dilde metin, ses ve görsel çeviriyi destekler.';
 
   @override
-  String get faqQuestion2 => 'Verilerim güvende mi?';
+  String get faqQuestion2 => 'Canlı çeviri nasıl çalışır?';
 
   @override
-  String get faqAnswer2 =>
-      'Veri güvenliğini ciddiye alıyor ve kişisel bilgileriniz ile çeviri geçmişinizi korumayı hedefliyoruz.';
+  String get faqAnswer2 => 'Uygulama konuşmanızı dinler ve seçilen dile anında çevirir.';
 
   @override
-  String get faqQuestion3 => 'Çevrimdışı kullanabilir miyim?';
+  String get faqQuestion3 => 'Uygulamayı çevrimdışı kullanabilir miyim?';
 
   @override
-  String get faqAnswer3 =>
-      'Bazı özellikler internet bağlantısı gerektirebilir. Çevrimdışı destek, kullanılan çeviri hizmetine bağlıdır.';
+  String get faqAnswer3 => 'Evet, dil paketlerini indirerek internet olmadan da çeviri yapabilirsiniz.';
 
   @override
-  String get faqQuestion4 => 'Aboneliğimi nasıl iptal edebilirim?';
+  String get faqQuestion4 => 'Görsel çeviri tüm metinleri tanıyabilir mi?';
 
   @override
-  String get faqAnswer4 =>
-      'Aboneliğinizi mağaza hesap ayarlarınızdan veya uygulamadaki abonelik bölümünden yönetebilir ya da iptal edebilirsiniz.';
+  String get faqAnswer4 => 'OCR teknolojimiz basılı ve çoğu el yazısını doğru şekilde tanır.';
 
   @override
-  String get faqQuestion5 => 'Aile paylaşımı mevcut mu?';
+  String get faqQuestion5 => 'Live Lingola ücretsiz mi?';
 
   @override
-  String get faqAnswer5 =>
-      'Aile paylaşımının kullanılabilirliği abonelik platformunuza ve mağaza politikalarına bağlıdır. Desteklenen seçenekler için hesap ayarlarınızı kontrol edin.';
+  String get faqAnswer5 => 'Temel özellikler ücretsizdir. Premium sürüm ek özellikler sunar.';
 
   @override
   String get photoTranslateTitle => 'Fotoğraf Çeviri';
 
   @override
-  String get photoTranslateInstruction =>
-      'Çevirmek istediğiniz metni\nçerçevenin içine yerleştirin.';
+  String get photoTranslateInstruction => 'Çevirmek istediğiniz metni\nçerçevenin içine yerleştirin.';
 
   @override
   String get photoTranslationFailed => 'Fotoğraf çevirisi başarısız oldu';
@@ -396,26 +380,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get onboardingTitle2 => 'Canlı Çeviri\nDeneyimi';
 
   @override
-  String get onboardingBody1 =>
-      'Live Lingola ile dünyanın neresinde olursanız olun, yabancı diller artık bir engel değil. İletişimi en akıcı haliyle deneyimleyin.';
+  String get onboardingBody1 => 'Live Lingola ile dünyanın neresinde olursanız olun, yabancı diller artık bir engel değil. İletişimi en akıcı haliyle deneyimleyin.';
 
   @override
-  String get onboardingBody2 =>
-      'Sesinizi ve çevrenizdeki metinleri anında kendi dilinize çevirin. Yapay zeka destekli teknolojimizle konuşmalar artık çok daha akıcı.';
+  String get onboardingBody2 => 'Sesinizi ve çevrenizdeki metinleri anında kendi dilinize çevirin. Yapay zeka destekli teknolojimizle konuşmalar artık çok daha akıcı.';
 
   @override
-  String get getStarted => 'Başlayın';
+  String get getStarted => 'Başlayalım';
 
   @override
-  String get onboardingFlow5Title => 'Kişisel Hesabınız\nOluşturuluyor';
+  String get onboardingFlow5Title => 'Kişisel Hesabın\nOluşturuluyor';
 
   @override
-  String get onboardingFlow5Subtitle =>
-      'Yapay zeka asistanınız deneyiminizi kişiselleştiriyor.\nBu birkaç saniye sürebilir.';
+  String get onboardingFlow5Subtitle => 'Yapay zekâ asistanın deneyimini kişiselleştiriyor.\nBu işlem birkaç saniye sürebilir.';
 
   @override
-  String get onboardingFlow5ProgressLabel =>
-      'Yapay zeka deneyiminizi kişiselleştiriyor';
+  String get onboardingFlow5ProgressLabel => 'Yapay zekâ deneyimini kişiselleştiriyor';
 
   @override
   String get onboardingFlow5StepProfile => 'Profil oluşturuluyor';
@@ -424,7 +404,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get onboardingFlow5StepLanguage => 'Dil ayarları yapılandırılıyor';
 
   @override
-  String get onboardingFlow5StepAi => 'Yapay zeka modeli hazırlanıyor';
+  String get onboardingFlow5StepAi => 'Yapay zekâ modeli hazırlanıyor';
 
   @override
   String preferencesSaveFailed(Object error) {
@@ -438,11 +418,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get skip => 'Geç';
 
   @override
-  String get onboardingFlow4Title =>
-      'Bir çeviri uygulamasında\nhangi özellikleri istersiniz?';
+  String get onboardingFlow4Title => 'Bir çeviri uygulamasında\nhangi özellikleri istersin?';
 
   @override
-  String get onboardingFlow4Subtitle => 'Lütfen tercihinizi belirtin.';
+  String get onboardingFlow4Subtitle => 'Lütfen tercihini belirt.';
 
   @override
   String get onboardingFlow4OptionAccurate => 'Doğru Çeviri';
@@ -460,11 +439,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get onboardingFlow4OptionAll => 'Hepsi';
 
   @override
-  String get onboardingFlow3Title =>
-      'Daha önce yapay zeka\nçevirisi kullandınız mı?';
+  String get onboardingFlow3Title => 'Daha önce yapay zekâ\ntabanlı çeviri kullandın mı?';
 
   @override
-  String get onboardingFlow3Subtitle => 'Lütfen tercihinizi belirtin.';
+  String get onboardingFlow3Subtitle => 'Lütfen tercihini belirt.';
 
   @override
   String get yes => 'Evet';
@@ -476,8 +454,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get onboardingFlow2Title => 'Dil Seç';
 
   @override
-  String get onboardingFlow2Subtitle =>
-      'Çevirmek istediğiniz dili seçin.\nSeçiminiz tüm uygulamayı etkiler.';
+  String get onboardingFlow2Subtitle => 'Çevirmek istediğin dili seç.\nSeçimin tüm uygulamayı etkiler.';
 
   @override
   String get from => 'Kaynak';
@@ -486,11 +463,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get to => 'Hedef';
 
   @override
-  String get onboardingFlow1Title =>
-      'Çeviriyi en çok\nne için kullanıyorsunuz?';
+  String get onboardingFlow1Title => 'Çeviriyi en çok\nhangi amaçla kullanıyorsun?';
 
   @override
-  String get onboardingFlow1Subtitle => 'Lütfen tercihinizi belirtin.';
+  String get onboardingFlow1Subtitle => 'Lütfen tercihini belirt.';
 
   @override
   String get onboardingFlow1OptionDaily => 'Günlük İletişim';
@@ -499,7 +475,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get onboardingFlow1OptionBusiness => 'İş Dünyası';
 
   @override
-  String get onboardingFlow1OptionLearning => 'Dil Öğrenimi';
+  String get onboardingFlow1OptionLearning => 'Dil Öğrenme';
 
   @override
   String get onboardingFlow1OptionTravel => 'Seyahat';
@@ -565,12 +541,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get clearFavoriteTitle => 'Favorileri Temizle';
 
   @override
-  String get clearHistoryDescription =>
-      'Geçmişinizi\ntemizlemek istediğinize emin misiniz?';
+  String get clearHistoryDescription => 'Geçmişinizi\ntemizlemek istediğinize emin misiniz?';
 
   @override
-  String get clearFavoriteDescription =>
-      'Favori listenizi\ntemizlemek istediğinize emin misiniz?';
+  String get clearFavoriteDescription => 'Favori listenizi\ntemizlemek istediğinize emin misiniz?';
 
   @override
   String get clear => 'Temizle';
@@ -579,8 +553,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get frequentlyTermsTitle => 'Sık Kullanılan Terimler';
 
   @override
-  String get couldNotLoadFrequentlyUsedTerms =>
-      'Sık kullanılan terimler yüklenemedi';
+  String get couldNotLoadFrequentlyUsedTerms => 'Sık kullanılan terimler yüklenemedi';
 
   @override
   String get noFrequentlyUsedTermsFound => 'Sık kullanılan terim bulunamadı';
@@ -603,15 +576,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get frequentlyUsed => 'Sık Kullanılanlar';
 
   @override
-  String get reviewMostFrequentlyUsedTerms =>
-      'En sık\nkullanılan terimleri gözden geçirin.';
+  String get reviewMostFrequentlyUsedTerms => 'En sık\nkullanılan terimleri gözden geçirin.';
 
   @override
   String get unlimitedLiveTranslation => 'Sınırsız Canlı Çeviri';
 
   @override
-  String get removeDailyLimits =>
-      'Ses ve metindeki\ngünlük limitleri kaldırın.';
+  String get removeDailyLimits => 'Ses ve metindeki\ngünlük limitleri kaldırın.';
 
   @override
   String get getPremium => 'Premium Al';
@@ -635,8 +606,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get replyIdeas => 'Yanıt Fikirleri';
 
   @override
-  @override
   String get popular => 'Popüler';
+
+  @override
+  String get moreFeaturesTitle => 'Daha Fazla Özellik';
+
+  @override
+  String get frequentlyUsedTitle => 'Sık Kullanılanlar';
+
+  @override
+  String get frequentlyUsedDescription => 'En sık kullanılan terimleri gözden geçirin.';
+
+  @override
+  String get historyTitle => 'Geçmiş';
+
+  @override
+  String get favoriteTitle => 'Favoriler';
 
   @override
   String get signInCancelled => 'Giriş işlemi iptal edildi.';
@@ -662,8 +647,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get loginTitle => 'Live Lingola’ya Hoş Geldiniz';
 
   @override
-  String get loginSubtitle =>
-      'Çeviriye başlamak için tercih ettiğiniz hesapla devam edin.';
+  String get loginSubtitle => 'Çeviriye başlamak için tercih ettiğiniz hesapla devam edin.';
 
   @override
   String get signingIn => 'Giriş yapılıyor...';
@@ -699,40 +683,35 @@ class AppLocalizationsTr extends AppLocalizations {
   String get cookiesPolicyLinkText => 'Çerez Politikası';
 
   @override
-  String get faqQuestion6 => 'Live Lingola hangi dilleri destekler?';
+  String get faqQuestion6 => 'Uygulama sesimi kaydediyor mu?';
 
   @override
-  String get faqAnswer6 =>
-      'Uygulamamız 100’den fazla dilde metin, ses ve görüntü çevirisini destekler.';
+  String get faqAnswer6 => 'Ses veriniz yalnızca çeviri için geçici olarak işlenir ve saklanmaz.';
 
   @override
-  String get faqQuestion7 => 'Uygulama çeviri sırasında sesimi kaydediyor mu?';
+  String get faqQuestion7 => 'Sorun yaşarsam ne yapmalıyım?';
 
   @override
-  String get faqAnswer7 =>
-      'Gizliliğiniz bizim için önemlidir. Ses verileri yalnızca çeviri işlemi için geçici olarak kullanılır ve saklanmaz.';
+  String get faqAnswer7 => 'Ayarlar > Destek bölümünden veya support@fly-work.com adresinden bize ulaşabilirsiniz.';
 
   @override
-  String get faqQuestion8 => 'PDF gibi uzun belgeleri çevirebilir miyim?';
+  String get faqQuestion8 => 'Belgeleri çevirebilir miyim?';
 
   @override
-  String get faqAnswer8 =>
-      'Evet. PDF, Word veya TXT dosyalarını yükleyerek format bozulmadan çeviri alabilirsiniz.';
+  String get faqAnswer8 => 'Evet, PDF, Word ve TXT belgeleri formatını koruyarak çevirebilirsiniz.';
 
   @override
   String get faqQuestion9 => 'Çeviriler ne kadar doğru?';
 
   @override
-  String get faqAnswer9 =>
-      'DeepL, Google ve OpenAI teknolojileri gibi gelişmiş yapay zeka çeviri motorlarını kullanıyoruz.';
+  String get faqAnswer9 => 'Birden fazla gelişmiş AI çeviri motoru kullanarak yüksek doğruluk sağlıyoruz.';
 
   @override
-  String get faqQuestion10 =>
-      'Başka uygulamalardaki mesajları çevirebilir miyim?';
+  String get faqQuestion10 => 'Diğer uygulamalardaki mesajları çevirebilir miyim?';
 
   @override
-  String get faqAnswer10 =>
-      'Evet. Erişilebilirlik izni verirseniz, mesajları anında çevirmek için yüzen çeviri özelliğini kullanabilirsiniz.';
+  String get faqAnswer10 => 'Evet, erişilebilirlik izni ile mesajları anında çevirebilirsiniz.';
+
   @override
   String get proLabel => 'PRO';
 
@@ -774,6 +753,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get trial60s => '60 sn deneme';
+
   @override
   String get aiChatTitle => 'AI Chat';
 
@@ -784,8 +764,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get typing => 'Yazıyor...';
 
   @override
-  String get aiChatWelcomeMessage =>
-      'Merhaba! Ben Lingola AI. Bugün sana nasıl yardımcı olabilirim?';
+  String get aiChatWelcomeMessage => 'Merhaba! Ben Lingola AI. Bugün sana nasıl yardımcı olabilirim?';
 
   @override
   String aiChatErrorMessage(Object error) {
@@ -851,36 +830,42 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get expertNews => 'Haberler';
-  @override
-  String get translated => 'Çevrilmiş';
 
   @override
-  String get original => 'Orijinal';
+  String get photoScanTranslated => 'Çevrilmiş';
+
+  @override
+  String get photoScanOriginal => 'Orijinal';
+
+  @override
+  String get photoScanSelectOrCapture => 'Bir fotoğraf seçin veya çekin';
+
+  @override
+  String get photoScanProcessing => 'İşleniyor...';
 
   @override
   String get yesterday => 'Dün';
 
   @override
-  String get noNotifications => 'Bildirim yok';
+  String get noNotifications => 'Bildirim bulunmuyor';
+
   @override
   String get notificationNewTranslationReadyTitle => 'Yeni Çeviri Hazır';
 
   @override
-  String get notificationNewTranslationReadyBody =>
-      'Sesli çeviri dosyanız başarıyla metne dönüştürüldü ve çevrildi.';
+  String get notificationNewTranslationReadyBody => 'Sesli çeviri dosyanız başarıyla metne dönüştürüldü ve çevrildi.';
 
   @override
-  String get notificationTime10MinAgo => '10 dk önce';
+  String get notificationTime10MinAgo => '10 dk. önce';
 
   @override
   String get notificationSpecialOfferTitle => 'Sizi Özel Bir Teklif Bekliyor';
 
   @override
-  String get notificationSpecialOfferBody =>
-      'Sınırsız fotoğraf çevirisi için Premium\'a %50 indirimle yükseltin.';
+  String get notificationSpecialOfferBody => 'Sınırsız fotoğraf çevirisi için Premium\'a %50 indirimle yükseltin.';
 
   @override
-  String get notificationTime2hAgo => '2 saat önce';
+  String get notificationTime2hAgo => '2 sa. önce';
 
   @override
   String get notificationSeeOpportunity => 'FIRSATI GÖR';
@@ -889,25 +874,20 @@ class AppLocalizationsTr extends AppLocalizations {
   String get notificationAiChatTitle => 'AI Chat ile Sohbet Et';
 
   @override
-  String get notificationAiChatBody =>
-      'AI chat ile aklınızdaki sorulara anında yanıt bulun.';
+  String get notificationAiChatBody => 'AI chat ile aklınızdaki sorulara anında yanıt bulun.';
 
   @override
-  String get notificationTimeJustNow => 'Az önce';
+  String get aiConsentTitle => 'Yapay Zeka & Gizlilik';
 
   @override
-  String get aiConsentTitle => 'Yapay Zekâ Veri Paylaşım İzni';
+  String get aiConsentBody => 'Çeviri ve yapay zeka destekli yanıtlar sunabilmek için metin, ses kayıtlarınız ve fotoğraflarınız üçüncü taraf yapay zeka ortaklarımıza (OpenAI ve Google) gönderilecektir. Lütfen hassas kişisel bilgilerinizi paylaşmayın. Verilerinizin bu sağlayıcılarla paylaşılmasını onaylıyor musunuz?';
 
   @override
-  String get aiConsentBody =>
-      'Çeviri ve yapay zekâ destekli özellikler sunabilmek için aşağıdaki veriler Google\'a (Gemini AI) gönderilebilir:\n\n• Çeviri için girdiğiniz metinler\n• Ses kayıtları ve konuşma dökümleri\n• Fotoğraf çevirisi için gönderdiğiniz görseller\n\nBu veriler güvenli bir şekilde iletilir ve yalnızca talep edilen hizmeti sunmak için kullanılır. "İzin Ver" seçeneğine dokunarak bu verilerin Google ile paylaşılmasını kabul etmiş olursunuz.';
+  String get aiConsentLearnMore => ' Gizlilik Politikamızdan daha fazla bilgi edinin.';
 
   @override
-  String get aiConsentAccept => 'İzin Ver';
+  String get aiConsentAccept => 'Kabul Ediyorum';
 
   @override
-  String get aiConsentDecline => 'Şimdi Değil';
-
-  @override
-  String get aiConsentLearnMore => 'Daha Fazla Bilgi';
+  String get aiConsentDecline => 'Vazgeç';
 }
