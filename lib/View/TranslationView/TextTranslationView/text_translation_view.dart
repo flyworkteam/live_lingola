@@ -22,6 +22,7 @@ import 'package:lingola_app/Core/widgets/text_translation/text_translation_model
 import 'package:lingola_app/Core/widgets/text_translation/text_translation_result_card.dart';
 import 'package:lingola_app/Core/widgets/text_translation/text_translation_source_card.dart';
 import 'package:lingola_app/Core/widgets/text_translation/text_translation_utils.dart';
+import 'package:lingola_app/Riverpod/Providers/current_user_provider.dart';
 import 'package:lingola_app/Riverpod/Providers/language_provider.dart';
 import 'package:lingola_app/Services/Translation/text_to_speech_service.dart';
 import 'package:lingola_app/Services/ai_consent_service.dart';
@@ -79,7 +80,16 @@ class _TextTranslationViewState extends ConsumerState<TextTranslationView> {
   int _examplesRequestId = 0;
   int _examplesRefreshSeed = 0;
 
-  String? get _firebaseUid => FirebaseAuth.instance.currentUser?.uid;
+  String? get _firebaseUid {
+    // First try Firebase Auth directly
+    final fbUid = FirebaseAuth.instance.currentUser?.uid;
+    if (fbUid != null && fbUid.isNotEmpty) return fbUid;
+    // Fallback: read from currentUserProvider (for guest users etc.)
+    final user = ref.read(currentUserProvider);
+    final providerUid = user?['firebase_uid']?.toString().trim();
+    if (providerUid != null && providerUid.isNotEmpty) return providerUid;
+    return null;
+  }
 
   int get _sourceLength => _sourceCtrl.text.length;
 
@@ -495,17 +505,8 @@ class _TextTranslationViewState extends ConsumerState<TextTranslationView> {
       'saveToHistory=$saveToHistory force=$force text="$source"',
     );
 
-    if ((_firebaseUid ?? "").isEmpty) {
-      if (!mounted) return;
-      setState(() {
-        _isTranslating = false;
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.noLoggedInUser)),
-      );
-      _log('TRANSLATE STOPPED => firebase uid yok');
-      return;
-    }
+    final firebaseUid = _firebaseUid;
+    _log('TRANSLATE => firebase_uid=${firebaseUid ?? "null (guest)"}');
 
     if (source.isEmpty) {
       if (!mounted) return;
@@ -566,14 +567,15 @@ class _TextTranslationViewState extends ConsumerState<TextTranslationView> {
     });
 
     try {
+      final bool canSaveToHistory = saveToHistory && firebaseUid != null;
       final requestBody = {
-        "firebase_uid": _firebaseUid,
+        if (firebaseUid != null) "firebase_uid": firebaseUid,
         "source_text": source,
         "source_language": backendLanguageName(_sourceLangCode),
         "target_language": backendLanguageName(_targetLangCode),
         "expert": backendExpertName(_expertKey),
         "translation_type": "text",
-        "save_to_history": saveToHistory,
+        "save_to_history": canSaveToHistory,
       };
 
       _log('TRANSLATE REQUEST BODY => ${jsonEncode(requestBody)}');

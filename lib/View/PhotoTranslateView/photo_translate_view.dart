@@ -401,16 +401,6 @@ class _PhotoTranslateViewState extends ConsumerState<PhotoTranslateView> {
       _translatedImageProvider = null;
     });
 
-    if (firebaseUid == null && userId == null) {
-      debugPrint("USER DATA NOT READY");
-
-      setState(() {
-        _isProcessing = false;
-      });
-
-      return;
-    }
-
     debugPrint('PHOTO TRANSLATE FIREBASE UID: $firebaseUid');
     debugPrint('PHOTO TRANSLATE USER ID: $userId');
     debugPrint('PHOTO TRANSLATE SOURCE: $_sourceLangCode');

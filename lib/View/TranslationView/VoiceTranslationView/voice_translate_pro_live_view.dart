@@ -643,11 +643,6 @@ class _VoiceTranslateProLiveViewState
     debugPrint('VOICE PRO FINAL TEXT: "$sourceText"');
     debugPrint('VOICE PRO FINAL URL: ${AppConfig.baseUrl}/translate/text');
 
-    if (firebaseUid == null) {
-      debugPrint('VOICE PRO ERROR: firebaseUid is null');
-      return;
-    }
-
     if (sourceText.isEmpty) {
       debugPrint('VOICE PRO ERROR: sourceText is empty');
       return;
@@ -715,13 +710,13 @@ class _VoiceTranslateProLiveViewState
           "Content-Type": "application/json",
         },
         body: jsonEncode({
-          "firebase_uid": firebaseUid,
+          if (firebaseUid != null) "firebase_uid": firebaseUid,
           "source_text": sourceText,
           "source_language": _backendLanguageName(_sourceLangCode),
           "target_language": _backendLanguageName(_targetLangCode),
           "expert": "Pro",
           "translation_type": "voice",
-          "save_to_history": true,
+          "save_to_history": firebaseUid != null,
         }),
       );
 
