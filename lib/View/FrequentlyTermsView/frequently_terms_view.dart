@@ -49,10 +49,10 @@ class _FrequentlyTermsViewState extends ConsumerState<FrequentlyTermsView> {
 
     if (firebaseUid == null) {
       if (!mounted) return;
-      setState(() => _items = []);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.userNotFound)),
-      );
+      setState(() {
+        _items = [];
+        _isLoading = false;
+      });
       return;
     }
 

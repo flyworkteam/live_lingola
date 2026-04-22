@@ -62,11 +62,8 @@ class _HistoryFavoriteViewState extends ConsumerState<HistoryFavoriteView> {
       setState(() {
         _history = [];
         _favorite = [];
+        _isLoading = false;
       });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.userNotFound)),
-      );
       return;
     }
 
@@ -243,7 +240,16 @@ class _HistoryFavoriteViewState extends ConsumerState<HistoryFavoriteView> {
 
   Future<void> _clearCurrentTab() async {
     final firebaseUid = _currentFirebaseUid;
-    if (firebaseUid == null) return;
+    if (firebaseUid == null) {
+      setState(() {
+        if (_tab == 0) {
+          _history.clear();
+        } else {
+          _favorite.clear();
+        }
+      });
+      return;
+    }
 
     setState(() => _isActionLoading = true);
 

@@ -49,23 +49,15 @@ class _OnboardingFlowView5State extends ConsumerState<OnboardingFlowView5> {
 
     try {
       final prefs = await SharedPreferences.getInstance();
-      final isGuest = prefs.getBool('is_guest_mode') ?? false;
-
       final onboardingState = ref.read(onboardingControllerProvider);
 
-      if (isGuest) {
-        debugPrint(
-          'ONBOARDING FLOW 5 -> GUEST MODE ACTIVE -> SKIP BACKEND SAVE',
-        );
-
-        if (!mounted) return;
-        widget.onFinish();
-        return;
+      try {
+        await ref
+            .read(onboardingRepositoryProvider)
+            .savePreferences(onboardingState);
+      } catch (e) {
+        debugPrint('ONBOARDING FLOW 5 -> BACKEND SAVE FAILED (continuing): $e');
       }
-
-      await ref
-          .read(onboardingRepositoryProvider)
-          .savePreferences(onboardingState);
 
       if (!mounted) return;
       widget.onFinish();

@@ -79,7 +79,6 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
       setState(() {
         _isLoading = false;
       });
-      _toast(l10n.noLoggedInUser);
       return;
     }
 
@@ -135,9 +134,7 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
   Future<void> _pickAndUploadPhoto() async {
     final firebaseUid = _firebaseUid;
 
-    if (firebaseUid == null || firebaseUid.isEmpty || _isUploadingPhoto) {
-      return;
-    }
+    if (_isUploadingPhoto) return;
 
     try {
       final XFile? picked = await _picker.pickImage(
@@ -237,7 +234,7 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
     final l10n = AppLocalizations.of(context)!;
     final firebaseUid = _firebaseUid;
 
-    if (firebaseUid == null || firebaseUid.isEmpty || _isSaving) return;
+    if (_isSaving) return;
 
     setState(() {
       _isSaving = true;
@@ -367,9 +364,7 @@ class _ProfileSettingsViewState extends ConsumerState<ProfileSettingsView> {
     final firebaseUid = _firebaseUid;
     final currentFirebaseUser = FirebaseAuth.instance.currentUser;
 
-    if (firebaseUid == null ||
-        firebaseUid.isEmpty ||
-        currentFirebaseUser == null) {
+    if (currentFirebaseUser == null) {
       return;
     }
 
